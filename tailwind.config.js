@@ -14,6 +14,8 @@ module.exports = {
         hpBlack: '#000000',
         hpRed: '#C4002F',
         hpLightRed: '#C4002F',
+        hpHoverLightGray: '#E9E9E9',
+        hpClickedWhiteBlue: '#6ED1DE',
       },
     },
   },
