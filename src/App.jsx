@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import TestDown from './components/moecules/TestDown';
+import DropdownMenu from './components/moecules/DropdownMenu';
 
 function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <div className="mx-2 my-2">
-      <TestDown
+      <DropdownMenu
         // textArr={[
         //   '[강의실1] 다이나믹듀오와 함께하는 힙합 수업',
         //   '중1',
