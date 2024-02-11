@@ -1,21 +1,40 @@
 import { useState } from 'react';
-import SlideBar from './components/moecules/SlideBar';
+import TestDown from './components/moecules/TestDown';
 
 function App() {
-  const [isClickArr, setIsClickArr] = useState([false, true, false, false]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <div className="mx-2 my-2">
-      <SlideBar
-        num={3}
-        firstText="학생 관리"
-        secondText="반 관리"
-        thirdText="강사 관리"
-        isClickArr={isClickArr}
-        setIsClickArr={setIsClickArr}
+      <TestDown
+        // textArr={[
+        //   '[강의실1] 다이나믹듀오와 함께하는 힙합 수업',
+        //   '중1',
+        //   '중2',
+        //   '중3',
+        //   '고1',
+        //   '고2',
+        // ]}
+        // textArr={[
+        //   '[강의실1] 다이나믹듀오와 함께하는 힙합 수업',
+        //   '[강의실2] 화 25',
+        //   '[강의실3] 월 35',
+        //   '[강의실4] 화 45',
+        //   '[강의실5] 월 55',
+        //   '[강의실6] 화 65',
+        // ]}
+        textArr={[
+          'Theme 1. 등차수열의 대칭성과 합의 구조',
+          'Theme 2. 등차수열의 대칭성과 합의 구조',
+          'Theme 3. 등차수열의 대칭성과 합의 구조와 등차수열의 끝은 어디인가에 대한 한석원 교수님의 타고난 통찰과 이루어질수 없는 모발과의 만남은 무엇일까?ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ',
+          'Theme 4. 등차수열의 대칭성과 합의 구조',
+          'Theme 5. 등차수열의 대칭성과 합의 구조',
+          'Theme 6. 등차수열의 대칭성과 합의 구조',
+        ]}
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+        size="long"
       />
-      {isClickArr[1] && <div>1번</div>}
-      {isClickArr[2] && <div>2번</div>}
-      {isClickArr[3] && <div>3번</div>}
+      <div>{selectedIndex}</div>
     </div>
   );
 }

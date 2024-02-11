@@ -10,7 +10,7 @@ module.exports = {
         hpBlue: '#00A3FF',
         hpGray: '#BCBCBC',
         hpLightGray: '#F6F6F6',
-        hpLightkGray: '#3E3E3E',
+        hpLightkBlack: '#3E3E3E',
         hpBlack: '#000000',
         hpRed: '#C4002F',
         hpLightRed: '#C4002F',
