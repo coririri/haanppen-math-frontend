@@ -17,6 +17,10 @@ module.exports = {
         hpHoverLightGray: '#E9E9E9',
         hpClickedWhiteBlue: '#6ED1DE',
       },
+      fontFamily: {
+        sjBold: ['Sejong-hospital-Bold', 'sans', 'serif'],
+        sjLight: ['Sejong-hospital-Light', 'sans', 'serif'],
+      },
     },
   },
   plugins: [],
