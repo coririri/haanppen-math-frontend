@@ -42,6 +42,12 @@
   src: url('../public/fonts/Sejong hospital Light.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Sejong-hospital-Bold';
+  font-weight: Bold;
+  src: url('../public/fonts/Sejong hospital Bold.ttf') format('truetype');
+}
+
 body {
   margin: 0;
   font-family:
