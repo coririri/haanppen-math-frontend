@@ -6,7 +6,7 @@ import getDayInKorean from '../../utils/getDayInKorean';
 function DayClassList({ date, videoLink, children }) {
   return (
     <div className="w-[42rem] h-[10.875rem] border-[0.075rem] border-solid rounded-lg">
-      <div className="flex items-center h-[3.3rem] w-[19.3rem] mx-auto">
+      <div className="flex items-center h-[3.3rem] w-[19.4rem] mx-auto">
         <div className="bg-hpLightRed text-white font-sjBold rounded-lg text-[1.32rem] px-[1.625rem] py-[0.2rem] mr-4">
           {date.getMonth() + 1}.{date.getDate()}({getDayInKorean(date.getDay())}
           ) 수업
