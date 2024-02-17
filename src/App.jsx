@@ -11,6 +11,10 @@ function App() {
         />
         <ClassList type="homework" text="~p.187 까지" />
       </DayClassList>
+      <ClassList
+        type="progress"
+        text="개념원리 중3-1 ~p.187 (이차함수의 그래프)"
+      />
     </div>
   );
 }
