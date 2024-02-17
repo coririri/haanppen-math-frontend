@@ -30,7 +30,6 @@ function IconButton({ bgColor, icon, text, handleClick }) {
         <div className="bg-hpLightBlue inline-flex items-center font-bold border-[0.075rem] border-solid border-[#008FE0] py-[0.2rem] px-3 rounded-lg">
           {icon}
           <span className="ml-2 text-md py-[0.15rem] text-white font-sjBold">
-            {' '}
             {text}
           </span>
         </div>
