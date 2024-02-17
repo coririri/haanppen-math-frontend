@@ -6,25 +6,17 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size }) {
   const [isOpen, setIsOpen] = useState(false);
 
   let sizeByWidth = '';
-  let sizeByPaddingY = '';
   let sizeByTextSize = '';
-  let sizeByPaddingX = '';
 
   if (size === 'long') {
-    sizeByWidth = 'w-96';
-    sizeByPaddingY = 'py-4';
-    sizeByTextSize = 'text-sm';
-    sizeByPaddingX = 'pl-4';
+    sizeByWidth = 'w-[25.25rem]';
+    sizeByTextSize = 'text-md';
   } else if (size === 'normal') {
     sizeByWidth = 'w-60';
-    sizeByPaddingY = 'py-3';
     sizeByTextSize = 'text-xl';
-    sizeByPaddingX = 'pl-4';
   } else if (size === 'small') {
     sizeByWidth = 'w-32';
-    sizeByPaddingY = 'py-3';
     sizeByTextSize = 'text-xl';
-    sizeByPaddingX = 'pl-6';
   }
 
   const dropdownList = textArr.map((text, index) => {
@@ -32,7 +24,7 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size }) {
       selectedIndex !== index ? (
         <button
           type="button"
-          className={`w-full ${sizeByPaddingY} h-14 font-semibold ${sizeByTextSize} hover:bg-hpLightGray`}
+          className={`w-[24.75rem] h-[3rem] flex items-center font-bold ${sizeByTextSize} hover:bg-hpLightGray`}
           key={text}
           onClick={() => {
             setSelectedIndex(index);
@@ -40,7 +32,7 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size }) {
           }}
         >
           <div
-            className={`text-left h-full overflow-hidden hover:overflow-auto ${sizeByPaddingX}`}
+            className={`w-[23rem] h-[2.4rem] leading-[2.4rem] ${sizeByTextSize} text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto`}
           >
             {text}
           </div>
@@ -55,29 +47,33 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size }) {
 
   return (
     <div
-      className={`${sizeByWidth} h-54 ${isOpen ? 'border-[0.075rem] rounded-lg border-hpLightkBlack border-solid' : ''}`}
+      className={`${sizeByWidth} h-[16rem] ${isOpen ? 'border-[0.075rem] rounded-lg border-hpLightkBlack border-solid' : ''}`}
     >
       <button
         type="button"
-        className={`w-full h-14 font-semibold  ${sizeByTextSize} border-hpLightkBlack border-solid flex justify-between items-center py-auto ${isOpen ? 'border-b-[0.075rem]' : 'border-[0.075rem] rounded-lg'}`}
+        className={`${sizeByWidth} h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-b-[0.075rem]' : 'border-[0.075rem] rounded-lg'}`}
         key={textArr[selectedIndex]}
         onClick={() => {
           setIsOpen((prev) => !prev);
         }}
       >
         <div
-          className={`h-full ${sizeByPaddingX} ${sizeByPaddingY} overflow-hidden hover:overflow-auto`}
+          className={`w-[23rem] h-[2.4rem] leading-[2.4rem] ${sizeByTextSize} text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto`}
         >
           {textArr[selectedIndex]}
         </div>
         <div
-          className={`transition-[transform] origin-center ${isOpen ? 'rotate-180 pl-4' : 'rotate-0 pr-4'}`}
+          className={`w-[1.875rem] transition-[transform] origin-center ${isOpen ? 'rotate-180 mr-5' : 'rotate-0 mr-4'}`}
         >
-          <BsTriangleFill color="#BCBCBC" size="1rem" />
+          <BsTriangleFill color="#BCBCBC" size="1.5rem" />
         </div>
       </button>
       {isOpen && (
-        <div className="h-40 flex flex-col overflow-y-auto">{filteredList}</div>
+        <div
+          className={`${sizeByWidth} h-[13.6rem] flex flex-col overflow-y-auto`}
+        >
+          {filteredList}
+        </div>
       )}
     </div>
   );

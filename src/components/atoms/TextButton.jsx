@@ -12,17 +12,17 @@ function TextButton({
     if (shape === 'long')
       return (
         <button
-          className={`py-1 px-20 border-hpBlack border-[0.072rem] rounded-lg text-2xl font-semibold ${isClick ? 'bg-hpWhiteBlue' : 'bg-white'} ${moreStyle}`}
+          className={`inline-block w-[16.75rem] h-[2.375rem]  border-hpBlack border-[0.072rem] rounded-lg font-bold ${isClick ? 'bg-hpWhiteBlue' : 'bg-white'} ${moreStyle}`}
           type="button"
           onClick={handleClick}
         >
-          {children}
+          <span className="text-[1.7rem] leading-[2.375rem]">{children}</span>
         </button>
       );
     else if (shape === 'square')
       return (
         <button
-          className={`py-1 px-2 border-[0.072rem] rounded-lg text-2xl font-semibold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
+          className={`inline-block w-[3.8rem] h-[3.8rem] py-3 px-4 border-[0.072rem] rounded-lg text-3xl font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
           type="button"
           onClick={handleClick}
         >
@@ -32,10 +32,10 @@ function TextButton({
   if (color === 'gray')
     return (
       <button
-        className={`py-1 px-10 border-hpGray border-[0.072rem] rounded-full text-2xl font-semibold bg-hpLightGray hover:bg-hpHoverLightGray ${moreStyle}`}
+        className={`inline-block w-[6.25rem] h-[2rem] border-hpGray border-[0.072rem] rounded-full font-bold bg-hpLightGray hover:bg-hpHoverLightGray ${moreStyle}`}
         type="button"
       >
-        {children}
+        <span className="text-xl">{children}</span>
       </button>
     );
 }

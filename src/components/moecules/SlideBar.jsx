@@ -35,7 +35,7 @@ function SlideBar({
             isClick={isClickArr[2]}
             handleClick={() => {
               setIsClickArr([false, false, true, false]);
-              setLeftPosition('left-[17.5rem]');
+              setLeftPosition('left-[18.5rem]');
             }}
           >
             {secondText}
@@ -49,7 +49,7 @@ function SlideBar({
   }
   if (num === 3) {
     return (
-      <div>
+      <div className="w-[56.8rem]">
         <div>
           <TextButton
             color="white"
@@ -70,7 +70,7 @@ function SlideBar({
             isClick={isClickArr[2]}
             handleClick={() => {
               setIsClickArr([false, false, true, false]);
-              setLeftPosition('left-[16.8rem]');
+              setLeftPosition('left-[18.5em]');
             }}
             moreStyle="mr-4"
           >
@@ -83,7 +83,7 @@ function SlideBar({
             isClick={isClickArr[3]}
             handleClick={() => {
               setIsClickArr([false, false, false, true]);
-              setLeftPosition('left-[33rem]');
+              setLeftPosition('left-[36.5rem]');
             }}
           >
             {thirdText}

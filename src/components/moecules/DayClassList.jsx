@@ -5,9 +5,9 @@ import getDayInKorean from '../../utils/getDayInKorean';
 
 function DayClassList({ date, videoLink, children }) {
   return (
-    <div className="w-[30rem] h-[8rem] border-[0.075rem] border-solid rounded-lg pb-2">
-      <div className="flex h-12 items-center w-[18.5rem] mx-auto">
-        <div className="bg-hpLightRed text-white font-sjBold px-4 py-1 h-9 rounded-lg text-xl mr-2">
+    <div className="w-[42rem] h-[10.875rem] border-[0.075rem] border-solid rounded-lg">
+      <div className="flex items-center h-[3.3rem] w-[19.4rem] mx-auto">
+        <div className="bg-hpLightRed text-white font-sjBold rounded-lg text-[1.32rem] px-[1.625rem] py-[0.2rem] mr-4">
           {date.getMonth() + 1}.{date.getDate()}({getDayInKorean(date.getDay())}
           ) 수업
         </div>
@@ -20,7 +20,7 @@ function DayClassList({ date, videoLink, children }) {
           icon={<MdOndemandVideo color="white" size="1.7rem" />}
         />
       </div>
-      <div className="w-[28rem] mx-auto mt-2 mb-2">{children}</div>
+      <div className="w-[34.5rem] h-[7.575rem] mx-auto py-2">{children}</div>
     </div>
   );
 }
