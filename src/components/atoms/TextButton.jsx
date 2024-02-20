@@ -1,13 +1,6 @@
 import PropTypes from 'prop-types';
 
-function TextButton({
-  color,
-  shape,
-  children,
-  isClick,
-  handleClick,
-  moreStyle,
-}) {
+function TextButton({ color, shape, text, isClick, handleClick, moreStyle }) {
   if (color === 'white')
     if (shape === 'long')
       return (
@@ -16,7 +9,7 @@ function TextButton({
           type="button"
           onClick={handleClick}
         >
-          <span className="text-[1.7rem] leading-[2.375rem]">{children}</span>
+          <span className="text-[1.7rem] leading-[2.375rem]">{text}</span>
         </button>
       );
     else if (shape === 'square')
@@ -26,7 +19,7 @@ function TextButton({
           type="button"
           onClick={handleClick}
         >
-          {children}
+          {text}
         </button>
       );
   if (color === 'gray')
@@ -35,13 +28,13 @@ function TextButton({
         className={`inline-block w-[6.25rem] h-[2rem] border-hpGray border-[0.072rem] rounded-full font-bold bg-hpLightGray hover:bg-hpHoverLightGray ${moreStyle}`}
         type="button"
       >
-        <span className="text-xl">{children}</span>
+        <span className="text-xl">{text}</span>
       </button>
     );
 }
 
 TextButton.propTypes = {
-  children: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
   color: PropTypes.oneOf(['white', 'gray']),
   shape: PropTypes.oneOf(['long', 'square']),
   isClick: PropTypes.bool.isRequired,
