@@ -3,21 +3,29 @@ import StudentManagementList from './components/moecules/StudentManagementList';
 
 function App() {
   const [, setDeletedIndexArr] = useState(Array(3).fill(false));
+  const studentInformationArr = [
+    {
+      grade: 11,
+      name: '조인애',
+      phoneNumber: '010-3433-0652',
+    },
+    {
+      grade: 7,
+      name: '김민아',
+      phoneNumber: '010-3423-0652',
+    },
+  ];
   return (
     <div>
       <StudentManagementList
-        grade="고2"
-        name="조인애"
-        phoneNumber="010-3433-0652"
+        studentInformationArr={studentInformationArr}
         setDeletedIndexArr={setDeletedIndexArr}
-        index={1}
+        index={0}
       />
       <StudentManagementList
-        grade="중1"
-        name="김민아"
-        phoneNumber="010-3423-0652"
+        studentInformationArr={studentInformationArr}
         setDeletedIndexArr={setDeletedIndexArr}
-        index={2}
+        index={1}
       />
     </div>
   );

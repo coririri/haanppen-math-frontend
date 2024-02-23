@@ -2,9 +2,10 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextButton from '../atoms/TextButton';
 import studentInformationShape from '../../types/studentInformation';
+import gradeTransform from '../../utils/gradeTransform';
 
 function StudentManagementList({
-  studentInformation,
+  studentInformationArr,
   setDeletedIndexArr,
   index,
 }) {
@@ -12,7 +13,7 @@ function StudentManagementList({
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev);
   };
-  const { grade, name, phoneNumber } = studentInformation;
+  const { grade, name, phoneNumber } = studentInformationArr[index];
   return (
     <div className="w-[42.875rem] h-[3.375rem] flex items-center justify-between">
       <div className="ml-8">
@@ -29,7 +30,9 @@ function StudentManagementList({
         />
       </div>
       <div>
-        <span className="text-xl text-hpBlack font-bold">{grade}</span>
+        <span className="text-xl text-hpBlack font-bold">
+          {gradeTransform(grade)}
+        </span>
       </div>
       <div>
         <span className="text-xl text-hpBlack font-bold">{name}</span>
@@ -51,7 +54,7 @@ function StudentManagementList({
 }
 
 StudentManagementList.propTypes = {
-  studentInformation: PropTypes.arrayOf(
+  studentInformationArr: PropTypes.arrayOf(
     PropTypes.shape(studentInformationShape),
   ).isRequired,
   setDeletedIndexArr: PropTypes.func.isRequired,
