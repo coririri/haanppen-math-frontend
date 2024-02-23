@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextButton from '../atoms/TextButton';
+import studentInformationShape from '../../types/studentInformation';
 
 function StudentManagementList({
-  grade,
-  name,
-  phoneNumber,
+  studentInformation,
   setDeletedIndexArr,
   index,
 }) {
@@ -13,6 +12,7 @@ function StudentManagementList({
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev);
   };
+  const { grade, name, phoneNumber } = studentInformation;
   return (
     <div className="w-[42.875rem] h-[3.375rem] flex items-center justify-between">
       <div className="ml-8">
@@ -51,9 +51,9 @@ function StudentManagementList({
 }
 
 StudentManagementList.propTypes = {
-  grade: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  phoneNumber: PropTypes.string.isRequired,
+  studentInformation: PropTypes.arrayOf(
+    PropTypes.shape(studentInformationShape),
+  ).isRequired,
   setDeletedIndexArr: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
 };

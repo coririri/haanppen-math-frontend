@@ -2,7 +2,7 @@ import { useState } from 'react';
 import StudentManagementList from './components/moecules/StudentManagementList';
 
 function App() {
-  const [, setDeletedIndexArr] = useState(Array(3).fill(0));
+  const [, setDeletedIndexArr] = useState(Array(3).fill(false));
   return (
     <div>
       <StudentManagementList
