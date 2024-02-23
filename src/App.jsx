@@ -1,19 +1,32 @@
 import { useState } from 'react';
-import SlideBar from './components/moecules/SlideBar';
+import StudentManagementList from './components/moecules/StudentManagementList';
 
 function App() {
-  const [isClickArr, setIsClickArr] = useState([false, true, false]);
+  const [, setDeletedIndexArr] = useState(Array(3).fill(false));
+  const studentInformationArr = [
+    {
+      grade: 11,
+      name: '조인애',
+      phoneNumber: '010-3433-0652',
+    },
+    {
+      grade: 7,
+      name: '김민아',
+      phoneNumber: '010-3423-0652',
+    },
+  ];
   return (
-    <div className="mx-2 my-2">
-      <SlideBar
-        num={2}
-        firstText="학생 관리"
-        secondText="반 관리"
-        isClickArr={isClickArr}
-        setIsClickArr={setIsClickArr}
+    <div>
+      <StudentManagementList
+        studentInformationArr={studentInformationArr}
+        setDeletedIndexArr={setDeletedIndexArr}
+        index={0}
       />
-      {isClickArr[1] && <div>1번</div>}
-      {isClickArr[2] && <div>2번</div>}
+      <StudentManagementList
+        studentInformationArr={studentInformationArr}
+        setDeletedIndexArr={setDeletedIndexArr}
+        index={1}
+      />
     </div>
   );
 }
