@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import StudentManagementList from '../molecules/StudentManagementList';
-import { register } from '../../stores/slices/studentListSlice';
 
 function StudentManagementContainer() {
   const studentList = useSelector((state) => state.students);
-  const dispatch = useDispatch();
 
   const [deletedIndexArr, setDeletedIndexArr] = useState([]);
   return (
@@ -46,23 +44,6 @@ function StudentManagementContainer() {
             />
           </div>
         ))}
-      </div>
-      <div className="mt-4">
-        <button
-          type="button"
-          onClick={() => {
-            setDeletedIndexArr((prev) => [...prev, false]);
-            dispatch(
-              register({
-                grade: 11,
-                name: '조인애',
-                phoneNumber: '010-3433-0652',
-              }),
-            );
-          }}
-        >
-          학생 추가
-        </button>
       </div>
     </div>
   );
