@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { checkDeletedIndex } from '../../stores/slices/classListSlice';
 import TextButton from '../atoms/TextButton';
 
-function ClassManagementList({ setDeletedIndexArr, index, checked }) {
-  const classList = useSelector((state) => state.class.classes);
+function ClassManagementList({ index }) {
+  const { classes, deletedIndexArr } = useSelector((state) => state.class);
+  const dispatch = useDispatch();
 
+  console.log(deletedIndexArr);
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev);
   };
 
-  const { className, num, teacherName } = classList[index];
+  const { className, num, teacherName } = classes[index];
 
   return (
     <div className="w-[42.875rem] h-[3.375rem] flex items-center">
@@ -19,13 +22,8 @@ function ClassManagementList({ setDeletedIndexArr, index, checked }) {
         <input
           type="checkbox"
           className="w-[1.125rem] h-[1.125rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
-          checked={checked}
           onChange={() => {
-            setDeletedIndexArr((prev) => {
-              const newDeletedIndexArr = prev.slice();
-              newDeletedIndexArr[index] = !prev[index];
-              return newDeletedIndexArr;
-            });
+            dispatch(checkDeletedIndex(index));
           }}
         />
       </div>
@@ -33,7 +31,7 @@ function ClassManagementList({ setDeletedIndexArr, index, checked }) {
         <span className="text-xl text-hpBlack font-bold">{className}</span>
       </div>
       <div className="w-[11.375rem] flex justify-center">
-        <span className="text-xl text-hpBlack font-bold">{num}</span>
+        <span className="text-xl text-hpBlack font-bold">{num}명</span>
       </div>
       <div className="w-[16rem] flex justify-center">
         <span className="text-xl text-hpBlack font-bold">{teacherName}</span>
@@ -52,9 +50,7 @@ function ClassManagementList({ setDeletedIndexArr, index, checked }) {
 }
 
 ClassManagementList.propTypes = {
-  setDeletedIndexArr: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  checked: PropTypes.bool.isRequired,
 };
 
 export default ClassManagementList;
