@@ -1,30 +1,27 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TextButton from '../atoms/TextButton';
 import gradeTransform from '../../utils/gradeTransform';
+import { checkDeletedStudentIndex } from '../../stores/slices/studentListSlice';
 
-function StudentManagementList({ setDeletedIndexArr, index, checked }) {
-  const studentList = useSelector((state) => state.student.students);
+function StudentManagementList({ index }) {
+  const { students } = useSelector((state) => state.student);
+  const dispatch = useDispatch();
 
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev);
   };
-  const { grade, name, phoneNumber } = studentList[index];
+  const { grade, name, phoneNumber } = students[index];
   return (
     <div className="w-[42.875rem] h-[3.375rem] flex items-center">
       <div className="w-[7.5rem]">
         <input
           type="checkbox"
           className="w-[1.125rem] h-[1.125rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
-          checked={checked}
           onChange={() => {
-            setDeletedIndexArr((prev) => {
-              const newDeletedIndexArr = prev.slice();
-              newDeletedIndexArr[index] = !prev[index];
-              return newDeletedIndexArr;
-            });
+            dispatch(checkDeletedStudentIndex(index));
           }}
         />
       </div>
@@ -53,9 +50,7 @@ function StudentManagementList({ setDeletedIndexArr, index, checked }) {
 }
 
 StudentManagementList.propTypes = {
-  setDeletedIndexArr: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  checked: PropTypes.bool.isRequired,
 };
 
 export default StudentManagementList;

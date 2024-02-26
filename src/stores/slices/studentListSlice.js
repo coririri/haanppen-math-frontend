@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 /* eslint-disable no-param-reassign */
 export const studentListSlice = createSlice({
   name: 'studentList',
-  initialState: { students: [] },
+  initialState: { students: [], deletedIndexArr: [] },
   reducers: {
     register: (state, action) => {
       const { grade, name, phoneNumber } = action.payload;
@@ -32,10 +32,24 @@ export const studentListSlice = createSlice({
         phoneNumber,
       });
     },
+    checkDeletedStudentIndex: (state, action) => {
+      const index = action.payload;
+      state.deletedIndexArr = state.deletedIndexArr.map((item, idx) => {
+        if (idx === index) {
+          return !item; // 특정 인덱스의 값을 반전시킵니다.
+        }
+        return item; // 나머지는 그대로 유지합니다.
+      });
+    },
   },
 });
 
-export const { register, remove, removeMultiple, modify } =
-  studentListSlice.actions;
+export const {
+  register,
+  remove,
+  removeMultiple,
+  modify,
+  checkDeletedStudentIndex,
+} = studentListSlice.actions;
 
 export default studentListSlice.reducer;

@@ -3,11 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 export const classListSlice = createSlice({
   name: 'classList',
   initialState: {
-    classes: [
-      { className: '화56', num: 2, teacherName: '권나희 선생님' },
-      { className: '화16', num: 4, teacherName: '강병인 선생님' },
-    ],
-    deletedIndexArr: [false, false],
+    classes: [],
+    deletedIndexArr: [],
   },
   reducers: {
     register: (state, action) => {
@@ -43,7 +40,7 @@ export const classListSlice = createSlice({
         teacherName,
       });
     },
-    checkDeletedIndex: (state, action) => {
+    checkDeletedClassIndex: (state, action) => {
       const index = action.payload;
       state.deletedIndexArr = state.deletedIndexArr.map((item, idx) => {
         if (idx === index) {
@@ -55,7 +52,12 @@ export const classListSlice = createSlice({
   },
 });
 
-export const { register, remove, removeMultiple, modify, checkDeletedIndex } =
-  classListSlice.actions;
+export const {
+  register,
+  remove,
+  removeMultiple,
+  modify,
+  checkDeletedClassIndex,
+} = classListSlice.actions;
 
 export default classListSlice.reducer;

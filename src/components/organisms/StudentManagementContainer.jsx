@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import StudentManagementList from '../molecules/StudentManagementList';
 
 function StudentManagementContainer() {
   const studentList = useSelector((state) => state.student.students);
 
-  const [deletedIndexArr, setDeletedIndexArr] = useState([]);
   return (
     <div className="m-10">
       <div className="w-[42.875rem] h-[3.375rem] flex items-center">
@@ -37,11 +35,7 @@ function StudentManagementContainer() {
             key={studentList[index].phoneNumber}
             className="border-hpGray border-solid border-b-[0.1rem]"
           >
-            <StudentManagementList
-              setDeletedIndexArr={setDeletedIndexArr}
-              index={index}
-              checked={deleted}
-            />
+            <StudentManagementList index={index} />
           </div>
         ))}
       </div>

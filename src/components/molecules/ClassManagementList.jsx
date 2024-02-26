@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { checkDeletedIndex } from '../../stores/slices/classListSlice';
+import { checkDeletedClassIndex } from '../../stores/slices/classListSlice';
 import TextButton from '../atoms/TextButton';
 
 function ClassManagementList({ index }) {
-  const { classes, deletedIndexArr } = useSelector((state) => state.class);
+  const { classes } = useSelector((state) => state.class);
   const dispatch = useDispatch();
 
-  console.log(deletedIndexArr);
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev);
@@ -23,7 +22,7 @@ function ClassManagementList({ index }) {
           type="checkbox"
           className="w-[1.125rem] h-[1.125rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
           onChange={() => {
-            dispatch(checkDeletedIndex(index));
+            dispatch(checkDeletedClassIndex(index));
           }}
         />
       </div>
