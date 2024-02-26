@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import StudentManagementList from '../molecules/StudentManagementList';
 
 function StudentManagementContainer() {
-  const studentList = useSelector((state) => state.students);
+  const studentList = useSelector((state) => state.student.students);
 
   const [deletedIndexArr, setDeletedIndexArr] = useState([]);
   return (

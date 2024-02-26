@@ -1,6 +1,8 @@
-import StudentManagementContainer from './components/organisms/StudentManagementContainer';
+import { useState } from 'react';
+import ClassManagementList from './components/molecules/ClassManagementList';
 
 function App() {
+  const [, setDeletedIndexArr] = useState([]);
   // const studentInformationArr = [
   //   {
   //     grade: 11,
@@ -15,7 +17,16 @@ function App() {
   // ];
   return (
     <div>
-      <StudentManagementContainer />
+      {/* <ClassManagementList
+        setDeletedIndexArr={setDeletedIndexArr}
+        index={0}
+        checked={false}
+      /> */}
+      <ClassManagementList
+        setDeletedIndexArr={setDeletedIndexArr}
+        index={0}
+        checked={false}
+      />
     </div>
   );
 }

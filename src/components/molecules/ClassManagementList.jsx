@@ -2,16 +2,17 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import TextButton from '../atoms/TextButton';
-import gradeTransform from '../../utils/gradeTransform';
 
-function StudentManagementList({ setDeletedIndexArr, index, checked }) {
-  const studentList = useSelector((state) => state.student.students);
+function ClassManagementList({ setDeletedIndexArr, index, checked }) {
+  const classList = useSelector((state) => state.class.classes);
 
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev);
   };
-  const { grade, name, phoneNumber } = studentList[index];
+
+  const { className, num, teacherName } = classList[index];
+
   return (
     <div className="w-[42.875rem] h-[3.375rem] flex items-center">
       <div className="w-[7.5rem]">
@@ -29,15 +30,13 @@ function StudentManagementList({ setDeletedIndexArr, index, checked }) {
         />
       </div>
       <div className="w-[8rem] flex justify-center">
-        <span className="text-xl text-hpBlack font-bold">
-          {gradeTransform(grade)}
-        </span>
+        <span className="text-xl text-hpBlack font-bold">{className}</span>
       </div>
       <div className="w-[11.375rem] flex justify-center">
-        <span className="text-xl text-hpBlack font-bold">{name}</span>
+        <span className="text-xl text-hpBlack font-bold">{num}</span>
       </div>
       <div className="w-[16rem] flex justify-center">
-        <span className="text-xl text-hpBlack font-bold">{phoneNumber}</span>
+        <span className="text-xl text-hpBlack font-bold">{teacherName}</span>
       </div>
       <div className="w-[11rem] flex justify-center">
         <TextButton
@@ -52,10 +51,10 @@ function StudentManagementList({ setDeletedIndexArr, index, checked }) {
   );
 }
 
-StudentManagementList.propTypes = {
+ClassManagementList.propTypes = {
   setDeletedIndexArr: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   checked: PropTypes.bool.isRequired,
 };
 
-export default StudentManagementList;
+export default ClassManagementList;
