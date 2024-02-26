@@ -1,43 +1,46 @@
 import { createSlice } from '@reduxjs/toolkit';
 /* eslint-disable no-param-reassign */
-export const studentListSlice = createSlice({
-  name: 'studentList',
-  initialState: { students: [], deletedIndexArr: [] },
+export const classListSlice = createSlice({
+  name: 'classList',
+  initialState: {
+    classes: [],
+    deletedIndexArr: [],
+  },
   reducers: {
     register: (state, action) => {
-      const { grade, name, phoneNumber } = action.payload;
-      state.students.push({
-        grade,
-        name,
-        phoneNumber,
+      const { className, num, teacherName } = action.payload;
+      state.classes.push({
+        className,
+        num,
+        teacherName,
       });
-      state.students.push(false);
+      state.deletedIndexArr.push(false);
     },
     remove: (state, action) => {
       const { index } = action.payload;
-      state.students.splice(index, 1);
+      state.classes.splice(index, 1);
       state.deletedIndexArr.splice(index, 1);
     },
     removeMultiple: (state, action) => {
       const { removedArr } = action.payload;
       removedArr.sort((a, b) => b - a);
-      state.students = state.students.filter(
-        (student, index) => !removedArr.includes(index),
+      state.classes = state.classes.filter(
+        (group, index) => !removedArr.includes(index),
       );
       state.deletedIndexArr = state.classes.filter(
         (value, index) => !removedArr.includes(index),
       );
     },
     modify: (state, action) => {
-      const { index, grade, name, phoneNumber } = action.payload;
+      const { index, className, num, teacherName } = action.payload;
 
-      state.students.splice(index, 1, {
-        grade,
-        name,
-        phoneNumber,
+      state.classes.splice(index, 1, {
+        className,
+        num,
+        teacherName,
       });
     },
-    checkDeletedStudentIndex: (state, action) => {
+    checkDeletedClassIndex: (state, action) => {
       const index = action.payload;
       state.deletedIndexArr = state.deletedIndexArr.map((item, idx) => {
         if (idx === index) {
@@ -54,7 +57,7 @@ export const {
   remove,
   removeMultiple,
   modify,
-  checkDeletedStudentIndex,
-} = studentListSlice.actions;
+  checkDeletedClassIndex,
+} = classListSlice.actions;
 
-export default studentListSlice.reducer;
+export default classListSlice.reducer;
