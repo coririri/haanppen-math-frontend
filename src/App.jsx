@@ -1,9 +1,9 @@
-import ClassManagementContainer from './components/organisms/ClassManagementContainer';
+import TeacherManagementContainer from './components/organisms/TeacherManagementContainer';
 
 function App() {
   return (
     <div>
-      <ClassManagementContainer />
+      <TeacherManagementContainer />
     </div>
   );
 }

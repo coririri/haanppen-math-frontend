@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import StudentManagementList from '../molecules/StudentManagementList';
+import TeacherManagementList from '../molecules/TeacherManagementList';
 
-function StudentManagementContainer() {
-  const { students } = useSelector((state) => state.student);
+function TeacherManagementContainer() {
+  const { teachers } = useSelector((state) => state.teacher);
 
   return (
     <div className="m-10">
@@ -14,15 +14,12 @@ function StudentManagementContainer() {
             disabled
           />
         </div>
-        <div className="w-[8rem] flex justify-center">
-          <span className="text-xl text-hpGray font-bold">학년</span>
-        </div>
-        <div className="w-[11.375rem] flex justify-center">
+        <div className="w-[19.375rem] flex justify-center">
           <span className="text-xl text-hpGray font-bold">이름</span>
         </div>
         <div className="w-[16rem] flex justify-center">
           <span className="text-xl text-hpGray font-bold">
-            학생 ID(전화 번호)
+            선생님 ID(전화 번호)
           </span>
         </div>
         <div className="w-[11rem] text-xl flex justify-center text-hpGray font-bold">
@@ -30,12 +27,12 @@ function StudentManagementContainer() {
         </div>
       </div>
       <div className="w-[45rem] h-[20.25rem] overflow-y-auto border-hpBlack border-solid border-y-[0.125rem]">
-        {students.map((deleted, index) => (
+        {teachers.map((deleted, index) => (
           <div
-            key={students[index].phoneNumber}
+            key={teachers[index].phoneNumber}
             className="border-hpGray border-solid border-b-[0.1rem]"
           >
-            <StudentManagementList index={index} />
+            <TeacherManagementList index={index} />
           </div>
         ))}
       </div>
@@ -43,4 +40,4 @@ function StudentManagementContainer() {
   );
 }
 
-export default StudentManagementContainer;
+export default TeacherManagementContainer;
