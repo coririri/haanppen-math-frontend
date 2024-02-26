@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import StudentManagementList from '../molecules/StudentManagementList';
 
 function StudentManagementContainer() {
-  const studentList = useSelector((state) => state.student.students);
+  const { students } = useSelector((state) => state.student);
 
   return (
     <div className="m-10">
@@ -30,9 +30,9 @@ function StudentManagementContainer() {
         </div>
       </div>
       <div className="w-[45rem] h-[20.25rem] overflow-y-auto border-hpBlack border-solid border-y-[0.125rem]">
-        {deletedIndexArr.map((deleted, index) => (
+        {students.map((deleted, index) => (
           <div
-            key={studentList[index].phoneNumber}
+            key={students[index].phoneNumber}
             className="border-hpGray border-solid border-b-[0.1rem]"
           >
             <StudentManagementList index={index} />
