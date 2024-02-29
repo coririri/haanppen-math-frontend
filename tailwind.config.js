@@ -20,6 +20,7 @@ module.exports = {
       fontFamily: {
         sjBold: ['Sejong-hospital-Bold', 'sans', 'serif'],
         sjLight: ['Sejong-hospital-Light', 'sans', 'serif'],
+        cantarell: ['Cantarell'],
       },
     },
   },
