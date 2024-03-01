@@ -1,14 +1,22 @@
 import PropTypes from 'prop-types';
 import { AiOutlineSearch } from 'react-icons/ai';
 
-function Input({ type, size, placeholder, handleChange, handleClick, value }) {
+function Input({
+  type,
+  size,
+  placeholder,
+  handleChange,
+  handleClick,
+  handleBlur,
+  value,
+}) {
   if (type === 'singleLine') {
     return (
       <input
         className="w-full text-md font-cantarell font-bold rounded-lg border-[0.075rem] border-black bg-white px-2 py-[0.4rem] focus:outline-none"
         type="text"
-        value={value}
-        onChange={handleChange}
+        defaultValue={value}
+        onBlur={handleBlur}
       />
     );
   }
@@ -17,8 +25,8 @@ function Input({ type, size, placeholder, handleChange, handleClick, value }) {
       <div className="w-[20rem] h-[30rem]">
         <textarea
           className="w-full h-full text-md font-cantarell font-bold bg-white focus:outline-none"
-          value={{ value }}
-          onChange={handleChange}
+          defaultValue={value}
+          onBlur={handleBlur}
         />
       </div>
     );
@@ -29,7 +37,8 @@ function Input({ type, size, placeholder, handleChange, handleClick, value }) {
         <input
           className="w-full h-[3.5rem] text-2xl font-cantarell rounded-l-md border-y-[0.15rem] border-l-[0.15rem] border-[#DADADA] bg-white px-2 py-[0.4rem] focus:outline-none"
           type="text"
-          value={value}
+          defaultValue={value}
+          onBlur={handleBlur}
           placeholder={placeholder}
         />
         <button type="button" aria-label="Search" onClick={handleChange}>
@@ -67,10 +76,11 @@ function Input({ type, size, placeholder, handleChange, handleClick, value }) {
 Input.propTypes = {
   type: PropTypes.oneOf(['singleLine', 'multiLine', 'search', 'checkbox'])
     .isRequired,
-  size: PropTypes.oneOf(['normal', 'big']),
+  size: PropTypes.oneOf(['normal', 'big', '']),
   placeholder: PropTypes.string,
   handleChange: PropTypes.func,
   handleClick: PropTypes.func,
+  handleBlur: PropTypes.func,
   value: PropTypes.string,
 };
 
@@ -78,6 +88,7 @@ Input.defaultProps = {
   placeholder: '',
   handleChange: null,
   handleClick: null,
+  handleBlur: null,
   value: null,
   size: '',
 };
