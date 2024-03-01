@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { AiOutlineSearch } from 'react-icons/ai';
 
-function Input({ type, placeholder, handleChange, handleClick, value }) {
+function Input({ type, size, placeholder, handleChange, handleClick, value }) {
   if (type === 'singleLine') {
     return (
       <input
@@ -41,21 +41,33 @@ function Input({ type, placeholder, handleChange, handleClick, value }) {
     );
   }
   if (type === 'checkbox') {
-    return (
-      <div>
-        <input
-          type="checkbox"
-          className="w-[1.125rem] h-[1.125rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
-          onChange={handleClick}
-        />
-      </div>
-    );
+    if (size === 'big')
+      return (
+        <div>
+          <input
+            type="checkbox"
+            className="w-[1.68rem] h-[1.68rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
+            onChange={handleClick}
+          />
+        </div>
+      );
+    if (size === 'normal')
+      return (
+        <div>
+          <input
+            type="checkbox"
+            className="w-[1.125rem] h-[1.125rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
+            onChange={handleClick}
+          />
+        </div>
+      );
   }
 }
 
 Input.propTypes = {
   type: PropTypes.oneOf(['singleLine', 'multiLine', 'search', 'checkbox'])
     .isRequired,
+  size: PropTypes.oneOf(['normal', 'big']),
   placeholder: PropTypes.string,
   handleChange: PropTypes.func,
   handleClick: PropTypes.func,
@@ -67,6 +79,7 @@ Input.defaultProps = {
   handleChange: null,
   handleClick: null,
   value: null,
+  size: '',
 };
 
 export default Input;
