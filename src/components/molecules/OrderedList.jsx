@@ -26,7 +26,6 @@ function OrderedList({
       // 못 찾으면
       updatedDeletedIndexArr.push(order);
     }
-    console.log(updatedDeletedIndexArr);
     setDeletedIndexArr(updatedDeletedIndexArr);
   };
 
@@ -68,7 +67,43 @@ function OrderedList({
       </li>
     );
   if (type === 'videoRegistered') return <div>videoRegistered</div>;
-  if (type === 'chapter') return <div>chapter</div>;
+  if (type === 'chapter')
+    return (
+      <li>
+        <div className="flex items-center w-[40rem] h-[4rem]">
+          <div className="flex flex-col items-center justify-evenly w-[3rem] h-[4rem]">
+            <button
+              type="button"
+              aria-label="위로 올리기"
+              className="w-[1.68rem] h-[1.68rem] bg-white rounded-2xl"
+            >
+              <FiArrowUp size="1.68rem" />
+            </button>
+            <button
+              type="button"
+              aria-label="아래로 내리기"
+              className="w-[1.68rem] h-[1.68rem] bg-white rounded-2xl"
+            >
+              <FiArrowDown size="1.68rem" />
+            </button>
+          </div>
+          <div className="flex justify-center items-center w-[2.5rem]">
+            <Input type="checkbox" size="big" handleChange={handleCheckbox} />
+          </div>
+          <div className="flex justify-center w-[7.5rem]">
+            <span className="text-2xl font-bold">{order}단원</span>
+          </div>
+          <div className="w-[25.25rem]">
+            <Input
+              type="singleLine"
+              value={orderedState[order - 1]}
+              handleBlur={handleBlur}
+            />
+          </div>
+        </div>
+        <div className="w-[39rem] h-[0.1rem] bg-white" />
+      </li>
+    );
 }
 
 OrderedList.propTypes = {

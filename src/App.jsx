@@ -3,17 +3,17 @@ import OrderedList from './components/molecules/OrderedList';
 
 function App() {
   const [orderedState, setOrderedState] = useState([
-    'https://www.youtube.com/watch?v=....',
-    'https://www.youtube.com/watch?v=....',
-    'https://www.youtube.com/watch?v=....',
-    'https://www.youtube.com/watch?v=....',
+    'Theme 1. 등차수열의 대칭성과 합의 구조',
+    'Theme 1. 등차수열의 대칭성과 합의 구조',
+    'Theme 1. 등차수열의 대칭성과 합의 구조',
+    'Theme 1. 등차수열의 대칭성과 합의 구조',
   ]);
 
   const [deletedIndexArr, setDeletedIndexArr] = useState([]);
   return (
     <div className="m-2">
       <OrderedList
-        type="videoRegistration"
+        type="chapter"
         order={1}
         orderedState={orderedState}
         setOrderedState={setOrderedState}
