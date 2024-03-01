@@ -1,18 +1,24 @@
-import { useRef } from 'react';
-import Input from './components/atoms/Input';
+import { useState } from 'react';
+import OrderedList from './components/molecules/OrderedList';
 
 function App() {
-  const inputRef = useRef(null);
+  const [orderedState, setOrderedState] = useState([
+    'https://www.youtube.com/watch?v=....',
+    'https://www.youtube.com/watch?v=....',
+    'https://www.youtube.com/watch?v=....',
+    'https://www.youtube.com/watch?v=....',
+  ]);
 
+  const [deletedIndexArr, setDeletedIndexArr] = useState([]);
   return (
     <div className="m-2">
-      <Input
-        type="search"
-        inputRef={inputRef}
-        placeholder="반 이름 검색"
-        handleClickSearch={() => {
-          console.log(inputRef.current?.value);
-        }}
+      <OrderedList
+        type="videoRegistration"
+        order={1}
+        orderedState={orderedState}
+        setOrderedState={setOrderedState}
+        deletedIndexArr={deletedIndexArr}
+        setDeletedIndexArr={setDeletedIndexArr}
       />
     </div>
   );

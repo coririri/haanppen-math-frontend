@@ -41,7 +41,7 @@ function Input({
           onBlur={handleBlur}
           placeholder={placeholder}
         />
-        <button type="button" aria-label="Search" onClick={handleChange}>
+        <button type="button" aria-label="Search" onClick={handleClick}>
           <div className="w-[3.4rem] h-[3.5rem] flex items-center justify-center border-[0.15rem] border-solid border-[#DADADA] bg-[#DADADA]">
             <AiOutlineSearch size="3.3rem" color="#C1C1C1" />
           </div>
@@ -56,7 +56,7 @@ function Input({
           <input
             type="checkbox"
             className="w-[1.68rem] h-[1.68rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
-            onChange={handleClick}
+            onChange={handleChange}
           />
         </div>
       );
