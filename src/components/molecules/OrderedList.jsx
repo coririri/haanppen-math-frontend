@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
 import Input from '../atoms/Input';
+import DropdownMenu from './DropdownMenu';
 
 function OrderedList({
   type,
@@ -10,6 +12,8 @@ function OrderedList({
   deletedIndexArr,
   setDeletedIndexArr,
 }) {
+  const [dropdownSelectedIndex, setDropdownSelectedIndex] = useState(0);
+
   const handleBlur = (e) => {
     const updatedOreredState = [...orderedState];
     updatedOreredState.splice(order - 1, 1, e.target.value);
@@ -66,7 +70,44 @@ function OrderedList({
         <div className="w-[39rem] h-[0.1rem] bg-white" />
       </li>
     );
-  if (type === 'videoRegistered') return <div>videoRegistered</div>;
+  if (type === 'videoRegistered')
+    return (
+      <li>
+        <div className="flex items-center w-[40rem] h-[4rem]">
+          <div className="flex flex-col items-center justify-evenly w-[3rem] h-[4rem]">
+            <button
+              type="button"
+              aria-label="위로 올리기"
+              className="w-[1.68rem] h-[1.68rem] bg-white rounded-2xl"
+            >
+              <FiArrowUp size="1.68rem" />
+            </button>
+            <button
+              type="button"
+              aria-label="아래로 내리기"
+              className="w-[1.68rem] h-[1.68rem] bg-white rounded-2xl"
+            >
+              <FiArrowDown size="1.68rem" />
+            </button>
+          </div>
+          <div className="flex justify-center items-center w-[2.5rem]">
+            <Input type="checkbox" size="big" handleChange={handleCheckbox} />
+          </div>
+          <div className="flex justify-center w-[7.5rem]">
+            <span className="text-2xl font-bold">{order}번 영상</span>
+          </div>
+          <div className="w-[25.25rem] pt-[13.5rem]">
+            <DropdownMenu
+              textArr={orderedState[order - 1]}
+              selectedIndex={dropdownSelectedIndex}
+              setSelectedIndex={setDropdownSelectedIndex}
+              size="long"
+            />
+          </div>
+        </div>
+        <div className="w-[39rem] h-[0.1rem] bg-white" />
+      </li>
+    );
   if (type === 'chapter')
     return (
       <li>
@@ -110,7 +151,12 @@ OrderedList.propTypes = {
   type: PropTypes.oneOf(['videoRegistration', 'videoRegistered', 'chapter'])
     .isRequired,
   order: PropTypes.number.isRequired,
-  orderedState: PropTypes.arrayOf(PropTypes.string).isRequired,
+  orderedState: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+  ).isRequired,
   setOrderedState: PropTypes.func.isRequired,
   deletedIndexArr: PropTypes.arrayOf(PropTypes.number).isRequired,
   setDeletedIndexArr: PropTypes.func.isRequired,

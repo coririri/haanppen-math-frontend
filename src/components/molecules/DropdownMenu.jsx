@@ -24,7 +24,7 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size }) {
       selectedIndex !== index ? (
         <button
           type="button"
-          className={`w-[24.75rem] h-[3rem] flex items-center font-bold ${sizeByTextSize} hover:bg-hpLightGray`}
+          className={`w-[24.75rem] h-[3rem] bg-hpLightGray z-10 flex items-center font-bold ${sizeByTextSize} hover:bg-hpGray`}
           key={text}
           onClick={() => {
             setSelectedIndex(index);
@@ -47,7 +47,7 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size }) {
 
   return (
     <div
-      className={`${sizeByWidth} h-[16rem] ${isOpen ? 'border-[0.075rem] rounded-lg border-hpLightkBlack border-solid' : ''}`}
+      className={`${sizeByWidth} h-[16.3rem] ${isOpen ? 'border-[0.075rem] rounded-lg border-hpLightkBlack border-solid' : ''}`}
     >
       <button
         type="button"
