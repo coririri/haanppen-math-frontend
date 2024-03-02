@@ -1,9 +1,15 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
-function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size, isOpen, handleClick }) {
-
+function DropdownMenu({
+  size,
+  textArr,
+  selectedIndex,
+  setSelectedIndex,
+  isOpen,
+  order,
+  handleClick,
+}) {
   let sizeByWidth = '';
   let sizeByTextSize = '';
   let leftPaddingText = '';
@@ -31,7 +37,7 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size, isOpen, 
           key={text}
           onClick={() => {
             setSelectedIndex(index);
-            setIsOpen(false);
+            handleClick(order);
           }}
         >
           <div
@@ -55,7 +61,9 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size, isOpen, 
           type="button"
           className={`w-[25.25rem] h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
-          onClick={handleClick}
+          onClick={() => {
+            handleClick(order);
+          }}
         >
           <div className="w-[23rem] h-[2.4rem] leading-[2.4rem] text-md text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
             {textArr[selectedIndex]}
@@ -82,7 +90,9 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size, isOpen, 
           type="button"
           className={`w-60 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
-          onClick={handleClick}
+          onClick={() => {
+            handleClick(order);
+          }}
         >
           <div className="w-56 h-[2.4rem] leading-[2.4rem] text-xl text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
             {textArr[selectedIndex]}
@@ -109,7 +119,9 @@ function DropdownMenu({ textArr, selectedIndex, setSelectedIndex, size, isOpen, 
           type="button"
           className={`w-32 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
-          onClick={handleClick}
+          onClick={() => {
+            handleClick(order);
+          }}
         >
           <div className="w-30 h-[2.4rem] leading-[2.4rem] text-xl text-left pl-4 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
             {textArr[selectedIndex]}
@@ -136,7 +148,8 @@ DropdownMenu.propTypes = {
   setSelectedIndex: PropTypes.func.isRequired,
   size: PropTypes.oneOf(['small', 'normal', 'long']).isRequired,
   isOpen: PropTypes.bool.isRequired,
-  handleClick: PropTypes.func.isRequired
+  order: PropTypes.number.isRequired,
+  handleClick: PropTypes.func.isRequired,
 };
 
 export default DropdownMenu;
