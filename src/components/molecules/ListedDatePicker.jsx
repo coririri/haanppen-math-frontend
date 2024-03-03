@@ -1,13 +1,13 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { BsTriangleFill } from 'react-icons/bs';
 
-function ListedDatePicker() {
+function ListedDatePicker({ year, month, date, order }) {
   return (
     <div className="flex justify-between w-[9rem] h-[1.75rem]">
       <div className="w-[2.75rem] h-[1.75rem] flex items-center border-solid border-hpGray rounded-lg border-[0.05rem]">
         <div className="w-[1.75rem] h-full text-center">
           <span className="font-bold text-md text-hpDarkBlue leading-[1.625] pl-1">
-            24
+            {year}
           </span>
         </div>
         <div className="w-[1rem] h-[1.5rem] my-auto">
@@ -30,7 +30,7 @@ function ListedDatePicker() {
       <div className="w-[2.75rem] h-[1.75rem] flex items-center border-solid border-hpGray rounded-lg border-[0.05rem]">
         <div className="w-[1.75rem] h-full text-center">
           <span className="font-bold text-md text-hpDarkBlue leading-[1.625] pl-1">
-            24
+            {month}
           </span>
         </div>
         <div className="w-[1rem] h-[1.5rem] my-auto">
@@ -53,7 +53,7 @@ function ListedDatePicker() {
       <div className="w-[2.75rem] h-[1.75rem] flex items-center border-solid border-hpGray rounded-lg border-[0.05rem]">
         <div className="w-[1.75rem] h-full text-center">
           <span className="font-bold text-md text-hpDarkBlue leading-[1.625] pl-1">
-            24
+            {date}
           </span>
         </div>
         <div className="w-[1rem] h-[1.5rem] my-auto">
@@ -76,5 +76,12 @@ function ListedDatePicker() {
     </div>
   );
 }
+
+ListedDatePicker.propTypes = {
+  year: PropTypes.number.isRequired,
+  month: PropTypes.number.isRequired,
+  date: PropTypes.number.isRequired,
+  order: PropTypes.number.isRequired,
+};
 
 export default ListedDatePicker;
