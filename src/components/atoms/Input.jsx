@@ -1,24 +1,38 @@
 import PropTypes from 'prop-types';
 import { AiOutlineSearch } from 'react-icons/ai';
 
-function Input({ type, inputRef, placeholder, handleClickSearch }) {
+function Input({
+  type,
+  handleClick,
+  handleBlur,
+  handleChange,
+  handleClickSearch,
+  defaultValue,
+  placeholder,
+}) {
   if (type === 'singleLine') {
     return (
       <input
         className="w-full text-md font-cantarell font-bold rounded-lg border-[0.075rem] border-black bg-white px-2 py-[0.4rem] focus:outline-none"
         type="text"
-        ref={inputRef}
+        onClick={handleClick}
+        onBlur={handleBlur}
+        onChange={handleChange}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
       />
     );
   }
   if (type === 'multiLine') {
     return (
-      <div className="w-[20rem] h-[30rem]">
-        <textarea
-          className="w-full h-full text-md font-cantarell font-bold bg-white focus:outline-none"
-          ref={inputRef}
-        />
-      </div>
+      <textarea
+        className="w-[20rem] h-[30rem] text-md font-cantarell font-bold bg-white focus:outline-none"
+        onClick={handleClick}
+        onBlur={handleBlur}
+        onChange={handleChange}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+      />
     );
   }
   if (type === 'search') {
@@ -27,7 +41,10 @@ function Input({ type, inputRef, placeholder, handleClickSearch }) {
         <input
           className="w-full h-[3.5rem] text-2xl font-cantarell rounded-l-md border-y-[0.15rem] border-l-[0.15rem] border-[#DADADA] bg-white px-2 py-[0.4rem] focus:outline-none"
           type="text"
-          ref={inputRef}
+          onClick={handleClick}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          defaultValue={defaultValue}
           placeholder={placeholder}
         />
         <button type="button" aria-label="Search" onClick={handleClickSearch}>
@@ -38,19 +55,38 @@ function Input({ type, inputRef, placeholder, handleClickSearch }) {
       </div>
     );
   }
+  if (type === 'checkbox') {
+    return (
+      <input
+        type="checkbox"
+        className="w-full h-full border-[0.075rem] border-solid border-hpBlack"
+        onClick={handleClick}
+        onBlur={handleBlur}
+        onChange={handleChange}
+        defaultValue={defaultValue}
+      />
+    );
+  }
 }
 
 Input.propTypes = {
-  type: PropTypes.oneOf(['singleLine', 'multiLine', 'search']).isRequired,
-  inputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  type: PropTypes.oneOf(['singleLine', 'multiLine', 'checkbox', 'search'])
     .isRequired,
-  placeholder: PropTypes.string,
+  handleClick: PropTypes.func,
   handleClickSearch: PropTypes.func,
+  handleBlur: PropTypes.func,
+  handleChange: PropTypes.func,
+  defaultValue: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
+  placeholder: PropTypes.string,
 };
 
 Input.defaultProps = {
-  placeholder: '',
+  handleClick: null,
   handleClickSearch: null,
+  handleBlur: null,
+  handleChange: null,
+  defaultValue: null,
+  placeholder: null,
 };
 
 export default Input;
