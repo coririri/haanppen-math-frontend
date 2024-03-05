@@ -50,6 +50,8 @@
 
 body {
   max-width: 1440px;
+  height: 1024px;
+  max-height: 1024px;
   margin: 0 auto;
   font-family:
     Sejong-hospital-Light,
