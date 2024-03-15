@@ -1,9 +1,9 @@
-import LoginTempalte from './components/template/LoginTempalte';
+import LoginPage from './components/pages/LoginPage';
 
 function App() {
   return (
     <div>
-      <LoginTempalte />
+      <LoginPage />
     </div>
   );
 }

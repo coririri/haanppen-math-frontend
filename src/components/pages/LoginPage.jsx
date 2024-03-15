@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import instance from '../../apis/instance';
 import logoImages from '../../images/loginPage/logo_image.png';
 
-function LoginTempalte() {
+function LoginPage() {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [userForm, setUserForm] = useState({ id: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
@@ -72,9 +72,13 @@ function LoginTempalte() {
       )
       .then((response) => {
         const token = response.data.accessToken;
+        const { role } = response.data;
         instance.defaults.headers.common.Authorization = token;
+        localStorage.setItem('role', role);
       })
       .catch((error) => {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL;
+        console.log(backendUrl);
         if (error.response) {
           // 요청이 전송되었고, 서버는 2xx 외의 상태 코드로 응답했습니다.
           const errorStatus = Number(error.response.status);
@@ -85,7 +89,7 @@ function LoginTempalte() {
               // 404 페이지로 이동
             } else if (errorCode === '-003') {
               setErrorMessage('비밀번호가 틀렸습니다');
-            } else if (errorCode === '-104') {
+            } else if (errorCode === '-006') {
               setErrorMessage('없는 아이디 입니다.');
             } else if (errorCode === '-101') {
               setErrorMessage('입력 형식이 잘못 됐습니다.');
@@ -180,4 +184,4 @@ function LoginTempalte() {
   );
 }
 
-export default LoginTempalte;
+export default LoginPage;
