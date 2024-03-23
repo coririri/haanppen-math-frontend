@@ -17,6 +17,11 @@ psd
 thumb
 sketch
 
+.env
+.env.prodution
+.env.development
+.env.test
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
