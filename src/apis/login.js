@@ -1,6 +1,6 @@
 import instance from './instance';
 
-const login = (userForm, setErrorMessage) => {
+const login = (userForm, setErrorMessage, navigate) => {
   instance
     .post('/api/login', {
       userPhoneNumber: userForm.id,
@@ -20,8 +20,14 @@ const login = (userForm, setErrorMessage) => {
         if (errorStatus >= 400 && errorStatus < 500) {
           // 클라이언트 요청 오류
           if (errorStatus === 404) {
+            navigate('nonfound-pageserver');
+            setTimeout(() => {
+              alert('메인 페이지로 이동합니다');
+              navigate('/');
+            }, 3000);
             // 404 페이지로 이동
-          } else if (errorCode === '-003') {
+          }
+          if (errorCode === '-003') {
             setErrorMessage('비밀번호가 틀렸습니다');
           } else if (errorCode === '-006') {
             setErrorMessage('없는 아이디 입니다.');
@@ -29,6 +35,11 @@ const login = (userForm, setErrorMessage) => {
             setErrorMessage('입력 형식이 잘못 됐습니다.');
           }
         } else if (errorStatus >= 500) {
+          navigate('server-error');
+          setTimeout(() => {
+            alert('메인 페이지로 이동합니다');
+            navigate('/');
+          }, 3000);
           // 500 페이지로 이동
         }
       } else if (error.request) {

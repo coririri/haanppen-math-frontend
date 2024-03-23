@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logoImages from '../../images/loginPage/logo_image.png';
 import { idValidation, passwordValidation } from '../../utils/loginValidation';
 import login from '../../apis/login';
@@ -7,6 +8,7 @@ import LoginForm from '../organisms/LoginForm';
 function LoginPage() {
   const [userForm, setUserForm] = useState({ id: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const { id } = userForm;
@@ -19,7 +21,7 @@ function LoginPage() {
   }, [userForm.password]);
 
   const handleLoginClick = () => {
-    login(userForm, setErrorMessage);
+    login(userForm, setErrorMessage, navigate);
   };
 
   return (
