@@ -3,17 +3,22 @@ import LoginPage from './components/pages/LoginPage';
 import NonFoundPageServerError from './components/pages/NonFoundPageServerError';
 import ServerErrorPage from './components/pages/ServerErrorPage';
 import NonFoundClientError from './components/pages/NonFoundPageClientError';
+import CommonLayout from './components/layouts/CommonLayout';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route
-          path="/nonfound-pageserver"
-          element={<NonFoundPageServerError />}
-        />
-        <Route path="/server-error" element={<ServerErrorPage />} />
+        {/* 공통 레이아웃 */}
+        <Route path="/" element={<CommonLayout />}>
+          {/* 단독 레이아웃 */}
+          <Route index element={<LoginPage />} />
+          <Route
+            path="nonfound-pageserver"
+            element={<NonFoundPageServerError />}
+          />
+          <Route path="server-error" element={<ServerErrorPage />} />
+        </Route>
         {/* 404 에러 */}
         <Route path="*" element={<NonFoundClientError />} />
       </Routes>
