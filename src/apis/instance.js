@@ -19,9 +19,10 @@ instance.interceptors.request.use(async (config) => {
     try {
       const response = await refreshInstance.post('/api/login/refresh');
       const newToken = response.data.accessToken;
-      const { role } = response.data;
+      const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = newToken;
       localStorage.setItem('role', role);
+      localStorage.setItem('userName', userName);
     } catch (error) {
       console.error('토큰을 갱신하는 중 에러가 발생했습니다:', error);
       // 토큰 갱신에 실패한 경우 여기에 적절한 처리를 추가할 수 있습니다.

@@ -8,9 +8,10 @@ const login = (userForm, setErrorMessage, navigate) => {
     })
     .then((response) => {
       const token = response.data.accessToken;
-      const { role } = response.data;
+      const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = token;
       localStorage.setItem('role', role);
+      localStorage.setItem('userName', userName);
     })
     .catch((error) => {
       if (error.response) {
