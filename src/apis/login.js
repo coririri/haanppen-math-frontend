@@ -1,7 +1,7 @@
-import instance from './instance';
+import instance, { loginInstance } from './instance';
 
 const login = (userForm, setErrorMessage, navigate) => {
-  instance
+  loginInstance
     .post('/api/login', {
       userPhoneNumber: userForm.id,
       password: userForm.password,
