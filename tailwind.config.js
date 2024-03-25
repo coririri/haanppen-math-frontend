@@ -22,6 +22,10 @@ module.exports = {
         sjLight: ['Sejong-hospital-Light', 'sans', 'serif'],
         cantarell: ['Cantarell'],
       },
+      screens: {
+        md: '834px',
+        lg: '1440px',
+      },
     },
   },
   plugins: [],
