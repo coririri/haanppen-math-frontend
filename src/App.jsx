@@ -14,7 +14,7 @@ function App() {
         {/* 404 에러 */}
         <Route path="*" element={<NonFoundClientError />} />
         {/* 단독 레이아웃 */}
-        <Route index element={<LoginPage />} />
+        <Route path="login" element={<LoginPage />} />
         <Route
           path="nonfound-pageserver"
           element={<NonFoundPageServerError />}

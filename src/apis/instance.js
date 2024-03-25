@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-const refreshInstance = axios.create({
+export const refreshInstance = axios.create({
   baseURL: backendUrl,
   timeout: 1000,
 });
@@ -14,8 +14,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(async (config) => {
   // accessToken이 없거나 만료된 경우 새로운 토큰을 가져오는 로직
-  const token = instance.defaults.headers.common.Authorization;
-  if (!token) {
+  const curToken = instance.defaults.headers.common.Authorization;
+  const curUserName = localStorage.getItem('userName');
+  const curRole = localStorage.getItem('role');
+  if (!curToken || !curUserName || !curRole) {
     try {
       const response = await refreshInstance.post('/api/login/refresh');
       const newToken = response.data.accessToken;
