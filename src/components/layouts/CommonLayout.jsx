@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 function CommonLayout() {
   return (
-    <div>
+    <div className="h-[100vh]">
       {/* 헤더 */}
       <Outlet />
     </div>

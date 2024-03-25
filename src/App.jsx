@@ -10,17 +10,16 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* 공통 레이아웃 */}
-        <Route path="/" element={<CommonLayout />}>
-          {/* 단독 레이아웃 */}
-          <Route index element={<LoginPage />} />
-          <Route
-            path="nonfound-pageserver"
-            element={<NonFoundPageServerError />}
-          />
-          <Route path="server-error" element={<ServerErrorPage />} />
-        </Route>
+        <Route path="/" element={<CommonLayout />} />
         {/* 404 에러 */}
         <Route path="*" element={<NonFoundClientError />} />
+        {/* 단독 레이아웃 */}
+        <Route index element={<LoginPage />} />
+        <Route
+          path="nonfound-pageserver"
+          element={<NonFoundPageServerError />}
+        />
+        <Route path="server-error" element={<ServerErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
