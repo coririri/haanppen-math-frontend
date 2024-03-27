@@ -1,0 +1,75 @@
+@tailwind base;
+
+/* Firefox */
+/* * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary) var(--primary);
+} */
+
+/* Chrome, Edge, and Safari */
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 0.5rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Sejong-hospital-Light';
+  font-weight: Light;
+  src: url('../public/fonts/Sejong hospital Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Sejong-hospital-Bold';
+  font-weight: Bold;
+  src: url('../public/fonts/Sejong hospital Bold.ttf') format('truetype');
+}
+
+body {
+  max-width: 1440px;
+  height: 100vh;
+  margin: 0 auto;
+  font-family:
+    Sejong-hospital-Light,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
