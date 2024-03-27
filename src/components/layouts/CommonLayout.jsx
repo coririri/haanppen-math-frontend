@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import instance, { refreshInstance } from '../../apis/instance';
+import Header from '../organisms/Header';
 
 function CommonLayout() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       const curToken = instance.defaults.headers.common.Authorization;
@@ -22,7 +23,7 @@ function CommonLayout() {
           // 토큰 갱신에 실패한 경우 여기에 적절한 처리를 추가할 수 있습니다.
           setTimeout(() => {
             alert('로그인 페이지로 이동합니다');
-            navigate('/login');
+            // navigate('/login');
           }, 3000);
         }
       }
@@ -33,7 +34,7 @@ function CommonLayout() {
 
   return (
     <div className="h-[100vh]">
-      {/* 헤더 */}
+      <Header />
       <Outlet />
     </div>
   );
