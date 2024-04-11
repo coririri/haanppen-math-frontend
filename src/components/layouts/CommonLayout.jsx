@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import instance, { refreshInstance } from '../../apis/instance';
 import Header from '../organisms/Header';
+import Navigation from '../organisms/Navigation';
 
 function CommonLayout() {
   // const navigate = useNavigate();
@@ -35,6 +36,7 @@ function CommonLayout() {
   return (
     <div className="h-[100vh]">
       <Header />
+      <Navigation />
       <Outlet />
     </div>
   );
