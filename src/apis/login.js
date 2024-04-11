@@ -12,6 +12,7 @@ const login = (userForm, setErrorMessage, navigate) => {
       instance.defaults.headers.common.Authorization = token;
       localStorage.setItem('role', role);
       localStorage.setItem('userName', userName);
+      navigate('/');
     })
     .catch((error) => {
       if (error.response) {
