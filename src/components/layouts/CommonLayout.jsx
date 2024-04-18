@@ -34,10 +34,18 @@ function CommonLayout() {
   }, []);
 
   return (
-    <div className="h-[100vh]">
+    <div>
       <Header />
       <Navigation />
-      <Outlet />
+      {localStorage.getItem('role') === 'STUDENT' ? (
+        <div className="w-[428px] h-[712px] border-[12px] mx-auto  border-hpBackgroundGray border-solid">
+          <Outlet />
+        </div>
+      ) : (
+        <div className="w-[1400px] h-[680px] mx-auto border-[20px] border-hpBackgroundGray border-solid">
+          <Outlet />
+        </div>
+      )}
     </div>
   );
 }

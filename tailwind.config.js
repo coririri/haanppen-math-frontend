@@ -16,6 +16,7 @@ module.exports = {
         hpLightRed: '#C4002F',
         hpHoverLightGray: '#E9E9E9',
         hpClickedWhiteBlue: '#6ED1DE',
+        hpBackgroundGray: '#F0F0F0',
       },
       fontFamily: {
         sjBold: ['Sejong-hospital-Bold', 'sans', 'serif'],
