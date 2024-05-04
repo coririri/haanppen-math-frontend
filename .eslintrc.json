@@ -13,6 +13,14 @@
   },
   "plugins": ["react"],
   "rules": {
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "labelAttributes": ["htmlFor"]
+      }
+    ],
+    "react/prop-types": "off",
+    "import/no-extraneous-dependencies": "off"
   }
 }
