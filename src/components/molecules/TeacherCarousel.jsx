@@ -8,14 +8,14 @@ function TeacherCarousel({
 }) {
   const handleChangeSelectedTeacherindex = (flag) => {
     if (flag === 'left') {
-      if (selectedTeacherindex === 0) {
+      if (selectedTeacherindex === 0 || selectedTeacherindex === 1) {
         setSelectedTeacherindexIndex(teacherList.length - 1);
       } else {
         setSelectedTeacherindexIndex((prev) => prev - 1);
       }
     } else if (flag === 'right') {
       if (selectedTeacherindex === teacherList.length - 1) {
-        setSelectedTeacherindexIndex(0);
+        setSelectedTeacherindexIndex(1);
       } else {
         setSelectedTeacherindexIndex((prev) => prev + 1);
       }
@@ -39,7 +39,9 @@ function TeacherCarousel({
           />
         </button>
         <span className="h-[42px] leading-[42px] text-lg font-bold overflow-hidden">
-          {teacherList[selectedTeacherindex]} 선생님
+          {selectedTeacherindex === 0
+            ? teacherList[selectedTeacherindex]
+            : `${teacherList[selectedTeacherindex]} 선생님`}
         </span>
         <button
           type="button"
