@@ -8,8 +8,10 @@ const login = (userForm, setErrorMessage, navigate) => {
     })
     .then((response) => {
       const token = response.data.accessToken;
+      console.log(token);
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = token;
+      console.log(instance.defaults.headers.common.Authorization);
       localStorage.setItem('role', role);
       localStorage.setItem('userName', userName);
       navigate('/');
@@ -38,10 +40,7 @@ const login = (userForm, setErrorMessage, navigate) => {
           }
         } else if (errorStatus >= 500) {
           navigate('server-error');
-          setTimeout(() => {
-            alert('메인 페이지로 이동합니다');
-            navigate('/');
-          }, 3000);
+          alert('메인 페이지로 이동합니다');
           // 500 페이지로 이동
         }
       } else if (error.request) {

@@ -1,23 +1,67 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsFillPencilFill } from 'react-icons/bs';
 import { IoMdClose } from 'react-icons/io';
 import Slider from 'react-slick';
+import { useNavigate } from 'react-router-dom';
 import InputImageButton from '../atoms/InputImageButton';
 import IconButton from '../atoms/IconButton';
 import TeacherCarousel from '../molecules/TeacherCarousel';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import instance from '../../apis/instance';
 
 function WriteQueryPage() {
+  const [imgPreview, setImgePreview] = useState([]);
   const [imgFiles, setImgFiles] = useState([]);
-  const finishWrite = () => {};
-
-  const teacherList = ['선택 없음', '권나희', '하경현', '정은채'];
+  const [teacherList, setTeacherList] = useState(['선택 없음']);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
+  const { navigate } = useNavigate();
+
+  const finishWrite = () => {
+    const formData = new FormData();
+    imgFiles.forEach((img) => {
+      formData.append('images', img);
+    });
+    formData.append('targetMemberId', teacherList[selectedTeacherindex].id);
+    formData.append('content', '없음');
+    formData.append('title', '제목 없음');
+    instance
+      .post('/api/board/questions', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Content-Type을 반드시 이렇게 하여야 한다.
+        },
+      })
+      .then(() => {
+        navigate('/question-board');
+        console.log('게시글 작성 성공');
+      })
+      .catch(() => {
+        alert('게시글 작성에 실패 했습니다');
+        console.log('게시글 작성 실패');
+      });
+  };
+
+  useEffect(() => {
+    instance
+      .get('/api/members/teachers')
+      .then((response) => {
+        const entireTeahcerList = response.data;
+        setTeacherList((prev) => [...prev, ...entireTeahcerList]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(instance.defaults.headers.common.Authorization);
+  }, []);
+
   const handleDeleteImageButton = (index) => {
     setImgFiles(() => [
       ...imgFiles.slice(0, index),
       ...imgFiles.slice(index + 1, imgFiles.length),
+    ]);
+    setImgePreview(() => [
+      ...imgPreview.slice(0, index),
+      ...imgPreview.slice(index + 1, imgFiles.length),
     ]);
   };
 
@@ -33,7 +77,7 @@ function WriteQueryPage() {
       <div className="text-center text-lg mt-4 font-bold text-hpRed">
         *사진으로만 질문하세요*
       </div>
-      <div className="block">
+      <div className="block w-[404px] mx-auto">
         <Slider
           dots
           infinite={false}
@@ -42,7 +86,7 @@ function WriteQueryPage() {
           slidesToShow={1}
           arrows={false}
         >
-          {imgFiles.map((src, index) => (
+          {imgPreview.map((src, index) => (
             <div className="w-[404px] h-[400px] mx-auto mt-6 relative">
               <button
                 className="absolute right-2 top-4 bg-black"
@@ -67,7 +111,10 @@ function WriteQueryPage() {
             icon={<BsFillPencilFill size="1.5rem" />}
             handleClick={finishWrite}
           />
-          <InputImageButton setImgFiles={setImgFiles} />
+          <InputImageButton
+            setImgFiles={setImgFiles}
+            setImgePreview={setImgePreview}
+          />
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 export const refreshInstance = axios.create({
   baseURL: backendUrl,
   timeout: 1000,
+  withCredentials: true, // http-only 쿠키를 받기 위해
 });
 
 const instance = axios.create({
@@ -17,12 +18,14 @@ instance.interceptors.request.use(async (config) => {
   const curToken = instance.defaults.headers.common.Authorization;
   const curUserName = localStorage.getItem('userName');
   const curRole = localStorage.getItem('role');
+  console.log(curToken);
   if (!curToken || !curUserName || !curRole) {
     try {
       const response = await refreshInstance.post('/api/login/refresh');
       const newToken = response.data.accessToken;
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = newToken;
+      console.log(instance.defaults.headers.common.Authorization);
       localStorage.setItem('role', role);
       localStorage.setItem('userName', userName);
     } catch (error) {
@@ -40,6 +43,7 @@ instance.interceptors.request.use(async (config) => {
 export const loginInstance = axios.create({
   baseURL: backendUrl,
   timeout: 1000,
+  withCredentials: true, // http-only 쿠키를 받기 위해
 });
 
 export default instance;
