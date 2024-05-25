@@ -2,15 +2,15 @@ import axios from 'axios';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-export const refreshInstance = axios.create({
-  baseURL: backendUrl,
-  timeout: 1000,
-  withCredentials: true, // http-only 쿠키를 받기 위해
-});
-
 const instance = axios.create({
   baseURL: backendUrl,
   timeout: 1000,
+});
+
+export const loginInstance = axios.create({
+  baseURL: backendUrl,
+  timeout: 1000,
+  withCredentials: true, // http-only 쿠키를 받기 위해
 });
 
 instance.interceptors.request.use(async (config) => {
@@ -21,7 +21,7 @@ instance.interceptors.request.use(async (config) => {
   console.log(curToken);
   if (!curToken || !curUserName || !curRole) {
     try {
-      const response = await refreshInstance.post('/api/login/refresh');
+      const response = await loginInstance.post('/api/login/refresh');
       const newToken = response.data.accessToken;
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = newToken;
@@ -38,12 +38,6 @@ instance.interceptors.request.use(async (config) => {
     }
   }
   return config;
-});
-
-export const loginInstance = axios.create({
-  baseURL: backendUrl,
-  timeout: 1000,
-  withCredentials: true, // http-only 쿠키를 받기 위해
 });
 
 export default instance;
