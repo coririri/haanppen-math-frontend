@@ -8,7 +8,8 @@ import IconButton from '../atoms/IconButton';
 import TeacherCarousel from '../molecules/TeacherCarousel';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import instance from '../../apis/instance';
+import getAllTeachers from '../../apis/teacher';
+import writeQuery from '../../apis/query';
 
 function WriteQueryPage() {
   const [imgPreview, setImgePreview] = useState([]);
@@ -25,33 +26,13 @@ function WriteQueryPage() {
     formData.append('targetMemberId', teacherList[selectedTeacherindex].id);
     formData.append('content', '없음');
     formData.append('title', '제목 없음');
-    instance
-      .post('/api/board/questions', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Content-Type을 반드시 이렇게 하여야 한다.
-        },
-      })
-      .then(() => {
-        navigate('/question-board');
-        console.log('게시글 작성 성공');
-      })
-      .catch(() => {
-        alert('게시글 작성에 실패 했습니다');
-        console.log('게시글 작성 실패');
-      });
+    writeQuery(formData, navigate);
+    // formdata를 활용해 질문 글 작성
   };
 
   useEffect(() => {
-    instance
-      .get('/api/members/teachers')
-      .then((response) => {
-        const entireTeahcerList = response.data;
-        setTeacherList((prev) => [...prev, ...entireTeahcerList]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    console.log(instance.defaults.headers.common.Authorization);
+    getAllTeachers(setTeacherList);
+    // 질문 가능한 선생님 조회
   }, []);
 
   const handleDeleteImageButton = (index) => {
