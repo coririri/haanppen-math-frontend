@@ -31,7 +31,7 @@ function Navigation() {
             }}
           >
             <Link
-              to="/question"
+              to="/write-query"
               className={`text-2xl text-center ${clickIndex === 2 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
             >
               질문 게시판
@@ -80,7 +80,7 @@ function Navigation() {
           }}
         >
           <Link
-            to="/question"
+            to="/write-query"
             className={`text-3xl text-center ${clickIndex === 2 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
           >
             질문 게시판

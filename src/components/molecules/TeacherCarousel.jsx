@@ -14,7 +14,12 @@ function TeacherCarousel({
         setSelectedTeacherindexIndex((prev) => prev - 1);
       }
     } else if (flag === 'right') {
-      if (selectedTeacherindex === teacherList.length - 1) {
+      if (
+        selectedTeacherindex === teacherList.length - 1 &&
+        teacherList.length === 1
+      ) {
+        alert('질문 가능한 선생님이 없습니다');
+      } else if (selectedTeacherindex === teacherList.length - 1) {
         setSelectedTeacherindexIndex(1);
       } else {
         setSelectedTeacherindexIndex((prev) => prev + 1);
@@ -41,7 +46,7 @@ function TeacherCarousel({
         <span className="h-[42px] leading-[42px] text-lg font-bold overflow-hidden">
           {selectedTeacherindex === 0
             ? teacherList[selectedTeacherindex]
-            : `${teacherList[selectedTeacherindex]} 선생님`}
+            : `${teacherList[selectedTeacherindex].name} 선생님`}
         </span>
         <button
           type="button"

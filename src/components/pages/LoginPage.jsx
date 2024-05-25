@@ -11,14 +11,12 @@ function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { id } = userForm;
-    setErrorMessage(idValidation(id));
-  }, [userForm.id]);
-
-  useEffect(() => {
-    const { password } = userForm;
-    setErrorMessage(passwordValidation(password));
-  }, [userForm.password]);
+    const { id, password } = userForm;
+    let tempErrorMessage = idValidation(id);
+    tempErrorMessage =
+      tempErrorMessage === '' ? passwordValidation(password) : tempErrorMessage;
+    setErrorMessage(tempErrorMessage);
+  }, [userForm.id, userForm.password]);
 
   const handleLoginClick = () => {
     login(userForm, setErrorMessage, navigate);
