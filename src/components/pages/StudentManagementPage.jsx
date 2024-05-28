@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { AiOutlineSmile, AiOutlineSearch } from 'react-icons/ai';
 import SlideBar from '../molecules/SlideBar';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
-import StudentManagementList from '../molecules/StudentManagementList';
 
 function StudentManagementPage() {
   const [managementIndex, setManagementIndex] = useState([true, false, false]);
@@ -96,7 +96,6 @@ function StudentManagementPage() {
           </div>
         </div>
       </div>
-      <StudentManagementList />
     </div>
   );
 }
