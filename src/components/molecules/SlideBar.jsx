@@ -49,14 +49,14 @@ function SlideBar({
   }
   if (num === 3) {
     return (
-      <div className="w-[56.8rem]">
+      <div className="w-[836px]">
         <div>
           <TextButton
             color="white"
             shape="long"
-            isClick={isClickArr[1]}
+            isClick={isClickArr[0]}
             handleClick={() => {
-              setIsClickArr([false, true, false, false]);
+              setIsClickArr([true, false, false]);
               setLeftPosition('left-2');
             }}
             moreStyle="mr-4"
@@ -67,9 +67,9 @@ function SlideBar({
           <TextButton
             color="white"
             shape="long"
-            isClick={isClickArr[2]}
+            isClick={isClickArr[1]}
             handleClick={() => {
-              setIsClickArr([false, false, true, false]);
+              setIsClickArr([false, true, false]);
               setLeftPosition('left-[18.5em]');
             }}
             moreStyle="mr-4"
@@ -80,9 +80,9 @@ function SlideBar({
           <TextButton
             color="white"
             shape="long"
-            isClick={isClickArr[3]}
+            isClick={isClickArr[2]}
             handleClick={() => {
-              setIsClickArr([false, false, false, true]);
+              setIsClickArr([false, false, true]);
               setLeftPosition('left-[36.5rem]');
             }}
           >

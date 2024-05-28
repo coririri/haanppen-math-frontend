@@ -1,10 +1,8 @@
-import PropTypes from 'prop-types';
-
 function TextButton({
+  children,
   color,
   shape,
   size,
-  text,
   isClick,
   handleClick,
   moreStyle,
@@ -17,17 +15,17 @@ function TextButton({
           type="button"
           onClick={handleClick}
         >
-          <span className="text-[1.7rem] leading-[2.375rem]">{text}</span>
+          <span className="text-[1.7rem] leading-[2.375rem]">{children}</span>
         </button>
       );
     else if (shape === 'square')
       return (
         <button
-          className={`inline-block w-[3.8rem] h-[3.8rem] py-3 px-4 border-[0.072rem] rounded-lg text-3xl font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
+          className={`inline-block w-[2.6rem] h-[2.6rem] py-1 px-2 border-[0.072rem] rounded-lg text-xl font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
           type="button"
           onClick={handleClick}
         >
-          {text}
+          {children}
         </button>
       );
   if (color === 'gray')
@@ -37,7 +35,7 @@ function TextButton({
         type="button"
         onClick={handleClick}
       >
-        <span className="text-xl">{text}</span>
+        <span className="text-xl">{children}</span>
       </button>
     );
   if (shape === 'math') {
@@ -48,7 +46,7 @@ function TextButton({
           type="button"
           onClick={handleClick}
         >
-          <span className="text-3xl leading-[2.125rem]">{text}</span>
+          <span className="text-3xl leading-[2.125rem]">{children}</span>
         </button>
       );
     }
@@ -59,7 +57,7 @@ function TextButton({
           type="button"
           onClick={handleClick}
         >
-          <span className="text-xl leading-[1.43rem]">{text}</span>
+          <span className="text-xl leading-[1.43rem]">{children}</span>
         </button>
       );
     }
@@ -70,29 +68,11 @@ function TextButton({
           type="button"
           onClick={handleClick}
         >
-          <span className="text-xl leading-[1.2rem]">{text}</span>
+          <span className="text-xl leading-[1.2rem]">{children}</span>
         </button>
       );
     }
   }
 }
-
-TextButton.propTypes = {
-  text: PropTypes.string.isRequired,
-  color: PropTypes.oneOf(['white', 'gray']),
-  shape: PropTypes.oneOf(['long', 'square', 'math']),
-  size: PropTypes.oneOf(['big', 'small', 'tooSmall']),
-  isClick: PropTypes.bool,
-  handleClick: PropTypes.func.isRequired,
-  moreStyle: PropTypes.string,
-};
-
-TextButton.defaultProps = {
-  color: 'white',
-  shape: 'long',
-  moreStyle: '',
-  size: 'small',
-  isClick: false,
-};
 
 export default TextButton;

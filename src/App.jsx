@@ -5,6 +5,7 @@ import ServerErrorPage from './components/pages/ServerErrorPage';
 import NonFoundClientError from './components/pages/NonFoundPageClientError';
 import CommonLayout from './components/layouts/CommonLayout';
 import WriteQueryPage from './components/pages/WriteQueryPage';
+import StudentManagementPage from './components/pages/StudentManagementPage';
 
 function App() {
   return (
@@ -13,6 +14,10 @@ function App() {
         {/* 공통 레이아웃 */}
         <Route path="/" element={<CommonLayout />}>
           <Route path="write-query" element={<WriteQueryPage />} />
+          <Route
+            path="management-student"
+            element={<StudentManagementPage />}
+          />
         </Route>
         {/* 404 에러 */}
         <Route path="*" element={<NonFoundClientError />} />
