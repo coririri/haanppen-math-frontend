@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { BsTriangleFill } from 'react-icons/bs';
 
 function DropdownMenu({
@@ -7,7 +6,6 @@ function DropdownMenu({
   selectedIndex,
   setSelectedIndex,
   isOpen,
-  order,
   handleClick,
 }) {
   let sizeByWidth = '';
@@ -37,7 +35,7 @@ function DropdownMenu({
           key={text}
           onClick={() => {
             setSelectedIndex(index);
-            handleClick(order);
+            handleClick();
           }}
         >
           <div
@@ -62,7 +60,7 @@ function DropdownMenu({
           className={`w-[25.25rem] h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
           onClick={() => {
-            handleClick(order);
+            handleClick();
           }}
         >
           <div className="w-[23rem] h-[2.4rem] leading-[2.4rem] text-md text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
@@ -91,7 +89,7 @@ function DropdownMenu({
           className={`w-60 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
           onClick={() => {
-            handleClick(order);
+            handleClick();
           }}
         >
           <div className="w-56 h-[2.4rem] leading-[2.4rem] text-xl text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
@@ -114,13 +112,13 @@ function DropdownMenu({
 
   if (size === 'small')
     return (
-      <div className="w-32 h-[2.4rem] relative">
+      <div className="w-24 h-[2.4rem] relative">
         <button
           type="button"
-          className={`w-32 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
+          className={`w-24 h-[2.4rem] font-bold  border-hpGray border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
           onClick={() => {
-            handleClick(order);
+            handleClick();
           }}
         >
           <div className="w-30 h-[2.4rem] leading-[2.4rem] text-xl text-left pl-4 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
@@ -134,22 +132,12 @@ function DropdownMenu({
         </button>
 
         {isOpen && (
-          <div className="absolute w-32 h-[13.6rem] bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpLightkBlack border-solid flex flex-col overflow-y-auto overflow-x-hidden">
+          <div className="absolute w-24 h-[13.6rem] bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpGray border-solid flex flex-col overflow-y-auto overflow-x-hidden">
             {filteredList}
           </div>
         )}
       </div>
     );
 }
-
-DropdownMenu.propTypes = {
-  textArr: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  selectedIndex: PropTypes.number.isRequired,
-  setSelectedIndex: PropTypes.func.isRequired,
-  size: PropTypes.oneOf(['small', 'normal', 'long']).isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  order: PropTypes.number.isRequired,
-  handleClick: PropTypes.func.isRequired,
-};
 
 export default DropdownMenu;

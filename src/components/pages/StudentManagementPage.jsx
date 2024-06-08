@@ -3,6 +3,7 @@ import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
 import StudentList from '../organisms/StudentList';
+import StudentEnrollmentModal from '../modals/StudentEnrollmentModal';
 
 function StudentManagementPage() {
   const [choosenGradeIndex, setChoosenGradeIndex] = useState([
@@ -11,8 +12,13 @@ function StudentManagementPage() {
     false,
   ]);
   const { searchRef } = useRef();
+  const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   return (
     <div className="w-full text-center">
+      <StudentEnrollmentModal
+        enrollmentModalOpen={enrollmentModalOpen}
+        setEnrollmentModalOpen={setEnrollmentModalOpen}
+      />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="mt-3 flex items-center justify-between w-[250px] mx-auto">
         <TextButton
@@ -59,7 +65,7 @@ function StudentManagementPage() {
               icon={<AiOutlineSmile size="26px" color="white" />}
               text="학생 등록"
               handleClick={() => {
-                console.log('학생 등록');
+                setEnrollmentModalOpen(true);
               }}
             />
           </div>

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import instance from '../../apis/instance';
-import Header from '../organisms/Header';
-import Navigation from '../organisms/Navigation';
+import Header from './Header';
+import Navigation from './Navigation';
 import { refreshLogin } from '../../apis/login';
 
 function CommonLayout() {

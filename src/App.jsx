@@ -1,4 +1,5 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import ReactModal from 'react-modal';
 import LoginPage from './components/pages/LoginPage';
 import NonFoundPageServerError from './components/pages/NonFoundPageServerError';
 import ServerErrorPage from './components/pages/ServerErrorPage';
@@ -8,6 +9,7 @@ import WriteQueryPage from './components/pages/WriteQueryPage';
 import ManagementPage from './components/pages/ManagementPage';
 
 function App() {
+  ReactModal.setAppElement('#root');
   return (
     <BrowserRouter>
       <Routes>
