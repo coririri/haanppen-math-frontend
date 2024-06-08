@@ -11,17 +11,17 @@ function TextButton({
     if (shape === 'long')
       return (
         <button
-          className={`inline-block w-[16.75rem] h-[2.375rem]  border-hpBlack border-[0.072rem] rounded-lg font-bold ${isClick ? 'bg-hpWhiteBlue' : 'bg-white'} ${moreStyle}`}
+          className={`inline-block w-[200px] h-[30px]  border-hpBlack border-[0.072rem] rounded-lg font-bold ${isClick ? 'bg-hpWhiteBlue' : 'bg-white'} ${moreStyle}`}
           type="button"
           onClick={handleClick}
         >
-          <span className="text-[1.7rem] leading-[2.375rem]">{children}</span>
+          <span className="text-lg leading-[30px]">{children}</span>
         </button>
       );
     else if (shape === 'square')
       return (
         <button
-          className={`inline-block w-[2.6rem] h-[2.6rem] py-1 px-2 border-[0.072rem] rounded-lg text-xl font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
+          className={`inline-block w-[36px] h-[36px] py-1 px-2 border-[0.072rem] rounded-lg text-md font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
           type="button"
           onClick={handleClick}
         >

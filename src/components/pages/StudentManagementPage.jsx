@@ -1,12 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { AiOutlineSmile, AiOutlineSearch } from 'react-icons/ai';
-import SlideBar from '../molecules/SlideBar';
+import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
+import StudentList from '../organisms/StudentList';
 
 function StudentManagementPage() {
-  const [managementIndex, setManagementIndex] = useState([true, false, false]);
   const [choosenGradeIndex, setChoosenGradeIndex] = useState([
     true,
     false,
@@ -15,19 +13,8 @@ function StudentManagementPage() {
   const { searchRef } = useRef();
   return (
     <div className="w-full text-center">
-      <div className="inline-block mt-4">
-        <SlideBar
-          num={3}
-          firstText="학생 관리"
-          secondText="반 관리"
-          thirdText="강사 관리"
-          isClickArr={managementIndex}
-          setIsClickArr={setManagementIndex}
-        />
-      </div>
-
-      <hr className="h-[2px] border-0 bg-hpGray w-[700px] mx-auto mt-4" />
-      <div className="mt-4 flex items-center justify-between w-[250px] mx-auto">
+      <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
+      <div className="mt-3 flex items-center justify-between w-[250px] mx-auto">
         <TextButton
           color="white"
           shape="square"
@@ -61,40 +48,55 @@ function StudentManagementPage() {
         >
           고
         </TextButton>
-        <span className="text-3xl font-bold">123명</span>
+        <span className="text-xl font-bold">123명</span>
       </div>
-      <hr className="h-[2px] border-0 bg-hpGray w-[700px] mx-auto mt-4" />
+      <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
-        <div>
-          <IconButton
-            bgColor="blue"
-            icon={<AiOutlineSmile size="26px" color="white" />}
-            text="학생 등록"
-            handleClick={() => {
-              console.log('학생 등록');
-            }}
-          />
+        <div className="flex items-center">
+          <div className="mr-6">
+            <IconButton
+              bgColor="blue"
+              icon={<AiOutlineSmile size="26px" color="white" />}
+              text="학생 등록"
+              handleClick={() => {
+                console.log('학생 등록');
+              }}
+            />
+          </div>
+          <div>
+            <IconButton
+              bgColor="white"
+              icon={<AiFillEdit size="26px" color="black" />}
+              text="학생 삭제"
+              handleClick={() => {
+                console.log('학생 삭제');
+              }}
+            />
+          </div>
         </div>
         <div>
           <div className="relative inline-block">
             <input
               type="text"
-              className="w-[200px] h-[42px] leading-[21px] border-[2.5px] border-solid border-hpGray pr-2 pl-6 rounded-xl focus-visible:outline-0 text-xl"
+              className="w-[180px] h-[36px] leading-[21px] border-[1.3px] border-solid border-black pr-2 pl-4 rounded-sm focus-visible:outline-0 text-lg"
               placeholder="학생 이름 검색"
               ref={searchRef}
             />
             <button
-              className="absolute bg-bjsBlue text-lg p-1 pl-3 text-white right-0 top-[2px] rounded-r-xl "
+              className="absolute bg-bjsBlue text-md p-1 pl-3 text-white right-0 top-[1px] rounded-r-xl "
               type="button"
-              aria-label="검색"
+              aria-label="학생 검색"
               onClick={() => {
                 console.log('검색');
               }}
             >
-              <AiOutlineSearch size="28px" className="mr-2" color="gray" />
+              <AiOutlineSearch size="26px" className="mr-2" color="black" />
             </button>
           </div>
         </div>
+      </div>
+      <div className="mt-2">
+        <StudentList />
       </div>
     </div>
   );
