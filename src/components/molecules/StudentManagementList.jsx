@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import TextButton from '../atoms/TextButton';
 import gradeTransform from '../../utils/gradeTransform';
-import { checkDeletedStudentIndex } from '../../stores/slices/studentListSlice';
 
 function StudentManagementList({ index }) {
   const { students } = useSelector((state) => state.student);
-  const dispatch = useDispatch();
 
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
@@ -20,9 +18,6 @@ function StudentManagementList({ index }) {
         <input
           type="checkbox"
           className="w-[1.125rem] h-[1.125rem] mx-auto flex items-center border-hpLightkBlack border-solid border-[0.1rem]"
-          onChange={() => {
-            dispatch(checkDeletedStudentIndex(index));
-          }}
         />
       </div>
       <div className="w-[8rem] flex justify-center">

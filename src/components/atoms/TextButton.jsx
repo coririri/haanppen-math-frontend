@@ -31,11 +31,11 @@ function TextButton({
   if (color === 'gray')
     return (
       <button
-        className={`inline-block w-[6.25rem] h-[2rem] border-hpGray border-[0.072rem] rounded-full font-bold bg-hpLightGray hover:bg-hpHoverLightGray ${moreStyle}`}
+        className={`inline-block w-[5.25rem] h-[1.8rem] border-hpGray border-[0.072rem] rounded-full font-bold bg-hpLightGray hover:bg-hpHoverLightGray ${moreStyle}`}
         type="button"
         onClick={handleClick}
       >
-        <span className="text-xl">{children}</span>
+        <span className="text-lg">{children}</span>
       </button>
     );
   if (shape === 'math') {

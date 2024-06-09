@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoImages from '../../images/loginPage/lg_logo_image.png';
-import { idValidation, passwordValidation } from '../../utils/loginValidation';
+import {
+  idValidation,
+  passwordValidation,
+} from '../../validation/loginValidation';
 import login from '../../apis/login';
 import LoginForm from '../organisms/LoginForm';
 

@@ -7,12 +7,16 @@ function StudentList() {
       <div className="w-[800px] mx-auto">
         <div className="flex items-center justify-between">
           <input type="checkbox" className="w-[16px] h-[16px]" />
-          <span className="text-lg font-bold text-hpGray">학년</span>
-          <span className="text-lg font-bold text-hpGray">학생 이름</span>
-          <span className="text-lg font-bold text-hpGray">
+          <span className="text-lg font-bold text-hpGray w-[60px] text-center">
+            학년
+          </span>
+          <span className="text-lg font-bold text-hpGray w-[90px]">
+            학생 이름
+          </span>
+          <span className="text-lg font-bold text-hpGray w-[140px]">
             학생 ID(전화번호)
           </span>
-          <span className="text-lg font-bold text-hpGray">수정</span>
+          <span className="text-lg font-bold text-hpGray w-[100px]">수정</span>
         </div>
       </div>
       <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
