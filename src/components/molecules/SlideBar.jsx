@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import TextButton from '../atoms/TextButton';
 
 function SlideBar({
@@ -10,7 +9,7 @@ function SlideBar({
   isClickArr,
   setIsClickArr,
 }) {
-  const [leftPosition, setLeftPosition] = useState('left-2');
+  const [leftPosition, setLeftPosition] = useState('left-28');
 
   if (num === 2) {
     return (
@@ -49,15 +48,15 @@ function SlideBar({
   }
   if (num === 3) {
     return (
-      <div className="w-[56.8rem]">
+      <div className="w-[836px]">
         <div>
           <TextButton
             color="white"
             shape="long"
-            isClick={isClickArr[1]}
+            isClick={isClickArr[0]}
             handleClick={() => {
-              setIsClickArr([false, true, false, false]);
-              setLeftPosition('left-2');
+              setIsClickArr([true, false, false]);
+              setLeftPosition('left-[125px]');
             }}
             moreStyle="mr-4"
           >
@@ -67,10 +66,10 @@ function SlideBar({
           <TextButton
             color="white"
             shape="long"
-            isClick={isClickArr[2]}
+            isClick={isClickArr[1]}
             handleClick={() => {
-              setIsClickArr([false, false, true, false]);
-              setLeftPosition('left-[18.5em]');
+              setIsClickArr([false, true, false]);
+              setLeftPosition('left-[340px]');
             }}
             moreStyle="mr-4"
           >
@@ -80,33 +79,21 @@ function SlideBar({
           <TextButton
             color="white"
             shape="long"
-            isClick={isClickArr[3]}
+            isClick={isClickArr[2]}
             handleClick={() => {
-              setIsClickArr([false, false, false, true]);
-              setLeftPosition('left-[36.5rem]');
+              setIsClickArr([false, false, true]);
+              setLeftPosition('left-[555px]');
             }}
           >
             {thirdText}
           </TextButton>
         </div>
         <div
-          className={`transition-[left] relative h-1 w-60 mt-1 bg-hpBlue ${leftPosition}`}
+          className={`transition-[left] relative h-1 w-40 mt-1 bg-hpBlue ${leftPosition}`}
         />
       </div>
     );
   }
 }
 
-SlideBar.propTypes = {
-  num: PropTypes.number.isRequired,
-  firstText: PropTypes.string.isRequired,
-  secondText: PropTypes.string.isRequired,
-  thirdText: PropTypes.string,
-  isClickArr: PropTypes.arrayOf(PropTypes.bool.isRequired).isRequired,
-  setIsClickArr: PropTypes.func.isRequired,
-};
-
-SlideBar.defaultProps = {
-  thirdText: '',
-};
 export default SlideBar;

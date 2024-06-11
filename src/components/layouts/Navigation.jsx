@@ -57,45 +57,45 @@ function Navigation() {
   }
   return (
     <nav className="w-[1440px] mx-auto">
-      <div className="w-[660px] h-[110px] mx-auto flex justify-between items-center">
+      <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">
         <button
           type="button"
-          className="block w-[150px]"
+          className="block w-[100px]"
           onClick={() => {
             setClickIndex(1);
           }}
         >
           <Link
             to="/enroll-class-video"
-            className={`text-3xl text-center ${clickIndex === 1 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+            className={`text-xl text-center ${clickIndex === 1 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
           >
             강의 등록
           </Link>
         </button>
         <button
           type="button"
-          className="block w-[150px]"
+          className="block w-[100px]"
           onClick={() => {
             setClickIndex(2);
           }}
         >
           <Link
             to="/write-query"
-            className={`text-3xl text-center ${clickIndex === 2 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+            className={`text-xl text-center ${clickIndex === 2 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
           >
             질문 게시판
           </Link>
         </button>
         <button
           type="button"
-          className="block w-[150px]"
+          className="block w-[160px]"
           onClick={() => {
             setClickIndex(3);
           }}
         >
           <Link
             to="/management"
-            className={`text-3xl text-center   ${clickIndex === 3 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+            className={`text-xl text-center   ${clickIndex === 3 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
           >
             관리
           </Link>

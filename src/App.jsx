@@ -1,18 +1,22 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import ReactModal from 'react-modal';
 import LoginPage from './components/pages/LoginPage';
 import NonFoundPageServerError from './components/pages/NonFoundPageServerError';
 import ServerErrorPage from './components/pages/ServerErrorPage';
 import NonFoundClientError from './components/pages/NonFoundPageClientError';
 import CommonLayout from './components/layouts/CommonLayout';
 import WriteQueryPage from './components/pages/WriteQueryPage';
+import ManagementPage from './components/pages/ManagementPage';
 
 function App() {
+  ReactModal.setAppElement('#root');
   return (
     <BrowserRouter>
       <Routes>
         {/* 공통 레이아웃 */}
         <Route path="/" element={<CommonLayout />}>
           <Route path="write-query" element={<WriteQueryPage />} />
+          <Route path="management" element={<ManagementPage />} />
         </Route>
         {/* 404 에러 */}
         <Route path="*" element={<NonFoundClientError />} />
