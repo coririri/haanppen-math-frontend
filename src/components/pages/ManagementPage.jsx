@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SlideBar from '../molecules/SlideBar';
 import StudentManagementPage from './StudentManagementPage';
+import TeacherManagementPage from './TeacherManagementPage';
 
 function ManagementPage() {
   const [managementIndex, setManagementIndex] = useState([true, false, false]);
@@ -18,6 +19,7 @@ function ManagementPage() {
         />
       </div>
       {managementIndex[0] === true && <StudentManagementPage />}
+      {managementIndex[2] === true && <TeacherManagementPage />}
     </div>
   );
 }
