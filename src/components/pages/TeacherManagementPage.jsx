@@ -14,7 +14,7 @@ function TeacherManagementPage() {
         setEnrollmentModalOpen={setEnrollmentModalOpen}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
-      <div className="flex items-center  w-[550px] mx-auto justify-between mt-8">
+      <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
         <div className="flex items-center">
           <div className="mr-6">
             <IconButton
