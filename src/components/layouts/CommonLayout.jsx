@@ -30,7 +30,7 @@ function CommonLayout() {
           <Outlet />
         </div>
       ) : (
-        <div className="w-[1400px] min-h-[680px] relative mx-auto border-[20px] border-hpBackgroundGray border-solid">
+        <div className="w-[1440px] min-h-[680px] relative mx-auto border-[20px] border-hpBackgroundGray border-solid">
           <Outlet />
         </div>
       )}

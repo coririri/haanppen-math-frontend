@@ -69,10 +69,16 @@ function TeacherEnrollmentModal({
         <h1 className="text-xl font-bold">강사 등록</h1>
         <form>
           <div className="flex mt-10 justify-center items-center">
-            <div className="font-bold text-lg mr-2 w-[120px]">강사 이름</div>
+            <label
+              className="font-bold text-lg mr-2 w-[120px]"
+              htmlFor="teacherModalName"
+            >
+              강사 이름
+            </label>
             <input
               type="text"
               className="w-[160px] h-[30px] border-solid border-black border-[1px] rounded-md pl-2 text-sm font-bold"
+              id="teacherModalName"
               placeholder="이름을 입력해주세요."
               onChange={(e) => {
                 setUserform((prev) => ({
@@ -83,11 +89,15 @@ function TeacherEnrollmentModal({
             />
           </div>
           <div className="flex mt-4 items-center justify-center">
-            <div className="font-bold text-lg mr-2 w-[120px]">
+            <label
+              className="font-bold text-lg mr-2 w-[120px]"
+              htmlFor="teacherModalPhonenumber"
+            >
               강사 연락처(ID)
-            </div>
+            </label>
             <input
               type="text"
+              id="teacherModalPhonenumber"
               className="w-[160px] h-[30px] border-solid border-black border-[1px] rounded-md pl-2 text-sm font-bold"
               placeholder="숫자만 입력해주세요."
               onChange={(e) => {

@@ -17,8 +17,8 @@ function DropdownMenu({
     sizeByTextSize = 'text-md';
     leftPaddingText = 'pl-6';
   } else if (size === 'normal') {
-    sizeByWidth = 'w-60';
-    sizeByTextSize = 'text-xl';
+    sizeByWidth = 'w-42';
+    sizeByTextSize = 'text-lg';
     leftPaddingText = 'pl-6';
   } else if (size === 'small') {
     sizeByWidth = 'w-32';
@@ -83,27 +83,27 @@ function DropdownMenu({
 
   if (size === 'normal')
     return (
-      <div className="w-60 h-[2.4rem] relative">
+      <div className="w-40 h-[2.4rem] relative">
         <button
           type="button"
-          className={`w-60 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
+          className={`w-40 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
           onClick={() => {
             handleClick();
           }}
         >
-          <div className="w-56 h-[2.4rem] leading-[2.4rem] text-xl text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
+          <div className="w-56 h-[2.4rem] leading-[2.4rem] text-lg text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
             {textArr[selectedIndex]}
           </div>
           <div
             className={`w-4 transition-[transform] origin-center ${isOpen ? 'rotate-180 mr-2' : 'rotate-0 mr-4'}`}
           >
-            <BsTriangleFill color="#BCBCBC" size="1.5rem" />
+            <BsTriangleFill color="#BCBCBC" size="1.1rem" />
           </div>
         </button>
 
         {isOpen && (
-          <div className="absolute w-60  bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpLightkBlack border-solid flex flex-col overflow-y-auto overflow-x-hidden">
+          <div className="absolute w-40  bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpLightkBlack border-solid flex flex-col overflow-y-auto overflow-x-hidden">
             {filteredList}
           </div>
         )}
