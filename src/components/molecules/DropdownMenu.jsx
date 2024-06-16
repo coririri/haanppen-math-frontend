@@ -98,7 +98,7 @@ function DropdownMenu({
           <div
             className={`w-4 transition-[transform] origin-center ${isOpen ? 'rotate-180 mr-2' : 'rotate-0 mr-4'}`}
           >
-            <BsTriangleFill color="#BCBCBC" size="1.5rem" />
+            <BsTriangleFill color="#BCBCBC" size="1.1rem" />
           </div>
         </button>
 

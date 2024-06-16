@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import { AiFillEdit, AiOutlineSearch } from 'react-icons/ai';
 import TeacherCarousel from '../molecules/TeacherCarousel';
 import IconButton from '../atoms/IconButton';
-import StudentListDropdownByClass from '../organisms/StudentListByClass';
+import StudentListByClass from '../organisms/StudentListByClass';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -37,6 +37,45 @@ function ClassEnrollmentModal({ enrollmentModalOpen, setEnrollmentModalOpen }) {
   const [teacherList] = useState(['선택 없음']);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
   const { searchRef } = useRef();
+
+  const entireClassData = [
+    {
+      grade: 1,
+      students: [
+        { id: 1, name: '조민채' },
+        { id: 2, name: '김윤하' },
+        { id: 3, name: '김선우' },
+      ],
+    },
+    {
+      grade: 5,
+      students: [
+        { id: 4, name: '하경현' },
+        { id: 5, name: '윤희종' },
+        { id: 6, name: '손혜림' },
+      ],
+    },
+    {
+      grade: 8,
+      students: [
+        { id: 7, name: '김태훈' },
+        { id: 8, name: '김도엽' },
+        { id: 9, name: '김동현' },
+      ],
+    },
+  ];
+
+  const currentClassData = [
+    {
+      grade: 1,
+      students: [{ id: 3, name: '김선우' }],
+    },
+    {
+      grade: 5,
+      students: [{ id: 4, name: '하경현' }],
+    },
+  ];
+
   return (
     <ReactModal
       isOpen={enrollmentModalOpen}
@@ -92,7 +131,11 @@ function ClassEnrollmentModal({ enrollmentModalOpen, setEnrollmentModalOpen }) {
                 <AiOutlineSearch size="26px" className="mr-2" color="black" />
               </button>
             </div>
-            <StudentListDropdownByClass />
+            <StudentListByClass
+              type="entire"
+              entireClassData={entireClassData}
+              currentClassData={currentClassData}
+            />
           </div>
           <div className="ml-4 w-[280px]">
             <div className="relative mx-auto mb-3 w-[180px]">
@@ -113,7 +156,11 @@ function ClassEnrollmentModal({ enrollmentModalOpen, setEnrollmentModalOpen }) {
                 <AiOutlineSearch size="26px" className="mr-2" color="black" />
               </button>
             </div>
-            <StudentListDropdownByClass />
+            <StudentListByClass
+              type="selected"
+              entireClassData={entireClassData}
+              currentClassData={currentClassData}
+            />
           </div>
         </div>
         <div className="flex w-full justify-center mt-6">
