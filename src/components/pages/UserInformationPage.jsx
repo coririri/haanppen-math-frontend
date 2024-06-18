@@ -7,7 +7,7 @@ function UserInformation() {
   if (role === 'STUDENT')
     return (
       <div className="mt-[110px] flex flex-col">
-        <div className="flex flex-col justify-between w-[380px] h-[300px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
+        <div className="flex flex-col justify-between w-[380px] h-[350px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
           <div className="flex flex-col justify-center mt-8">
             <div className="flex justify-center">
               <label
@@ -46,7 +46,23 @@ function UserInformation() {
                 className="text-center block font-bold text-lg w-[120px]"
                 htmlFor="userName"
               >
-                비밀번호
+                기존 비밀번호
+              </label>
+              <input
+                type="password"
+                id="userName"
+                className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
+                value="qweqwe123"
+                onChange={() => {}}
+              />
+            </div>
+            <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto my-4" />
+            <div className="flex justify-center">
+              <label
+                className="text-center block font-bold text-lg w-[120px]"
+                htmlFor="userName"
+              >
+                새 비밀번호
               </label>
               <input
                 type="password"
@@ -84,7 +100,7 @@ function UserInformation() {
     );
   return (
     <div className="mt-[110px] flex flex-col">
-      <div className="flex flex-col justify-between w-[550px] h-[300px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
+      <div className="flex flex-col justify-between w-[550px] h-[340px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
         <div className="flex flex-col justify-center mt-8">
           <div className="flex justify-center">
             <label
@@ -123,7 +139,23 @@ function UserInformation() {
               className="text-center block font-bold text-lg w-[120px]"
               htmlFor="userName"
             >
-              비밀번호
+              기존 비밀번호
+            </label>
+            <input
+              type="password"
+              id="userName"
+              className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
+              value="qweqwe123"
+              onChange={() => {}}
+            />
+          </div>
+          <hr className="h-[1px] border-0 bg-hpGray w-[450px] mx-auto my-4" />
+          <div className="flex justify-center">
+            <label
+              className="text-center block font-bold text-lg w-[120px]"
+              htmlFor="userName"
+            >
+              새 비밀번호
             </label>
             <input
               type="password"

@@ -7,7 +7,7 @@ import NonFoundClientError from './components/pages/NonFoundPageClientError';
 import CommonLayout from './components/layouts/CommonLayout';
 import WriteQueryPage from './components/pages/WriteQueryPage';
 import ManagementPage from './components/pages/ManagementPage';
-import UserInformation from './components/pages/UserInformation';
+import UserInformationPage from './components/pages/UserInformationPage';
 
 function App() {
   ReactModal.setAppElement('#root');
@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<CommonLayout />}>
           <Route path="write-query" element={<WriteQueryPage />} />
           <Route path="management" element={<ManagementPage />} />
-          <Route path="user-information" element={<UserInformation />} />
+          <Route path="user-information" element={<UserInformationPage />} />
         </Route>
         {/* 404 에러 */}
         <Route path="*" element={<NonFoundClientError />} />
