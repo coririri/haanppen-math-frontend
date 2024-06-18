@@ -129,7 +129,7 @@ function TeacherEnrollmentModal({
                 teacherAccountRegist(setEnrollmentModalOpen, payload);
               }}
               disabled={isDisabled}
-            />{' '}
+            />
           </div>
           <div>
             <IconButton
