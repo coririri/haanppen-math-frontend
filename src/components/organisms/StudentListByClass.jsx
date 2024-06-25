@@ -1,37 +1,54 @@
 import React from 'react';
 import StudentListByGradeDropdown from '../molecules/StudentListByGradeDropdown';
 
-function StudentListByClass({ type, entireClassData, currentClassData }) {
-  if (type === 'entire')
+function StudentListByClass({
+  type,
+  differntCourseStudents,
+  myCourseStudents,
+}) {
+  if (type === 'entire') {
     return (
       <div className="border-solid border-black  border-[1.1px] rounded-lg w-[280px] h-[450px]  bg-hpLightGray overflow-auto">
-        {entireClassData.map((course) => (
-          <div key={course.grade}>
-            <StudentListByGradeDropdown
-              type={type}
-              grade={course.grade}
-              students={course.students}
-              entireClassData={entireClassData}
-              currentClassData={currentClassData}
-            />
-          </div>
-        ))}
+        {differntCourseStudents.map((course) => {
+          if (course.students.length > 0) {
+            console.log(course.students);
+            return (
+              <div key={course.grade + 1}>
+                <StudentListByGradeDropdown
+                  type={type}
+                  grade={course.grade + 1}
+                  students={course.students}
+                  differntCourseStudents={differntCourseStudents}
+                  myCourseStudents={myCourseStudents}
+                />
+              </div>
+            );
+          }
+          return '';
+        })}
       </div>
     );
+  }
 
   return (
     <div className="border-solid border-black  border-[1.1px] rounded-lg w-[280px] h-[450px]  bg-hpLightGray overflow-auto">
-      {currentClassData.map((course) => (
-        <div key={course.grade}>
-          <StudentListByGradeDropdown
-            type={type}
-            grade={course.grade}
-            students={course.students}
-            entireClassData={entireClassData}
-            currentClassData={currentClassData}
-          />
-        </div>
-      ))}
+      {myCourseStudents.map((course) => {
+        if (course.students.length > 0) {
+          console.log(course.students);
+          return (
+            <div key={course.grade + 1}>
+              <StudentListByGradeDropdown
+                type={type}
+                grade={course.grade + 1}
+                students={course.students}
+                differntCourseStudents={differntCourseStudents}
+                myCourseStudents={myCourseStudents}
+              />
+            </div>
+          );
+        }
+        return '';
+      })}
     </div>
   );
 }
