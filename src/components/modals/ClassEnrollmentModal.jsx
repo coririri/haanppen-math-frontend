@@ -38,43 +38,210 @@ function ClassEnrollmentModal({ enrollmentModalOpen, setEnrollmentModalOpen }) {
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
   const { searchRef } = useRef();
 
-  const entireClassData = [
+  const differntCourseStudents = [
+    {
+      grade: 0,
+      students: [],
+    },
     {
       grade: 1,
-      students: [
-        { id: 1, name: '조민채' },
-        { id: 2, name: '김윤하' },
-        { id: 3, name: '김선우' },
-      ],
+      students: [],
+    },
+    {
+      grade: 2,
+      students: [],
+    },
+    {
+      grade: 3,
+      students: [],
+    },
+    {
+      grade: 4,
+      students: [],
     },
     {
       grade: 5,
-      students: [
-        { id: 4, name: '하경현' },
-        { id: 5, name: '윤희종' },
-        { id: 6, name: '손혜림' },
-      ],
+      students: [],
+    },
+    {
+      grade: 6,
+      students: [],
+    },
+    {
+      grade: 7,
+      students: [],
     },
     {
       grade: 8,
-      students: [
-        { id: 7, name: '김태훈' },
-        { id: 8, name: '김도엽' },
-        { id: 9, name: '김동현' },
-      ],
+      students: [],
+    },
+    {
+      grade: 9,
+      students: [],
+    },
+    {
+      grade: 10,
+      students: [],
+    },
+    {
+      grade: 11,
+      students: [],
     },
   ];
 
-  const currentClassData = [
+  const myCourseStudents = [
+    {
+      grade: 0,
+      students: [],
+    },
     {
       grade: 1,
-      students: [{ id: 3, name: '김선우' }],
+      students: [],
+    },
+    {
+      grade: 2,
+      students: [],
+    },
+    {
+      grade: 3,
+      students: [],
+    },
+    {
+      grade: 4,
+      students: [],
     },
     {
       grade: 5,
-      students: [{ id: 4, name: '하경현' }],
+      students: [],
+    },
+    {
+      grade: 6,
+      students: [],
+    },
+    {
+      grade: 7,
+      students: [],
+    },
+    {
+      grade: 8,
+      students: [],
+    },
+    {
+      grade: 9,
+      students: [],
+    },
+    {
+      grade: 10,
+      students: [],
+    },
+    {
+      grade: 11,
+      students: [],
     },
   ];
+
+  const entireCourse = {
+    courseId: 0,
+    courseName: '화53',
+    studentPreviews: [
+      {
+        studentId: 0,
+        studentName: '조인애',
+        grade: 1,
+      },
+      {
+        studentId: 1,
+        studentName: '손혜림',
+        grade: 1,
+      },
+      {
+        studentId: 2,
+        studentName: '김선우',
+        grade: 0,
+      },
+      {
+        studentId: 3,
+        studentName: '배재윤',
+        grade: 2,
+      },
+      {
+        studentId: 4,
+        studentName: '최인성',
+        grade: 3,
+      },
+      {
+        studentId: 5,
+        studentName: '김도용',
+        grade: 2,
+      },
+      {
+        studentId: 6,
+        studentName: '이경순',
+        grade: 0,
+      },
+    ],
+    teacherPreview: {
+      teacherName: 'string',
+      teacherId: 0,
+    },
+  };
+
+  const myCourse = {
+    courseId: 0,
+    courseName: '화53',
+    studentPreviews: [
+      {
+        studentId: 2,
+        studentName: '김선우',
+        grade: 0,
+      },
+      {
+        studentId: 3,
+        studentName: '배재윤',
+        grade: 2,
+      },
+      {
+        studentId: 6,
+        studentName: '이경순',
+        grade: 0,
+      },
+    ],
+    teacherPreview: {
+      teacherName: 'string',
+      teacherId: 0,
+    },
+  };
+
+  const entireStudentIds = new Set(
+    entireCourse.studentPreviews.map((student) => student.studentId),
+  );
+  const myStudentIds = new Set(
+    myCourse.studentPreviews.map((student) => student.studentId),
+  );
+
+  const differenceStudentIds = [...entireStudentIds].filter(
+    (studentId) => !myStudentIds.has(studentId),
+  );
+
+  const differenceStudents = entireCourse.studentPreviews.filter((student) =>
+    differenceStudentIds.includes(student.studentId),
+  );
+
+  myCourse.studentPreviews.forEach((student) => {
+    myCourseStudents[student.grade].students.push({
+      studentId: student.studentId,
+      studentName: student.studentName,
+      grade: student.grade,
+    });
+  });
+
+  differenceStudents.forEach((student) => {
+    differntCourseStudents[student.grade].students.push({
+      studentId: student.studentId,
+      studentName: student.studentName,
+      grade: student.grade,
+    });
+  });
 
   return (
     <ReactModal
@@ -133,8 +300,8 @@ function ClassEnrollmentModal({ enrollmentModalOpen, setEnrollmentModalOpen }) {
             </div>
             <StudentListByClass
               type="entire"
-              entireClassData={entireClassData}
-              currentClassData={currentClassData}
+              differntCourseStudents={differntCourseStudents}
+              myCourseStudents={myCourseStudents}
             />
           </div>
           <div className="ml-4 w-[280px]">
@@ -158,8 +325,8 @@ function ClassEnrollmentModal({ enrollmentModalOpen, setEnrollmentModalOpen }) {
             </div>
             <StudentListByClass
               type="selected"
-              entireClassData={entireClassData}
-              currentClassData={currentClassData}
+              differntCourseStudents={differntCourseStudents}
+              myCourseStudents={myCourseStudents}
             />
           </div>
         </div>
