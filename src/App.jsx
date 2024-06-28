@@ -8,6 +8,8 @@ import CommonLayout from './components/layouts/CommonLayout';
 import WriteQueryPage from './components/pages/WriteQueryPage';
 import ManagementPage from './components/pages/ManagementPage';
 import UserInformationPage from './components/pages/UserInformationPage';
+import QueryBoardPage from './components/pages/QueryBoardPage';
+import QuestionPage from './components/pages/QuestionPage';
 
 function App() {
   ReactModal.setAppElement('#root');
@@ -16,9 +18,11 @@ function App() {
       <Routes>
         {/* 공통 레이아웃 */}
         <Route path="/" element={<CommonLayout />}>
+          <Route path="query-board" element={<QueryBoardPage />} />
           <Route path="write-query" element={<WriteQueryPage />} />
           <Route path="management" element={<ManagementPage />} />
           <Route path="user-information" element={<UserInformationPage />} />
+          <Route path="question/:id" element={<QuestionPage />} />
         </Route>
         {/* 404 에러 */}
         <Route path="*" element={<NonFoundClientError />} />

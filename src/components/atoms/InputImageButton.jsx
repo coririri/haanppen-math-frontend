@@ -6,12 +6,12 @@ function InputImageButton({ setImgFiles, setImgePreview }) {
 
   const saveImgFile = () => {
     const file = imgRef.current.files.item(0);
-    setImgFiles((prev) => [...prev, file]);
+    setImgFiles(() => [file]);
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setImgePreview((prev) => [...prev, reader.result]);
+        setImgePreview(() => [reader.result]);
       };
     }
   };

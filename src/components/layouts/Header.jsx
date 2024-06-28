@@ -25,7 +25,7 @@ function Header() {
             type="button"
             className="ml-4"
             onClick={() => {
-              window.location.reload();
+              window.location.href = 'http://localhost:3000';
             }}
           >
             <img src={logoImages} alt="한편의 수학 로고 이미지" />
@@ -55,7 +55,7 @@ function Header() {
           type="button"
           className="block w-[200px]"
           onClick={() => {
-            window.location.reload();
+            window.location.href = 'http://localhost:3000';
           }}
         >
           <img

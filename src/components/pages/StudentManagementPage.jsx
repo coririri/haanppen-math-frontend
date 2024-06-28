@@ -13,6 +13,7 @@ function StudentManagementPage() {
   ]);
   const { searchRef } = useRef();
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
+
   return (
     <div className="w-full text-center">
       <StudentEnrollmentModal
