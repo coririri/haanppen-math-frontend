@@ -4,7 +4,7 @@ const getAllTeachers = (setTeacherList) => {
   instance
     .get('/api/members/teachers')
     .then((response) => {
-      const entireTeahcerList = response.data;
+      const entireTeahcerList = response.data.contents;
       setTeacherList((prev) => [...prev, ...entireTeahcerList]);
     })
     .catch((error) => {

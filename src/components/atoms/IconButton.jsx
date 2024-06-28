@@ -11,7 +11,7 @@ function IconButton({ bgColor, icon, text, handleClick, disabled = false }) {
         disabled={disabled}
       >
         <div
-          className={`inline-flex items-center font-bold border-[1.5px] border-solid py-1 px-5 rounded-lg  ${disabled ? 'border-hpGray' : 'border-black'}`}
+          className={`bg-white inline-flex items-center font-bold border-[1.5px] border-solid py-1 px-5 rounded-lg  ${disabled ? 'border-hpGray' : 'border-black'}`}
         >
           {icon}
           <span
