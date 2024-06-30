@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
 import DropdownMenu from '../molecules/DropdownMenu';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
 import phonenumberValidate from '../../validation/phonenumberValidation';
-import studentAccountRegist from '../../apis/student';
+import { modifyStudent } from '../../apis/student';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -35,39 +35,42 @@ const customModalStyles = {
   },
 };
 
-function StudentEnrollmentModal({
-  enrollmentModalOpen,
-  setEnrollmentModalOpen,
-  queryKeyQueryClient,
-  queryKeyChoosenGradeIndex,
-  queryKeySearchNameValue,
+function StudentModificationModal({
+  modificationModalOpen,
+  setModificationModalOpen,
+  id,
+  grade,
+  name,
+  phoneNumber,
 }) {
-  const [choosenGradeIndex, setChoosenGradeIndex] = useState([
-    true,
-    false,
-    false,
-  ]);
+  const isInitialMount = useRef(true);
+  const [choosenGradeIndex, setChoosenGradeIndex] = useState(() => {
+    if (grade <= 5) return [true, false, false];
+    if (grade <= 8) return [false, true, false];
+    return [false, false, true];
+  });
 
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownContentsText, setDropdownContentsText] = useState([
-    '초1',
-    '초2',
-    '초3',
-    '초4',
-    '초5',
-    '초6',
-  ]);
+  const [dropdownContentsText, setDropdownContentsText] = useState(() => {
+    if (grade <= 5) return ['초1', '초2', '초3', '초4', '초5', '초6'];
+    if (grade <= 8) return ['중1', '중2', '중3'];
+    return ['고1', '고2', '고3'];
+  });
 
-  phonenumberValidate();
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(() => {
+    if (grade <= 5) return grade;
+    if (grade <= 8) return grade - 6;
+    return grade - 9;
+  });
 
   const [isDisabled, setIsDisabled] = useState(true);
-  const [userform, setUserform] = useState({ name: '', phoneNumber: '' });
+  const [userform, setUserform] = useState({ name, phoneNumber });
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    if (choosenGradeIndex[0] === true) {
+    if (isInitialMount.current === true) {
+      isInitialMount.current = false;
+    } else if (choosenGradeIndex[0] === true) {
       setDropdownContentsText(['초1', '초2', '초3', '초4', '초5', '초6']);
       setSelectedIndex(0);
     } else if (choosenGradeIndex[1] === true) {
@@ -78,6 +81,27 @@ function StudentEnrollmentModal({
       setSelectedIndex(0);
     }
   }, [choosenGradeIndex]);
+
+  useEffect(() => {
+    setSelectedIndex(() => {
+      if (grade <= 5) return grade;
+      if (grade <= 8) return grade - 6;
+      return grade - 9;
+    });
+
+    setDropdownContentsText(() => {
+      if (grade <= 5) return ['초1', '초2', '초3', '초4', '초5', '초6'];
+      if (grade <= 8) return ['중1', '중2', '중3'];
+      return ['고1', '고2', '고3'];
+    });
+
+    setChoosenGradeIndex(() => {
+      if (grade <= 5) return [true, false, false];
+      if (grade <= 8) return [false, true, false];
+      return [false, false, true];
+    });
+    isInitialMount.current = true;
+  }, [modificationModalOpen]);
 
   useEffect(() => {
     if (!phonenumberValidate(userform.phoneNumber)) {
@@ -91,15 +115,15 @@ function StudentEnrollmentModal({
       setErrorMessage('');
     }
   }, [userform]);
-
+  console.log(selectedIndex);
   return (
     <ReactModal
-      isOpen={enrollmentModalOpen}
-      onRequestClose={setEnrollmentModalOpen}
+      isOpen={modificationModalOpen}
+      onRequestClose={setModificationModalOpen}
       style={customModalStyles}
     >
       <div className="flex flex-col items-center">
-        <h1 className="text-xl font-bold">학생 등록</h1>
+        <h1 className="text-xl font-bold">학생 수정</h1>
         <div className="flex items-center mt-4">
           <div className="flex items-center justify-between w-[140px] mx-auto mr-4">
             <TextButton
@@ -160,6 +184,7 @@ function StudentEnrollmentModal({
               id="studentModalName"
               className="w-[160px] h-[30px] border-solid border-black border-[1px] rounded-md pl-2 text-sm font-bold"
               placeholder="이름을 입력해주세요."
+              defaultValue={name}
               onChange={(e) => {
                 setUserform((prev) => ({
                   ...prev,
@@ -180,6 +205,7 @@ function StudentEnrollmentModal({
               id="studentModalPhonenumber"
               className="w-[160px] h-[30px] border-solid border-black border-[1px] rounded-md pl-2 text-sm font-bold"
               placeholder="숫자만 입력해주세요."
+              defaultValue={phoneNumber}
               onChange={(e) => {
                 setUserform((prev) => ({
                   ...prev,
@@ -202,26 +228,21 @@ function StudentEnrollmentModal({
               }
               text="완료"
               handleClick={() => {
-                let grade;
+                let modificationGrade;
                 if (choosenGradeIndex[0] === true) {
-                  grade = selectedIndex;
+                  modificationGrade = selectedIndex;
                 } else if (choosenGradeIndex[1] === true) {
-                  grade = selectedIndex + 6;
+                  modificationGrade = selectedIndex + 6;
                 } else {
-                  grade = selectedIndex + 9;
+                  modificationGrade = selectedIndex + 9;
                 }
                 const payload = {
                   name: userform.name,
-                  grade,
+                  grade: modificationGrade,
                   phoneNumber: userform.phoneNumber,
+                  id,
                 };
-                studentAccountRegist(
-                  setEnrollmentModalOpen,
-                  payload,
-                  queryKeyQueryClient,
-                  queryKeyChoosenGradeIndex,
-                  queryKeySearchNameValue,
-                );
+                modifyStudent(setModificationModalOpen, payload);
               }}
               disabled={isDisabled}
             />{' '}
@@ -232,7 +253,7 @@ function StudentEnrollmentModal({
               icon={<AiFillEdit size="20px" />}
               text="취소"
               handleClick={() => {
-                setEnrollmentModalOpen(false);
+                setModificationModalOpen(false);
               }}
             />
           </div>
@@ -242,4 +263,4 @@ function StudentEnrollmentModal({
   );
 }
 
-export default StudentEnrollmentModal;
+export default StudentModificationModal;

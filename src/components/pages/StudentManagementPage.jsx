@@ -1,24 +1,58 @@
 import React, { useRef, useState } from 'react';
 import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
 import StudentList from '../organisms/StudentList';
 import StudentEnrollmentModal from '../modals/StudentEnrollmentModal';
+import { deleteStudent, getStudentList } from '../../apis/student';
 
 function StudentManagementPage() {
+  const queryClient = useQueryClient();
   const [choosenGradeIndex, setChoosenGradeIndex] = useState([
     true,
     false,
     false,
+    false,
   ]);
-  const { searchRef } = useRef();
+  const [searchNameValue, setSearchNameValue] = useState('');
+  const searchRef = useRef();
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
+  const [forDeletedStudentIds, setForDeletedStudentIds] = useState([]);
+  console.log(forDeletedStudentIds);
 
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['studentList', choosenGradeIndex, searchNameValue],
+      queryFn: getStudentList,
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => lastPage?.data?.nextCursor,
+    });
+
+  const mutation = useMutation({
+    mutationFn: () => deleteStudent(forDeletedStudentIds),
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        'studentList',
+        choosenGradeIndex,
+        searchNameValue,
+      ]);
+    },
+  });
+
+  if (isLoading) return <div>로딩중</div>;
   return (
     <div className="w-full text-center">
       <StudentEnrollmentModal
         enrollmentModalOpen={enrollmentModalOpen}
         setEnrollmentModalOpen={setEnrollmentModalOpen}
+        queryKeyQueryClient={queryClient}
+        queryKeyChoosenGradeIndex={choosenGradeIndex}
+        queryKeySearchNameValue={searchNameValue}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="mt-3 flex items-center justify-between w-[250px] mx-auto">
@@ -28,7 +62,21 @@ function StudentManagementPage() {
           size="small"
           isClick={choosenGradeIndex[0]}
           handleClick={() => {
-            setChoosenGradeIndex([true, false, false]);
+            queryClient.invalidateQueries('students', choosenGradeIndex);
+            setChoosenGradeIndex([true, false, false, false]);
+            setForDeletedStudentIds([]);
+          }}
+        >
+          전체
+        </TextButton>
+        <TextButton
+          color="white"
+          shape="square"
+          size="small"
+          isClick={choosenGradeIndex[1]}
+          handleClick={() => {
+            setChoosenGradeIndex([false, true, false, false]);
+            setForDeletedStudentIds([]);
           }}
         >
           초
@@ -37,9 +85,10 @@ function StudentManagementPage() {
           color="white"
           shape="square"
           size="small"
-          isClick={choosenGradeIndex[1]}
+          isClick={choosenGradeIndex[2]}
           handleClick={() => {
-            setChoosenGradeIndex([false, true, false]);
+            setChoosenGradeIndex([false, false, true, false]);
+            setForDeletedStudentIds([]);
           }}
         >
           중
@@ -48,9 +97,10 @@ function StudentManagementPage() {
           color="white"
           shape="square"
           size="small"
-          isClick={choosenGradeIndex[2]}
+          isClick={choosenGradeIndex[3]}
           handleClick={() => {
-            setChoosenGradeIndex([false, false, true]);
+            setChoosenGradeIndex([false, false, false, true]);
+            setForDeletedStudentIds([]);
           }}
         >
           고
@@ -75,7 +125,8 @@ function StudentManagementPage() {
               bgColor="white"
               icon={<AiFillEdit size="26px" color="black" />}
               text="학생 삭제"
-              handleClick={() => {
+              handleClick={async () => {
+                mutation.mutate(forDeletedStudentIds);
                 console.log('학생 삭제');
               }}
             />
@@ -94,6 +145,10 @@ function StudentManagementPage() {
               type="button"
               aria-label="학생 검색"
               onClick={() => {
+                console.log(searchRef.current.value);
+                setChoosenGradeIndex([false, false, false, false]);
+                setForDeletedStudentIds([]);
+                setSearchNameValue(searchRef.current.value);
                 console.log('검색');
               }}
             >
@@ -103,7 +158,25 @@ function StudentManagementPage() {
         </div>
       </div>
       <div className="mt-2">
-        <StudentList />
+        <StudentList
+          pages={data?.pages}
+          setForDeletedStudentIds={setForDeletedStudentIds}
+          choosenGradeIndex={choosenGradeIndex}
+          searchNameValue={searchNameValue}
+        />
+      </div>
+      <div>
+        <button
+          type="button"
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+        >
+          {isFetchingNextPage
+            ? 'Loading more...'
+            : hasNextPage
+              ? 'Load More'
+              : 'Nothing more to load'}
+        </button>
       </div>
     </div>
   );

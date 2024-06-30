@@ -1,12 +1,17 @@
 import React from 'react';
 import StudentItem from '../molecules/StudentItem';
 
-function StudentList() {
+function StudentList({
+  pages,
+  setForDeletedStudentIds,
+  choosenGradeIndex,
+  searchNameValue,
+}) {
   return (
     <div className="w-full">
       <div className="w-[800px] mx-auto">
         <div className="flex items-center justify-between">
-          <input type="checkbox" className="w-[16px] h-[16px]" />
+          <input type="checkbox" className="w-[16px] h-[16px]" disabled />
           <span className="text-lg font-bold text-hpGray w-[60px] text-center">
             학년
           </span>
@@ -21,18 +26,22 @@ function StudentList() {
       </div>
       <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
       <div className="w-[800px] mx-auto mt-4">
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
-        <StudentItem grade="2학년" name="조인애" id="010-3433-0652" />
+        {pages.map((page) => {
+          const students = page.data.contents;
+          return students.map((student) => (
+            <StudentItem
+              key={student.id}
+              id={student.id}
+              grade={student.grade}
+              name={student.name}
+              phoneNumber={student.phoneNumber}
+              setForDeletedStudentIds={setForDeletedStudentIds}
+              choosenGradeIndex={choosenGradeIndex}
+              searchNameValue={searchNameValue}
+            />
+          ));
+        })}
       </div>
-      <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
     </div>
   );
 }

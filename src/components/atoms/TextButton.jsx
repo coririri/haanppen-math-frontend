@@ -21,7 +21,7 @@ function TextButton({
     else if (shape === 'square')
       return (
         <button
-          className={`inline-block w-[36px] h-[36px] py-1 px-2 border-[0.072rem] rounded-lg text-md font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
+          className={`inline-block h-[36px] py-1 px-2 border-[0.072rem] rounded-lg text-md font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}
           type="button"
           onClick={handleClick}
         >
