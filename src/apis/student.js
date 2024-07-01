@@ -73,25 +73,24 @@ export const deleteStudent = (forDeletedStudentIds) =>
 export const modifyStudent = (
   setEnrollmentModalOpen,
   payload,
-  queryClient,
-  choosenGradeIndex,
-  searchNameValue,
+  queryKeyQueryClient,
+  queryKeyChoosenGradeIndex,
+  queryKeySearchNameValue,
 ) =>
   instance
     .put('api/accounts/student', {
-      data: {
-        studentId: payload.id,
-        name: payload.name,
-        phoneNumber: payload.phoneNumber,
-        grade: payload.modificationGrade,
-      },
+      studentId: payload.id,
+      name: payload.name,
+      phoneNumber: payload.phoneNumber,
+      grade: payload.grade,
     })
     .then((response) => {
-      queryClient.invalidateQueries([
+      queryKeyQueryClient.invalidateQueries([
         'studentList',
-        choosenGradeIndex,
-        searchNameValue,
+        queryKeyChoosenGradeIndex,
+        queryKeySearchNameValue,
       ]);
+      setEnrollmentModalOpen(false);
       console.log(response);
     })
     .catch((error) => {

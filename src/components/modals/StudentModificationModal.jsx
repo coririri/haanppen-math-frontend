@@ -42,6 +42,9 @@ function StudentModificationModal({
   grade,
   name,
   phoneNumber,
+  queryKeyQueryClient,
+  queryKeyChoosenGradeIndex,
+  queryKeySearchNameValue,
 }) {
   const isInitialMount = useRef(true);
   const [choosenGradeIndex, setChoosenGradeIndex] = useState(() => {
@@ -242,7 +245,13 @@ function StudentModificationModal({
                   phoneNumber: userform.phoneNumber,
                   id,
                 };
-                modifyStudent(setModificationModalOpen, payload);
+                modifyStudent(
+                  setModificationModalOpen,
+                  payload,
+                  queryKeyQueryClient,
+                  queryKeyChoosenGradeIndex,
+                  queryKeySearchNameValue,
+                );
               }}
               disabled={isDisabled}
             />{' '}
