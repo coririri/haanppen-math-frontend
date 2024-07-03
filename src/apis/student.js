@@ -1,6 +1,6 @@
 import instance from './instance';
 
-export const getStudentList = ({ queryKey, pageParam, name = '' }) => {
+export const getStudentList = ({ queryKey, pageParam }) => {
   console.log(queryKey[1]);
   if (queryKey[1][0] === true)
     return instance.get('/api/members/students', {
@@ -9,7 +9,7 @@ export const getStudentList = ({ queryKey, pageParam, name = '' }) => {
         cursorIndex: pageParam,
         startGrade: 0,
         endGrade: 11,
-        name,
+        name: queryKey[2],
       },
     });
 
@@ -20,7 +20,7 @@ export const getStudentList = ({ queryKey, pageParam, name = '' }) => {
         cursorIndex: pageParam,
         startGrade: 0,
         endGrade: 5,
-        name,
+        name: queryKey[2],
       },
     });
 
@@ -31,7 +31,7 @@ export const getStudentList = ({ queryKey, pageParam, name = '' }) => {
         cursorIndex: pageParam,
         startGrade: 6,
         endGrade: 8,
-        name,
+        name: queryKey[2],
       },
     });
 
@@ -42,7 +42,7 @@ export const getStudentList = ({ queryKey, pageParam, name = '' }) => {
         cursorIndex: pageParam,
         startGrade: 9,
         endGrade: 11,
-        name,
+        name: queryKey[2],
       },
     });
   return instance.get('/api/members/students', {

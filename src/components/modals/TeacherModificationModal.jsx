@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
 import phonenumberValidate from '../../validation/phonenumberValidation';
-import { registTeacherAccount } from '../../apis/teacher';
+import { modifyTeacher } from '../../apis/teacher';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -33,16 +33,17 @@ const customModalStyles = {
   },
 };
 
-function TeacherEnrollmentModal({
-  enrollmentModalOpen,
-  setEnrollmentModalOpen,
-  queryClient,
-  searchNameValue,
+function TeacherModificationModal({
+  modificationModalOpen,
+  setModificationModalOpen,
+  id,
+  name,
+  phoneNumber,
+  queryKeyQueryClient,
+  queryKeySearchNameValue,
 }) {
-  phonenumberValidate();
-
   const [isDisabled, setIsDisabled] = useState(true);
-  const [userform, setUserform] = useState({ name: '', phoneNumber: '' });
+  const [userform, setUserform] = useState({ name, phoneNumber });
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -63,12 +64,12 @@ function TeacherEnrollmentModal({
 
   return (
     <ReactModal
-      isOpen={enrollmentModalOpen}
-      onRequestClose={setEnrollmentModalOpen}
+      isOpen={modificationModalOpen}
+      onRequestClose={setModificationModalOpen}
       style={customModalStyles}
     >
       <div className="flex flex-col items-center">
-        <h1 className="text-xl font-bold">강사 등록</h1>
+        <h1 className="text-xl font-bold">강사 수정</h1>
         <form>
           <div className="flex mt-10 justify-center items-center">
             <label
@@ -81,6 +82,7 @@ function TeacherEnrollmentModal({
               type="text"
               className="w-[160px] h-[30px] border-solid border-black border-[1px] rounded-md pl-2 text-sm font-bold"
               id="teacherModalName"
+              defaultValue={name}
               placeholder="이름을 입력해주세요."
               onChange={(e) => {
                 setUserform((prev) => ({
@@ -101,6 +103,7 @@ function TeacherEnrollmentModal({
               type="text"
               id="teacherModalPhonenumber"
               className="w-[160px] h-[30px] border-solid border-black border-[1px] rounded-md pl-2 text-sm font-bold"
+              defaultValue={phoneNumber}
               placeholder="숫자만 입력해주세요."
               onChange={(e) => {
                 setUserform((prev) => ({
@@ -125,14 +128,15 @@ function TeacherEnrollmentModal({
               text="완료"
               handleClick={() => {
                 const payload = {
+                  id,
                   name: userform.name,
                   phoneNumber: userform.phoneNumber,
                 };
-                registTeacherAccount(
-                  setEnrollmentModalOpen,
+                modifyTeacher(
+                  setModificationModalOpen,
                   payload,
-                  queryClient,
-                  searchNameValue,
+                  queryKeyQueryClient,
+                  queryKeySearchNameValue,
                 );
               }}
               disabled={isDisabled}
@@ -144,7 +148,7 @@ function TeacherEnrollmentModal({
               icon={<AiFillEdit size="20px" />}
               text="취소"
               handleClick={() => {
-                setEnrollmentModalOpen(false);
+                setModificationModalOpen(false);
               }}
             />
           </div>
@@ -154,4 +158,4 @@ function TeacherEnrollmentModal({
   );
 }
 
-export default TeacherEnrollmentModal;
+export default TeacherModificationModal;
