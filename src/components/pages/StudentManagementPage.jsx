@@ -23,7 +23,6 @@ function StudentManagementPage() {
   const searchRef = useRef();
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   const [forDeletedStudentIds, setForDeletedStudentIds] = useState([]);
-  console.log(forDeletedStudentIds);
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -44,7 +43,6 @@ function StudentManagementPage() {
     },
   });
 
-  if (isLoading) return <div>로딩중</div>;
   return (
     <div className="w-full text-center">
       <StudentEnrollmentModal
@@ -146,9 +144,9 @@ function StudentManagementPage() {
               aria-label="학생 검색"
               onClick={() => {
                 console.log(searchRef.current.value);
-                setChoosenGradeIndex([false, false, false, false]);
                 setForDeletedStudentIds([]);
                 setSearchNameValue(searchRef.current.value);
+                console.log(searchRef.current.value);
                 console.log('검색');
               }}
             >
@@ -157,27 +155,33 @@ function StudentManagementPage() {
           </div>
         </div>
       </div>
-      <div className="mt-2">
-        <StudentList
-          pages={data?.pages}
-          setForDeletedStudentIds={setForDeletedStudentIds}
-          choosenGradeIndex={choosenGradeIndex}
-          searchNameValue={searchNameValue}
-        />
-      </div>
-      <div>
-        <button
-          type="button"
-          onClick={() => fetchNextPage()}
-          disabled={!hasNextPage || isFetchingNextPage}
-        >
-          {isFetchingNextPage
-            ? 'Loading more...'
-            : hasNextPage
-              ? 'Load More'
-              : 'Nothing more to load'}
-        </button>
-      </div>
+      {isLoading ? (
+        <div>로딩중</div>
+      ) : (
+        <div>
+          <div className="mt-2">
+            <StudentList
+              pages={data?.pages}
+              setForDeletedStudentIds={setForDeletedStudentIds}
+              choosenGradeIndex={choosenGradeIndex}
+              searchNameValue={searchNameValue}
+            />
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={() => fetchNextPage()}
+              disabled={!hasNextPage || isFetchingNextPage}
+            >
+              {isFetchingNextPage
+                ? 'Loading more...'
+                : hasNextPage
+                  ? 'Load More'
+                  : 'Nothing more to load'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
