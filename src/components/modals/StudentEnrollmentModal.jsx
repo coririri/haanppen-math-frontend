@@ -4,7 +4,7 @@ import { AiFillEdit } from 'react-icons/ai';
 import DropdownMenu from '../molecules/DropdownMenu';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
-import phonenumberValidate from '../../validation/phonenumberValidation';
+import phonenumberValidate from '../../utils/phonenumberValidation';
 import studentAccountRegist from '../../apis/student';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,

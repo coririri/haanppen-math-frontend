@@ -75,4 +75,15 @@ export const refreshLogin = (navigate) => {
     });
 };
 
+export const logout = () => {
+  instance
+    .post('api/logout')
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export default login;

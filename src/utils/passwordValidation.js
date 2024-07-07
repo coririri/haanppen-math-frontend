@@ -1,14 +1,5 @@
-export function idValidation(id) {
-  const idRegex = /^010[0-9]{8}$/;
-  const idTest = idRegex.test(id);
-
-  if (!idTest) {
-    return '아이디는 010으로 시작하는 11자리 숫자로 이루어져야 합니다';
-  }
-  return '';
-}
-
-export function passwordValidation(password) {
+function passwordValidation(password) {
+  if (password === undefined) return '';
   const num = password.search(/[0-9]/g);
   const eng = password.search(/[a-zA-Z]/gi);
   const spe = password.search(/[!@^]/gi);
@@ -27,3 +18,10 @@ export function passwordValidation(password) {
   }
   return '';
 }
+
+export const isPasswordSame = (password, newPassword) => {
+  if (password === newPassword) return '';
+  return '기존 비밀번호와 일치하지 않습니다';
+};
+
+export default passwordValidation;

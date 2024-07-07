@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoImages from '../../images/loginPage/lg_logo_image.png';
-import {
-  idValidation,
-  passwordValidation,
-} from '../../validation/loginValidation';
+import phoneNumberValidation from '../../utils/idValidation';
+import passwordValidation from '../../utils/passwordValidation';
 import login from '../../apis/login';
 import LoginForm from '../organisms/LoginForm';
 
@@ -15,7 +13,7 @@ function LoginPage() {
 
   useEffect(() => {
     const { id, password } = userForm;
-    let tempErrorMessage = idValidation(id);
+    let tempErrorMessage = phoneNumberValidation(id);
     tempErrorMessage =
       tempErrorMessage === '' ? passwordValidation(password) : tempErrorMessage;
     setErrorMessage(tempErrorMessage);

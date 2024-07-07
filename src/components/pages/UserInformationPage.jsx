@@ -1,183 +1,207 @@
 import { AiFillEdit } from 'react-icons/ai';
+import { useEffect, useState } from 'react';
 import IconButton from '../atoms/IconButton';
+import getMyAccountInfo, { putAccountInfo } from '../../apis/account';
+import idValidation from '../../utils/idValidation';
+import passwordValidation, {
+  isPasswordSame,
+} from '../../utils/passwordValidation';
+import { logout } from '../../apis/login';
 
 function UserInformation() {
-  const role = localStorage.getItem('role');
-  console.log(role);
-  if (role === 'STUDENT')
-    return (
-      <div className="mt-[110px] flex flex-col">
-        <div className="flex flex-col justify-between w-[380px] h-[350px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
-          <div className="flex flex-col justify-center mt-8">
-            <div className="flex justify-center">
-              <label
-                className="text-center block font-bold text-lg w-[120px]"
-                htmlFor="userName"
-              >
-                이름
-              </label>
-              <input
-                type="text"
-                id="userName"
-                className="w-[200px] h-[30px] text-center border-solid border-black border-[1px] rounded-md text-sm font-bold"
-                value="김선우"
-                onChange={() => {}}
-              />
-            </div>
-            <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto my-4" />
-            <div className="flex justify-center">
-              <label
-                className="text-center block font-bold text-lg w-[120px]"
-                htmlFor="userName"
-              >
-                전화번호(ID)
-              </label>
-              <input
-                type="text"
-                id="userName"
-                className="w-[200px] h-[30px] text-center border-solid border-black border-[1px] rounded-md ext-sm font-bold"
-                value="010-3433-0652"
-                onChange={() => {}}
-              />
-            </div>
-            <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto my-4" />
-            <div className="flex justify-center">
-              <label
-                className="text-center block font-bold text-lg w-[120px]"
-                htmlFor="userName"
-              >
-                기존 비밀번호
-              </label>
-              <input
-                type="password"
-                id="userName"
-                className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
-                value="qweqwe123"
-                onChange={() => {}}
-              />
-            </div>
-            <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto my-4" />
-            <div className="flex justify-center">
-              <label
-                className="text-center block font-bold text-lg w-[120px]"
-                htmlFor="userName"
-              >
-                새 비밀번호
-              </label>
-              <input
-                type="password"
-                id="userName"
-                className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
-                value="qweqwe123"
-                onChange={() => {}}
-              />
-            </div>
-            <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto my-4" />
-          </div>
-          <div className="mb-6 w-full text-right">
-            <span className="pr-12">계정 가입일: 2024.02.30</span>
-          </div>
-        </div>
-        <div className="mx-auto mt-8 flex">
-          <div className="mr-2">
-            <IconButton
-              bgColor="white"
-              icon={<AiFillEdit size="20px" />}
-              text="저장"
-              handleClick={() => {}}
-            />
-          </div>
-          <div className="ml-2">
-            <IconButton
-              bgColor="white"
-              icon={<AiFillEdit size="20px" />}
-              text="로그아웃"
-              handleClick={() => {}}
-            />
-          </div>
-        </div>
-      </div>
+  const [userForm, setUserForm] = useState({
+    name: '',
+    phoneNumber: '',
+    password: '',
+    newPassword: '',
+    registerDate: '24.08.02',
+  });
+
+  const [errorMessages, setErrorMessages] = useState({
+    name: '',
+    phoneNumber: '',
+    password: '',
+    newPassword: '',
+  });
+
+  useEffect(() => {
+    getMyAccountInfo(setUserForm);
+  }, []);
+
+  useEffect(() => {
+    if (userForm.name === '')
+      setErrorMessages((prev) => ({
+        ...prev,
+        name: '이름은 빈칸일 수 없습니다.',
+      }));
+    else {
+      setErrorMessages((prev) => ({
+        ...prev,
+        name: '',
+      }));
+    }
+  }, [userForm.name]);
+
+  useEffect(() => {
+    const validationMessage = idValidation(userForm.phoneNumber);
+    setErrorMessages((prev) => ({
+      ...prev,
+      id: validationMessage,
+    }));
+  }, [userForm.phoneNumber]);
+
+  useEffect(() => {
+    console.log(userForm.password);
+    const validationMessage = passwordValidation(userForm.password);
+    setErrorMessages((prev) => ({
+      ...prev,
+      password: validationMessage,
+    }));
+  }, [userForm.password]);
+
+  useEffect(() => {
+    const validationMessage = isPasswordSame(
+      userForm.password,
+      userForm.newPassword,
     );
+    setErrorMessages((prev) => ({
+      ...prev,
+      newPassword: validationMessage,
+    }));
+  }, [userForm.newPassword]);
+
   return (
-    <div className="mt-[110px] flex flex-col">
-      <div className="flex flex-col justify-between w-[550px] h-[340px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
+    <div className="mt-[70px] flex flex-col">
+      <div className="flex flex-col justify-between w-[380px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
         <div className="flex flex-col justify-center mt-8">
           <div className="flex justify-center">
             <label
               className="text-center block font-bold text-lg w-[120px]"
-              htmlFor="userName"
+              htmlFor="name"
             >
               이름
             </label>
             <input
               type="text"
-              id="userName"
+              id="name"
               className="w-[200px] h-[30px] text-center border-solid border-black border-[1px] rounded-md text-sm font-bold"
-              value="김선우"
-              onChange={() => {}}
+              defaultValue={userForm.name}
+              onChange={(e) => {
+                setUserForm((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                }));
+              }}
             />
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[450px] mx-auto my-4" />
+          <div className="text-center ml-[120px] mt-2 text-hpLightRed font-bold">
+            {errorMessages.name}
+          </div>
+          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mb-4 mt-2" />
           <div className="flex justify-center">
             <label
               className="text-center block font-bold text-lg w-[120px]"
-              htmlFor="userName"
+              htmlFor="id"
             >
               전화번호(ID)
             </label>
             <input
               type="text"
-              id="userName"
+              id="id"
               className="w-[200px] h-[30px] text-center border-solid border-black border-[1px] rounded-md ext-sm font-bold"
-              value="010-3433-0652"
-              onChange={() => {}}
+              defaultValue={userForm.phoneNumber}
+              onChange={(e) => {
+                setUserForm((prev) => ({
+                  ...prev,
+                  phoneNumber: e.target.value,
+                }));
+              }}
             />
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[450px] mx-auto my-4" />
+          <div className="text-center ml-[120px] mt-2 text-hpLightRed font-bold">
+            {errorMessages.id}
+          </div>
+          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mt-2 mb-4" />
           <div className="flex justify-center">
             <label
               className="text-center block font-bold text-lg w-[120px]"
-              htmlFor="userName"
+              htmlFor="password"
             >
               기존 비밀번호
             </label>
             <input
               type="password"
-              id="userName"
+              id="password"
               className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
-              value="qweqwe123"
-              onChange={() => {}}
+              defaultValue={userForm.password}
+              onChange={(e) => {
+                setUserForm((prev) => ({
+                  ...prev,
+                  password: e.target.value,
+                }));
+              }}
             />
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[450px] mx-auto my-4" />
+          <div className="text-center ml-[40px] mt-2 text-hpLightRed font-bold">
+            {errorMessages.password}
+          </div>
+          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mt-2 mb-4" />
           <div className="flex justify-center">
             <label
               className="text-center block font-bold text-lg w-[120px]"
-              htmlFor="userName"
+              htmlFor="newPassword"
             >
               새 비밀번호
             </label>
             <input
               type="password"
-              id="userName"
+              id="newPassword"
               className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
-              value="qweqwe123"
-              onChange={() => {}}
+              defaultValue=""
+              onChange={(e) => {
+                setUserForm((prev) => ({
+                  ...prev,
+                  newPassword: e.target.value,
+                }));
+              }}
             />
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[450px] mx-auto my-4" />
+          <div className="text-center ml-[120px] mt-2 text-hpLightRed font-bold">
+            {errorMessages.newPassword}
+          </div>
+          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mt-2 mb-4" />
         </div>
         <div className="mb-6 w-full text-right">
-          <span className="pr-12">계정 가입일: 2024.02.30</span>
+          <span className="pr-12">계정 가입일: {userForm.registerDate}</span>
         </div>
       </div>
       <div className="mx-auto mt-8 flex">
         <div className="mr-2">
           <IconButton
             bgColor="white"
-            icon={<AiFillEdit size="20px" />}
+            icon={
+              <AiFillEdit
+                size="20px"
+                color={`${
+                  errorMessages.name !== '' ||
+                  errorMessages.phoneNumber !== '' ||
+                  errorMessages.password !== '' ||
+                  errorMessages.newPassword !== ''
+                    ? 'gray'
+                    : 'black'
+                }`}
+              />
+            }
             text="저장"
-            handleClick={() => {}}
+            handleClick={() => {
+              putAccountInfo(userForm);
+            }}
+            disabled={
+              errorMessages.name !== '' ||
+              errorMessages.phoneNumber !== '' ||
+              errorMessages.password !== '' ||
+              errorMessages.newPassword !== ''
+            }
           />
         </div>
         <div className="ml-2">
@@ -185,7 +209,9 @@ function UserInformation() {
             bgColor="white"
             icon={<AiFillEdit size="20px" />}
             text="로그아웃"
-            handleClick={() => {}}
+            handleClick={() => {
+              logout();
+            }}
           />
         </div>
       </div>
