@@ -14,6 +14,7 @@ export const loginInstance = axios.create({
 });
 
 instance.interceptors.request.use(async (config) => {
+  console.log(config);
   // accessToken이 없거나 만료된 경우 새로운 토큰을 가져오는 로직
   const curToken = instance.defaults.headers.common.Authorization;
   const curUserName = localStorage.getItem('userName');
