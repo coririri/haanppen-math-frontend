@@ -9,14 +9,14 @@ import TeacherCarousel from '../molecules/TeacherCarousel';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import getAllTeachers from '../../apis/teacher';
-import writeQuery from '../../apis/query';
+import writeQuery from '../../apis/question';
 
 function WriteQueryPage() {
   const [imgPreview, setImgePreview] = useState([]);
   const [imgFiles, setImgFiles] = useState([]);
   const [teacherList, setTeacherList] = useState(['선택 없음']);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   const finishWrite = () => {
     const formData = new FormData();

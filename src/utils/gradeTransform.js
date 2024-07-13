@@ -25,7 +25,7 @@ const gradeTransform = (grade) => {
     case 12:
       return '고3';
     default:
-      return '알 수 없음';
+      return '학년 알 수 없음';
   }
 };
 

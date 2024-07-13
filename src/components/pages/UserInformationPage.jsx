@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import IconButton from '../atoms/IconButton';
 import getMyAccountInfo, { putAccountInfo } from '../../apis/account';
 import idValidation from '../../utils/idValidation';
-import passwordValidation, {
-  isPasswordSame,
-} from '../../utils/passwordValidation';
+import passwordValidation from '../../utils/passwordValidation';
 import { logout } from '../../apis/login';
 
 function UserInformation() {
@@ -60,10 +58,7 @@ function UserInformation() {
   }, [userForm.password]);
 
   useEffect(() => {
-    const validationMessage = isPasswordSame(
-      userForm.password,
-      userForm.newPassword,
-    );
+    const validationMessage = passwordValidation(userForm.newPassword);
     setErrorMessages((prev) => ({
       ...prev,
       newPassword: validationMessage,

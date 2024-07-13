@@ -14,19 +14,18 @@ export const loginInstance = axios.create({
 });
 
 instance.interceptors.request.use(async (config) => {
-  console.log(config);
   // accessToken이 없거나 만료된 경우 새로운 토큰을 가져오는 로직
   const curToken = instance.defaults.headers.common.Authorization;
   const curUserName = localStorage.getItem('userName');
   const curRole = localStorage.getItem('role');
-  console.log(curToken);
+
   if (!curToken || !curUserName || !curRole) {
     try {
       const response = await loginInstance.post('/api/login/refresh');
       const newToken = response.data.accessToken;
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = newToken;
-      console.log(instance.defaults.headers.common.Authorization);
+
       localStorage.setItem('role', role);
       localStorage.setItem('userName', userName);
     } catch (error) {

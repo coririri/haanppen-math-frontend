@@ -1,12 +1,18 @@
 import instance from './instance';
 
-const getMyAccountInfo = () => {
+const getMyAccountInfo = (setUserForm) => {
   instance
-    .get('/api/accounts/my', {
-      headers: {},
-    })
+    .get('/api/accounts/my', {})
     .then((response) => {
       console.log(response);
+      const userData = response.data;
+      setUserForm({
+        name: userData.userName,
+        phoneNumber: userData.phoneNumber,
+        password: '',
+        newPassword: '',
+        registerDate: '24.08.02',
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -15,7 +21,7 @@ const getMyAccountInfo = () => {
 
 export const putAccountInfo = (userForm) => {
   instance
-    .put('/api/accounts/my', {
+    .patch('/api/accounts/my', {
       phoneNumber: userForm.phoneNumber,
       name: userForm.name,
       prevPassword: userForm.password,

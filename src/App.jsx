@@ -21,7 +21,7 @@ function App() {
         <Routes>
           {/* 공통 레이아웃 */}
           <Route path="/" element={<CommonLayout />}>
-            <Route path="query-board" element={<QueryBoardPage />} />
+            <Route path="question-board" element={<QueryBoardPage />} />
             <Route path="write-query" element={<WriteQueryPage />} />
             <Route path="management" element={<ManagementPage />} />
             <Route path="user-information" element={<UserInformationPage />} />

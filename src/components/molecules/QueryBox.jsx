@@ -17,8 +17,10 @@ function QueryBox({ id, imgSrc, grade, studentName, isSolved, teacherName }) {
           <div className="w-[165px] flex justify-between items-center">
             <QueryBadge isSolved={isSolved} />
             <div>
-              <span className="font-bold"> {gradeTransfrom(grade)} </span>
-              <span className="font-bold">{studentName}</span>
+              <span className="font-bold mr-[5px]">
+                {gradeTransfrom(grade + 1)}
+              </span>
+              <span className="font-bold ml-[2px]">{studentName}</span>
             </div>
           </div>
           <div>
