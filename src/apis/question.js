@@ -1,6 +1,5 @@
+import imageUrlToSrc from '../utils/imageUrlToSrc';
 import instance from './instance';
-
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const writeQuery = (formData, navigate) => {
   instance
@@ -19,6 +18,7 @@ const writeQuery = (formData, navigate) => {
       console.log('게시글 작성 실패');
     });
 };
+
 export const getQuestionsList = async ({ pageParam, queryKey }) => {
   try {
     const response = await instance.get('/api/board/questions', {
@@ -30,23 +30,25 @@ export const getQuestionsList = async ({ pageParam, queryKey }) => {
     });
 
     const { data } = response;
-    console.log(data);
     const { contents } = data;
-    console.log(contents);
+
     for (let i = 0; i < contents.length; i += 1) {
       const question = contents[i];
       if (question.images.length !== 0) {
         const { imageUrl } = question.images[0];
-        console.log(`${backendUrl}api/media/${imageUrl}`);
-        question.images[0] = `${backendUrl}api/media/${imageUrl}`;
+        question.images[0] = imageUrlToSrc(imageUrl);
       }
     }
-    console.log(data);
     return data;
   } catch (error) {
     console.error('Error fetching questions list:', error);
     throw error;
   }
+};
+
+export const getDetailQuestionById = async (id) => {
+  const response = await instance.get(`/api/board/questions/${id}`);
+  return response.data;
 };
 
 export default writeQuery;
