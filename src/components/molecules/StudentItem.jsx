@@ -14,7 +14,7 @@ function StudentItem({
   searchNameValue,
 }) {
   const [modificationModalOpen, setModificationModalOpen] = useState(false);
-  console.log(modificationModalOpen);
+
   const queryClient = useQueryClient();
   return (
     <div>

@@ -1,12 +1,38 @@
 import { useState } from 'react';
 import TextButton from '../atoms/TextButton';
+import CourseModificationModal from '../modals/CourseModificationModal';
 
-function ClassItem({ className, studentNum, teacherName }) {
+function CourseItem({
+  className,
+  studentNum,
+  teacherName,
+  courseId,
+  setCourseListData,
+  setDeletedCoursesIndex,
+}) {
   const [isClick, setIsClick] = useState(false);
   return (
     <div>
+      <CourseModificationModal
+        enrollmentModalOpen={isClick}
+        setEnrollmentModalOpen={setIsClick}
+        setCourseListData={setCourseListData}
+        courseId={courseId}
+      />
       <div className="flex items-center justify-between my-2">
-        <input type="checkbox" className="w-[16px] h-[16px]" />
+        <input
+          type="checkbox"
+          className="w-[16px] h-[16px]"
+          onClick={(e) => {
+            if (e.target.checked) {
+              setDeletedCoursesIndex((prev) => [...prev, courseId]);
+            } else {
+              setDeletedCoursesIndex((prev) =>
+                prev.filter((item) => item !== courseId),
+              );
+            }
+          }}
+        />
         <span className="text-lg font-bold text-black w-[140px] text-center">
           {className}
         </span>
@@ -34,4 +60,4 @@ function ClassItem({ className, studentNum, teacherName }) {
   );
 }
 
-export default ClassItem;
+export default CourseItem;

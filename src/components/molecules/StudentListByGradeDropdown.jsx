@@ -8,6 +8,10 @@ function StudentListByGradeDropdown({
   students,
   differntCourseStudents,
   myCourseStudents,
+  setDifferntCourseStudents,
+  setMyCourseStudents,
+  setMyStudentsNum,
+  setDifferentStudentsNum,
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -42,15 +46,23 @@ function StudentListByGradeDropdown({
                 type="button"
                 onClick={() => {
                   const tempMyCourseStudents = [...myCourseStudents];
+                  let changingStudentsNums = 0;
                   students.forEach((student) => {
                     tempMyCourseStudents[grade - 1].students.push(student);
+                    changingStudentsNums += 1;
                   });
                   console.log(tempMyCourseStudents);
+                  setMyCourseStudents(tempMyCourseStudents);
 
                   const tempDifferntCourseStudents = [
                     ...differntCourseStudents,
                   ];
                   tempDifferntCourseStudents[grade - 1].students = [];
+                  setDifferntCourseStudents(tempDifferntCourseStudents);
+                  setMyStudentsNum((prev) => prev + changingStudentsNums);
+                  setDifferentStudentsNum(
+                    (prev) => prev - changingStudentsNums,
+                  );
                   console.log(tempDifferntCourseStudents);
                 }}
               >
@@ -75,6 +87,7 @@ function StudentListByGradeDropdown({
                     const tempMyCourseStudents = [...myCourseStudents];
                     tempMyCourseStudents[grade - 1].students.push(student);
                     console.log(tempMyCourseStudents);
+                    setMyCourseStudents(tempMyCourseStudents);
 
                     const tempDifferntCourseStudents = [
                       ...differntCourseStudents,
@@ -82,20 +95,21 @@ function StudentListByGradeDropdown({
                     tempDifferntCourseStudents[grade - 1].students =
                       tempDifferntCourseStudents[grade - 1].students.filter(
                         (tempStudent) => {
-                          if (student.studentName !== tempStudent.studentName) {
+                          if (student.name !== tempStudent.name) {
                             return tempStudent;
                           }
                           return '';
                         },
                       );
                     console.log(tempDifferntCourseStudents);
+                    setDifferntCourseStudents(tempDifferntCourseStudents);
+                    setMyStudentsNum((prev) => prev + 1);
+                    setDifferentStudentsNum((prev) => prev - 1);
                   }}
                 >
                   <div className="w-full h-full flex items-center justify-between">
                     <div className="ml-4">
-                      <span className="text-md ml-8">
-                        {student.studentName}
-                      </span>
+                      <span className="text-md ml-8">{student.name}</span>
                     </div>
                     <div className="mr-[18px] bg-hpLightkBlack px-2 rounded-xl">
                       <span className="text-sm text-white">
@@ -141,14 +155,20 @@ function StudentListByGradeDropdown({
               type="button"
               onClick={() => {
                 const tempDifferntCourseStudents = [...differntCourseStudents];
+                let changingStudentsNums = 0;
                 students.forEach((student) => {
                   tempDifferntCourseStudents[grade - 1].students.push(student);
+                  changingStudentsNums += 1;
                 });
                 console.log(tempDifferntCourseStudents);
+                setDifferntCourseStudents(tempDifferntCourseStudents);
 
                 const tempMyCourseStudents = [...myCourseStudents];
                 tempMyCourseStudents[grade - 1].students = [];
                 console.log(tempMyCourseStudents);
+                setMyCourseStudents(tempMyCourseStudents);
+                setDifferentStudentsNum((prev) => prev + changingStudentsNums);
+                setMyStudentsNum((prev) => prev - changingStudentsNums);
               }}
             >
               <div className="mr-4 bg-[#BCF7FF] px-2 rounded-xl">
@@ -172,23 +192,27 @@ function StudentListByGradeDropdown({
                   ];
                   tempDifferntCourseStudents[grade - 1].students.push(student);
                   console.log(tempDifferntCourseStudents);
+                  setDifferntCourseStudents(tempDifferntCourseStudents);
 
                   const tempMyCourseStudents = [...myCourseStudents];
                   tempMyCourseStudents[grade - 1].students =
                     tempMyCourseStudents[grade - 1].students.filter(
                       (tempStudent) => {
-                        if (student.studentName !== tempStudent.studentName) {
+                        if (student.name !== tempStudent.name) {
                           return tempStudent;
                         }
                         return '';
                       },
                     );
                   console.log(tempMyCourseStudents);
+                  setMyCourseStudents(tempMyCourseStudents);
+                  setDifferentStudentsNum((prev) => prev + 1);
+                  setMyStudentsNum((prev) => prev - 1);
                 }}
               >
                 <div className="w-full h-full flex items-center justify-between">
                   <div className="ml-4">
-                    <span className="text-md ml-8">{student.studentName}</span>
+                    <span className="text-md ml-8">{student.name}</span>
                   </div>
                   <div className="mr-[18px] bg-hpLightkBlack px-2 rounded-xl">
                     <span className="text-sm text-white">

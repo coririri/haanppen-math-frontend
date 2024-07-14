@@ -1,21 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineSmile, AiFillEdit } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
 import DropdownMenu from '../molecules/DropdownMenu';
-import ClassList from '../organisms/ClassList';
-import ClassEnrollmentModal from '../modals/ClassEnrollmentModal';
+import ClassList from '../organisms/CourseList';
+import CourseEnrollmentModal from '../modals/CourseEnrollmentModal';
+import { deleteCourses, getAllCourses } from '../../apis/course';
 
-function ClassManagementPage() {
+function CourseManagementPage() {
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   const [teacherArr] = useState(['선생님 전체', '권나희', '하경현']);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [courseListData, setCourseListData] = useState(null);
+  const [deletedCoursesIndex, setDeletedCoursesIndex] = useState([]);
+
+  useEffect(() => {
+    getAllCourses(setCourseListData);
+  }, []);
 
   return (
     <div className="w-full text-center">
-      <ClassEnrollmentModal
+      <CourseEnrollmentModal
         enrollmentModalOpen={enrollmentModalOpen}
         setEnrollmentModalOpen={setEnrollmentModalOpen}
+        setCourseListData={setCourseListData}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
@@ -35,8 +43,10 @@ function ClassManagementPage() {
               bgColor="white"
               icon={<AiFillEdit size="26px" color="black" />}
               text="반 삭제"
-              handleClick={() => {
-                console.log('반 삭제');
+              handleClick={async () => {
+                for (let i = 0; i < deletedCoursesIndex.length; i += 1)
+                  await deleteCourses(deletedCoursesIndex[i]);
+                await getAllCourses(setCourseListData);
               }}
             />
           </div>
@@ -57,10 +67,14 @@ function ClassManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <ClassList />
+        <ClassList
+          courseListData={courseListData}
+          setDeletedCoursesIndex={setDeletedCoursesIndex}
+          setCourseListData={setCourseListData}
+        />
       </div>
     </div>
   );
 }
 
-export default ClassManagementPage;
+export default CourseManagementPage;

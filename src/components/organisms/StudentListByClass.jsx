@@ -5,13 +5,16 @@ function StudentListByClass({
   type,
   differntCourseStudents,
   myCourseStudents,
+  setDifferntCourseStudents,
+  setMyCourseStudents,
+  setMyStudentsNum,
+  setDifferentStudentsNum,
 }) {
   if (type === 'entire') {
     return (
       <div className="border-solid border-black  border-[1.1px] rounded-lg w-[280px] h-[450px]  bg-hpLightGray overflow-auto">
         {differntCourseStudents.map((course) => {
           if (course.students.length > 0) {
-            console.log(course.students);
             return (
               <div key={course.grade + 1}>
                 <StudentListByGradeDropdown
@@ -20,6 +23,10 @@ function StudentListByClass({
                   students={course.students}
                   differntCourseStudents={differntCourseStudents}
                   myCourseStudents={myCourseStudents}
+                  setDifferntCourseStudents={setDifferntCourseStudents}
+                  setMyCourseStudents={setMyCourseStudents}
+                  setMyStudentsNum={setMyStudentsNum}
+                  setDifferentStudentsNum={setDifferentStudentsNum}
                 />
               </div>
             );
@@ -34,7 +41,6 @@ function StudentListByClass({
     <div className="border-solid border-black  border-[1.1px] rounded-lg w-[280px] h-[450px]  bg-hpLightGray overflow-auto">
       {myCourseStudents.map((course) => {
         if (course.students.length > 0) {
-          console.log(course.students);
           return (
             <div key={course.grade + 1}>
               <StudentListByGradeDropdown
@@ -43,6 +49,10 @@ function StudentListByClass({
                 students={course.students}
                 differntCourseStudents={differntCourseStudents}
                 myCourseStudents={myCourseStudents}
+                setDifferntCourseStudents={setDifferntCourseStudents}
+                setMyCourseStudents={setMyCourseStudents}
+                setMyStudentsNum={setMyStudentsNum}
+                setDifferentStudentsNum={setDifferentStudentsNum}
               />
             </div>
           );

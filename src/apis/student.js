@@ -1,7 +1,6 @@
 import instance from './instance';
 
 export const getStudentList = ({ queryKey, pageParam }) => {
-  console.log(queryKey[1]);
   if (queryKey[1][0] === true)
     return instance.get('/api/members/students', {
       params: {
@@ -128,4 +127,154 @@ const studentAccountRegist = (
     });
 };
 
+export const getAllStudents = async (
+  setEntireStudents,
+  setEntireStudentsNum,
+) => {
+  await instance
+    .get('/api/members/students', {
+      params: {
+        size: 100,
+        cursorIndex: 0,
+        startGrade: 0,
+        endGrade: 11,
+      },
+    })
+    .then((response) => {
+      const students = response.data.contents;
+
+      const newStudents = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempStudentsNum = 0;
+      students.forEach((student) => {
+        newStudents[student.grade].students.push({
+          id: student.id,
+          name: student.name,
+        });
+        tempStudentsNum += 1;
+      });
+      setEntireStudentsNum(tempStudentsNum);
+      setEntireStudents(newStudents);
+    });
+};
+
+export const getMyCourseStudents = async (
+  courseId,
+  setMyCourseStudents,
+  setMyStudentsNum,
+) => {
+  await instance.get(`/api/manage/courses/${courseId}`).then((response) => {
+    const { studentPreviews } = response.data;
+
+    const newStudents = [
+      {
+        grade: 0,
+        students: [],
+      },
+      {
+        grade: 1,
+        students: [],
+      },
+      {
+        grade: 2,
+        students: [],
+      },
+      {
+        grade: 3,
+        students: [],
+      },
+      {
+        grade: 4,
+        students: [],
+      },
+      {
+        grade: 5,
+        students: [],
+      },
+      {
+        grade: 6,
+        students: [],
+      },
+      {
+        grade: 7,
+        students: [],
+      },
+      {
+        grade: 8,
+        students: [],
+      },
+      {
+        grade: 9,
+        students: [],
+      },
+      {
+        grade: 10,
+        students: [],
+      },
+      {
+        grade: 11,
+        students: [],
+      },
+    ];
+    let tempStudentsNum = 0;
+
+    studentPreviews.forEach((student) => {
+      newStudents[student.grade].students.push({
+        id: student.studentId,
+        name: student.studentName,
+      });
+      tempStudentsNum += 1;
+    });
+    setMyCourseStudents(newStudents);
+    setMyStudentsNum(tempStudentsNum);
+  });
+};
 export default studentAccountRegist;

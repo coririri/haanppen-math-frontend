@@ -1,7 +1,7 @@
 import instance from './instance';
 
-const getAllTeachers = (setTeacherList) => {
-  instance
+const getAllTeachers = async (setTeacherList) => {
+  await instance
     .get('/api/members/teachers')
     .then((response) => {
       const entireTeahcerList = response.data.contents;

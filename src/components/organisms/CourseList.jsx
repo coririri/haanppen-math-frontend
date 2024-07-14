@@ -1,6 +1,10 @@
-import ClassItem from '../molecules/ClassItem';
+import ClassItem from '../molecules/CourseItem';
 
-function ClassList() {
+function CourseList({
+  courseListData,
+  setDeletedCoursesIndex,
+  setCourseListData,
+}) {
   return (
     <div className="w-full">
       <div className="w-[800px] mx-auto">
@@ -20,17 +24,21 @@ function ClassList() {
       </div>
       <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
       <div className="w-[800px] mx-auto mt-4">
-        <ClassItem className="화53" studentNum="2명" teacherName="권나희" />
-        <ClassItem className="화53" studentNum="2명" teacherName="권나희" />
-        <ClassItem className="화53" studentNum="2명" teacherName="권나희" />
-        <ClassItem className="화53" studentNum="2명" teacherName="권나희" />
-        <ClassItem className="화53" studentNum="2명" teacherName="권나희" />
-        <ClassItem className="화53" studentNum="2명" teacherName="권나희" />
-        <ClassItem className="화53" studentNum="2명" teacherName="권나희" />
+        {courseListData?.map((course) => (
+          <ClassItem
+            key={course?.courseId}
+            className={course?.courseName}
+            studentNum={course?.studentSize}
+            teacherName={course?.teacherPreview.teacherName}
+            courseId={course?.courseId}
+            setDeletedCoursesIndex={setDeletedCoursesIndex}
+            setCourseListData={setCourseListData}
+          />
+        ))}
       </div>
       <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
     </div>
   );
 }
 
-export default ClassList;
+export default CourseList;

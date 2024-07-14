@@ -118,7 +118,7 @@ function StudentModificationModal({
       setErrorMessage('');
     }
   }, [userform]);
-  console.log(selectedIndex);
+
   return (
     <ReactModal
       isOpen={modificationModalOpen}
