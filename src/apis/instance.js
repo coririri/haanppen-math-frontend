@@ -26,6 +26,7 @@ instance.interceptors.request.use(async (config) => {
       const newToken = response.data.accessToken;
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = newToken;
+      config.headers.Authorization = newToken;
 
       localStorage.setItem('role', role);
       localStorage.setItem('userName', userName);

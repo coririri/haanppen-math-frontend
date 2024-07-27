@@ -57,8 +57,8 @@ const login = (userForm, setErrorMessage, navigate) => {
     });
 };
 
-export const refreshLogin = (navigate) => {
-  loginInstance
+export const refreshLogin = async (navigate) => {
+  await loginInstance
     .post('/api/login/refresh')
     .then((response) => {
       const newToken = response.data.accessToken;
