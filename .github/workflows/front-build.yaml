@@ -33,3 +33,11 @@ jobs: # Job 설정
           key: ${{ secrets.AWS_SSH_KEY }}
           source: 'build/*'
           target: '/home/ubuntu/frontserver'
+      - name: run application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          script: |
+            serve -s build
