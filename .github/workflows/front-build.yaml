@@ -1,4 +1,4 @@
-name: Test deploy_3 # Workflow 이름
+name: Test deploy_4 # Workflow 이름
 on: # Event 감지
   push:
     branches:
