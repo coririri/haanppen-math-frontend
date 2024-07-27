@@ -40,4 +40,4 @@ jobs: # Job 설정
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
-            serve -s build
+            serve -s frontserver/build
