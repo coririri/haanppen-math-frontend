@@ -1,8 +1,9 @@
 import instance from './instance';
 
 const getMyAccountInfo = (setUserForm) => {
+  console.log(instance.defaults.headers.common.Authorization);
   instance
-    .get('/api/accounts/my', {})
+    .get('/api/accounts/my')
     .then((response) => {
       console.log(response);
       const userData = response.data;
@@ -15,6 +16,7 @@ const getMyAccountInfo = (setUserForm) => {
       });
     })
     .catch((error) => {
+      console.log(instance.defaults.headers.common.Authorization);
       console.log(error);
     });
 };

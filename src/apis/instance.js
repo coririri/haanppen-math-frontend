@@ -22,6 +22,7 @@ instance.interceptors.request.use(async (config) => {
   if (!curToken || !curUserName || !curRole) {
     try {
       const response = await loginInstance.post('/api/login/refresh');
+      console.log('보냄!');
       const newToken = response.data.accessToken;
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = newToken;
@@ -37,6 +38,7 @@ instance.interceptors.request.use(async (config) => {
       }, 3000);
     }
   }
+  console.log(instance.defaults.headers.common.Authorization);
   return config;
 });
 

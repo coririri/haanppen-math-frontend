@@ -9,6 +9,7 @@ import imageUrlToSrc from '../../utils/imageUrlToSrc';
 import gradeTransform from '../../utils/gradeTransform';
 import dateTimeToDate from '../../utils/dateTimeToDate';
 import WriteComment from '../organisms/WriteComment';
+import CommentBox from '../organisms/CommentBox';
 
 function QuestionDetailPage() {
   const { id } = useParams();
@@ -29,6 +30,7 @@ function QuestionDetailPage() {
         registerMemberGrade: response.registeredMember.memberGrade + 1,
       };
       commentsData = response.comments;
+      console.log(commentsData);
 
       setData({
         questionDetailData,
@@ -39,7 +41,8 @@ function QuestionDetailPage() {
 
     getData();
   }, []);
-
+  console.log(questionDetailData);
+  console.log(commentsData);
   return (
     <div className="w-full">
       <div className="w-[900px] h-[30px] mx-auto mt-8 bg-hpLightGray">
@@ -121,6 +124,9 @@ function QuestionDetailPage() {
             />
           </div>
         )}
+        {data?.commentsData?.map((comment) => (
+          <CommentBox comment={comment} />
+        ))}
 
         {isWriteComment && (
           <div>
