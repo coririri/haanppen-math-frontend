@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import instance from '../../apis/instance';
 import Header from './Header';
 import Navigation from './Navigation';
-// import { refreshLogin } from '../../apis/login';
+import { refreshLogin } from '../../apis/login';
 
 function CommonLayout() {
   // const navigate = useNavigate();
@@ -14,7 +14,7 @@ function CommonLayout() {
       const curUserName = localStorage.getItem('userName');
       const curRole = localStorage.getItem('role');
       if (!curToken || !curUserName || !curRole) {
-        // refreshLogin(navigate);
+        refreshLogin();
       }
     };
 

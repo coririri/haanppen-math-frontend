@@ -57,7 +57,7 @@ const login = (userForm, setErrorMessage, navigate) => {
     });
 };
 
-export const refreshLogin = async (navigate) => {
+export const refreshLogin = async () => {
   await loginInstance
     .post('/api/login/refresh')
     .then((response) => {
@@ -70,8 +70,11 @@ export const refreshLogin = async (navigate) => {
     .catch((error) => {
       console.error('토큰을 갱신하는 중 에러가 발생했습니다:', error);
       // 토큰 갱신에 실패한 경우 여기에 적절한 처리를 추가할 수 있습니다.
-      alert('로그인 페이지로 이동합니다');
-      navigate('/login');
+      // 토큰 갱신에 실패한 경우 여기에 적절한 처리를 추가할 수 있습니다.
+      setTimeout(() => {
+        alert('로그인 페이지로 이동합니다');
+        window.location.href = '/login';
+      }, 3000);
     });
 };
 
@@ -80,9 +83,11 @@ export const logout = () => {
     .post('api/logout')
     .then((response) => {
       console.log(response);
+      window.location.href = '/login';
     })
     .catch((error) => {
       console.log(error);
+      // window.location.href = '/login';
     });
 };
 
