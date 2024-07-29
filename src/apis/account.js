@@ -21,7 +21,7 @@ const getMyAccountInfo = (setUserForm) => {
     });
 };
 
-export const putAccountInfo = (userForm) => {
+export const putAccountInfo = (userForm, setErrorMessages) => {
   instance
     .patch('/api/accounts/my', {
       phoneNumber: userForm.phoneNumber,
@@ -30,7 +30,12 @@ export const putAccountInfo = (userForm) => {
       newPassword: userForm.newPassword,
     })
     .then(() => {})
-    .catch(() => {});
+    .catch(() => {
+      setErrorMessages((prev) => ({
+        ...prev,
+        password: '기존 비밀번호가 틀렸습니다',
+      }));
+    });
 };
 
 export default getMyAccountInfo;

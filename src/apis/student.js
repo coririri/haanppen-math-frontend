@@ -131,79 +131,70 @@ export const getAllStudents = async (
   setEntireStudents,
   setEntireStudentsNum,
 ) => {
-  await instance
-    .get('/api/members/students', {
-      params: {
-        size: 100,
-        cursorIndex: 0,
-        startGrade: 0,
-        endGrade: 11,
-      },
-    })
-    .then((response) => {
-      const students = response.data.contents;
+  await instance.get('/api/members/students/all', {}).then((response) => {
+    const students = response.data.contents;
 
-      const newStudents = [
-        {
-          grade: 0,
-          students: [],
-        },
-        {
-          grade: 1,
-          students: [],
-        },
-        {
-          grade: 2,
-          students: [],
-        },
-        {
-          grade: 3,
-          students: [],
-        },
-        {
-          grade: 4,
-          students: [],
-        },
-        {
-          grade: 5,
-          students: [],
-        },
-        {
-          grade: 6,
-          students: [],
-        },
-        {
-          grade: 7,
-          students: [],
-        },
-        {
-          grade: 8,
-          students: [],
-        },
-        {
-          grade: 9,
-          students: [],
-        },
-        {
-          grade: 10,
-          students: [],
-        },
-        {
-          grade: 11,
-          students: [],
-        },
-      ];
-      let tempStudentsNum = 0;
-      students.forEach((student) => {
-        newStudents[student.grade].students.push({
-          id: student.id,
-          name: student.name,
-        });
-        tempStudentsNum += 1;
+    const newStudents = [
+      {
+        grade: 0,
+        students: [],
+      },
+      {
+        grade: 1,
+        students: [],
+      },
+      {
+        grade: 2,
+        students: [],
+      },
+      {
+        grade: 3,
+        students: [],
+      },
+      {
+        grade: 4,
+        students: [],
+      },
+      {
+        grade: 5,
+        students: [],
+      },
+      {
+        grade: 6,
+        students: [],
+      },
+      {
+        grade: 7,
+        students: [],
+      },
+      {
+        grade: 8,
+        students: [],
+      },
+      {
+        grade: 9,
+        students: [],
+      },
+      {
+        grade: 10,
+        students: [],
+      },
+      {
+        grade: 11,
+        students: [],
+      },
+    ];
+    let tempStudentsNum = 0;
+    students.forEach((student) => {
+      newStudents[student.grade].students.push({
+        id: student.id,
+        name: student.name,
       });
-      setEntireStudentsNum(tempStudentsNum);
-      setEntireStudents(newStudents);
+      tempStudentsNum += 1;
     });
+    setEntireStudentsNum(tempStudentsNum);
+    setEntireStudents(newStudents);
+  });
 };
 
 export const getMyCourseStudents = async (

@@ -84,6 +84,7 @@ export const logout = () => {
     .then((response) => {
       console.log(response);
       window.location.href = '/login';
+      instance.defaults.headers.common.Authorization = null;
     })
     .catch((error) => {
       console.log(error);

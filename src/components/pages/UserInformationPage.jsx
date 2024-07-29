@@ -189,7 +189,7 @@ function UserInformation() {
             }
             text="저장"
             handleClick={() => {
-              putAccountInfo(userForm);
+              putAccountInfo(userForm, setErrorMessages);
             }}
             disabled={
               errorMessages.name !== '' ||
