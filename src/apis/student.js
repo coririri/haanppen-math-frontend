@@ -132,7 +132,7 @@ export const getAllStudents = async (
   setEntireStudentsNum,
 ) => {
   await instance.get('/api/members/students/all', {}).then((response) => {
-    const students = response.data.contents;
+    const students = response.data;
 
     const newStudents = [
       {
