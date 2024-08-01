@@ -6,9 +6,21 @@ function TextButton({
   isClick,
   handleClick,
   moreStyle,
+  isStudent,
 }) {
   if (color === 'white')
-    if (shape === 'long')
+    if (shape === 'long') {
+      if (isStudent) {
+        return (
+          <button type="button" onClick={handleClick}>
+            <div
+              className={`w-[130px] h-[40px] border-solid border-black border-[1.75px] rounded-lg text-center  ${isClick ? 'bg-hpWhiteBlue' : 'bg-white'} ${moreStyle}`}
+            >
+              <span className="text-xl font-bold leading-10">{children}</span>
+            </div>
+          </button>
+        );
+      }
       return (
         <button
           className={`inline-block w-[200px] h-[30px]  border-hpBlack border-[0.072rem] rounded-lg font-bold ${isClick ? 'bg-hpWhiteBlue' : 'bg-white'} ${moreStyle}`}
@@ -18,7 +30,7 @@ function TextButton({
           <span className="text-lg leading-[30px]">{children}</span>
         </button>
       );
-    else if (shape === 'square')
+    } else if (shape === 'square')
       return (
         <button
           className={`inline-block h-[36px] py-1 px-2 border-[0.072rem] rounded-lg text-md font-bold ${isClick ? 'bg-hpWhiteBlue border-hpClickedWhiteBlue' : 'bg-white border-hpGray'} ${moreStyle}`}

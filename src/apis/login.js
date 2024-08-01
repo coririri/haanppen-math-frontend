@@ -83,7 +83,7 @@ export const logout = () => {
     .post('api/logout')
     .then((response) => {
       console.log(response);
-      // window.location.href = '/login';
+      window.location.href = '/login';
       instance.defaults.headers.common.Authorization = null;
     })
     .catch((error) => {

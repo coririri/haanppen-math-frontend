@@ -1,8 +1,31 @@
 import PropTypes from 'prop-types';
 
-function IconButton({ bgColor, icon, text, handleClick, disabled = false }) {
+function IconButton({
+  bgColor,
+  icon,
+  text,
+  handleClick,
+  disabled = false,
+  isStudent = false,
+}) {
   // icon의 크기는 1.5rem으로 주세요
   if (bgColor === 'white') {
+    if (isStudent === true) {
+      return (
+        <button type="button" onClick={handleClick} disabled={disabled}>
+          <div
+            className={`flex w-[110px] items-center bg-white font-bold border-[1.5px] border-solid  rounded-lg  ${disabled ? 'border-hpGray' : 'border-black'}`}
+          >
+            <div className="ml-1">{icon}</div>
+            <span
+              className={`mx-auto text-md py-[0.15rem]  ${disabled ? 'text-hpGray' : 'text-black'}`}
+            >
+              {text}
+            </span>
+          </div>
+        </button>
+      );
+    }
     return (
       <button
         type="button"

@@ -8,10 +8,50 @@ function SlideBar({
   thirdText,
   isClickArr,
   setIsClickArr,
+  isStudent,
 }) {
   const [leftPosition, setLeftPosition] = useState('left-28');
+  const [studentLeftPosition, setStudentLeftPosition] = useState('left-[4rem]');
 
   if (num === 2) {
+    if (isStudent) {
+      return (
+        <div>
+          <div className="flex items-center justify-center mx-auto">
+            <TextButton
+              color="white"
+              shape="long"
+              isClick={isClickArr[0]}
+              handleClick={() => {
+                setIsClickArr([true, false]);
+                setStudentLeftPosition('left-[4rem]');
+              }}
+              moreStyle="mr-2"
+              isStudent
+            >
+              {firstText}
+            </TextButton>
+
+            <TextButton
+              color="white"
+              shape="long"
+              isClick={isClickArr[1]}
+              handleClick={() => {
+                setIsClickArr([false, true]);
+                setStudentLeftPosition('left-[13.3rem]');
+              }}
+              moreStyle="ml-2"
+              isStudent
+            >
+              {secondText}
+            </TextButton>
+          </div>
+          <div
+            className={`transition-[left] relative h-1 w-32 mt-1 bg-hpBlue ${studentLeftPosition}`}
+          />
+        </div>
+      );
+    }
     return (
       <div>
         <div>
@@ -41,7 +81,7 @@ function SlideBar({
           </TextButton>
         </div>
         <div
-          className={`transition-[left] relative h-1 w-60 mt-1 bg-hpBlue ${leftPosition}`}
+          className={`transition-[left] relative h-1 w-36 mt-1 bg-hpBlue ${leftPosition}`}
         />
       </div>
     );
