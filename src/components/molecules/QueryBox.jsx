@@ -37,7 +37,7 @@ function QueryBox({
             </div>
           </div>
           <div className="mt-2">
-            <img src={imgSrc} alt="학생 질문 문제" className="w-[750px]" />
+            <img src={imgSrc} alt="학생 질문 문제" className="w-[400px]" />
           </div>
         </div>
       </button>

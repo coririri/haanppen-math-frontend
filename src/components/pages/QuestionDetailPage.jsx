@@ -43,6 +43,77 @@ function QuestionDetailPage() {
   }, []);
   console.log(questionDetailData);
   console.log(commentsData);
+  if (localStorage.getItem('role') === 'STUDENT') {
+    return (
+      <div className="w-full">
+        <div className="w-[400px] h-[30px] mx-auto mt-8 bg-hpLightGray">
+          <div className="h-full flex items-center justify-between">
+            <div className="h-full flex items-center ml-4">
+              <BsBookmarkCheckFill />
+              <span className="text-sm font-bold">
+                {gradeTransform(data?.questionDetailData.registerMemberGrade)}
+              </span>
+              <span className="text-md ml-2 font-bold">
+                {data?.questionDetailData.registerMemberName}
+              </span>
+            </div>
+            <div className="h-full flex items-center mr-4">
+              <BsClock />
+              <span className="ml-1 font-bold pt-[1px]">
+                {dateTimeToDate(data?.questionDetailData.registeredDateTime)}
+              </span>
+            </div>
+          </div>
+        </div>
+        <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-6 mb-2" />
+        <img
+          src={data?.questionDetailData.imageUrl}
+          alt="숙제"
+          className="w-[400px] mx-auto"
+        />
+        <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-2" />
+        <div className="mt-8 w-[900px] mx-auto">
+          <div>
+            <div className="flex items-center">
+              <BiCommentDots size="30px" className="mr-1" />
+              <span
+                className="text-2xl font-bold mr-1 text-[#FF6B00]"
+                style={{
+                  textShadow:
+                    '-1px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black',
+                }}
+              >
+                {data?.commentsData.length}
+              </span>
+              <span
+                className="text-xl font-bold text"
+                style={{
+                  textShadow:
+                    '-1px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black',
+                }}
+              >
+                Comments
+              </span>
+            </div>
+            <hr className="h-[1px] border-0 bg-hpGray w-[150px] mt-[0.5px] mb-4" />
+          </div>
+
+          {/* <div className="w-[900px] mx-auto">
+          <img src={hw2} alt="숙제" className="w-[900px] mx-auto my-2" />
+          <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto" />
+          <div className="w-[900px] mx-auto my-2">
+            <span>어쩌고 저쩌고~~</span>
+          </div>
+          <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto mt-2" />
+        </div> */}
+
+          {data?.commentsData?.map((comment) => (
+            <CommentBox comment={comment} isStudent />
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="w-full">
       <div className="w-[900px] h-[30px] mx-auto mt-8 bg-hpLightGray">
