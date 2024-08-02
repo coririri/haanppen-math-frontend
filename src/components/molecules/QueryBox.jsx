@@ -25,12 +25,6 @@ function QueryBox({
           <div className="flex justify-between items-center">
             <div className="w-[165px] flex justify-between items-center ml-2">
               <QueryBadge isSolved={isSolved} />
-              <div>
-                <span className="font-bold mr-[5px]">
-                  {gradeTransfrom(grade + 1)}
-                </span>
-                <span className="font-bold ml-[2px]">{studentName}</span>
-              </div>
             </div>
             <div>
               <span className="font-bold mr-2">{teacherName} 선생님</span>

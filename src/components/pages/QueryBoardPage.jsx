@@ -111,16 +111,6 @@ function QueryBoardPage() {
         <div className="w-[230px] h-[40px] border-solid border-black border-[1.75px] rounded-lg text-center mx-auto">
           <span className="text-2xl font-bold leading-10">전체 질문</span>
         </div>
-        <div className="absolute right-[320px] top-[-1px]">
-          <IconButton
-            bgColor="white"
-            icon={<AiFillEdit size="20px" className="text-black" />}
-            text="질문 작성"
-            handleClick={() => {
-              navigate('/write-query');
-            }}
-          />
-        </div>
       </div>
       <hr className="h-[1px] border-0 bg-hpGray w-[600px] mx-auto mt-3" />
       <div className="w-[750px] mx-auto mt-4">
