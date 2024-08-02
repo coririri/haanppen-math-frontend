@@ -63,7 +63,7 @@ function QueryBoardPage() {
           />
         </div>
 
-        <div className="w-[750px] mx-auto mt-4">
+        <div className="w-[400px] mx-auto mt-4">
           <div>
             {data?.pages.map((page) => {
               const questions = page.contents;
@@ -77,6 +77,7 @@ function QueryBoardPage() {
                     studentName={question.owner.memberName}
                     isSolved={question.solved}
                     teacherName={question.target.memberName}
+                    isStudent
                   />
                 );
               });
