@@ -3,8 +3,8 @@ import Pagenation from '../organisms/Pagenation';
 
 function Test() {
   return (
-    <div>
-      <Pagenation totalItemNumbers={55} size={5} />
+    <div className="w-full">
+      <Pagenation totalItemNumbers={204} size={5} />
     </div>
   );
 }
