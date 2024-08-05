@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
-function Pagenation({ totalItemNumbers, size }) {
-  const [page, setPage] = useState(1);
+function Pagenation({ totalItemNumbers, size, page, setPage }) {
   const [maxPage, setMaxPage] = useState(10);
   const [pageUi, setPageUi] = useState(
     Array(
