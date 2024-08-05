@@ -162,8 +162,7 @@ function StudentManagementPage() {
           <div className="mt-2">
             <StudentList
               pages={data?.pages}
-              setForDeletedStudentIds={setForDeletedStudentIds}
-              choosenGradeIndex={choosenGradeIndex}
+              setForDeletedTeacherIds={setForDeletedStudentIds}
               searchNameValue={searchNameValue}
             />
           </div>
