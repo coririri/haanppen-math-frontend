@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { BsFillPencilFill } from 'react-icons/bs';
 import writeComment from '../../apis/comment';
@@ -10,14 +10,16 @@ function WriteComment({ setIsWriteComment, questionId }) {
   const [imgsPreview, setImgsPreview] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
+  const commentRef = useRef();
 
   const finishWrite = () => {
     const formData = new FormData();
-    // imgsFiles.forEach((img) => {
-    //   formData.append('images', img);
-    // });
+    imgsFiles.forEach((img) => {
+      console.log(img);
+      formData.append('images', img);
+    });
     formData.append('questionId ', questionId);
-    formData.append('content', '테스트');
+    formData.append('content', commentRef.current.value);
     writeComment(formData);
     // formdata를 활용해 질문 글 작성
   };
@@ -54,6 +56,7 @@ function WriteComment({ setIsWriteComment, questionId }) {
             imageSrc={modalImage}
           />
           <textarea
+            ref={commentRef}
             className="outline-none text-lg"
             cols={80}
             rows={5}

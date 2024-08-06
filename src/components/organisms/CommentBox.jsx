@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import ImageModal from '../modals/ImageModal';
+import imageUrlToSrc from '../../utils/imageUrlToSrc';
 
 function CommentBox({ comment, isStudent }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
   console.log(comment);
+  console.log(comment?.images[0].imageUrl);
   if (isStudent) {
     return (
       <div className="w-[400px] mt-6 mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
@@ -23,23 +25,28 @@ function CommentBox({ comment, isStudent }) {
             />
             <div className="flex justify-between items-center mt-12">
               <div className="flex">
-                {comment?.images.map((previewImage) => (
-                  <div key={previewImage}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setModalImage(previewImage);
-                        setModalOpen(true);
-                      }}
-                    >
-                      <img
-                        src={previewImage}
-                        alt="이미지"
-                        className="w-[80px] h-[80px] mr-4"
-                      />
-                    </button>
-                  </div>
-                ))}
+                {comment?.images.map((previewImage, index) => {
+                  console.log('12');
+                  console.log(index);
+                  console.log(previewImage);
+                  return (
+                    <div key={previewImage?.imageUrl}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModalImage(imageUrlToSrc(previewImage?.imageUrl));
+                          setModalOpen(true);
+                        }}
+                      >
+                        <img
+                          src={imageUrlToSrc(previewImage?.imageUrl)}
+                          alt="이미지"
+                          className="w-[80px] h-[80px] mr-4"
+                        />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -69,12 +76,12 @@ function CommentBox({ comment, isStudent }) {
                   <button
                     type="button"
                     onClick={() => {
-                      setModalImage(previewImage);
+                      setModalImage(imageUrlToSrc(previewImage?.imageUrl));
                       setModalOpen(true);
                     }}
                   >
                     <img
-                      src={previewImage}
+                      src={imageUrlToSrc(previewImage?.imageUrl)}
                       alt="이미지"
                       className="w-[80px] h-[80px] mr-4"
                     />

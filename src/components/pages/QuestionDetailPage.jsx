@@ -22,7 +22,7 @@ function QuestionDetailPage() {
   useEffect(() => {
     const getData = async () => {
       const response = await getDetailQuestionById(id);
-      console.log(response);
+
       questionDetailData = {
         imageUrl: imageUrlToSrc(response.imageUrls[0].imageUrl),
         registeredDateTime: response.registeredDateTime,
@@ -41,8 +41,7 @@ function QuestionDetailPage() {
 
     getData();
   }, []);
-  console.log(questionDetailData);
-  console.log(commentsData);
+
   if (localStorage.getItem('role') === 'STUDENT') {
     return (
       <div className="w-full">
@@ -97,16 +96,6 @@ function QuestionDetailPage() {
             </div>
             <hr className="h-[1px] border-0 bg-hpGray w-[150px] mt-[0.5px] mb-4" />
           </div>
-
-          {/* <div className="w-[900px] mx-auto">
-          <img src={hw2} alt="숙제" className="w-[900px] mx-auto my-2" />
-          <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto" />
-          <div className="w-[900px] mx-auto my-2">
-            <span>어쩌고 저쩌고~~</span>
-          </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto mt-2" />
-        </div> */}
-
           {data?.commentsData?.map((comment) => (
             <CommentBox comment={comment} isStudent />
           ))}
@@ -168,15 +157,6 @@ function QuestionDetailPage() {
           </div>
           <hr className="h-[1px] border-0 bg-hpGray w-[150px] mt-[0.5px] mb-4" />
         </div>
-
-        {/* <div className="w-[900px] mx-auto">
-        <img src={hw2} alt="숙제" className="w-[900px] mx-auto my-2" />
-        <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto" />
-        <div className="w-[900px] mx-auto my-2">
-          <span>어쩌고 저쩌고~~</span>
-        </div>
-        <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto mt-2" />
-      </div> */}
         {!isWriteComment && (
           <div className="fixed bottom-8 left-0 right-0 flex justify-center">
             <IconButton
