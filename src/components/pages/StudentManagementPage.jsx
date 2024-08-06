@@ -30,7 +30,12 @@ function StudentManagementPage() {
   const mutation = useMutation({
     mutationFn: () => deleteStudent(forDeletedStudentIds),
     onSuccess: () => {
-      queryClient.invalidateQueries(['students', page - 1]);
+      queryClient.invalidateQueries([
+        'students',
+        choosenGradeIndex,
+        searchNameValue,
+        page - 1,
+      ]);
     },
   });
 
@@ -47,6 +52,7 @@ function StudentManagementPage() {
         queryKeyQueryClient={queryClient}
         queryKeyChoosenGradeIndex={choosenGradeIndex}
         queryKeySearchNameValue={searchNameValue}
+        page={page}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="mt-3 flex items-center justify-between w-[250px] mx-auto">
@@ -56,7 +62,6 @@ function StudentManagementPage() {
           size="small"
           isClick={choosenGradeIndex[0]}
           handleClick={() => {
-            queryClient.invalidateQueries('students', choosenGradeIndex);
             setChoosenGradeIndex([true, false, false, false]);
           }}
         >
@@ -80,7 +85,6 @@ function StudentManagementPage() {
           isClick={choosenGradeIndex[2]}
           handleClick={() => {
             setChoosenGradeIndex([false, false, true, false]);
-            setForDeletedStudentIds([]);
           }}
         >
           중
@@ -92,7 +96,6 @@ function StudentManagementPage() {
           isClick={choosenGradeIndex[3]}
           handleClick={() => {
             setChoosenGradeIndex([false, false, false, true]);
-            setForDeletedStudentIds([]);
           }}
         >
           고

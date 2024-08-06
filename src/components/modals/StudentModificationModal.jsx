@@ -39,6 +39,7 @@ function StudentModificationModal({
   modificationModalOpen,
   setModificationModalOpen,
   id,
+  page,
   grade,
   name,
   phoneNumber,
@@ -248,6 +249,7 @@ function StudentModificationModal({
                 modifyStudent(
                   setModificationModalOpen,
                   payload,
+                  page,
                   queryKeyQueryClient,
                   queryKeyChoosenGradeIndex,
                   queryKeySearchNameValue,

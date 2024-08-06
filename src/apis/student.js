@@ -72,6 +72,7 @@ export const deleteStudent = (forDeletedStudentIds) =>
 export const modifyStudent = (
   setEnrollmentModalOpen,
   payload,
+  page,
   queryKeyQueryClient,
   queryKeyChoosenGradeIndex,
   queryKeySearchNameValue,
@@ -85,9 +86,10 @@ export const modifyStudent = (
     })
     .then((response) => {
       queryKeyQueryClient.invalidateQueries([
-        'studentList',
+        'students',
         queryKeyChoosenGradeIndex,
         queryKeySearchNameValue,
+        page - 1,
       ]);
       setEnrollmentModalOpen(false);
       console.log(response);
@@ -102,6 +104,7 @@ const studentAccountRegist = (
   queryClient,
   choosenGradeIndex,
   searchNameValue,
+  page,
 ) => {
   console.log(choosenGradeIndex);
   instance
@@ -117,9 +120,10 @@ const studentAccountRegist = (
       setEnrollmentModalOpen(false);
 
       queryClient.invalidateQueries([
-        'studentList',
+        'students',
         choosenGradeIndex,
         searchNameValue,
+        page - 1,
       ]);
     })
     .catch((error) => {

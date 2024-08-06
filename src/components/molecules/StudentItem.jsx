@@ -8,6 +8,7 @@ function StudentItem({
   grade,
   name,
   id,
+  page,
   phoneNumber,
   setForDeletedStudentIds,
   choosenGradeIndex,
@@ -24,6 +25,7 @@ function StudentItem({
         queryKeyQueryClient={queryClient}
         queryKeyChoosenGradeIndex={choosenGradeIndex}
         queryKeySearchNameValue={searchNameValue}
+        page={page}
         id={id}
         grade={grade}
         name={name}

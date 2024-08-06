@@ -4,6 +4,7 @@ import StudentItem from '../molecules/StudentItem';
 function StudentList({
   students,
   setForDeletedStudentIds,
+  page,
   choosenGradeIndex,
   searchNameValue,
 }) {
@@ -31,6 +32,7 @@ function StudentList({
           <StudentItem
             key={student.id}
             id={student.id}
+            page={page}
             grade={student.grade}
             name={student.name}
             phoneNumber={student.phoneNumber}

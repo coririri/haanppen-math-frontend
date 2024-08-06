@@ -41,6 +41,7 @@ function StudentEnrollmentModal({
   queryKeyQueryClient,
   queryKeyChoosenGradeIndex,
   queryKeySearchNameValue,
+  queryKeyPage,
 }) {
   const [choosenGradeIndex, setChoosenGradeIndex] = useState([
     true,
@@ -221,6 +222,7 @@ function StudentEnrollmentModal({
                   queryKeyQueryClient,
                   queryKeyChoosenGradeIndex,
                   queryKeySearchNameValue,
+                  queryKeyPage,
                 );
               }}
               disabled={isDisabled}
