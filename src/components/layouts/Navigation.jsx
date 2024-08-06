@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Navigation() {
-  const [clickIndex, setClickIndex] = useState(1);
+  const [, setClickIndex] = useState(1);
   const role = localStorage.getItem('role');
 
   if (role === 'STUDENT') {
@@ -18,7 +18,7 @@ function Navigation() {
           >
             <Link
               to="/my-class"
-              className={`text-2xl  lg:text-3xl text-center   ${clickIndex === 1 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+              className="text-xl text-center hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
             >
               내 강의실
             </Link>
@@ -32,7 +32,7 @@ function Navigation() {
           >
             <Link
               to="/question-board"
-              className={`text-2xl text-center ${clickIndex === 2 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+              className="text-xl text-center hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
             >
               질문 게시판
             </Link>
@@ -46,7 +46,7 @@ function Navigation() {
           >
             <Link
               to="/concept-video"
-              className={`text-2xl text-center   ${clickIndex === 3 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+              className="text-xl text-center hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
             >
               개념 영상
             </Link>
@@ -60,7 +60,7 @@ function Navigation() {
       <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">
         <Link
           to="/enroll-class-video"
-          className={`block w-[160px] text-xl ${clickIndex === 1 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+          className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
         >
           <button
             type="button"
@@ -75,7 +75,7 @@ function Navigation() {
 
         <Link
           to="/question-board"
-          className={`text-xl text-center ${clickIndex === 2 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+          className="text-xl text-center  hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
         >
           <button
             type="button"
@@ -90,7 +90,7 @@ function Navigation() {
 
         <Link
           to="/management"
-          className={`block w-[160px] text-xl ${clickIndex === 3 ? 'text-hpDarkBlue font-sjBold' : 'text-black font-bold'}`}
+          className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
         >
           <button
             type="button"
