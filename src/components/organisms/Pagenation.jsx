@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
-function Pagenation({ totalItemNumbers, size, page, setPage }) {
+function Pagenation({ totalItemNumbers = 0, size, page, setPage }) {
   const [maxPage, setMaxPage] = useState(10);
   const [pageUi, setPageUi] = useState(
     Array(
@@ -41,8 +41,9 @@ function Pagenation({ totalItemNumbers, size, page, setPage }) {
     );
   }, [page]);
   console.log(page, maxPage);
+
   return (
-    <div className="flex w-[360px] mx-auto">
+    <div className="flex justify-center">
       <button
         type="button"
         aria-label="왼쪽으로 페이지 넘기기"

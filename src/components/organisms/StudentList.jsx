@@ -2,11 +2,12 @@ import React from 'react';
 import StudentItem from '../molecules/StudentItem';
 
 function StudentList({
-  pages,
+  students,
   setForDeletedStudentIds,
   choosenGradeIndex,
   searchNameValue,
 }) {
+  console.log(students);
   return (
     <div className="w-full">
       <div className="w-[800px] mx-auto">
@@ -26,21 +27,34 @@ function StudentList({
       </div>
       <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
       <div className="w-[800px] mx-auto mt-4">
-        {pages.map((page) => {
-          const students = page.data.contents;
-          return students.map((student) => (
-            <StudentItem
-              key={student.id}
-              id={student.id}
-              grade={student.grade}
-              name={student.name}
-              phoneNumber={student.phoneNumber}
-              setForDeletedStudentIds={setForDeletedStudentIds}
-              choosenGradeIndex={choosenGradeIndex}
-              searchNameValue={searchNameValue}
-            />
-          ));
-        })}
+        {students.map((student) => (
+          <StudentItem
+            key={student.id}
+            id={student.id}
+            grade={student.grade}
+            name={student.name}
+            phoneNumber={student.phoneNumber}
+            setForDeletedStudentIds={setForDeletedStudentIds}
+            choosenGradeIndex={choosenGradeIndex}
+            searchNameValue={searchNameValue}
+          />
+        ))}
+        {Array(10 - students.length)
+          .fill(0)
+          .map(() => (
+            <div>
+              <div>
+                <div className="flex items-center justify-between my-2 h-[28.795px]">
+                  <input className="w-[16px] h-[16px]" />
+                  <span className="text-lg font-bold text-black w-[60px] text-center" />
+                  <span className="text-lg font-bold text-black w-[90px] text-center" />
+                  <span className="text-lg font-bold text-black w-[140px]" />
+                  <div className="w-[100px]" />
+                </div>
+                <hr className="h-[0.5px] border-0  w-[800px] mx-auto mt-2" />
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );

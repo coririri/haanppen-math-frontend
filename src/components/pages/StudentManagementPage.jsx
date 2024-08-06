@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
 import {
-  useInfiniteQuery,
+  useQuery,
+  // useInfiniteQuery,
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
@@ -9,7 +10,8 @@ import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
 import StudentList from '../organisms/StudentList';
 import StudentEnrollmentModal from '../modals/StudentEnrollmentModal';
-import { deleteStudent, getStudentList } from '../../apis/student';
+import { deleteStudent, getStudentByPage } from '../../apis/student';
+import Pagenation from '../organisms/Pagenation';
 
 function StudentManagementPage() {
   const queryClient = useQueryClient();
@@ -22,27 +24,21 @@ function StudentManagementPage() {
   const [searchNameValue, setSearchNameValue] = useState('');
   const searchRef = useRef();
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
   const [forDeletedStudentIds, setForDeletedStudentIds] = useState([]);
-
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['studentList', choosenGradeIndex, searchNameValue],
-      queryFn: getStudentList,
-      initialPageParam: 0,
-      getNextPageParam: (lastPage) => lastPage?.data?.nextCursor,
-    });
 
   const mutation = useMutation({
     mutationFn: () => deleteStudent(forDeletedStudentIds),
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        'studentList',
-        choosenGradeIndex,
-        searchNameValue,
-      ]);
+      queryClient.invalidateQueries(['students', page - 1]);
     },
   });
 
+  const { data, isLoading } = useQuery({
+    queryKey: ['students', choosenGradeIndex, searchNameValue, page - 1],
+    queryFn: () => getStudentByPage(),
+  });
+  console.log(data);
   return (
     <div className="w-full text-center">
       <StudentEnrollmentModal
@@ -62,7 +58,6 @@ function StudentManagementPage() {
           handleClick={() => {
             queryClient.invalidateQueries('students', choosenGradeIndex);
             setChoosenGradeIndex([true, false, false, false]);
-            setForDeletedStudentIds([]);
           }}
         >
           전체
@@ -74,7 +69,6 @@ function StudentManagementPage() {
           isClick={choosenGradeIndex[1]}
           handleClick={() => {
             setChoosenGradeIndex([false, true, false, false]);
-            setForDeletedStudentIds([]);
           }}
         >
           초
@@ -144,7 +138,7 @@ function StudentManagementPage() {
               aria-label="학생 검색"
               onClick={() => {
                 console.log(searchRef.current.value);
-                setForDeletedStudentIds([]);
+                // setForDeletedStudentIds([]);
                 setSearchNameValue(searchRef.current.value);
                 console.log(searchRef.current.value);
                 console.log('검색');
@@ -161,23 +155,18 @@ function StudentManagementPage() {
         <div>
           <div className="mt-2">
             <StudentList
-              pages={data?.pages}
+              students={data?.data}
               setForDeletedTeacherIds={setForDeletedStudentIds}
               searchNameValue={searchNameValue}
             />
           </div>
-          <div>
-            <button
-              type="button"
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage || isFetchingNextPage}
-            >
-              {isFetchingNextPage
-                ? 'Loading more...'
-                : hasNextPage
-                  ? 'Load More'
-                  : 'Nothing more to load'}
-            </button>
+          <div className=" w-[360px] mx-auto ">
+            <Pagenation
+              page={page}
+              setPage={setPage}
+              totalItemNumbers={data?.pageInfo?.totalItemSize}
+              size={10}
+            />
           </div>
         </div>
       )}

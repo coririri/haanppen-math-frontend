@@ -268,4 +268,71 @@ export const getMyCourseStudents = async (
     setMyStudentsNum(tempStudentsNum);
   });
 };
+
+export const getStudentByPage = ({ queryKey }) => {
+  if (queryKey[1][0] === true)
+    return instance
+      .get('/api/members/students/paging', {
+        params: {
+          size: 10,
+          page: queryKey[3],
+          startGrade: 0,
+          endGrade: 11,
+          name: queryKey[2],
+        },
+      })
+      .then((res) => res.data);
+
+  if (queryKey[1][1] === true)
+    return instance
+      .get('/api/members/students/paging', {
+        params: {
+          size: 10,
+          page: queryKey[3],
+          startGrade: 0,
+          endGrade: 5,
+          name: queryKey[2],
+        },
+      })
+      .then((res) => res.data);
+
+  if (queryKey[1][2] === true)
+    return instance
+      .get('/api/members/students/paging', {
+        params: {
+          size: 10,
+          page: queryKey[3],
+          startGrade: 6,
+          endGrade: 8,
+          name: queryKey[2],
+        },
+      })
+      .then((res) => res.data);
+
+  if (queryKey[1][3] === true)
+    return instance
+      .get('/api/members/students/paging', {
+        params: {
+          size: 10,
+          page: queryKey[3],
+          startGrade: 9,
+          endGrade: 11,
+          name: queryKey[2],
+        },
+      })
+      .then((res) => res.data);
+
+  return instance
+    .get('/api/members/students/paging', {
+      params: {
+        size: 10,
+        page: queryKey[3],
+        startGrade: 0,
+        endGrade: 11,
+        name: queryKey[2],
+      },
+    })
+    .then((res) => res.data);
+};
+
 export default studentAccountRegist;
