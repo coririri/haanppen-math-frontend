@@ -1,14 +1,11 @@
 import { useRef, useState } from 'react';
 import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { deleteTeacherAccount, getTeacherList } from '../../apis/teacher';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteTeacherAccount, getTeacherByPage } from '../../apis/teacher';
 import IconButton from '../atoms/IconButton';
 import TeacherList from '../organisms/TeacherList';
 import TeacherEnrollmentModal from '../modals/TeacherEnrollmentModal';
+import Pagenation from '../organisms/Pagenation';
 
 function TeacherManagementPage() {
   const searchRef = useRef();
@@ -16,23 +13,28 @@ function TeacherManagementPage() {
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   const [searchNameValue, setSearchNameValue] = useState('');
   const [forDeletedTeacherIds, setForDeletedTeacherIds] = useState([]);
-
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['teacherList', searchNameValue],
-      queryFn: getTeacherList,
-      initialPageParam: 0,
-      getNextPageParam: (lastPage) => lastPage?.data?.nextCursor,
-    });
+  const [page, setPage] = useState(1);
+  // const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  //   useInfiniteQuery({
+  //     queryKey: ['teacherList', searchNameValue],
+  //     queryFn: getTeacherList,
+  //     initialPageParam: 0,
+  //     getNextPageParam: (lastPage) => lastPage?.data?.nextCursor,
+  //   });
 
   const mutation = useMutation({
     mutationFn: () => deleteTeacherAccount(forDeletedTeacherIds),
     onSuccess: () => {
-      queryClient.invalidateQueries(['teacherList', searchNameValue]);
+      queryClient.invalidateQueries(['teachers', searchNameValue, page - 1]);
     },
   });
 
+  const { data, isLoading } = useQuery({
+    queryKey: ['teachers', searchNameValue, page - 1],
+    queryFn: getTeacherByPage,
+  });
   console.log(data);
+  console.log(isLoading);
   return (
     <div className="w-full text-center">
       <TeacherEnrollmentModal
@@ -40,6 +42,7 @@ function TeacherManagementPage() {
         setEnrollmentModalOpen={setEnrollmentModalOpen}
         queryClient={queryClient}
         searchNameValue={searchNameValue}
+        page={page}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
@@ -82,6 +85,7 @@ function TeacherManagementPage() {
                 setSearchNameValue(searchRef.current.value);
                 console.log(searchNameValue);
                 console.log('검색');
+                setForDeletedTeacherIds([]);
               }}
             >
               <AiOutlineSearch size="26px" className="mr-2" color="black" />
@@ -95,23 +99,19 @@ function TeacherManagementPage() {
         <div>
           <div className="mt-2">
             <TeacherList
-              pages={data?.pages}
+              teachers={data?.data}
               setForDeletedTeacherIds={setForDeletedTeacherIds}
               searchNameValue={searchNameValue}
+              page={page}
             />
           </div>
-          <div>
-            <button
-              type="button"
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage || isFetchingNextPage}
-            >
-              {isFetchingNextPage
-                ? 'Loading more...'
-                : hasNextPage
-                  ? 'Load More'
-                  : 'Nothing more to load'}
-            </button>
+          <div className=" w-[360px] mx-auto my-1">
+            <Pagenation
+              page={page}
+              setPage={setPage}
+              totalItemNumbers={data?.pageInfo?.totalItemSize}
+              size={10}
+            />
           </div>
         </div>
       )}

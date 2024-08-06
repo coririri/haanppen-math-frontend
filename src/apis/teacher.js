@@ -17,6 +17,7 @@ export const registTeacherAccount = (
   payload,
   queryClient,
   searchNameValue,
+  page,
 ) => {
   instance
     .post('/api/accounts', {
@@ -27,7 +28,7 @@ export const registTeacherAccount = (
     })
     .then((response) => {
       console.log(response);
-      queryClient.invalidateQueries(['teacherList', searchNameValue]);
+      queryClient.invalidateQueries(['teachers', searchNameValue, page - 1]);
       setEnrollmentModalOpen(false);
     })
     .catch((error) => {
@@ -54,6 +55,7 @@ export const modifyTeacher = (
   payload,
   queryKeyQueryClient,
   queryKeySearchNameValue,
+  page,
 ) =>
   instance
     .put('api/accounts/teacher', {
@@ -63,8 +65,9 @@ export const modifyTeacher = (
     })
     .then((response) => {
       queryKeyQueryClient.invalidateQueries([
-        'studentList',
+        'teachers',
         queryKeySearchNameValue,
+        page - 1,
       ]);
       setEnrollmentModalOpen(false);
       console.log(response);
@@ -81,5 +84,16 @@ export const getTeacherList = ({ pageParam, queryKey }) =>
       name: queryKey[1],
     },
   });
+
+export const getTeacherByPage = ({ queryKey }) =>
+  instance
+    .get('/api/members/teachers/paging', {
+      params: {
+        size: 10,
+        page: queryKey[2],
+        name: queryKey[1],
+      },
+    })
+    .then((res) => res.data);
 
 export default getAllTeachers;

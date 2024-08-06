@@ -41,6 +41,7 @@ function TeacherModificationModal({
   phoneNumber,
   queryKeyQueryClient,
   queryKeySearchNameValue,
+  page,
 }) {
   const [isDisabled, setIsDisabled] = useState(true);
   const [userform, setUserform] = useState({ name, phoneNumber });
@@ -137,6 +138,7 @@ function TeacherModificationModal({
                   payload,
                   queryKeyQueryClient,
                   queryKeySearchNameValue,
+                  page,
                 );
               }}
               disabled={isDisabled}

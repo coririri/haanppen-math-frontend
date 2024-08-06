@@ -41,7 +41,7 @@ function StudentManagementPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['students', choosenGradeIndex, searchNameValue, page - 1],
-    queryFn: () => getStudentByPage(),
+    queryFn: getStudentByPage,
   });
   console.log(data);
   return (
@@ -73,6 +73,7 @@ function StudentManagementPage() {
           size="small"
           isClick={choosenGradeIndex[1]}
           handleClick={() => {
+            setForDeletedStudentIds([]);
             setChoosenGradeIndex([false, true, false, false]);
           }}
         >
@@ -84,6 +85,7 @@ function StudentManagementPage() {
           size="small"
           isClick={choosenGradeIndex[2]}
           handleClick={() => {
+            setForDeletedStudentIds([]);
             setChoosenGradeIndex([false, false, true, false]);
           }}
         >
@@ -95,6 +97,7 @@ function StudentManagementPage() {
           size="small"
           isClick={choosenGradeIndex[3]}
           handleClick={() => {
+            setForDeletedStudentIds([]);
             setChoosenGradeIndex([false, false, false, true]);
           }}
         >
@@ -141,7 +144,7 @@ function StudentManagementPage() {
               aria-label="학생 검색"
               onClick={() => {
                 console.log(searchRef.current.value);
-                // setForDeletedStudentIds([]);
+                setForDeletedStudentIds([]);
                 setSearchNameValue(searchRef.current.value);
                 console.log(searchRef.current.value);
                 console.log('검색');
@@ -159,11 +162,11 @@ function StudentManagementPage() {
           <div className="mt-2">
             <StudentList
               students={data?.data}
-              setForDeletedTeacherIds={setForDeletedStudentIds}
+              setForDeletedStudentIds={setForDeletedStudentIds}
               searchNameValue={searchNameValue}
             />
           </div>
-          <div className=" w-[360px] mx-auto ">
+          <div className=" w-[360px] mx-auto my-1">
             <Pagenation
               page={page}
               setPage={setPage}

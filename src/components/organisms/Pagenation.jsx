@@ -39,9 +39,9 @@ function Pagenation({ totalItemNumbers = 0, size, page, setPage }) {
           : Math.ceil(totalItemNumbers / size) - maxPage + 10,
       ).fill(0),
     );
-  }, [page]);
+  }, [page, totalItemNumbers]);
   console.log(page, maxPage);
-
+  console.log(totalItemNumbers);
   return (
     <div className="flex justify-center">
       <button

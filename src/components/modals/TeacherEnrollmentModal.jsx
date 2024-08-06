@@ -38,6 +38,7 @@ function TeacherEnrollmentModal({
   setEnrollmentModalOpen,
   queryClient,
   searchNameValue,
+  page,
 }) {
   phonenumberValidate();
 
@@ -133,6 +134,7 @@ function TeacherEnrollmentModal({
                   payload,
                   queryClient,
                   searchNameValue,
+                  page,
                 );
               }}
               disabled={isDisabled}

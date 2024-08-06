@@ -9,6 +9,7 @@ function TeacherItem({
   id,
   setForDeletedTeacherIds,
   searchNameValue,
+  page,
 }) {
   const [modificationModalOpen, setModificationModalOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -19,6 +20,7 @@ function TeacherItem({
         setModificationModalOpen={setModificationModalOpen}
         queryKeyQueryClient={queryClient}
         queryKeySearchNameValue={searchNameValue}
+        page={page}
         id={id}
         name={name}
         phoneNumber={phoneNumber}
