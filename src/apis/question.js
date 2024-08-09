@@ -23,7 +23,7 @@ export const getQuestionsList = async ({ pageParam, queryKey }) => {
   try {
     const response = await instance.get('/api/board/questions', {
       params: {
-        size: 10,
+        size: 1,
         cursorIndex: pageParam,
         sort: queryKey[1] ?? '',
       },

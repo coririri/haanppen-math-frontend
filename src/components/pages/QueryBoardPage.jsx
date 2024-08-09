@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillEdit } from 'react-icons/ai';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -6,9 +6,11 @@ import QueryBox from '../molecules/QueryBox';
 import IconButton from '../atoms/IconButton';
 import { getQuestionsList } from '../../apis/question';
 import SlideBar from '../molecules/SlideBar';
+import hw1 from '../../assests/hw1.jpg';
 
 function QueryBoardPage() {
   const navigate = useNavigate();
+  const observerElement = useRef();
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -20,22 +22,26 @@ function QueryBoardPage() {
 
   const [slideBarIndex, setSlideBarIndex] = useState([true, false]);
 
+  const onIntersection = () => {
+    if (!isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
   useEffect(() => {
-    // if (data) {
-    //   const newData = cloneDeep(data);
-    //   newData?.pages.forEach((page) => {
-    //     const questions = page.newData.contents;
-    //     questions.forEach(async (question) => {
-    //       if (question.images.length !== 0) {
-    //         const { imageUrl } = question.images[0];
-    //         console.log(imageUrl);
-    //         const image = await fetchImage(imageUrl);
-    //         question.images[0] = image;
-    //       }
-    //     });
-    //   });
-    // }
-  }, [data]);
+    const observer = new IntersectionObserver(onIntersection);
+
+    if (observerElement.current) {
+      observer.observe(observerElement.current);
+    }
+
+    return () => {
+      if (observerElement.current) {
+        observer.unobserve(observerElement.current);
+      }
+    };
+  }, [hasNextPage]);
+
   console.log(data);
   if (localStorage.getItem('role') === 'STUDENT')
     return (
@@ -118,7 +124,17 @@ function QueryBoardPage() {
           {data?.pages.map((page) => {
             const questions = page.contents;
             return questions.map((question) => {
-              if (question.images.length === 0) return '';
+              if (question.images.length === 0)
+                return (
+                  <QueryBox
+                    id={question.questionId}
+                    imgSrc={hw1}
+                    grade={question.owner.memberGrade}
+                    studentName={question.owner.memberName}
+                    isSolved={question.solved}
+                    teacherName={question.target.memberName}
+                  />
+                );
               return (
                 <QueryBox
                   id={question.questionId}
@@ -132,25 +148,7 @@ function QueryBoardPage() {
             });
           })}
         </div>
-        {isLoading ? (
-          <div>로딩중</div>
-        ) : (
-          <div>
-            <div>
-              <button
-                type="button"
-                onClick={() => fetchNextPage()}
-                disabled={!hasNextPage || isFetchingNextPage}
-              >
-                {isFetchingNextPage
-                  ? 'Loading more...'
-                  : hasNextPage
-                    ? 'Load More'
-                    : 'Nothing more to load'}
-              </button>
-            </div>
-          </div>
-        )}
+        <div ref={observerElement} />
       </div>
     </div>
   );
