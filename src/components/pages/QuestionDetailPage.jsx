@@ -10,6 +10,7 @@ import gradeTransform from '../../utils/gradeTransform';
 import dateTimeToDate from '../../utils/dateTimeToDate';
 import WriteComment from '../organisms/WriteComment';
 import CommentBox from '../organisms/CommentBox';
+import hw1 from '../../assests/hw1.jpg';
 
 function QuestionDetailPage() {
   const { id } = useParams();
@@ -24,13 +25,15 @@ function QuestionDetailPage() {
       const response = await getDetailQuestionById(id);
 
       questionDetailData = {
-        imageUrl: imageUrlToSrc(response.imageUrls[0].imageUrl),
+        imageUrl: response.imageUrls[0]?.imageUrl
+          ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
+          : hw1,
         registeredDateTime: response.registeredDateTime,
         registerMemberName: response.registeredMember.memberName,
         registerMemberGrade: response.registeredMember.memberGrade + 1,
       };
+
       commentsData = response.comments;
-      console.log(commentsData);
 
       setData({
         questionDetailData,

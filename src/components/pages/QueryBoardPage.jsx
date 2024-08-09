@@ -40,7 +40,7 @@ function QueryBoardPage() {
         observer.unobserve(observerElement.current);
       }
     };
-  }, [hasNextPage]);
+  }, [hasNextPage, observerElement.current]);
 
   console.log(data);
   if (localStorage.getItem('role') === 'STUDENT')

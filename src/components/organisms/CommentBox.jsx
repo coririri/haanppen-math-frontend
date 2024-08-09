@@ -6,7 +6,7 @@ function CommentBox({ comment, isStudent }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
   console.log(comment);
-  console.log(comment?.images[0].imageUrl);
+  console.log(comment?.images[0]?.imageUrl);
   if (isStudent) {
     return (
       <div className="w-[400px] mt-6 mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
