@@ -8,7 +8,6 @@ function StudentList({
   choosenGradeIndex,
   searchNameValue,
 }) {
-  console.log(students);
   return (
     <div className="w-full">
       <div className="w-[800px] mx-auto">
@@ -43,20 +42,23 @@ function StudentList({
         ))}
         {Array(10 - students.length)
           .fill(0)
-          .map(() => (
-            <div>
-              <div>
-                <div className="flex items-center justify-between my-2 h-[28.795px]">
-                  <input className="w-[16px] h-[16px]" />
-                  <span className="text-lg font-bold text-black w-[60px] text-center" />
-                  <span className="text-lg font-bold text-black w-[90px] text-center" />
-                  <span className="text-lg font-bold text-black w-[140px]" />
-                  <div className="w-[100px]" />
+          .map((value, index) => {
+            const emptyKey = Date.now() + index;
+            return (
+              <div key={emptyKey}>
+                <div>
+                  <div className="flex items-center justify-between my-2 h-[28.795px]">
+                    <input className="w-[16px] h-[16px]" />
+                    <span className="text-lg font-bold text-black w-[60px] text-center" />
+                    <span className="text-lg font-bold text-black w-[90px] text-center" />
+                    <span className="text-lg font-bold text-black w-[140px]" />
+                    <div className="w-[100px]" />
+                  </div>
+                  <hr className="h-[0.5px] border-0  w-[800px] mx-auto mt-2" />
                 </div>
-                <hr className="h-[0.5px] border-0  w-[800px] mx-auto mt-2" />
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
     </div>
   );

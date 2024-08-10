@@ -42,7 +42,6 @@ function QueryBoardPage() {
     };
   }, [hasNextPage, observerElement.current]);
 
-  console.log(data);
   if (localStorage.getItem('role') === 'STUDENT')
     return (
       <div className="w-full ">

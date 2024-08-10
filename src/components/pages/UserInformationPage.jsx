@@ -49,7 +49,6 @@ function UserInformation() {
   }, [userForm.phoneNumber]);
 
   useEffect(() => {
-    console.log(userForm.password);
     const validationMessage = passwordValidation(userForm.password);
     setErrorMessages((prev) => ({
       ...prev,

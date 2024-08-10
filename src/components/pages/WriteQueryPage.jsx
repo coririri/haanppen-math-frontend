@@ -21,7 +21,6 @@ function WriteQueryPage() {
   const finishWrite = () => {
     const formData = new FormData();
     imgFiles.forEach((img) => {
-      console.log(img);
       formData.append('images', img);
     });
     formData.append('targetMemberId', teacherList[selectedTeacherindex].id);

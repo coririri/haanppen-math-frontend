@@ -40,8 +40,7 @@ function Pagenation({ totalItemNumbers = 0, size, page, setPage }) {
       ).fill(0),
     );
   }, [page, totalItemNumbers]);
-  console.log(page, maxPage);
-  console.log(totalItemNumbers);
+
   return (
     <div className="flex justify-center">
       <button
@@ -55,20 +54,24 @@ function Pagenation({ totalItemNumbers = 0, size, page, setPage }) {
           <AiOutlineLeft className="font-bold" />
         </div>
       </button>
-      {pageUi.map((value, index) => (
-        <button
-          type="button"
-          onClick={() => {
-            setPage(index - 10 + maxPage + 1);
-          }}
-        >
-          <div
-            className={`w-[30px] h-[30px] leading-[30px] text-center rounded-2xl  ${index - 10 + maxPage + 1 === page ? 'text-white bg-hpHoverLightGray' : 'text-black hover:bg-hpWhiteBlue hover:bg-opacity-25 hover:text-hpDarkBlue'}`}
+      {pageUi.map((value, index) => {
+        const pageNumber = index - 10 + maxPage + 1;
+        return (
+          <button
+            key={pageNumber}
+            type="button"
+            onClick={() => {
+              setPage(index - 10 + maxPage + 1);
+            }}
           >
-            <span className="font-bold">{index - 10 + maxPage + 1}</span>
-          </div>
-        </button>
-      ))}
+            <div
+              className={`w-[30px] h-[30px] leading-[30px] text-center rounded-2xl  ${index - 10 + maxPage + 1 === page ? 'text-white bg-hpHoverLightGray' : 'text-black hover:bg-hpWhiteBlue hover:bg-opacity-25 hover:text-hpDarkBlue'}`}
+            >
+              <span className="font-bold">{index - 10 + maxPage + 1}</span>
+            </div>
+          </button>
+        );
+      })}
 
       <button
         type="button"

@@ -8,7 +8,6 @@ const login = (userForm, setErrorMessage, navigate) => {
     })
     .then((response) => {
       const token = response.data.accessToken;
-      console.log(token);
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = token;
       console.log(instance.defaults.headers.common.Authorization);

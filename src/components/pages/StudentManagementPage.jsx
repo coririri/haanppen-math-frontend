@@ -43,7 +43,7 @@ function StudentManagementPage() {
     queryKey: ['students', choosenGradeIndex, searchNameValue, page - 1],
     queryFn: getStudentByPage,
   });
-  console.log(data);
+
   return (
     <div className="w-full text-center">
       <StudentEnrollmentModal
@@ -125,7 +125,6 @@ function StudentManagementPage() {
               text="학생 삭제"
               handleClick={async () => {
                 mutation.mutate(forDeletedStudentIds);
-                console.log('학생 삭제');
               }}
             />
           </div>
@@ -143,11 +142,8 @@ function StudentManagementPage() {
               type="button"
               aria-label="학생 검색"
               onClick={() => {
-                console.log(searchRef.current.value);
                 setForDeletedStudentIds([]);
                 setSearchNameValue(searchRef.current.value);
-                console.log(searchRef.current.value);
-                console.log('검색');
               }}
             >
               <AiOutlineSearch size="26px" className="mr-2" color="black" />

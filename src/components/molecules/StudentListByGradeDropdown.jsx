@@ -51,7 +51,6 @@ function StudentListByGradeDropdown({
                     tempMyCourseStudents[grade - 1].students.push(student);
                     changingStudentsNums += 1;
                   });
-                  console.log(tempMyCourseStudents);
                   setMyCourseStudents(tempMyCourseStudents);
 
                   const tempDifferntCourseStudents = [
@@ -63,7 +62,6 @@ function StudentListByGradeDropdown({
                   setDifferentStudentsNum(
                     (prev) => prev - changingStudentsNums,
                   );
-                  console.log(tempDifferntCourseStudents);
                 }}
               >
                 <div className="mr-4 bg-[#BCF7FF] px-2 rounded-xl">
@@ -86,7 +84,7 @@ function StudentListByGradeDropdown({
                   onClick={() => {
                     const tempMyCourseStudents = [...myCourseStudents];
                     tempMyCourseStudents[grade - 1].students.push(student);
-                    console.log(tempMyCourseStudents);
+
                     setMyCourseStudents(tempMyCourseStudents);
 
                     const tempDifferntCourseStudents = [
@@ -101,7 +99,7 @@ function StudentListByGradeDropdown({
                           return '';
                         },
                       );
-                    console.log(tempDifferntCourseStudents);
+
                     setDifferntCourseStudents(tempDifferntCourseStudents);
                     setMyStudentsNum((prev) => prev + 1);
                     setDifferentStudentsNum((prev) => prev - 1);
@@ -160,12 +158,12 @@ function StudentListByGradeDropdown({
                   tempDifferntCourseStudents[grade - 1].students.push(student);
                   changingStudentsNums += 1;
                 });
-                console.log(tempDifferntCourseStudents);
+
                 setDifferntCourseStudents(tempDifferntCourseStudents);
 
                 const tempMyCourseStudents = [...myCourseStudents];
                 tempMyCourseStudents[grade - 1].students = [];
-                console.log(tempMyCourseStudents);
+
                 setMyCourseStudents(tempMyCourseStudents);
                 setDifferentStudentsNum((prev) => prev + changingStudentsNums);
                 setMyStudentsNum((prev) => prev - changingStudentsNums);
@@ -191,7 +189,7 @@ function StudentListByGradeDropdown({
                     ...differntCourseStudents,
                   ];
                   tempDifferntCourseStudents[grade - 1].students.push(student);
-                  console.log(tempDifferntCourseStudents);
+
                   setDifferntCourseStudents(tempDifferntCourseStudents);
 
                   const tempMyCourseStudents = [...myCourseStudents];
@@ -204,7 +202,7 @@ function StudentListByGradeDropdown({
                         return '';
                       },
                     );
-                  console.log(tempMyCourseStudents);
+
                   setMyCourseStudents(tempMyCourseStudents);
                   setDifferentStudentsNum((prev) => prev + 1);
                   setMyStudentsNum((prev) => prev - 1);

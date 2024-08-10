@@ -379,7 +379,6 @@ function CourseModificationModal({
               placeholder="이름을 입력해주세요."
               onChange={(e) => {
                 setCourseName(e.target.value);
-                console.log(e.target.value);
               }}
               defaultValue={courseName}
             />

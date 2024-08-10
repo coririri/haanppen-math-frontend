@@ -15,7 +15,6 @@ function WriteComment({ setIsWriteComment, questionId }) {
   const finishWrite = () => {
     const formData = new FormData();
     imgsFiles.forEach((img) => {
-      console.log(img);
       formData.append('images', img);
     });
     formData.append('questionId ', questionId);

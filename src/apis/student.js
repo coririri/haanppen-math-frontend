@@ -62,9 +62,7 @@ export const deleteStudent = (forDeletedStudentIds) =>
         targetIds: forDeletedStudentIds,
       },
     })
-    .then((response) => {
-      console.log(response);
-    })
+    .then(() => {})
     .catch((error) => {
       console.log(error);
     });
@@ -84,7 +82,7 @@ export const modifyStudent = (
       phoneNumber: payload.phoneNumber,
       grade: payload.grade,
     })
-    .then((response) => {
+    .then(() => {
       queryKeyQueryClient.invalidateQueries([
         'students',
         queryKeyChoosenGradeIndex,
@@ -92,7 +90,6 @@ export const modifyStudent = (
         page - 1,
       ]);
       setEnrollmentModalOpen(false);
-      console.log(response);
     })
     .catch((error) => {
       console.log(error);
@@ -106,7 +103,6 @@ const studentAccountRegist = (
   searchNameValue,
   page,
 ) => {
-  console.log(choosenGradeIndex);
   instance
     .post('/api/accounts', {
       name: payload.name,
@@ -115,8 +111,7 @@ const studentAccountRegist = (
       role: 'student',
       password: '0000',
     })
-    .then((response) => {
-      console.log(response);
+    .then(() => {
       setEnrollmentModalOpen(false);
 
       queryClient.invalidateQueries([

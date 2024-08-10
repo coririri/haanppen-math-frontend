@@ -26,8 +26,7 @@ export const registTeacherAccount = (
       role: 'teacher',
       password: '0000',
     })
-    .then((response) => {
-      console.log(response);
+    .then(() => {
       queryClient.invalidateQueries(['teachers', searchNameValue, page - 1]);
       setEnrollmentModalOpen(false);
     })
@@ -43,9 +42,7 @@ export const deleteTeacherAccount = (forDeletedTeacherIds) =>
         targetIds: forDeletedTeacherIds,
       },
     })
-    .then((response) => {
-      console.log(response);
-    })
+    .then(() => {})
     .catch((error) => {
       console.log(error);
     });
@@ -63,14 +60,13 @@ export const modifyTeacher = (
       name: payload.name,
       phoneNumber: payload.phoneNumber,
     })
-    .then((response) => {
+    .then(() => {
       queryKeyQueryClient.invalidateQueries([
         'teachers',
         queryKeySearchNameValue,
         page - 1,
       ]);
       setEnrollmentModalOpen(false);
-      console.log(response);
     })
     .catch((error) => {
       console.log(error);

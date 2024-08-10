@@ -33,8 +33,7 @@ function TeacherManagementPage() {
     queryKey: ['teachers', searchNameValue, page - 1],
     queryFn: getTeacherByPage,
   });
-  console.log(data);
-  console.log(isLoading);
+
   return (
     <div className="w-full text-center">
       <TeacherEnrollmentModal
@@ -83,8 +82,7 @@ function TeacherManagementPage() {
               aria-label="강사 검색"
               onClick={() => {
                 setSearchNameValue(searchRef.current.value);
-                console.log(searchNameValue);
-                console.log('검색');
+
                 setForDeletedTeacherIds([]);
               }}
             >

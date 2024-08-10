@@ -19,7 +19,7 @@ instance.interceptors.request.use(async (config) => {
 
   try {
     const response = await loginInstance.post('/api/login/refresh');
-    console.log('보냄!');
+
     const newToken = response.data.accessToken;
     const { role, userName } = response.data;
     instance.defaults.headers.common.Authorization = newToken;
@@ -31,7 +31,6 @@ instance.interceptors.request.use(async (config) => {
     console.error('토큰을 갱신하는 중 에러가 발생했습니다:', error);
   }
 
-  console.log(instance.defaults.headers.common.Authorization);
   return config;
 });
 
