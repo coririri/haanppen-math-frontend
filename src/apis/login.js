@@ -10,7 +10,6 @@ const login = (userForm, setErrorMessage, navigate) => {
       const token = response.data.accessToken;
       const { role, userName } = response.data;
       instance.defaults.headers.common.Authorization = token;
-      console.log(instance.defaults.headers.common.Authorization);
       localStorage.setItem('role', role);
       localStorage.setItem('userName', userName);
       navigate('/');
