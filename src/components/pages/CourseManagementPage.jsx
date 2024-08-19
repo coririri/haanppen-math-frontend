@@ -4,19 +4,44 @@ import IconButton from '../atoms/IconButton';
 import DropdownMenu from '../molecules/DropdownMenu';
 import ClassList from '../organisms/CourseList';
 import CourseEnrollmentModal from '../modals/CourseEnrollmentModal';
-import { deleteCourses, getAllCourses } from '../../apis/course';
+import {
+  deleteCourses,
+  getAllCourses,
+  getCoursesById,
+} from '../../apis/course';
+import getAllTeachers from '../../apis/teacher';
 
 function CourseManagementPage() {
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
-  const [teacherArr] = useState(['선생님 전체', '권나희', '하경현']);
+  const [teacherArr, setTeacherArr] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [courseListData, setCourseListData] = useState(null);
   const [deletedCoursesIndex, setDeletedCoursesIndex] = useState([]);
-
   useEffect(() => {
-    getAllCourses(setCourseListData);
-  }, []);
+    // 비동기 함수 정의
+    const fetchData = async () => {
+      try {
+        const { data } = await getAllTeachers();
+
+        setTeacherArr(data);
+
+        console.log(teacherArr);
+        console.log(selectedIndex);
+        console.log(teacherArr[selectedIndex - 1]);
+        if (teacherArr.length === 0 || selectedIndex === 0) {
+          getAllCourses(setCourseListData);
+        } else {
+          getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    // 비동기 함수 호출
+    fetchData();
+  }, [selectedIndex]);
 
   return (
     <div className="w-full text-center">
@@ -24,6 +49,8 @@ function CourseManagementPage() {
         enrollmentModalOpen={enrollmentModalOpen}
         setEnrollmentModalOpen={setEnrollmentModalOpen}
         setCourseListData={setCourseListData}
+        teacherArr={teacherArr}
+        selectedIndex={selectedIndex}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
@@ -55,7 +82,10 @@ function CourseManagementPage() {
           <div className="relative inline-block">
             <DropdownMenu
               size="normal"
-              textArr={teacherArr}
+              textArr={[
+                '선택 없음',
+                ...teacherArr.map((teacher) => teacher.name),
+              ]}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               isOpen={isDropdownOpen}
@@ -71,6 +101,8 @@ function CourseManagementPage() {
           courseListData={courseListData}
           setDeletedCoursesIndex={setDeletedCoursesIndex}
           setCourseListData={setCourseListData}
+          teacherArr={teacherArr}
+          selectedIndex={selectedIndex}
         />
       </div>
     </div>

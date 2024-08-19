@@ -1,16 +1,6 @@
 import instance from './instance';
 
-const getAllTeachers = async (setTeacherList) => {
-  await instance
-    .get('/api/members/teachers/all')
-    .then((response) => {
-      const entireTeahcerList = response.data;
-      setTeacherList((prev) => [...prev, ...entireTeahcerList]);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+const getAllTeachers = async () => instance.get('/api/members/teachers/all');
 
 export const registTeacherAccount = (
   setEnrollmentModalOpen,

@@ -45,7 +45,7 @@ function TeacherCarousel({
         </button>
         <span className="h-[42px] leading-[42px] text-lg font-bold overflow-hidden">
           {selectedTeacherindex === 0
-            ? teacherList[selectedTeacherindex]
+            ? '선택 없음'
             : `${teacherList[selectedTeacherindex].name} 선생님`}
         </span>
         <button

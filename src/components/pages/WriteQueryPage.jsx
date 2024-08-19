@@ -31,8 +31,15 @@ function WriteQueryPage() {
   };
 
   useEffect(() => {
-    getAllTeachers(setTeacherList);
-    // 질문 가능한 선생님 조회
+    const fetchData = async () => {
+      try {
+        const { data } = await getAllTeachers();
+        setTeacherList(['선택 없음', ...data]);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
   }, []);
 
   const handleDeleteImageButton = (index) => {

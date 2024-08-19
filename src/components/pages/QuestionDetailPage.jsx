@@ -100,7 +100,7 @@ function QuestionDetailPage() {
             <hr className="h-[1px] border-0 bg-hpGray w-[150px] mt-[0.5px] mb-4" />
           </div>
           {data?.commentsData?.map((comment) => (
-            <CommentBox comment={comment} isStudent />
+            <CommentBox comment={comment} key={comment.commentId} isStudent />
           ))}
         </div>
       </div>
@@ -179,7 +179,7 @@ function QuestionDetailPage() {
           </div>
         )}
         {data?.commentsData?.map((comment) => (
-          <CommentBox comment={comment} />
+          <CommentBox comment={comment} key={comment.commentId} />
         ))}
 
         {isWriteComment && (

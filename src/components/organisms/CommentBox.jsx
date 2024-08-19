@@ -6,6 +6,28 @@ function CommentBox({ comment, isStudent }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
+  // URL을 감지하고 <a> 태그로 변환하는 함수
+  const convertToLinks = (text) => {
+    // URL 정규식
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    // 텍스트를 분할하고 URL이면 <a> 태그로 변환
+    return text.split(urlRegex).map((part) =>
+      urlRegex.test(part) ? (
+        <a
+          href={part}
+          key={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline"
+        >
+          {part}
+        </a>
+      ) : (
+        part
+      ),
+    );
+  };
+
   if (isStudent) {
     return (
       <div className="w-[400px] mt-6 mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
@@ -16,12 +38,9 @@ function CommentBox({ comment, isStudent }) {
               setModalOpen={setModalOpen}
               imageSrc={modalImage}
             />
-            <textarea
-              className="outline-none text-lg"
-              cols={30}
-              rows={4}
-              value={comment?.content}
-            />
+            <span className="outline-none text-lg w-[800px] h-[140px] block">
+              {convertToLinks(comment?.content)}
+            </span>
             <div className="flex justify-between items-center mt-12">
               <div className="flex">
                 {comment?.images.map((previewImage) => (
@@ -57,12 +76,9 @@ function CommentBox({ comment, isStudent }) {
             setModalOpen={setModalOpen}
             imageSrc={modalImage}
           />
-          <textarea
-            className="outline-none text-lg"
-            cols={80}
-            rows={5}
-            value={comment?.content}
-          />
+          <span className="outline-none text-lg w-[800px] h-[140px] block">
+            {convertToLinks(comment?.content)}
+          </span>
           <div className="flex justify-between items-center mt-12">
             <div className="flex">
               {comment?.images.map((previewImage) => (

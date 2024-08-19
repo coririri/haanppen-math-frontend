@@ -23,7 +23,34 @@ export const getQuestionsList = async ({ pageParam, queryKey }) => {
   try {
     const response = await instance.get('/api/board/questions', {
       params: {
-        size: 2,
+        size: 1,
+        cursorIndex: pageParam,
+        sort: queryKey[1] ?? '',
+      },
+    });
+
+    const { data } = response;
+    const { contents } = data;
+
+    for (let i = 0; i < contents.length; i += 1) {
+      const question = contents[i];
+      if (question.images.length !== 0) {
+        const { imageUrl } = question.images[0];
+        question.images[0] = imageUrlToSrc(imageUrl);
+      }
+    }
+    return data;
+  } catch (error) {
+    console.error('Error fetching questions list:', error);
+    throw error;
+  }
+};
+
+export const getMyQuestionsList = async ({ pageParam, queryKey }) => {
+  try {
+    const response = await instance.get('/api/board/questions/my', {
+      params: {
+        size: 1,
         cursorIndex: pageParam,
         sort: queryKey[1] ?? '',
       },

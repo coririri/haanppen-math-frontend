@@ -4,7 +4,7 @@ import { AiFillEdit } from 'react-icons/ai';
 import TeacherCarousel from '../molecules/TeacherCarousel';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
-import enrollCourse, { getAllCourses } from '../../apis/course';
+import enrollCourse, { getAllCourses, getCoursesById } from '../../apis/course';
 import getAllTeachers from '../../apis/teacher';
 import { getAllStudents } from '../../apis/student';
 
@@ -40,6 +40,8 @@ function CourseEnrollmentModal({
   enrollmentModalOpen,
   setEnrollmentModalOpen,
   setCourseListData,
+  teacherArr,
+  selectedIndex,
 }) {
   const [teacherList, setTeacherList] = useState(['선택 없음']);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
@@ -201,8 +203,16 @@ function CourseEnrollmentModal({
   ]);
 
   useEffect(() => {
-    getAllTeachers(setTeacherList);
-    getAllStudents(setEntireStudents, setEntireStudentsNum);
+    const fetchData = async () => {
+      try {
+        const { data } = await getAllTeachers();
+        setTeacherList(['선택 없음', ...data]);
+        getAllStudents(setEntireStudents, setEntireStudentsNum);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -266,7 +276,11 @@ function CourseEnrollmentModal({
     ]);
 
     getAllStudents(setEntireStudents, setEntireStudentsNum);
-    getAllCourses(setCourseListData);
+    if (teacherArr.length === 0 || selectedIndex === 0) {
+      getAllCourses(setCourseListData);
+    } else {
+      getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
+    }
   };
 
   return (

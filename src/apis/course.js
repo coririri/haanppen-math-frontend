@@ -10,11 +10,15 @@ const enrollCourse = async (courseName, teacherId, students) => {
     .then(() => {})
     .catch(() => {});
 };
-export const getAllCourses = (setCourseListData) => {
+export const getAllCourses = (setCourseListData) =>
   instance.get('/api/courses').then((response) => {
     setCourseListData(response.data);
   });
-};
+
+export const getCoursesById = (teacherId, setCourseListData) =>
+  instance.get(`/api/courses/teachers/${teacherId}`).then((response) => {
+    setCourseListData(response.data);
+  });
 
 export const deleteCourses = async (courseId) => {
   await instance.delete(`/api/manage/courses/${courseId}`);

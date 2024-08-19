@@ -4,6 +4,8 @@ function CourseList({
   courseListData,
   setDeletedCoursesIndex,
   setCourseListData,
+  teacherArr,
+  selectedIndex,
 }) {
   return (
     <div className="w-full">
@@ -33,6 +35,8 @@ function CourseList({
             courseId={course?.courseId}
             setDeletedCoursesIndex={setDeletedCoursesIndex}
             setCourseListData={setCourseListData}
+            teacherArr={teacherArr}
+            selectedIndex={selectedIndex}
           />
         ))}
       </div>

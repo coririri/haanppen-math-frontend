@@ -6,6 +6,7 @@ import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import {
   getAllCourses,
+  getCoursesById,
   getMyCourse,
   putCourseNameAndTeacher,
   putCourseStudents,
@@ -46,6 +47,8 @@ function CourseModificationModal({
   setEnrollmentModalOpen,
   setCourseListData,
   courseId,
+  teacherArr,
+  selectedIndex,
 }) {
   const [teacherList, setTeacherList] = useState(['선택 없음']);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
@@ -208,7 +211,8 @@ function CourseModificationModal({
 
   useEffect(() => {
     const getAllData = async () => {
-      await getAllTeachers(setTeacherList);
+      const { data } = await getAllTeachers();
+      setTeacherList(data);
       await getAllStudents(setEntireStudents, setEntireStudentsNum);
       await getMyCourseStudents(
         courseId,
@@ -298,6 +302,7 @@ function CourseModificationModal({
   }, [entireStudents, entireStudentsNum, myCourseStudents]);
 
   const resetModalState = () => {
+    console.log(teacherList);
     setSelectedTeacherindexIndex(0);
     setCourseName('');
     setMyStudentsNum(0);
@@ -351,9 +356,14 @@ function CourseModificationModal({
         students: [],
       },
     ]);
+
     getMyCourseStudents(courseId, setMyCourseStudents, setMyStudentsNum);
     getAllStudents(setEntireStudents, setEntireStudentsNum);
-    getAllCourses(setCourseListData);
+    if (teacherArr.length === 0 || selectedIndex === 0) {
+      getAllCourses(setCourseListData);
+    } else {
+      getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
+    }
   };
 
   return (

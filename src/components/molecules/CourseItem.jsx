@@ -9,6 +9,8 @@ function CourseItem({
   courseId,
   setCourseListData,
   setDeletedCoursesIndex,
+  teacherArr,
+  selectedIndex,
 }) {
   const [isClick, setIsClick] = useState(false);
   return (
@@ -18,6 +20,8 @@ function CourseItem({
         setEnrollmentModalOpen={setIsClick}
         setCourseListData={setCourseListData}
         courseId={courseId}
+        teacherArr={teacherArr}
+        selectedIndex={selectedIndex}
       />
       <div className="flex items-center justify-between my-2">
         <input
