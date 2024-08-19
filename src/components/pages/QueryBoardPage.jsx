@@ -126,6 +126,7 @@ function QueryBoardPage() {
                   if (question.images.length === 0)
                     return (
                       <QueryBox
+                        key={question.questionId}
                         id={question.questionId}
                         imgSrc={hw1}
                         grade={question.owner.memberGrade}
@@ -137,6 +138,7 @@ function QueryBoardPage() {
                     );
                   return (
                     <QueryBox
+                      key={question.questionId}
                       id={question.questionId}
                       imgSrc={question.images[0]}
                       grade={question.owner.memberGrade}
@@ -186,6 +188,7 @@ function QueryBoardPage() {
                   if (question.images.length === 0)
                     return (
                       <QueryBox
+                        key={question.questionId}
                         id={question.questionId}
                         imgSrc={hw1}
                         grade={question.owner.memberGrade}
@@ -197,6 +200,7 @@ function QueryBoardPage() {
                     );
                   return (
                     <QueryBox
+                      key={question.questionId}
                       id={question.questionId}
                       imgSrc={question.images[0]}
                       grade={question.owner.memberGrade}
@@ -230,6 +234,7 @@ function QueryBoardPage() {
               if (question.images.length === 0)
                 return (
                   <QueryBox
+                    key={question.questionId}
                     id={question.questionId}
                     imgSrc={hw1}
                     grade={question.owner.memberGrade}
@@ -240,6 +245,7 @@ function QueryBoardPage() {
                 );
               return (
                 <QueryBox
+                  key={question.questionId}
                   id={question.questionId}
                   imgSrc={question.images[0]}
                   grade={question.owner.memberGrade}
