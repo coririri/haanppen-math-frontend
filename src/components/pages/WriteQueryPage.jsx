@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom';
 import InputImageButton from '../atoms/InputImageButton';
 import IconButton from '../atoms/IconButton';
-import TeacherCarousel from '../molecules/TeacherCarousel';
+import Carousel from '../molecules/Carousel';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import getAllTeachers from '../../apis/teacher';
@@ -14,8 +14,8 @@ import writeQuery from '../../apis/question';
 function WriteQueryPage() {
   const [imgPreview, setImgePreview] = useState([]);
   const [imgFiles, setImgFiles] = useState([]);
-  const [teacherList, setTeacherList] = useState(['선택 없음']);
-  const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
+  const [teacherList, setTeacherList] = useState([]);
+  const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
   const navigate = useNavigate();
 
   const finishWrite = () => {
@@ -23,7 +23,8 @@ function WriteQueryPage() {
     imgFiles.forEach((img) => {
       formData.append('images', img);
     });
-    formData.append('targetMemberId', teacherList[selectedTeacherindex].id);
+    if (selectedTeacherindex !== 0)
+      formData.append('targetMemberId', teacherList[selectedTeacherindex].id);
     formData.append('content', '없음');
     formData.append('title', '제목 없음');
     writeQuery(formData, navigate);
@@ -34,7 +35,7 @@ function WriteQueryPage() {
     const fetchData = async () => {
       try {
         const { data } = await getAllTeachers();
-        setTeacherList(['선택 없음', ...data]);
+        setTeacherList([...data]);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -52,14 +53,18 @@ function WriteQueryPage() {
       ...imgPreview.slice(index + 1, imgFiles.length),
     ]);
   };
-
+  console.log(...teacherList);
+  console.log(...teacherList.map((teacher) => teacher.name));
   return (
     <div className="w-full">
       <div className="w-[233px] mx-auto mt-6">
-        <TeacherCarousel
-          teacherList={teacherList}
-          selectedTeacherindex={selectedTeacherindex}
-          setSelectedTeacherindexIndex={setSelectedTeacherindexIndex}
+        <Carousel
+          dataList={[
+            '지정 안함',
+            ...teacherList.map((teacher) => teacher.name),
+          ]}
+          selectedDataindex={selectedTeacherindex}
+          setSelectedDataindex={setSelectedTeacherindex}
         />
       </div>
       <div className="text-center text-lg mt-4 font-bold text-hpRed">

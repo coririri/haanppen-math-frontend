@@ -55,11 +55,10 @@ function StudentManagementPage() {
         page={page}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
-      <div className="mt-3 flex items-center justify-between w-[250px] mx-auto">
+      <div className="mt-3 flex items-center justify-between w-[300px] mx-auto">
         <TextButton
           color="white"
-          shape="square"
-          size="small"
+          moreStyle="w-[70px]"
           isClick={choosenGradeIndex[0]}
           handleClick={() => {
             setChoosenGradeIndex([true, false, false, false]);
@@ -69,6 +68,7 @@ function StudentManagementPage() {
         </TextButton>
         <TextButton
           color="white"
+          moreStyle="w-[45px]"
           shape="square"
           size="small"
           isClick={choosenGradeIndex[1]}
@@ -81,8 +81,7 @@ function StudentManagementPage() {
         </TextButton>
         <TextButton
           color="white"
-          shape="square"
-          size="small"
+          moreStyle="w-[45px]"
           isClick={choosenGradeIndex[2]}
           handleClick={() => {
             setForDeletedStudentIds([]);
@@ -93,8 +92,7 @@ function StudentManagementPage() {
         </TextButton>
         <TextButton
           color="white"
-          shape="square"
-          size="small"
+          moreStyle="w-[45px]"
           isClick={choosenGradeIndex[3]}
           handleClick={() => {
             setForDeletedStudentIds([]);

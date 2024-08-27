@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
-import TeacherCarousel from '../molecules/TeacherCarousel';
+import Carousel from '../molecules/Carousel';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import enrollCourse, { getAllCourses, getCoursesById } from '../../apis/course';
@@ -43,7 +43,7 @@ function CourseEnrollmentModal({
   teacherArr,
   selectedIndex,
 }) {
-  const [teacherList, setTeacherList] = useState(['선택 없음']);
+  const [teacherList, setTeacherList] = useState([]);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
   const [courseName, setCourseName] = useState('');
   const [entireStudentsNum, setEntireStudentsNum] = useState(0);
@@ -206,7 +206,7 @@ function CourseEnrollmentModal({
     const fetchData = async () => {
       try {
         const { data } = await getAllTeachers();
-        setTeacherList(['선택 없음', ...data]);
+        setTeacherList([...data]);
         getAllStudents(setEntireStudents, setEntireStudentsNum);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -310,10 +310,13 @@ function CourseEnrollmentModal({
             />
           </div>
           <div className="ml-8">
-            <TeacherCarousel
-              teacherList={teacherList}
-              selectedTeacherindex={selectedTeacherindex}
-              setSelectedTeacherindexIndex={setSelectedTeacherindexIndex}
+            <Carousel
+              dataList={[
+                '선택 없음',
+                ...teacherList.map((teacher) => teacher.name),
+              ]}
+              selectedDataindex={selectedTeacherindex}
+              setSelectedDataindex={setSelectedTeacherindexIndex}
             />
           </div>
         </div>
@@ -374,7 +377,10 @@ function CourseEnrollmentModal({
                     newCourseStudents.push(student.id);
                   });
                 });
-
+                if (selectedTeacherindex === 0) {
+                  alert('선생님을 선택해주세요');
+                  return;
+                }
                 await enrollCourse(
                   courseName,
                   teacherList[selectedTeacherindex].id,

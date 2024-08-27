@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
-import TeacherCarousel from '../molecules/TeacherCarousel';
+import TeacherCarousel from '../molecules/Carousel';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import {

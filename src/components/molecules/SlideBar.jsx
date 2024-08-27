@@ -20,14 +20,11 @@ function SlideBar({
           <div className="flex items-center justify-center mx-auto">
             <TextButton
               color="white"
-              shape="long"
-              isClick={isClickArr[0]}
+              moreStyle="w-[270px] mr-2"
               handleClick={() => {
                 setIsClickArr([true, false]);
                 setStudentLeftPosition('left-[4rem]');
               }}
-              moreStyle="mr-2"
-              isStudent
             >
               {firstText}
             </TextButton>
@@ -57,24 +54,21 @@ function SlideBar({
         <div>
           <TextButton
             color="white"
-            shape="long"
-            isClick={isClickArr[1]}
+            moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, true, false, false]);
               setLeftPosition('left-2');
             }}
-            moreStyle="mr-4"
           >
             {firstText}
           </TextButton>
 
           <TextButton
             color="white"
-            shape="long"
-            isClick={isClickArr[2]}
+            moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, false, true, false]);
-              setLeftPosition('left-[18.5rem]');
+              setLeftPosition('left-[16.5rem]');
             }}
           >
             {secondText}
@@ -92,37 +86,32 @@ function SlideBar({
         <div>
           <TextButton
             color="white"
-            shape="long"
-            isClick={isClickArr[0]}
+            moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([true, false, false]);
-              setLeftPosition('left-[125px]');
+              setLeftPosition('left-[130px]');
             }}
-            moreStyle="mr-4"
           >
             {firstText}
           </TextButton>
 
           <TextButton
             color="white"
-            shape="long"
-            isClick={isClickArr[1]}
+            moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, true, false]);
-              setLeftPosition('left-[340px]');
+              setLeftPosition('left-[330px]');
             }}
-            moreStyle="mr-4"
           >
             {secondText}
           </TextButton>
 
           <TextButton
             color="white"
-            shape="long"
-            isClick={isClickArr[2]}
+            moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, false, true]);
-              setLeftPosition('left-[555px]');
+              setLeftPosition('left-[525px]');
             }}
           >
             {thirdText}

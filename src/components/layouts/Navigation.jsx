@@ -59,7 +59,7 @@ function Navigation() {
     <nav className="w-[1440px] mx-auto">
       <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">
         <Link
-          to="/enroll-class-video"
+          to="/enroll-class"
           className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
         >
           <button
