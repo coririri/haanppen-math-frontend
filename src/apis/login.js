@@ -71,8 +71,8 @@ export const refreshLogin = async () => {
       // 토큰 갱신에 실패한 경우 여기에 적절한 처리를 추가할 수 있습니다.
       setTimeout(() => {
         alert('로그인 페이지로 이동합니다');
-        // window.location.href = '/login';
-      }, 3000);
+        window.location.href = '/login';
+      }, 1000);
     });
 };
 

@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import React, { useState } from 'react';
 import ClassDetailTab from '../organisms/ClassDetailTab';
-import VideoListTb from '../organisms/VideoListTb';
+import VideoListTab from '../organisms/VideoListTab';
 import Carousel from '../molecules/Carousel';
 import Canlendar from '../molecules/Canlendar';
 
@@ -13,8 +13,9 @@ function WriteClassPage() {
     title: '',
     desc: '',
   });
+  const [isCreated, setIsCreated] = useState(false);
   return (
-    <div className="w-[750px] mx-auto">
+    <div className="w-[950px] mx-auto">
       <div>
         <div className="flex justify-center mt-4">
           <div className="mr-6">
@@ -31,11 +32,15 @@ function WriteClassPage() {
         <ClassDetailTab
           classDetailData={classDetailData}
           setClassDetailData={setClassDetailData}
+          isCreated={isCreated}
+          setIsCreated={setIsCreated}
         />
       </div>
-      <div>
-        <VideoListTb />
-      </div>
+      {isCreated && (
+        <div>
+          <VideoListTab />
+        </div>
+      )}
     </div>
   );
 }
