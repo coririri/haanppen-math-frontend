@@ -16,7 +16,7 @@ const defaultVideoData = [
 function VideoListTab() {
   const [videoData, setVideoData] = useState(defaultVideoData);
   const [nowPlusVedio, setNowPlusVdeio] = useState(false);
-  console.log(videoData);
+
   return (
     <div className="mb-4">
       <div className="flex justify-center items-center mt-8">

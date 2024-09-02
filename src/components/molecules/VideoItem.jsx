@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AiOutlineArrowDown,
   AiOutlineArrowUp,
@@ -15,6 +16,7 @@ function VideoItem({
   lastVideoIndex,
 }) {
   const [isVideoSelected] = useState(video.title !== '');
+  const navigate = useNavigate();
 
   const upToOrder = () => {
     if (vedioIndex === 0) return;
@@ -139,7 +141,11 @@ function VideoItem({
               <TextButton
                 color="gray"
                 moreStyle="w-[11rem]"
-                handleClick={() => {}}
+                handleClick={() => {
+                  navigate(
+                    `/vedio-management?vedioIndex=${vedioIndex}&breadscrum=${localStorage.getItem('userName')}`,
+                  );
+                }}
               >
                 영상 관리
               </TextButton>
@@ -172,7 +178,7 @@ function VideoItem({
       {video.attachments.map((attachment, attachmentIndex) => {
         console.log(attachmentIndex);
         return (
-          <div className="w-full flex mb-2">
+          <div className="w-full flex mb-2" key={attachment}>
             <label
               htmlFor={`uploadedFile${vedioIndex}${attachmentIndex}`}
               aria-label="파일 수정"

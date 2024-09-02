@@ -14,6 +14,7 @@ import QuestionDetailPage from './components/pages/QuestionDetailPage';
 import Test from './components/pages/Test';
 import WriteClassPage from './components/pages/WriteClassPage';
 import 'react-datepicker/dist/react-datepicker.css';
+import VedioManagementPage from './components/pages/VedioManagementPage';
 
 function App() {
   const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ function App() {
             <Route path="user-information" element={<UserInformationPage />} />
             <Route path="question/:id" element={<QuestionDetailPage />} />
             <Route path="enroll-class" element={<WriteClassPage />} />
+            <Route path="vedio-management" element={<VedioManagementPage />} />
           </Route>
           {/* 404 에러 */}
           <Route path="*" element={<NonFoundClientError />} />
