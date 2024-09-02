@@ -16,7 +16,6 @@ function WriteClassPage() {
   const [isCreated, setIsCreated] = useState(false);
   return (
     <div className="w-[950px] mx-auto">
-      <div className="text-3xl font-bold">테스트 수정!!</div>
       <div>
         <div className="flex justify-center mt-4">
           <div className="mr-6">
