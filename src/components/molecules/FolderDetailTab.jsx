@@ -1,16 +1,56 @@
+import { useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import TextButton from '../atoms/TextButton';
+import { dateTimeToDateAndTimes } from '../../utils/dateTimeToDate';
+import getDirectory, { changeDirectoryName } from '../../apis/directory';
 
-function FolderDetailTab({ defaultFolderDetail }) {
+function FolderDetailTab({ folderData, breadscrumArray, setDirectoryDatas }) {
+  const [folderName, setFolderName] = useState(folderData.fileName);
+
+  useEffect(() => {
+    setFolderName(folderData.fileName);
+  }, [folderData]);
+  console.log(folderData);
   return (
     <div className="w-full">
       <div className="w-full flex mt-8">
         <input
           type="text"
-          value={defaultFolderDetail.name}
+          value={folderName}
           className="w-[150px] font-bold mx-4 pl-4 leading-[30px] border-solid border-[1px] rounded-lg border-hpGray"
+          onChange={(e) => {
+            setFolderName(e.target.value);
+          }}
         />
-        <TextButton color="gray" moreStyle="w-[4rem]" handleClick={() => {}}>
+        <TextButton
+          color="gray"
+          moreStyle="w-[4rem]"
+          handleClick={async () => {
+            const absolutePath = breadscrumArray.join('/');
+            try {
+              if (absolutePath !== '/') {
+                await changeDirectoryName(
+                  `${absolutePath.slice(1)}/${folderData.fileName}`,
+                  folderName,
+                );
+                const { data } = await getDirectory(absolutePath);
+                console.log(data);
+                setDirectoryDatas(data);
+              } else {
+                await changeDirectoryName(
+                  `${absolutePath}${folderData.fileName}`,
+                  folderName,
+                );
+
+                const { data } = await getDirectory(absolutePath);
+                console.log(data);
+                setDirectoryDatas(data);
+              }
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        >
           수정
         </TextButton>
       </div>
@@ -29,15 +69,17 @@ function FolderDetailTab({ defaultFolderDetail }) {
         </div>
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">크기</span>
-          <span className="font-bold">{defaultFolderDetail.size}GB</span>
+          <span className="font-bold">10GB</span>
         </div>
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">올린 날짜</span>
-          <span className="font-bold">{defaultFolderDetail.created_date}</span>
+          <span className="font-bold">
+            {dateTimeToDateAndTimes(folderData.createdTime)}
+          </span>
         </div>
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">수정 날짜</span>
-          <span className="font-bold">{defaultFolderDetail.modified_date}</span>
+          <span className="font-bold">2030-08-20 08:02:04</span>
         </div>
       </div>
     </div>

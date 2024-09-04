@@ -143,7 +143,7 @@ function VideoItem({
                 moreStyle="w-[11rem]"
                 handleClick={() => {
                   navigate(
-                    `/vedio-management?vedioIndex=${vedioIndex}&breadscrum=${localStorage.getItem('userName')}`,
+                    `/vedio-management?vedioIndex=${vedioIndex}&breadscrum=/`,
                   );
                 }}
               >

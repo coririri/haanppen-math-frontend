@@ -34,7 +34,7 @@ function FileDetailTab({ defaultFolderDetail }) {
           <span className="block w-[100px] text-[#BFBFBF]">수정 날짜</span>
           <span className="font-bold">{defaultFolderDetail.modified_date}</span>
         </div>
-        <div className="w-[9rem] mx-auto absolute bottom-12 left-20">
+        <div className="w-[9rem] mx-auto mt-24 mb-4">
           <TextButton color="gray" moreStyle="w-[9rem]" handleClick={() => {}}>
             영상 선택
           </TextButton>

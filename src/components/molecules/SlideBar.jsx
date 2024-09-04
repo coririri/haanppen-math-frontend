@@ -10,7 +10,7 @@ function SlideBar({
   setIsClickArr,
   isStudent,
 }) {
-  const [leftPosition, setLeftPosition] = useState('left-28');
+  const [leftPosition, setLeftPosition] = useState('left-[130px]');
   const [studentLeftPosition, setStudentLeftPosition] = useState('left-[4rem]');
 
   if (num === 2) {
