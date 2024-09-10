@@ -1,9 +1,9 @@
-function TextButton({ color, children, handleClick, moreStyle }) {
+function TextButton({ color, children, handleClick, moreStyle, isClick }) {
   if (color === 'white') {
     return (
       <button type="button" onClick={handleClick}>
         <div
-          className={`inline-block border-solid border-black border-[1.75px] rounded-lg text-center  hover:bg-hpWhiteBlue bg-white ${moreStyle}`}
+          className={`inline-block border-solid border-black border-[1.75px] rounded-lg text-center ${isClick ? 'bg-hpWhiteBlue' : 'hover:bg-hpWhiteBlue bg-white'} ${moreStyle} `}
         >
           <span className="text-xl font-bold leading-10 text-black">
             {children}

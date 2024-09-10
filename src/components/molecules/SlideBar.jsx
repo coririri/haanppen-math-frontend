@@ -20,6 +20,7 @@ function SlideBar({
           <div className="flex items-center justify-center mx-auto">
             <TextButton
               color="white"
+              isClick={isClickArr[0]}
               moreStyle="w-[270px] mr-2"
               handleClick={() => {
                 setIsClickArr([true, false]);
@@ -54,6 +55,7 @@ function SlideBar({
         <div>
           <TextButton
             color="white"
+            isClick={isClickArr[0]}
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, true, false, false]);
@@ -65,6 +67,7 @@ function SlideBar({
 
           <TextButton
             color="white"
+            isClick={isClickArr[1]}
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, false, true, false]);
@@ -86,6 +89,7 @@ function SlideBar({
         <div>
           <TextButton
             color="white"
+            isClick={isClickArr[0]}
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([true, false, false]);
@@ -97,6 +101,7 @@ function SlideBar({
 
           <TextButton
             color="white"
+            isClick={isClickArr[1]}
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, true, false]);
@@ -108,6 +113,7 @@ function SlideBar({
 
           <TextButton
             color="white"
+            isClick={isClickArr[2]}
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, false, true]);

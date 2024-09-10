@@ -47,6 +47,7 @@ function TeacherItem({
         </span>
         <div className="w-[100px]">
           <TextButton
+            moreStyle="w-[4rem]"
             color="gray"
             shape="square"
             isClick={modificationModalOpen}
