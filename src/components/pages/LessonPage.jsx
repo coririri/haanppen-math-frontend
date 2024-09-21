@@ -39,7 +39,7 @@ function LessonPage() {
   console.log(videoData);
   console.log(hasMemo);
 
-  const videoUrl = `${backendUrl}api/media/stream?resourceId=result_f407247b-8d62-4fd2-8ead-9d47c2cc5a92.mp4`;
+  const videoUrl = `${backendUrl}api/media/stream?resourceId=kokain.mp4`;
   return (
     <div>
       <div className="flex justify-center items-center my-4">
