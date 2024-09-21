@@ -20,6 +20,8 @@ export const getCoursesById = (teacherId, setCourseListData) =>
     setCourseListData(response.data);
   });
 
+export const getOwnCourses = () => instance.get(`/api/courses/my`);
+
 export const deleteCourses = async (courseId) => {
   await instance.delete(`/api/manage/courses/${courseId}`);
 };
@@ -41,6 +43,8 @@ export const getMyCourse = (
     setCourseName(response.data.courseName);
   });
 };
+
+export const getAllCourse = () => instance.get('api/courses');
 
 export const putCourseStudents = async (courseId, students) => {
   await instance

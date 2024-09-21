@@ -5,12 +5,19 @@ import InputBox from '../atoms/InputBox';
 import '../../css/datepicker/datepicker.css';
 import Textarea from '../atoms/Textarea';
 import TextButton from '../atoms/TextButton';
+import enrollLesson, {
+  putLessonDetailContentByClassId,
+} from '../../apis/lesson';
 
 function ClassDetailTab({
+  classId,
   classDetailData,
   setClassDetailData,
   isCreated,
   setIsCreated,
+  startDate,
+  courseList,
+  selectedClassindex,
 }) {
   return (
     <div className="w-[750px] mx-auto">
@@ -25,7 +32,17 @@ function ClassDetailTab({
           <TextButton
             color="gray"
             moreStyle="w-[5rem] ml-4 mb-1"
-            handleClick={() => {}}
+            handleClick={async () => {
+              try {
+                await putLessonDetailContentByClassId(
+                  classId,
+                  classDetailData.title,
+                  classDetailData.content,
+                );
+              } catch (e) {
+                console.log(e);
+              }
+            }}
           >
             저장
           </TextButton>
@@ -48,7 +65,17 @@ function ClassDetailTab({
           <TextButton
             color="gray"
             moreStyle="w-[5rem] ml-4 mb-1"
-            handleClick={() => {}}
+            handleClick={async () => {
+              try {
+                await putLessonDetailContentByClassId(
+                  classId,
+                  classDetailData.title,
+                  classDetailData.content,
+                );
+              } catch (e) {
+                console.log(e);
+              }
+            }}
           >
             저장
           </TextButton>
@@ -56,11 +83,11 @@ function ClassDetailTab({
 
         <Textarea
           moreStyle="w-full font-bold leading-[26px] h-[120px] mt-1"
-          value={classDetailData.desc}
+          value={classDetailData.content}
           onChange={(e) => {
             setClassDetailData((prev) => ({
               ...prev,
-              desc: e.target.value,
+              content: e.target.value,
             }));
           }}
         />
@@ -83,8 +110,23 @@ function ClassDetailTab({
             bgColor="white"
             icon={<AiFillEdit size="20px" />}
             text="수업 생성"
-            handleClick={() => {
-              setIsCreated(true);
+            handleClick={async () => {
+              if (classDetailData.title === '') {
+                alert('수업의 제목을 반드시 적어주세요');
+                return;
+              }
+
+              try {
+                await enrollLesson(
+                  courseList[selectedClassindex].courseId,
+                  startDate,
+                  classDetailData.title,
+                  classDetailData.content,
+                );
+                setIsCreated(true);
+              } catch (e) {
+                console.log(e);
+              }
             }}
           />
         </div>

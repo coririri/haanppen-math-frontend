@@ -35,7 +35,7 @@ function Carousel({ dataList, selectedDataindex, setSelectedDataindex }) {
           />
         </button>
         <span className="h-[42px] leading-[42px] text-lg font-bold overflow-hidden">
-          {dataList[selectedDataindex]}
+          {dataList[selectedDataindex].name}
         </span>
         <button
           type="button"

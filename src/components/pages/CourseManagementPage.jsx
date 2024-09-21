@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AiOutlineSmile, AiFillEdit } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
-import DropdownMenu from '../molecules/DropdownMenu';
 import ClassList from '../organisms/CourseList';
 import CourseEnrollmentModal from '../modals/CourseEnrollmentModal';
 import {
@@ -10,12 +9,12 @@ import {
   getCoursesById,
 } from '../../apis/course';
 import getAllTeachers from '../../apis/teacher';
+import TeacherDropdown from '../molecules/TeacherDropdown';
 
 function CourseManagementPage() {
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   const [teacherArr, setTeacherArr] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [courseListData, setCourseListData] = useState(null);
   const [deletedCoursesIndex, setDeletedCoursesIndex] = useState([]);
   useEffect(() => {
@@ -26,9 +25,6 @@ function CourseManagementPage() {
 
         setTeacherArr(data);
 
-        console.log(teacherArr);
-        console.log(selectedIndex);
-        console.log(teacherArr[selectedIndex - 1]);
         if (teacherArr.length === 0 || selectedIndex === 0) {
           getAllCourses(setCourseListData);
         } else {
@@ -80,18 +76,13 @@ function CourseManagementPage() {
         </div>
         <div>
           <div className="relative inline-block">
-            <DropdownMenu
-              size="normal"
+            <TeacherDropdown
               textArr={[
                 '선택 없음',
                 ...teacherArr.map((teacher) => teacher.name),
               ]}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              isOpen={isDropdownOpen}
-              handleClick={() => {
-                setIsDropdownOpen((prev) => !prev);
-              }}
             />
           </div>
         </div>

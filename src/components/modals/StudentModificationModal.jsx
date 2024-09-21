@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
-import DropdownMenu from '../molecules/DropdownMenu';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
 import phonenumberValidate from '../../utils/phonenumberValidation';
 import { modifyStudent } from '../../apis/student';
+import GradeDropdown from '../molecules/GradeDropdown';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -54,7 +54,6 @@ function StudentModificationModal({
     return [false, false, true];
   });
 
-  const [isOpen, setIsOpen] = useState(false);
   const [dropdownContentsText, setDropdownContentsText] = useState(() => {
     if (grade <= 5) return ['초1', '초2', '초3', '초4', '초5', '초6'];
     if (grade <= 8) return ['중1', '중2', '중3'];
@@ -165,13 +164,10 @@ function StudentModificationModal({
             </TextButton>
           </div>
           <div>
-            <DropdownMenu
-              size="small"
+            <GradeDropdown
               textArr={dropdownContentsText}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              isOpen={isOpen}
-              handleClick={() => setIsOpen((prev) => !prev)}
             />
           </div>
         </div>

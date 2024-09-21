@@ -160,7 +160,7 @@ function StudentManagementPage() {
               searchNameValue={searchNameValue}
             />
           </div>
-          <div className=" w-[360px] mx-auto my-1">
+          <div className="w-[360px] mx-auto my-1">
             <Pagenation
               page={page}
               setPage={setPage}

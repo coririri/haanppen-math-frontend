@@ -7,6 +7,8 @@ import {
 } from 'react-icons/ai';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
+import { putLessonVideos, addAttachmentVideo } from '../../apis/lesson';
+import VideoUploadingModal from '../modals/VideoUploadingModal';
 
 function VideoItem({
   videoData,
@@ -14,81 +16,218 @@ function VideoItem({
   setVideoData,
   vedioIndex,
   lastVideoIndex,
+  memoId,
+  startDate,
+  selectedClassindex,
 }) {
-  const [isVideoSelected] = useState(video.title !== '');
+  console.log(videoData);
   const navigate = useNavigate();
+  const [isVideoSelected] = useState(video.title !== '');
+  const [uploadingInfo, setUploadingInfo] = useState({
+    current: 0,
+    end: 0,
+  });
+  const [isVideoUploadingModalOpen, setIsVideoUploadingModalOpen] =
+    useState(false);
 
-  const upToOrder = () => {
+  const upToOrder = async () => {
     if (vedioIndex === 0) return;
 
-    setVideoData((prev) => {
-      const copiedVideoData = prev.map((tempVideo) => ({
+    try {
+      const copiedVideoDataToServer = videoData.map((tempVideo) => ({
         ...tempVideo,
-        attachments: [...tempVideo.attachments],
+        attachmentViews: [...tempVideo.attachmentViews],
       }));
 
-      const tempVideo = {
-        ...copiedVideoData[vedioIndex],
-        attachments: copiedVideoData[vedioIndex].attachments,
+      const tempVideoToServer = {
+        ...copiedVideoDataToServer[vedioIndex],
+        attachmentViews: copiedVideoDataToServer[vedioIndex].attachmentViews,
       };
-      copiedVideoData[vedioIndex] = copiedVideoData[vedioIndex - 1];
-      copiedVideoData[vedioIndex - 1] = tempVideo;
+      copiedVideoDataToServer[vedioIndex] =
+        copiedVideoDataToServer[vedioIndex - 1];
+      copiedVideoDataToServer[vedioIndex - 1] = tempVideoToServer;
 
-      return copiedVideoData;
-    });
+      await putLessonVideos(memoId, copiedVideoDataToServer);
+
+      setVideoData((prev) => {
+        const copiedVideoData = prev.map((tempVideo) => ({
+          ...tempVideo,
+          attachmentViews: [...tempVideo.attachmentViews],
+        }));
+
+        const tempVideo = {
+          ...copiedVideoData[vedioIndex],
+          attachmentViews: copiedVideoData[vedioIndex].attachmentViews,
+        };
+        copiedVideoData[vedioIndex] = copiedVideoData[vedioIndex - 1];
+        copiedVideoData[vedioIndex - 1] = tempVideo;
+
+        return copiedVideoData;
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const downToOrder = () => {
+  const downToOrder = async () => {
     if (vedioIndex === lastVideoIndex - 1) return;
     if (videoData[lastVideoIndex - 1].title === '') return;
-    setVideoData((prev) => {
-      const copiedVideoData = prev.map((tempVideo) => ({
+
+    try {
+      const copiedVideoDataToServer = videoData.map((tempVideo) => ({
         ...tempVideo,
-        attachments: [...tempVideo.attachments],
+        attachmentViews: [...tempVideo.attachmentViews],
       }));
 
-      const tempVideo = {
-        ...copiedVideoData[vedioIndex],
-        attachments: copiedVideoData[vedioIndex].attachments,
+      const tempVideoToServer = {
+        ...copiedVideoDataToServer[vedioIndex],
+        attachmentViews: copiedVideoDataToServer[vedioIndex].attachmentViews,
       };
-      copiedVideoData[vedioIndex] = copiedVideoData[vedioIndex + 1];
-      copiedVideoData[vedioIndex + 1] = tempVideo;
+      copiedVideoDataToServer[vedioIndex] =
+        copiedVideoDataToServer[vedioIndex + 1];
+      copiedVideoDataToServer[vedioIndex + 1] = tempVideoToServer;
 
-      return copiedVideoData;
-    });
+      await putLessonVideos(memoId, copiedVideoDataToServer);
+
+      setVideoData((prev) => {
+        const copiedVideoData = prev.map((tempVideo) => ({
+          ...tempVideo,
+          attachmentViews: [...tempVideo.attachmentViews],
+        }));
+
+        const tempVideo = {
+          ...copiedVideoData[vedioIndex],
+          attachmentViews: copiedVideoData[vedioIndex].attachmentViews,
+        };
+        copiedVideoData[vedioIndex] = copiedVideoData[vedioIndex + 1];
+        copiedVideoData[vedioIndex + 1] = tempVideo;
+
+        return copiedVideoData;
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const deleteVideo = () => {
-    setVideoData((prev) => {
-      const copiedVideoData = prev.map((tempVideo) => ({
+  const deleteVideo = async () => {
+    try {
+      const copiedVideoDataToServer = videoData.map((tempVideo) => ({
         ...tempVideo,
-        attachments: [...tempVideo.attachments],
+        attachmentViews: [...tempVideo.attachmentViews],
       }));
-      copiedVideoData.splice(vedioIndex, 1);
-      return copiedVideoData;
-    });
+      copiedVideoDataToServer.splice(vedioIndex, 1);
+
+      await putLessonVideos(memoId, copiedVideoDataToServer);
+
+      setVideoData((prev) => {
+        const copiedVideoData = prev.map((tempVideo) => ({
+          ...tempVideo,
+          attachmentViews: [...tempVideo.attachmentViews],
+        }));
+        copiedVideoData.splice(vedioIndex, 1);
+        return copiedVideoData;
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const uploadAttachmentFile = (e, attachmentIndex) => {
-    const file = e.target.files[0];
-    console.log(attachmentIndex);
-    setVideoData((prev) => {
-      const copiedVideoData = prev.map((tempVideo) => ({
-        ...tempVideo,
-        attachments: [...tempVideo.attachments],
-      }));
-      copiedVideoData[vedioIndex].attachments[attachmentIndex] = file.name;
-      return copiedVideoData;
-    });
+  const uploadAttachmentFile = async (event, attachmentIndex) => {
+    try {
+      const file = event.target.files[0];
+      const chunkSize = 1024 * 1024; // 1MB
+      // 시작
+
+      // total size 계산
+      const totalChunks = Math.ceil(file.size / chunkSize);
+      let currentChunk = 0;
+      setUploadingInfo({
+        current: 0,
+        end: totalChunks,
+      });
+
+      // 동영상 업로드 로딩창 열림
+      setIsVideoUploadingModalOpen(true);
+
+      // chunk file 전송
+      const sendNextChunk = async () => {
+        // chunk size 만큼 데이터 분할
+
+        const start = currentChunk * chunkSize;
+        const end = Math.min(start + chunkSize, file.size);
+
+        const chunk = file.slice(start, end);
+
+        // form data 형식으로 전송
+        const formData = new FormData();
+
+        formData.append('media', chunk);
+
+        try {
+          const response = await addAttachmentVideo(
+            video.memoMediaId,
+            file.name.split('.')[0],
+            file.size,
+            start === 0 ? 0 : start + 1,
+            totalChunks - 1 === currentChunk,
+            file.name.slice(-4),
+            formData,
+          );
+          console.log(response);
+          if (response.status === 201) {
+            setIsVideoUploadingModalOpen(false);
+            alert('파일 전송이 끝났습니다');
+          } else if (response.status === 202) {
+            currentChunk += 1;
+            setUploadingInfo((prev) => ({
+              ...prev,
+              current: currentChunk,
+            }));
+            sendNextChunk();
+          }
+        } catch (e) {
+          if (e.response && e.response.status === 406) {
+            console.log('406 Not Acceptable 에러 발생:', e.response.data);
+            // 서버로부터 chunkIndex를 받아옴
+            const { nextChunkIndex } = e.response.data;
+            console.log(nextChunkIndex);
+            currentChunk = ((nextChunkIndex - 1) / 1024) * 1024;
+            setUploadingInfo((prev) => ({
+              ...prev,
+              current: currentChunk,
+            }));
+            sendNextChunk();
+          } else {
+            console.log('알 수 없는 에러:', e);
+            alert('파일 업로드에 실패 하였습니다.');
+            setIsVideoUploadingModalOpen(false);
+          }
+        }
+      };
+
+      sendNextChunk();
+
+      setVideoData((prev) => {
+        const copiedVideoData = prev.map((tempVideo) => ({
+          ...tempVideo,
+          attachmentViews: [...tempVideo.attachmentViews],
+        }));
+        copiedVideoData[vedioIndex].attachmentViews[attachmentIndex] =
+          file.name;
+        return copiedVideoData;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const addAttachment = () => {
     setVideoData((prev) => {
       const copiedVideoData = prev.map((tempVideo) => ({
         ...tempVideo,
-        attachments: [...tempVideo.attachments],
+        attachmentViews: [...tempVideo.attachmentViews],
       }));
-      copiedVideoData[vedioIndex].attachments.push('');
+      copiedVideoData[vedioIndex].attachmentViews.push('');
       return copiedVideoData;
     });
   };
@@ -98,15 +237,21 @@ function VideoItem({
     setVideoData((prev) => {
       const copiedVideoData = prev.map((tempVideo) => ({
         ...tempVideo,
-        attachments: [...tempVideo.attachments],
+        attachmentViews: [...tempVideo.attachmentViews],
       }));
-      copiedVideoData[vedioIndex].attachments.splice(attachmentIndex, 1);
+      copiedVideoData[vedioIndex].attachmentViews.splice(attachmentIndex, 1);
       return copiedVideoData;
     });
   };
   console.log(video);
   return (
-    <div>
+    <div className="mx-auto">
+      <VideoUploadingModal
+        modalOpen={isVideoUploadingModalOpen}
+        setModalOpen={setIsVideoUploadingModalOpen}
+        uploadingInfo={uploadingInfo}
+      />
+
       <div className="flex justify-between items-center">
         <div className="w-[750px] h-[80px] bg-hpBgGray rounded-3xl my-4 flex items-center">
           {isVideoSelected ? (
@@ -143,14 +288,14 @@ function VideoItem({
                 moreStyle="w-[11rem]"
                 handleClick={() => {
                   navigate(
-                    `/vedio-management?vedioIndex=${vedioIndex}&breadscrum=/`,
+                    `/vedio-management?breadscrum=/&memoId=${memoId}&date=${startDate}&classIndex=${selectedClassindex}`,
                   );
                 }}
               >
                 영상 관리
               </TextButton>
             ) : (
-              video.title
+              video.mediaName.slice(0, -4)
             )}
           </span>
         </div>
@@ -175,7 +320,7 @@ function VideoItem({
         </div>
       </div>
 
-      {video.attachments.map((attachment, attachmentIndex) => {
+      {video.attachmentViews.map((attachment, attachmentIndex) => {
         console.log(attachmentIndex);
         return (
           <div className="w-full flex mb-2" key={attachment}>

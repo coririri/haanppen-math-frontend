@@ -1,12 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { getDay, getYear, getMonth, addDays, subDays } from 'date-fns'; // date-fns에서 유틸리티 함수 임포트
-import { BsFillTriangleFill } from 'react-icons/bs';
+import { getDay, getYear, getMonth } from 'date-fns'; // date-fns에서 유틸리티 함수 임포트
 import { ko } from 'date-fns/locale'; // 한국어 로케일을 가져옵니다.
 import DatePicker from 'react-datepicker';
+import { LiaCalendarCheck } from 'react-icons/lia';
+import { useNavigate } from 'react-router-dom';
+import dateTimeToDate from '../../utils/dateTimeToDate';
 
-function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
+function DateSelector({
+  startDate,
+  setStartDate,
+  courseList,
+  selectedClassindex,
+}) {
   const [currentDate, setCurrentDate] = useState(startDate);
+  const navigate = useNavigate();
 
   const calendar = useRef(null);
 
@@ -21,9 +29,10 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
 
   const closeDatePicker = () => {
     setStartDate(currentDate);
-    searchParams.set('date', currentDate);
-    setSearchParams(searchParams);
     calendar.current.setOpen(false);
+    navigate(
+      `/lesson?date=${dateTimeToDate(currentDate)}&courseId=${courseList[selectedClassindex].courseId}&courseName=${courseList[selectedClassindex].courseName}`,
+    );
   };
 
   const MONTHS = [
@@ -54,26 +63,22 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
 
   return (
     <div className="relative">
+      {/* 날짜 선택 버튼 */}
       <button
-        className="absolute top-3 left-4 z-10"
         type="button"
-        aria-label="왼쪽 넘기기"
-        onClick={() => {
-          setStartDate((prevDate) => subDays(prevDate, 1)); // 현재 날짜에서 하루를 빼서 업데이트
-          searchParams.set('date', subDays(startDate, 1));
-          setSearchParams(searchParams);
-          setCurrentDate((prevDate) => subDays(prevDate, 1));
-        }}
+        onClick={openDatePicker}
+        className="bg-hpBlue px-4 py-1 rounded-lg flex items-center justify-center"
       >
-        <BsFillTriangleFill
-          className="origin-center rotate-[270deg]"
-          size="20px"
-          color="#BCBCBC"
+        <LiaCalendarCheck
+          size="1.5rem"
+          className="mb-[2px] mr-1"
+          color="white"
         />
+        <span className="font-bold text-lg ml-1 text-white">날짜 선택</span>
       </button>
       <DatePicker
         withPortal
-        className="date date-record"
+        className="date date-record hidden"
         locale={ko}
         selected={startDate}
         dateFormat="yyyy.MM.dd(eee)"
@@ -128,25 +133,8 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
           </button>
         </div>
       </DatePicker>
-      <button
-        className="absolute top-3 left-[12.5rem] z-20"
-        type="button"
-        aria-label="왼쪽 넘기기"
-        onClick={() => {
-          setStartDate((prevDate) => addDays(prevDate, 1)); // 현재 날짜에서 하루를 더해서 업데이트
-          searchParams.set('date', addDays(startDate, 1));
-          setSearchParams(searchParams);
-          setCurrentDate((prevDate) => addDays(prevDate, 1));
-        }}
-      >
-        <BsFillTriangleFill
-          className="origin-center rotate-[90deg]"
-          size="20px"
-          color="#BCBCBC"
-        />
-      </button>
     </div>
   );
 }
 
-export default Canlendar;
+export default DateSelector;

@@ -4,7 +4,7 @@ import { AiOutlineRight } from 'react-icons/ai';
 import TextButton from '../atoms/TextButton';
 import Folder from '../molecules/Folder';
 import VideoFile from '../molecules/ViedoFile';
-// import FileDetailTab from '../molecules/FileDetailTab';
+import FileDetailTab from '../molecules/FileDetailTab';
 import FolderDetailTab from '../molecules/FolderDetailTab';
 import getDirectory, { deleteDirectory } from '../../apis/directory';
 import CreateFolderModal from '../modals/CreateFolderModal';
@@ -89,10 +89,12 @@ function VedioManagementPage() {
     // chunk file 전송
     const sendNextChunk = async () => {
       // chunk size 만큼 데이터 분할
+      console.log(file.name);
       const start = currentChunk * chunkSize;
       const end = Math.min(start + chunkSize, file.size);
 
       const chunk = file.slice(start, end);
+      console.log(chunk);
       // form data 형식으로 전송
       const formData = new FormData();
       const info = {
@@ -101,6 +103,7 @@ function VedioManagementPage() {
         totalChunkCount: file.size,
         currChunkIndex: start === 0 ? 0 : start + 1,
         isLast: totalChunks - 1 === currentChunk,
+        extension: '.mp4',
       };
       formData.append('media', chunk);
       formData.append(
@@ -288,6 +291,7 @@ function VedioManagementPage() {
                   name={data.fileName}
                   setCheckedDirectoryArr={setCheckedDirectoryArr}
                   index={index}
+                  path={data.path}
                 />
               );
             })}
@@ -310,7 +314,7 @@ function VedioManagementPage() {
                   setDirectoryDatas={setDirectoryDatas}
                 />
               )}
-            {/* {checkedDirectoryArr.length !== 0 &&
+            {checkedDirectoryArr.length !== 0 &&
               directoryDatas[
                 checkedDirectoryArr[checkedDirectoryArr.length - 1]
               ].isDir === false && (
@@ -321,7 +325,7 @@ function VedioManagementPage() {
                     ]
                   }
                 />
-              )} */}
+              )}
           </div>
         </div>
       </div>

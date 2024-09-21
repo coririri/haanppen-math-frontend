@@ -51,7 +51,7 @@ function CourseModificationModal({
   selectedIndex,
 }) {
   const [teacherList, setTeacherList] = useState(['선택 없음']);
-  const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
+  const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
   const [courseName, setCourseName] = useState('');
   const [entireStudentsNum, setEntireStudentsNum] = useState(0);
   const [differentStudentsNum, setDifferentStudentsNum] = useState(0);
@@ -293,17 +293,12 @@ function CourseModificationModal({
 
     setDifferntCourseStudents(newDifferntStudents);
     setDifferentStudentsNum(tempDifferentStudentsNum);
-    getMyCourse(
-      courseId,
-      teacherList,
-      setSelectedTeacherindexIndex,
-      setCourseName,
-    );
+    getMyCourse(courseId, teacherList, setSelectedTeacherindex, setCourseName);
   }, [entireStudents, entireStudentsNum, myCourseStudents]);
 
   const resetModalState = () => {
     console.log(teacherList);
-    setSelectedTeacherindexIndex(0);
+    setSelectedTeacherindex(0);
     setCourseName('');
     setMyStudentsNum(0);
     setMyCourseStudents([
@@ -366,6 +361,7 @@ function CourseModificationModal({
     }
   };
 
+  console.log(teacherList);
   return (
     <ReactModal
       isOpen={enrollmentModalOpen}
@@ -395,9 +391,9 @@ function CourseModificationModal({
           </div>
           <div className="ml-8">
             <TeacherCarousel
-              teacherList={teacherList}
-              selectedTeacherindex={selectedTeacherindex}
-              setSelectedTeacherindexIndex={setSelectedTeacherindexIndex}
+              dataList={teacherList}
+              selectedDataindex={selectedTeacherindex}
+              setSelectedDataindex={setSelectedTeacherindex}
             />
           </div>
         </div>

@@ -1,12 +1,18 @@
-import { FcFolder } from 'react-icons/fc';
+import { FcVideoFile } from 'react-icons/fc';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import TextButton from '../atoms/TextButton';
+import { dateTimeToDateAndTimes } from '../../utils/dateTimeToDate';
+import { addLessonVideo } from '../../apis/lesson';
 
-function FileDetailTab({ defaultFolderDetail }) {
+function FileDetailTab({ fileData }) {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  console.log(fileData);
   return (
     <div className="w-full">
       <div className="w-full flex mt-8">
         <span className="block w-[200px] font-bold mx-4 pl-4 leading-[30px] text-xl">
-          {defaultFolderDetail.name}
+          {fileData.fileName.slice(0, -4)}.mp4
         </span>
       </div>
       <div className="pl-8">
@@ -16,7 +22,7 @@ function FileDetailTab({ defaultFolderDetail }) {
           </span>
         </div>
         <div className="mt-4 ml-4 flex items-center justify-center w-[150px] h-[150px] border-solid border-[1px] border-[#C0C0C0] rounded-3xl outline-none bg-hpLightBlue/10 ">
-          <FcFolder size="6rem" />
+          <FcVideoFile size="6rem" />
         </div>
         <div className="flex mt-16">
           <span className="block w-[100px] text-[#BFBFBF]">종류</span>
@@ -24,18 +30,34 @@ function FileDetailTab({ defaultFolderDetail }) {
         </div>
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">크기</span>
-          <span className="font-bold">{defaultFolderDetail.size}GB</span>
+          <span className="font-bold">10GB</span>
         </div>
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">올린 날짜</span>
-          <span className="font-bold">{defaultFolderDetail.created_date}</span>
+          <span className="font-bold">
+            {' '}
+            {dateTimeToDateAndTimes(fileData.createdTime)}
+          </span>
         </div>
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">수정 날짜</span>
-          <span className="font-bold">{defaultFolderDetail.modified_date}</span>
+          <span className="font-bold">2030-08-20 08:02:04</span>
         </div>
         <div className="w-[9rem] mx-auto mt-24 mb-4">
-          <TextButton color="gray" moreStyle="w-[9rem]" handleClick={() => {}}>
+          <TextButton
+            color="gray"
+            moreStyle="w-[9rem]"
+            handleClick={async () => {
+              try {
+                await addLessonVideo(searchParams.get('memoId'), fileData.path);
+                navigate(
+                  `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}`,
+                );
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+          >
             영상 선택
           </TextButton>
         </div>

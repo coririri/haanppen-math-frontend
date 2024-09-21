@@ -206,6 +206,7 @@ function CourseEnrollmentModal({
     const fetchData = async () => {
       try {
         const { data } = await getAllTeachers();
+        console.log(data);
         setTeacherList([...data]);
         getAllStudents(setEntireStudents, setEntireStudentsNum);
       } catch (error) {
@@ -282,6 +283,9 @@ function CourseEnrollmentModal({
       getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
     }
   };
+
+  console.log(teacherList);
+  console.log(selectedTeacherindex);
 
   return (
     <ReactModal
@@ -383,7 +387,7 @@ function CourseEnrollmentModal({
                 }
                 await enrollCourse(
                   courseName,
-                  teacherList[selectedTeacherindex].id,
+                  teacherList[selectedTeacherindex - 1].id,
                   newCourseStudents,
                 );
 
