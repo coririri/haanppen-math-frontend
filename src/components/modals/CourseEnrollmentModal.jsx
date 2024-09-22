@@ -316,8 +316,10 @@ function CourseEnrollmentModal({
           <div className="ml-8">
             <Carousel
               dataList={[
-                '선택 없음',
-                ...teacherList.map((teacher) => teacher.name),
+                {
+                  name: '선택 없음',
+                },
+                ...teacherList,
               ]}
               selectedDataindex={selectedTeacherindex}
               setSelectedDataindex={setSelectedTeacherindexIndex}

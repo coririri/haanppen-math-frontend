@@ -103,7 +103,7 @@ function VedioManagementPage() {
         totalChunkCount: file.size,
         currChunkIndex: start === 0 ? 0 : start + 1,
         isLast: totalChunks - 1 === currentChunk,
-        extension: '.txt',
+        extension: '.mp4',
       };
       formData.append('media', chunk);
       formData.append(

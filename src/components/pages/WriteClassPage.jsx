@@ -53,6 +53,7 @@ function WriteClassPage() {
           title: '',
           content: '',
         });
+        setVideoData([]);
       }
     };
     if (startDate && courseList[selectedClassindex]?.courseId) {

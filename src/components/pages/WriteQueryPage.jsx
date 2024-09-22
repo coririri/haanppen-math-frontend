@@ -59,10 +59,7 @@ function WriteQueryPage() {
     <div className="w-full">
       <div className="w-[233px] mx-auto mt-6">
         <Carousel
-          dataList={[
-            '지정 안함',
-            ...teacherList.map((teacher) => teacher.name),
-          ]}
+          dataList={[{ name: '지정 안함' }, ...teacherList]}
           selectedDataindex={selectedTeacherindex}
           setSelectedDataindex={setSelectedTeacherindex}
         />

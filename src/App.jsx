@@ -11,7 +11,6 @@ import ManagementPage from './components/pages/ManagementPage';
 import UserInformationPage from './components/pages/UserInformationPage';
 import QueryBoardPage from './components/pages/QueryBoardPage';
 import QuestionDetailPage from './components/pages/QuestionDetailPage';
-import Test from './components/pages/Test';
 import WriteClassPage from './components/pages/WriteClassPage';
 import 'react-datepicker/dist/react-datepicker.css';
 import VedioManagementPage from './components/pages/VedioManagementPage';
@@ -41,7 +40,6 @@ function App() {
           <Route path="*" element={<NonFoundClientError />} />
           {/* 단독 레이아웃 */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/test" element={<Test />} />
           <Route
             path="/nonfound-pageserver"
             element={<NonFoundPageServerError />}

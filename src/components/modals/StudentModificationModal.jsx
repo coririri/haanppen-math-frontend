@@ -131,8 +131,7 @@ function StudentModificationModal({
           <div className="flex items-center justify-between w-[140px] mx-auto mr-4">
             <TextButton
               color="white"
-              shape="square"
-              size="small"
+              moreStyle="w-[40px]"
               isClick={choosenGradeIndex[0]}
               handleClick={() => {
                 setChoosenGradeIndex([true, false, false]);
@@ -142,8 +141,7 @@ function StudentModificationModal({
             </TextButton>
             <TextButton
               color="white"
-              shape="square"
-              size="small"
+              moreStyle="w-[40px]"
               isClick={choosenGradeIndex[1]}
               handleClick={() => {
                 setChoosenGradeIndex([false, true, false]);
@@ -153,8 +151,7 @@ function StudentModificationModal({
             </TextButton>
             <TextButton
               color="white"
-              shape="square"
-              size="small"
+              moreStyle="w-[40px]"
               isClick={choosenGradeIndex[2]}
               handleClick={() => {
                 setChoosenGradeIndex([false, false, true]);
