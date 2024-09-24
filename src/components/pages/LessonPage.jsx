@@ -44,8 +44,6 @@ function LessonPage() {
       );
   }, [selectedVideoIndex, videoData]);
 
-  console.log(videoUrl);
-
   return (
     <div>
       <div className="flex justify-center items-center my-4">

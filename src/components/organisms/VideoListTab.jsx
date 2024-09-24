@@ -2,17 +2,6 @@ import React, { useState } from 'react';
 import { AiOutlineVideoCameraAdd } from 'react-icons/ai';
 import VideoItem from '../molecules/VideoItem';
 
-// const defaultVideoData = [
-//   {
-//     title: '수학(하) 로그와 실생활의 관계를 이용한 인수분해 정리 1강',
-//     attachments: [],
-//   },
-//   {
-//     title: '수학(상) 인수분해 정리 2강',
-//     attachments: [],
-//   },
-// ];
-
 function VideoListTab({
   videoData,
   setVideoData,

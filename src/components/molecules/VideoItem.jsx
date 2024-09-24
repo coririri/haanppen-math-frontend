@@ -7,7 +7,11 @@ import {
 } from 'react-icons/ai';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
-import { putLessonVideos, addAttachmentVideo } from '../../apis/lesson';
+import {
+  putLessonVideos,
+  addAttachmentVideo,
+  deleteLessonVideo,
+} from '../../apis/lesson';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 
 function VideoItem({
@@ -111,6 +115,7 @@ function VideoItem({
 
   const deleteVideo = async () => {
     try {
+      await deleteLessonVideo(memoId, video.memoMediaId);
       const copiedVideoDataToServer = videoData.map((tempVideo) => ({
         ...tempVideo,
         attachmentViews: [...tempVideo.attachmentViews],
@@ -243,7 +248,7 @@ function VideoItem({
       return copiedVideoData;
     });
   };
-  console.log(video);
+
   return (
     <div className="mx-auto">
       <VideoUploadingModal

@@ -40,12 +40,14 @@ export const addLessonVideo = async (memoId, mediaSource) =>
 export const putLessonVideos = async (memoId, videoDatas) =>
   instance.put(`/api/course/memo/media`, {
     memoId,
-    mediaRegisterRequests: videoDatas.map((videoData) => ({
-      isNew: false,
+    sequenceUpdateRequests: videoDatas.map((videoData, index) => ({
       memoMediaId: videoData.memoMediaId,
-      mediaSource: videoData.mediaSource,
+      sequence: index,
     })),
   });
+
+export const deleteLessonVideo = async (memoId, memoMediaId) =>
+  instance.delete(`/api/course/memo/${memoId}/media/${memoMediaId}`);
 
 export const getLessonsByClassId = (courseId, sortIndex, page) => {
   if (Number(sortIndex) === 0)
