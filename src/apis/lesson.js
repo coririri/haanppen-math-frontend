@@ -40,9 +40,9 @@ export const addLessonVideo = async (memoId, mediaSource) =>
 export const putLessonVideos = async (memoId, videoDatas) =>
   instance.put(`/api/course/memo/media`, {
     memoId,
-    sequenceUpdateRequests: videoDatas.map((videoData, index) => ({
+    sequenceUpdateRequests: videoDatas.map((videoData) => ({
       memoMediaId: videoData.memoMediaId,
-      sequence: index,
+      sequence: videoData.mediaSequence,
     })),
   });
 
@@ -77,3 +77,8 @@ export const addAttachmentVideo = async (
       },
     },
   );
+
+export const getAttachmentFile = (sourceId) =>
+  instance.get(`/api/file/download?fileSrc=${sourceId}`, {
+    timeout: 30000, // 30초 (30,000 밀리초)
+  });

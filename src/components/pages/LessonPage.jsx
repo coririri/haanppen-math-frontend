@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getLessonByDateAndCourse } from '../../apis/lesson';
+import { getAttachmentFile, getLessonByDateAndCourse } from '../../apis/lesson';
+import TextButton from '../atoms/TextButton';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -43,6 +44,25 @@ function LessonPage() {
         `${backendUrl}api/media/stream?resourceId=${videoData[selectedVideoIndex].mediaSource}`,
       );
   }, [selectedVideoIndex, videoData]);
+
+  const downloadAttachmentFile = async (attachmentData) => {
+    try {
+      const response = await getAttachmentFile(attachmentData.mediaSource);
+      console.log(response.data);
+
+      // 파일 다운로드 처리
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+
+      link.setAttribute('download', attachmentData.fileName); // 다운로드 파일 이름 설정
+      document.body.appendChild(link);
+      link.click(); // 다운로드 트리거
+      document.body.removeChild(link); // 트리거 후 링크 제거
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div>
@@ -97,6 +117,29 @@ function LessonPage() {
                 >
                   <span className="ml-4 font-bold">다음 강의</span>
                 </button>
+              </div>
+              <div className="mt-4">
+                {videoData?.[selectedVideoIndex].attachmentViews.map(
+                  (attachmentData) => (
+                    <div key={attachmentData.attachmentId} className="flex">
+                      <div className="w-[14rem] border-solid border-[1.3px] border-hpGray rounded-lg text-left pl-2 mr-2">
+                        <span className="font-bold text-md">
+                          {attachmentData.fileName}
+                        </span>
+                      </div>
+                      <TextButton
+                        color="gray"
+                        moreStyle="w-[8rem] mr-1 ml-2"
+                        textMoreStyle="text-sm"
+                        handleClick={() => {
+                          downloadAttachmentFile(attachmentData);
+                        }}
+                      >
+                        다운로드
+                      </TextButton>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
           )}

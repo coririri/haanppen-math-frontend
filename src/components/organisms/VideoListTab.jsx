@@ -18,19 +18,21 @@ function VideoListTab({
         <AiOutlineVideoCameraAdd size="2rem" className="mr-2" />
         <span className="font-bold text-2xl">수업 영상 목록</span>
       </div>
-      {videoData.map((video, vedioIndex) => (
-        <VideoItem
-          key={video.memoMediaId}
-          videoData={videoData}
-          video={video}
-          setVideoData={setVideoData}
-          vedioIndex={vedioIndex}
-          lastVideoIndex={videoData.length}
-          memoId={memoId}
-          startDate={startDate}
-          selectedClassindex={selectedClassindex}
-        />
-      ))}
+      {videoData
+        .sort((a, b) => a.mediaSequence - b.mediaSequence)
+        .map((video, vedioIndex) => (
+          <VideoItem
+            key={video.memoMediaId}
+            videoData={videoData}
+            video={video}
+            setVideoData={setVideoData}
+            vedioIndex={vedioIndex}
+            lastVideoIndex={videoData.length}
+            memoId={memoId}
+            startDate={startDate}
+            selectedClassindex={selectedClassindex}
+          />
+        ))}
       {!nowPlusVedio && (
         <button
           type="button"

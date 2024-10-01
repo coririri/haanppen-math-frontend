@@ -59,7 +59,7 @@ function WriteClassPage() {
     if (startDate && courseList[selectedClassindex]?.courseId) {
       fetchData();
     }
-  }, [startDate, courseList[selectedClassindex]?.courseId]);
+  }, [startDate, courseList[selectedClassindex]?.courseId, isCreated]);
 
   useEffect(() => {
     setSelectedClassindex(searchParams.get('classIndex'));

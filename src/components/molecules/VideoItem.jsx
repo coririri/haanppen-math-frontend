@@ -47,9 +47,10 @@ function VideoItem({
         ...copiedVideoDataToServer[vedioIndex],
         attachmentViews: copiedVideoDataToServer[vedioIndex].attachmentViews,
       };
-      copiedVideoDataToServer[vedioIndex] =
-        copiedVideoDataToServer[vedioIndex - 1];
-      copiedVideoDataToServer[vedioIndex - 1] = tempVideoToServer;
+      copiedVideoDataToServer[vedioIndex].mediaSequence =
+        copiedVideoDataToServer[vedioIndex - 1].mediaSequence;
+      copiedVideoDataToServer[vedioIndex - 1].mediaSequence =
+        tempVideoToServer.mediaSequence;
 
       await putLessonVideos(memoId, copiedVideoDataToServer);
 
@@ -63,8 +64,9 @@ function VideoItem({
           ...copiedVideoData[vedioIndex],
           attachmentViews: copiedVideoData[vedioIndex].attachmentViews,
         };
-        copiedVideoData[vedioIndex] = copiedVideoData[vedioIndex - 1];
-        copiedVideoData[vedioIndex - 1] = tempVideo;
+        copiedVideoData[vedioIndex].mediaSequence =
+          copiedVideoData[vedioIndex - 1].mediaSequence;
+        copiedVideoData[vedioIndex - 1].mediaSequence = tempVideo.mediaSequence;
 
         return copiedVideoData;
       });
@@ -87,9 +89,10 @@ function VideoItem({
         ...copiedVideoDataToServer[vedioIndex],
         attachmentViews: copiedVideoDataToServer[vedioIndex].attachmentViews,
       };
-      copiedVideoDataToServer[vedioIndex] =
-        copiedVideoDataToServer[vedioIndex + 1];
-      copiedVideoDataToServer[vedioIndex + 1] = tempVideoToServer;
+      copiedVideoDataToServer[vedioIndex].mediaSequence =
+        copiedVideoDataToServer[vedioIndex + 1].mediaSequence;
+      copiedVideoDataToServer[vedioIndex + 1].mediaSequence =
+        tempVideoToServer.mediaSequence;
 
       await putLessonVideos(memoId, copiedVideoDataToServer);
 
@@ -103,8 +106,9 @@ function VideoItem({
           ...copiedVideoData[vedioIndex],
           attachmentViews: copiedVideoData[vedioIndex].attachmentViews,
         };
-        copiedVideoData[vedioIndex] = copiedVideoData[vedioIndex + 1];
-        copiedVideoData[vedioIndex + 1] = tempVideo;
+        copiedVideoData[vedioIndex].mediaSequence =
+          copiedVideoData[vedioIndex + 1].mediaSequence;
+        copiedVideoData[vedioIndex + 1].mediaSequence = tempVideo.mediaSequence;
 
         return copiedVideoData;
       });
@@ -138,92 +142,87 @@ function VideoItem({
   };
 
   const uploadAttachmentFile = async (event, attachmentIndex) => {
-    try {
-      const file = event.target.files[0];
-      const chunkSize = 1024 * 1024; // 1MB
-      // 시작
+    const file = event.target.files[0];
+    const chunkSize = 1024 * 1024; // 1MB
+    // 시작
 
-      // total size 계산
-      const totalChunks = Math.ceil(file.size / chunkSize);
-      let currentChunk = 0;
-      setUploadingInfo({
-        current: 0,
-        end: totalChunks,
-      });
+    // total size 계산
+    const totalChunks = Math.ceil(file.size / chunkSize);
+    let currentChunk = 0;
+    setUploadingInfo({
+      current: 0,
+      end: totalChunks,
+    });
 
-      // 동영상 업로드 로딩창 열림
-      setIsVideoUploadingModalOpen(true);
+    // 동영상 업로드 로딩창 열림
+    setIsVideoUploadingModalOpen(true);
 
-      // chunk file 전송
-      const sendNextChunk = async () => {
-        // chunk size 만큼 데이터 분할
+    // chunk file 전송
+    const sendNextChunk = async () => {
+      // chunk size 만큼 데이터 분할
 
-        const start = currentChunk * chunkSize;
-        const end = Math.min(start + chunkSize, file.size);
+      const start = currentChunk * chunkSize;
+      const end = Math.min(start + chunkSize, file.size);
 
-        const chunk = file.slice(start, end);
+      const chunk = file.slice(start, end);
 
-        // form data 형식으로 전송
-        const formData = new FormData();
+      // form data 형식으로 전송
+      const formData = new FormData();
 
-        formData.append('media', chunk);
+      formData.append('chunkedFile', chunk);
 
-        try {
-          const response = await addAttachmentVideo(
-            video.memoMediaId,
-            file.name.split('.')[0],
-            file.size,
-            start === 0 ? 0 : start + 1,
-            totalChunks - 1 === currentChunk,
-            file.name.slice(-4),
-            formData,
-          );
-          console.log(response);
-          if (response.status === 201) {
-            setIsVideoUploadingModalOpen(false);
-            alert('파일 전송이 끝났습니다');
-          } else if (response.status === 202) {
-            currentChunk += 1;
-            setUploadingInfo((prev) => ({
-              ...prev,
-              current: currentChunk,
+      try {
+        const response = await addAttachmentVideo(
+          video.memoMediaId,
+          file.name.split('.')[0],
+          file.size,
+          start === 0 ? 0 : start + 1,
+          totalChunks - 1 === currentChunk,
+          file.name.slice(-4),
+          formData,
+        );
+        console.log(response);
+        if (response.status === 201) {
+          setIsVideoUploadingModalOpen(false);
+          alert('파일 전송이 끝났습니다');
+          setVideoData((prev) => {
+            const copiedVideoData = prev.map((tempVideo) => ({
+              ...tempVideo,
+              attachmentViews: [...tempVideo.attachmentViews],
             }));
-            sendNextChunk();
-          }
-        } catch (e) {
-          if (e.response && e.response.status === 406) {
-            console.log('406 Not Acceptable 에러 발생:', e.response.data);
-            // 서버로부터 chunkIndex를 받아옴
-            const { nextChunkIndex } = e.response.data;
-            console.log(nextChunkIndex);
-            currentChunk = ((nextChunkIndex - 1) / 1024) * 1024;
-            setUploadingInfo((prev) => ({
-              ...prev,
-              current: currentChunk,
-            }));
-            sendNextChunk();
-          } else {
-            console.log('알 수 없는 에러:', e);
-            alert('파일 업로드에 실패 하였습니다.');
-            setIsVideoUploadingModalOpen(false);
-          }
+            copiedVideoData[vedioIndex].attachmentViews[attachmentIndex] =
+              file.name;
+            return copiedVideoData;
+          });
+        } else if (response.status === 202) {
+          currentChunk += 1;
+          setUploadingInfo((prev) => ({
+            ...prev,
+            current: currentChunk,
+          }));
+          sendNextChunk();
         }
-      };
+      } catch (e) {
+        if (e.response && e.response.status === 406) {
+          console.log('406 Not Acceptable 에러 발생:', e.response.data);
+          // 서버로부터 chunkIndex를 받아옴
+          const { nextChunkIndex } = e.response.data;
+          console.log(nextChunkIndex);
+          currentChunk = ((nextChunkIndex - 1) / 1024) * 1024;
+          setUploadingInfo((prev) => ({
+            ...prev,
+            current: currentChunk,
+          }));
+          sendNextChunk();
+        } else {
+          console.log('알 수 없는 에러:', e);
+          alert('파일 업로드에 실패 하였습니다.');
+          setIsVideoUploadingModalOpen(false);
+        }
+      }
+    };
 
-      sendNextChunk();
-
-      setVideoData((prev) => {
-        const copiedVideoData = prev.map((tempVideo) => ({
-          ...tempVideo,
-          attachmentViews: [...tempVideo.attachmentViews],
-        }));
-        copiedVideoData[vedioIndex].attachmentViews[attachmentIndex] =
-          file.name;
-        return copiedVideoData;
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    sendNextChunk();
   };
 
   const addAttachment = () => {
@@ -326,9 +325,9 @@ function VideoItem({
       </div>
 
       {video.attachmentViews.map((attachment, attachmentIndex) => {
-        console.log(attachmentIndex);
+        console.log(attachment);
         return (
-          <div className="w-full flex mb-2" key={attachment}>
+          <div className="w-full flex mb-2" key={attachment.attachmentId}>
             <label
               htmlFor={`uploadedFile${vedioIndex}${attachmentIndex}`}
               aria-label="파일 수정"
@@ -356,7 +355,7 @@ function VideoItem({
               삭제 하기
             </TextButton>
             <span className="border-solid border-[1.3px] rounded-xl border-black w-[450px] text-lg text-center font-bold">
-              {attachment}
+              {attachment.fileName }
             </span>
           </div>
         );
