@@ -80,5 +80,6 @@ export const addAttachmentVideo = async (
 
 export const getAttachmentFile = (sourceId) =>
   instance.get(`/api/file/download?fileSrc=${sourceId}`, {
+    responseType: 'blob', // 파일 데이터를 Blob 형태로 받기
     timeout: 30000, // 30초 (30,000 밀리초)
   });
