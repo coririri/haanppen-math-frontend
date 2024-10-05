@@ -11,6 +11,7 @@ function SlideBar({
   isStudent,
 }) {
   const [leftPosition, setLeftPosition] = useState('left-[130px]');
+  const [twoLeftPosition, setTwoLeftPosition] = useState('left-[20px]');
   const [studentLeftPosition, setStudentLeftPosition] =
     useState('left-[6.5rem]');
 
@@ -57,8 +58,8 @@ function SlideBar({
             isClick={isClickArr[0]}
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
-              setIsClickArr([false, true, false, false]);
-              setLeftPosition('left-2');
+              setIsClickArr([true, false]);
+              setTwoLeftPosition('left-[20px]');
             }}
           >
             {firstText}
@@ -69,15 +70,15 @@ function SlideBar({
             isClick={isClickArr[1]}
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
-              setIsClickArr([false, false, true, false]);
-              setLeftPosition('left-[16.5rem]');
+              setIsClickArr([false, true]);
+              setTwoLeftPosition('left-[220px]');
             }}
           >
             {secondText}
           </TextButton>
         </div>
         <div
-          className={`transition-[left] relative h-1 w-36 mt-1 bg-hpBlue ${leftPosition}`}
+          className={`transition-[left] relative h-1 w-36 mt-1 bg-hpBlue ${twoLeftPosition}`}
         />
       </div>
     );

@@ -6,7 +6,7 @@ import imageUrlToSrc from '../../utils/imageUrlToSrc';
 function CommentBox({ comment, isStudent }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
-  console.log(comment);
+
   // URL을 감지하고 <a> 태그로 변환하는 함수
   const convertToLinks = (text) => {
     // URL 정규식

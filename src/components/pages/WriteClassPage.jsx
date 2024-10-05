@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ClassDetailTab from '../organisms/ClassDetailTab';
 import VideoListTab from '../organisms/VideoListTab';
-import ClassDropdownMenu from '../molecules/ClassDropdownMenu';
+import DropdownMenu from '../molecules/DropdownMenu';
 import Canlendar from '../molecules/Canlendar';
 import { getOwnCourses } from '../../apis/course';
 import dateTimeToDate from '../../utils/dateTimeToDate';
@@ -74,7 +74,8 @@ function WriteClassPage() {
       <div>
         <div className="flex justify-center mt-4">
           <div className="relative inline-block">
-            <ClassDropdownMenu
+            <DropdownMenu
+              type="search"
               textArr={courseList.map((course) => course.courseName)}
               selectedIndex={selectedClassindex}
               setSelectedIndex={setSelectedClassindex}

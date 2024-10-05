@@ -55,6 +55,58 @@ function Navigation() {
       </nav>
     );
   }
+  if (role === 'ADMIN')
+    return (
+      <nav className="w-[1440px] mx-auto">
+        <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">
+          <Link
+            to={`/enroll-class?date=${new Date()}&classIndex=${0}`}
+            className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+          >
+            <button
+              type="button"
+              className="text-right w-[160px]"
+              onClick={() => {
+                setClickIndex(1);
+              }}
+            >
+              강의 등록
+            </button>
+          </Link>
+
+          <Link
+            to="/question-board"
+            className="text-xl text-center  hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+          >
+            <button
+              type="button"
+              className="block w-[100px]"
+              onClick={() => {
+                setClickIndex(2);
+              }}
+            >
+              질문 게시판
+            </button>
+          </Link>
+
+          <Link
+            to="/management"
+            className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+          >
+            <button
+              type="button"
+              className="block w-[160px] text-left"
+              onClick={() => {
+                setClickIndex(3);
+              }}
+            >
+              관리
+            </button>
+          </Link>
+        </div>
+      </nav>
+    );
+
   return (
     <nav className="w-[1440px] mx-auto">
       <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">

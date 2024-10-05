@@ -7,4 +7,7 @@ const enrollVideo = (formData) =>
     },
   });
 
+export const deleteVideo = (mediaSrc) =>
+  instance.delete(`/api/directory/media?mediaSrc=${mediaSrc}`);
+
 export default enrollVideo;

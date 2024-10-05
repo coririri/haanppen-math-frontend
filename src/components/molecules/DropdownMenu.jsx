@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
-function ClassDropdownMenu({
+function DropdownMenu({
+  type,
   textArr,
   selectedIndex,
   setSelectedIndex,
@@ -18,8 +19,11 @@ function ClassDropdownMenu({
           className="w-42 h-[40px] flex items-center font-bold text-lg hover:bg-hpLightGray"
           key={text}
           onClick={() => {
-            searchParams.set('classIndex', index);
-            setSearchParams(searchParams);
+            if (type === 'search') {
+              searchParams.set('classIndex', index);
+              setSearchParams(searchParams);
+            }
+
             setSelectedIndex(index);
             setIsOpen((prev) => !prev);
           }}
@@ -37,7 +41,7 @@ function ClassDropdownMenu({
   );
 
   return (
-    <div className="w-40 h-[2.4rem] relative">
+    <div className="w-40 h-[2.4rem] relative mx-auto">
       <button
         type="button"
         className={`w-40 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
@@ -65,4 +69,4 @@ function ClassDropdownMenu({
   );
 }
 
-export default ClassDropdownMenu;
+export default DropdownMenu;

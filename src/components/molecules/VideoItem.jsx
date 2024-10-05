@@ -11,6 +11,7 @@ import {
   putLessonVideos,
   addAttachmentVideo,
   deleteLessonVideo,
+  deleteAttachmentFile,
 } from '../../apis/lesson';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 
@@ -190,8 +191,11 @@ function VideoItem({
               ...tempVideo,
               attachmentViews: [...tempVideo.attachmentViews],
             }));
-            copiedVideoData[vedioIndex].attachmentViews[attachmentIndex] =
-              file.name;
+            copiedVideoData[vedioIndex].attachmentViews[attachmentIndex] = {
+              fileName: file.name,
+            };
+
+            console.log(copiedVideoData);
             return copiedVideoData;
           });
         } else if (response.status === 202) {
@@ -348,14 +352,16 @@ function VideoItem({
             <TextButton
               color="gray"
               moreStyle="w-[130px] mr-4"
-              handleClick={(e) => {
+              handleClick={async (e) => {
+                if (attachment.attachmentId !== undefined)
+                  await deleteAttachmentFile(attachment.attachmentId);
                 deleteAttachment(e, attachmentIndex);
               }}
             >
               삭제 하기
             </TextButton>
             <span className="border-solid border-[1.3px] rounded-xl border-black w-[450px] text-lg text-center font-bold">
-              {attachment.fileName }
+              {attachment.fileName}
             </span>
           </div>
         );

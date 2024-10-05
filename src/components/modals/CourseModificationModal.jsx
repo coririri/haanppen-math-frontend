@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
-import TeacherCarousel from '../molecules/Carousel';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import {
@@ -13,6 +12,7 @@ import {
 } from '../../apis/course';
 import getAllTeachers from '../../apis/teacher';
 import { getAllStudents, getMyCourseStudents } from '../../apis/student';
+import DropdownMenu from '../molecules/DropdownMenu';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -28,7 +28,7 @@ const customModalStyles = {
   },
   content: {
     width: '750px',
-    height: '750px',
+    height: '800px',
     zIndex: '150',
     position: 'absolute',
     top: '50%',
@@ -390,10 +390,10 @@ function CourseModificationModal({
             />
           </div>
           <div className="ml-8">
-            <TeacherCarousel
-              dataList={teacherList}
-              selectedDataindex={selectedTeacherindex}
-              setSelectedDataindex={setSelectedTeacherindex}
+            <DropdownMenu
+              textArr={[...teacherList.map((teacher) => teacher.name)]}
+              selectedIndex={selectedTeacherindex}
+              setSelectedIndex={setSelectedTeacherindex}
             />
           </div>
         </div>

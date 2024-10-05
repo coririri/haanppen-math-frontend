@@ -8,7 +8,7 @@ import FileDetailTab from '../molecules/FileDetailTab';
 import FolderDetailTab from '../molecules/FolderDetailTab';
 import getDirectory, { deleteDirectory } from '../../apis/directory';
 import CreateFolderModal from '../modals/CreateFolderModal';
-import enrollVideo from '../../apis/video';
+import enrollVideo, { deleteVideo } from '../../apis/video';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 // import enrollVideo from '../../apis/video';
 
@@ -222,15 +222,17 @@ function VedioManagementPage() {
             color="gray"
             moreStyle="w-[9rem]  mr-4"
             handleClick={async () => {
-              for (let i = 0; i < checkedDirectoryArr.length; i += 1) {
-                console.log(checkedDirectoryArr[i]);
-                const deletedForName =
-                  directoryDatas[checkedDirectoryArr[i]].fileName;
-                await handleDeleteDirectory(deletedForName);
-              }
-              setCheckedDirectoryArr([]);
-
               try {
+                for (let i = 0; i < checkedDirectoryArr.length; i += 1) {
+                  console.log(checkedDirectoryArr[i]);
+                  if (directoryDatas[checkedDirectoryArr[i]].isDir === true) {
+                    const deletedForName =
+                      directoryDatas[checkedDirectoryArr[i]].fileName;
+                    await handleDeleteDirectory(deletedForName);
+                  }
+                }
+                setCheckedDirectoryArr([]);
+
                 const absolutePath = breadscrumArray.join('/');
                 if (absolutePath !== '/') {
                   const { data } = await getDirectory(absolutePath.slice(1));
@@ -251,7 +253,7 @@ function VedioManagementPage() {
           <label htmlFor="vedioUpload">
             <TextButton
               color="gray"
-              moreStyle="w-[9rem]"
+              moreStyle="w-[9rem] mr-4"
               handleClick={() => {
                 videoRef.current.click();
               }}
@@ -268,6 +270,39 @@ function VedioManagementPage() {
               onChange={handleEnrollVideo}
             />
           </label>
+
+          <TextButton
+            color="gray"
+            moreStyle="w-[9rem]"
+            handleClick={async () => {
+              for (let i = 0; i < checkedDirectoryArr.length; i += 1) {
+                console.log(checkedDirectoryArr[i]);
+                if (directoryDatas[checkedDirectoryArr[i]].isDir === false) {
+                  const deletedPath =
+                    directoryDatas[checkedDirectoryArr[i]].path;
+                  await deleteVideo(deletedPath);
+                }
+              }
+              setCheckedDirectoryArr([]);
+
+              try {
+                const absolutePath = breadscrumArray.join('/');
+                if (absolutePath !== '/') {
+                  const { data } = await getDirectory(absolutePath.slice(1));
+                  console.log(data);
+                  setDirectoryDatas(data);
+                } else {
+                  const { data } = await getDirectory(absolutePath);
+                  console.log(data);
+                  setDirectoryDatas(data);
+                }
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+          >
+            영상 삭제
+          </TextButton>
         </div>
       </div>
       <hr className="w-[1300px] h-[1.3px] mx-auto bg-hpGray mt-3" />

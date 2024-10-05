@@ -25,7 +25,7 @@ function Header() {
             type="button"
             className="ml-4"
             onClick={() => {
-              window.location.href = 'http://localhost:3000';
+              window.location.href = 'https://hanapi.hopto.org/';
             }}
           >
             <img src={logoImages} alt="한편의 수학 로고 이미지" />

@@ -49,7 +49,7 @@ function CourseItem({
         <div className="w-[100px]">
           <TextButton
             color="gray"
-            shape="square"
+            moreStyle="w-[65px]"
             isClick={isClick}
             handleClick={() => {
               setIsClick((prev) => !prev);

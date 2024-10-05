@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import ClassDropdownMenu from '../molecules/ClassDropdownMenu';
 import { getOwnCourses } from '../../apis/course';
 import { getLessonsByClassId } from '../../apis/lesson';
 import DateSelector from '../molecules/DateSelector';
 import CategoryDropdown from '../molecules/CategoryDropdown';
 import LessonList from '../organisms/LessonList';
 import Pagenation from '../organisms/Pagenation';
+import DropdownMenu from '../molecules/DropdownMenu';
 
 // const lessons = [
 //   {
@@ -87,7 +87,8 @@ function MyClassPage() {
       </div>
       <div className="relative flex justify-center mt-[-12px]">
         <div className="mr-4">
-          <ClassDropdownMenu
+          <DropdownMenu
+            type="search"
             textArr={courseList.map((course) => course.courseName)}
             selectedIndex={selectedClassindex}
             setSelectedIndex={setSelectedClassindex}

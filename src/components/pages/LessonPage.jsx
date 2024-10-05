@@ -64,6 +64,28 @@ function LessonPage() {
     }
   };
 
+  // URL을 감지하고 <a> 태그로 변환하는 함수
+  const convertToLinks = (text) => {
+    // URL 정규식
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    // 텍스트를 분할하고 URL이면 <a> 태그로 변환
+    return text.split(urlRegex).map((part) =>
+      urlRegex.test(part) ? (
+        <a
+          href={part}
+          key={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline"
+        >
+          {part}
+        </a>
+      ) : (
+        part
+      ),
+    );
+  };
+
   return (
     <div>
       <div className="flex justify-center items-center my-4">
@@ -84,7 +106,7 @@ function LessonPage() {
             <span className="text-lg font-bold">영상 내용</span>
           </div>
           <div className="px-4 py-2 border-solid border-[1.3px] border-black text-center rounded-lg mx-4 mb-4 mt-1 text-xs font-bold">
-            {lessonData.desc}
+            {convertToLinks(lessonData.desc)}
           </div>
           {videoData.length !== 0 && (
             <div className="flex flex-col justify-center items-center">
@@ -121,7 +143,10 @@ function LessonPage() {
               <div className="mt-4">
                 {videoData?.[selectedVideoIndex].attachmentViews.map(
                   (attachmentData) => (
-                    <div key={attachmentData.attachmentId} className="flex">
+                    <div
+                      key={attachmentData.attachmentId}
+                      className="flex my-2 items-center"
+                    >
                       <div className="w-[14rem] border-solid border-[1.3px] border-hpGray rounded-lg text-left pl-2 mr-2">
                         <span className="font-bold text-md">
                           {attachmentData.fileName}
@@ -129,7 +154,7 @@ function LessonPage() {
                       </div>
                       <TextButton
                         color="gray"
-                        moreStyle="w-[8rem] mr-1 ml-2"
+                        moreStyle="w-[8rem] h-[27px] mr-1 ml-2"
                         textMoreStyle="text-sm"
                         handleClick={() => {
                           downloadAttachmentFile(attachmentData);

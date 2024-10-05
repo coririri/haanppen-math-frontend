@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom';
 import InputImageButton from '../atoms/InputImageButton';
 import IconButton from '../atoms/IconButton';
-import Carousel from '../molecules/Carousel';
+import DropdownMenu from '../molecules/DropdownMenu';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import getAllTeachers from '../../apis/teacher';
@@ -18,13 +18,17 @@ function WriteQueryPage() {
   const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
   const navigate = useNavigate();
 
+  console.log(selectedTeacherindex);
   const finishWrite = () => {
     const formData = new FormData();
     imgFiles.forEach((img) => {
       formData.append('images', img);
     });
     if (selectedTeacherindex !== 0)
-      formData.append('targetMemberId', teacherList[selectedTeacherindex].id);
+      formData.append(
+        'targetMemberId',
+        teacherList[selectedTeacherindex - 1].id,
+      );
     formData.append('content', '없음');
     formData.append('title', '제목 없음');
     writeQuery(formData, navigate);
@@ -53,15 +57,14 @@ function WriteQueryPage() {
       ...imgPreview.slice(index + 1, imgFiles.length),
     ]);
   };
-  console.log(...teacherList);
-  console.log(...teacherList.map((teacher) => teacher.name));
+
   return (
     <div className="w-full">
       <div className="w-[233px] mx-auto mt-6">
-        <Carousel
-          dataList={[{ name: '지정 안함' }, ...teacherList]}
-          selectedDataindex={selectedTeacherindex}
-          setSelectedDataindex={setSelectedTeacherindex}
+        <DropdownMenu
+          textArr={['지정 안함', ...teacherList.map((teacher) => teacher.name)]}
+          selectedIndex={selectedTeacherindex}
+          setSelectedIndex={setSelectedTeacherindex}
         />
       </div>
       <div className="text-center text-lg mt-4 font-bold text-hpRed">

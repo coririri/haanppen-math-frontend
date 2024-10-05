@@ -83,3 +83,6 @@ export const getAttachmentFile = (sourceId) =>
     responseType: 'blob', // 파일 데이터를 Blob 형태로 받기
     timeout: 30000, // 30초 (30,000 밀리초)
   });
+
+export const deleteAttachmentFile = (targetAttachmentId) =>
+  instance.delete(`/api/courses/memos/media/attachment/${targetAttachmentId}`);

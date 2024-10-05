@@ -101,7 +101,9 @@ function StudentManagementPage() {
         >
           고
         </TextButton>
-        <span className="text-xl font-bold">123명</span>
+        <span className="text-xl font-bold">
+          {data?.pageInfo?.totalItemSize}명
+        </span>
       </div>
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
