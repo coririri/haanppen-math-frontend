@@ -20,7 +20,7 @@ function QueryBoardPage() {
     hasNextPage: hasNextAllQuestionsPage,
     isFetchingNextPage: isFetchingNextAllQuestionsPage,
   } = useInfiniteQuery({
-    queryKey: ['questionList', 'date'],
+    queryKey: ['questionList', 'date,DESC'],
     queryFn: getQuestionsList,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage?.nextCursor,
