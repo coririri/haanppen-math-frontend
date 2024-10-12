@@ -6,23 +6,6 @@ import passwordValidation from '../../utils/passwordValidation';
 import login from '../../apis/login';
 import LoginForm from '../organisms/LoginForm';
 
-// Default BeforeInstallPromptEvent object for iOS devices
-const defaultBeforeInstallPromptEvent = {
-  platforms: [],
-  userChoice: Promise.resolve({ outcome: 'dismissed', platform: '' }),
-  prompt: () => Promise.resolve(),
-  preventDefault: () => {},
-};
-
-// Function to check if iOS install prompt should be active
-const isIOSPromptActive = () => {
-  const isActive = JSON.parse(localStorage.getItem('iosInstalled') || 'true');
-  if (isActive) {
-    return defaultBeforeInstallPromptEvent;
-  }
-  return null;
-};
-
 function LoginPage() {
   const [userForm, setUserForm] = useState({ id: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
@@ -57,18 +40,6 @@ function LoginPage() {
         handleBeforeInstallPrompt,
       );
     };
-  }, []);
-
-  // iOS 설치 프롬프트 처리
-  useEffect(() => {
-    const iOSPrompt = isIOSPromptActive();
-    if (iOSPrompt) {
-      setDeferredPrompt(iOSPrompt);
-      setInstallable(true);
-      alert(
-        '이 웹 앱을 홈 화면에 추가하려면 Safari의 공유 버튼을 눌러 "홈 화면에 추가"를 선택하세요.',
-      );
-    }
   }, []);
 
   const handleLoginClick = () => {
