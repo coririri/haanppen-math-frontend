@@ -44,7 +44,7 @@ function QueryList({ question, isStudent }) {
           {question.owner.memberName}
         </span>
         <span className="inline-block w-[80px] text-center mr-[10px]">
-          {question.target.memberName}
+          {question.target === null ? '지정안함' : question.target.memberName}
         </span>
       </div>
     </button>
