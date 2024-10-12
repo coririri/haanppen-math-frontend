@@ -13,7 +13,7 @@ const writeQuery = (formData, navigate) => {
     })
     .catch((e) => {
       console.log(e);
-      alert('게시글 작성에 실패 했습니다');
+      alert(e);
       console.log('게시글 작성 실패');
     });
 };

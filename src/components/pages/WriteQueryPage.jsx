@@ -33,6 +33,7 @@ function WriteQueryPage() {
 
     imgFiles.forEach((img) => {
       formData.append('images', img);
+      alert(img.size);
     });
     if (selectedTeacherindex !== 0)
       formData.append(
@@ -42,8 +43,13 @@ function WriteQueryPage() {
     // else formData.append('targetMemberId', null);
     formData.append('content', questionText);
     formData.append('title', questionTitle);
-    writeQuery(formData, navigate);
-    // formdata를 활용해 질문 글 작성
+
+    try {
+      writeQuery(formData, navigate);
+      // formdata를 활용해 질문 글 작성
+    } catch (e) {
+      alert(e);
+    }
   };
 
   useEffect(() => {
