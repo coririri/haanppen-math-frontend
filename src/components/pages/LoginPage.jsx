@@ -13,6 +13,7 @@ function LoginPage() {
   const [installable, setInstallable] = useState(false);
   const navigate = useNavigate();
 
+  // ID와 패스워드 유효성 검사
   useEffect(() => {
     const { id, password } = userForm;
     let tempErrorMessage = phoneNumberValidation(id);
@@ -21,16 +22,18 @@ function LoginPage() {
     setErrorMessage(tempErrorMessage);
   }, [userForm.id, userForm.password]);
 
+  // PWA 설치 이벤트 리스너 설정
   useEffect(() => {
-    // beforeinstallprompt 이벤트 리스너 설정
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
+      console.log('beforeinstallprompt 이벤트 발생'); // 이벤트 발생 로그
       setDeferredPrompt(e); // 프롬프트 이벤트 저장
       setInstallable(true); // 설치 가능 상태로 변경
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
+    // 이벤트 해제
     return () => {
       window.removeEventListener(
         'beforeinstallprompt',
@@ -57,6 +60,8 @@ function LoginPage() {
       });
     }
   };
+
+  console.log('Installable: ', installable); // installable 상태 출력
 
   return (
     <main className="lg:w-[1440px] md:w-[834px] w-full mx-auto h-[100vh] flex flex-col items-center justify-center">
