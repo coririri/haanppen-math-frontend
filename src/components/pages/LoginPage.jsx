@@ -9,6 +9,8 @@ import LoginForm from '../organisms/LoginForm';
 function LoginPage() {
   const [userForm, setUserForm] = useState({ id: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [installable, setInstallable] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,12 +21,45 @@ function LoginPage() {
     setErrorMessage(tempErrorMessage);
   }, [userForm.id, userForm.password]);
 
+  useEffect(() => {
+    // beforeinstallprompt 이벤트 리스너 설정
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e); // 프롬프트 이벤트 저장
+      setInstallable(true); // 설치 가능 상태로 변경
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt,
+      );
+    };
+  }, []);
+
   const handleLoginClick = () => {
     login(userForm, setErrorMessage, navigate);
   };
 
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // 설치 프롬프트 실행
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('PWA 설치 완료');
+        } else {
+          console.log('PWA 설치 거절');
+        }
+        setDeferredPrompt(null);
+        setInstallable(false);
+      });
+    }
+  };
+
   return (
-    <main className="lg:w-[1440px] md:w-[834px] w-full mx-auto h-[100vh] flex flex-col items-center justify-center ">
+    <main className="lg:w-[1440px] md:w-[834px] w-full mx-auto h-[100vh] flex flex-col items-center justify-center">
       <div className="mb-24">
         <img
           className="mx-auto md:w-[250px] w-[220px]"
@@ -37,6 +72,17 @@ function LoginPage() {
         errorMessage={errorMessage}
         handleLoginClick={handleLoginClick}
       />
+
+      {/* PWA 설치 버튼 추가 */}
+      {installable && (
+        <button
+          onClick={handleInstallClick}
+          className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition duration-300"
+          type="button"
+        >
+          앱 설치
+        </button>
+      )}
     </main>
   );
 }

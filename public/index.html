@@ -31,32 +31,6 @@
       rel="stylesheet"
     />
     <title>React App</title>
-
-    <script>
-      let deferredPrompt;
-
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        document.getElementById('install-button').style.display = 'block';
-      });
-
-      document
-        .getElementById('install-button')
-        .addEventListener('click', () => {
-          if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('사용자가 PWA 설치를 수락했습니다.');
-              } else {
-                console.log('사용자가 PWA 설치를 거절했습니다.');
-              }
-              deferredPrompt = null;
-            });
-          }
-        });
-    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
