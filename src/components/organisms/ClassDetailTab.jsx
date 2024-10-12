@@ -6,6 +6,7 @@ import '../../css/datepicker/datepicker.css';
 import Textarea from '../atoms/Textarea';
 import TextButton from '../atoms/TextButton';
 import enrollLesson, {
+  deleteLessonById,
   putLessonDetailContentByClassId,
 } from '../../apis/lesson';
 
@@ -99,8 +100,13 @@ function ClassDetailTab({
             bgColor="white"
             icon={<AiFillEdit size="20px" />}
             text="수업 삭제"
-            handleClick={() => {
-              setIsCreated(false);
+            handleClick={async () => {
+              try {
+                await deleteLessonById(classId);
+                setIsCreated(false);
+              } catch (e) {
+                console.log(e);
+              }
             }}
           />
         </div>

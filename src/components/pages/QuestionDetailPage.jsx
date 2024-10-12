@@ -28,9 +28,11 @@ function QuestionDetailPage() {
       const questionDetailData = {
         title: response.title,
         content: response.content,
-        imageUrl: response.imageUrls[0]?.imageUrl
-          ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
-          : hw1,
+        imageUrls: response.imageUrls.map((imageUrl) =>
+          imageUrl.imageUrl
+            ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
+            : hw1,
+        ),
         registeredDateTime: response.registeredDateTime,
         registerMemberName: response.registeredMember.memberName,
         registerMemberGrade: response.registeredMember.memberGrade + 1,
@@ -157,11 +159,13 @@ function QuestionDetailPage() {
 
         {/* 질문 이미지 */}
         <div className="relative w-full mx-auto">
-          <img
-            src={data?.questionDetailData.imageUrl}
-            alt="숙제"
-            className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto"
-          />
+          {data?.questionDetailData.imageUrls.map((imageUrl) => (
+            <img
+              src={imageUrl}
+              alt="숙제"
+              className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto my-2"
+            />
+          ))}
         </div>
 
         {/* 수정/삭제 버튼 */}

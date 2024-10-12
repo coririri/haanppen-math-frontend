@@ -86,3 +86,6 @@ export const getAttachmentFile = (sourceId) =>
 
 export const deleteAttachmentFile = (targetAttachmentId) =>
   instance.delete(`/api/courses/memos/media/attachment/${targetAttachmentId}`);
+
+export const deleteLessonById = (lessonId) =>
+  instance.delete(`/api/courses/memos/${lessonId}`);
