@@ -5,12 +5,12 @@ function LessonList({ lessons, courseList, selectedClassindex }) {
   const navigate = useNavigate();
 
   return (
-    <div className="w-[380px] mx-auto mt-4">
+    <div className="w-[330px] mx-auto mt-4">
       <div className="flex bg-[#D9D9D9] py-2">
         <span className="block w-[100px] text-center font-bold text-md">
           수업 날짜
         </span>
-        <span className="block w-[280px]  text-center font-bold text-md">
+        <span className="block w-[230px]  text-center font-bold text-md">
           강의명
         </span>
       </div>
@@ -31,7 +31,7 @@ function LessonList({ lessons, courseList, selectedClassindex }) {
               );
             }}
           >
-            <span className="block w-[280px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
+            <span className="block w-[230px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
               {lesson.progressed}
             </span>
           </button>

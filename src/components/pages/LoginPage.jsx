@@ -24,10 +24,10 @@ function LoginPage() {
   };
 
   return (
-    <main className="lg:w-[1440px] md:w-[834px] w-[428px] mx-auto h-[100vh] flex flex-col items-center justify-center bg-hpLightGray ">
+    <main className="lg:w-[1440px] md:w-[834px] w-full mx-auto h-[100vh] flex flex-col items-center justify-center ">
       <div className="mb-24">
         <img
-          className="mx-auto md:w-[361px] w-[300px]"
+          className="mx-auto md:w-[250px] w-[220px]"
           src={logoImages}
           alt="한편의 수학 로고 이미지"
         />

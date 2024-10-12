@@ -20,7 +20,7 @@ function Header() {
   if (role === 'STUDENT') {
     return (
       <div>
-        <header className="mx-auto w-[428px] h-[96px] flex justify-between items-center">
+        <header className="mx-auto w-full h-[96px] flex justify-between items-center">
           <button
             type="button"
             className="ml-4"
@@ -28,23 +28,27 @@ function Header() {
               window.location.href = 'https://hanapi.hopto.org/';
             }}
           >
-            <img src={logoImages} alt="한편의 수학 로고 이미지" />
+            <img
+              src={logoImages}
+              alt="한편의 수학 로고 이미지"
+              className="w-[80px]"
+            />
           </button>
-          <span className="text-hpDarkBlue text-3xl font-sjBold">
+          <span className="text-hpDarkBlue text-2xl font-sjBold">
             {roleTheme}
           </span>
           <Link to="/user-information" className="mr-4">
             <div className="flex items-center h-[46px] rounded-l-[40px] rounded-r-[40px] border-solid border-[#E0E0E0] border-[1.5px]">
               <div className="ml-2 mr-2 rounded-[15px] bg-hpGray flex items-center justify-center">
-                <BsFillPersonFill color="#FFF" size="23px" />
+                <BsFillPersonFill color="#FFF" size="20px" />
               </div>
-              <div className="mr-4 text-center whitespace-nowrap overflow-y-hidden overflow-x-auto">
-                <span className="text-xl text-hpBlack">{userName}</span>
+              <div className="mr-2 text-center whitespace-nowrap overflow-y-hidden overflow-x-auto">
+                <span className="text-lg text-hpBlack">{userName}</span>
               </div>
             </div>
           </Link>
         </header>
-        <hr className="w-[428px] mx-auto bg-hpGray" />
+        <hr className="w-full mx-auto bg-hpGray" />
       </div>
     );
   }

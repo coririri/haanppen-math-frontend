@@ -65,8 +65,8 @@ function UserInformation() {
   }, [userForm.newPassword]);
 
   return (
-    <div className="mt-[70px] flex flex-col">
-      <div className="flex flex-col justify-between w-[380px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
+    <div className="lg:w-[1440px] md:w-[834px] w-full mt-[70px] flex flex-col px-4">
+      <div className="flex flex-col justify-between lg:w-[380px] md:w-[320px] w-full mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
         <div className="flex flex-col justify-center mt-8">
           <div className="flex justify-center">
             <label
@@ -78,7 +78,7 @@ function UserInformation() {
             <input
               type="text"
               id="name"
-              className="w-[200px] h-[30px] text-center border-solid border-black border-[1px] rounded-md text-sm font-bold"
+              className="lg:w-[200px] md:w-[180px] w-[150px] h-[30px] text-center border-solid border-black border-[1px] rounded-md text-sm font-bold"
               defaultValue={userForm.name}
               onChange={(e) => {
                 setUserForm((prev) => ({
@@ -91,7 +91,7 @@ function UserInformation() {
           <div className="text-center ml-[120px] mt-2 text-hpLightRed font-bold">
             {errorMessages.name}
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mb-4 mt-2" />
+          <hr className="h-[1px] border-0 bg-hpGray lg:w-[320px] md:w-[240px] w-full mx-auto mb-4 mt-2" />
           <div className="flex justify-center">
             <label
               className="text-center block font-bold text-lg w-[120px]"
@@ -102,7 +102,7 @@ function UserInformation() {
             <input
               type="text"
               id="id"
-              className="w-[200px] h-[30px] text-center border-solid border-black border-[1px] rounded-md ext-sm font-bold"
+              className="lg:w-[200px] md:w-[180px] w-[150px] h-[30px] text-center border-solid border-black border-[1px] rounded-md ext-sm font-bold"
               defaultValue={userForm.phoneNumber}
               onChange={(e) => {
                 setUserForm((prev) => ({
@@ -115,7 +115,7 @@ function UserInformation() {
           <div className="text-center ml-[120px] mt-2 text-hpLightRed font-bold">
             {errorMessages.id}
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mt-2 mb-4" />
+          <hr className="h-[1px] border-0 bg-hpGray lg:w-[320px] md:w-[240px] w-full mx-auto mt-2 mb-4" />
           <div className="flex justify-center">
             <label
               className="text-center block font-bold text-lg w-[120px]"
@@ -126,7 +126,7 @@ function UserInformation() {
             <input
               type="password"
               id="password"
-              className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
+              className="lg:w-[200px] md:w-[180px] w-[150px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
               defaultValue={userForm.password}
               onChange={(e) => {
                 setUserForm((prev) => ({
@@ -139,7 +139,7 @@ function UserInformation() {
           <div className="text-center ml-[40px] mt-2 text-hpLightRed font-bold">
             {errorMessages.password}
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mt-2 mb-4" />
+          <hr className="h-[1px] border-0 bg-hpGray lg:w-[320px] md:w-[240px] w-full mx-auto mt-2 mb-4" />
           <div className="flex justify-center">
             <label
               className="text-center block font-bold text-lg w-[120px]"
@@ -150,7 +150,7 @@ function UserInformation() {
             <input
               type="password"
               id="newPassword"
-              className="w-[200px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
+              className="lg:w-[200px] md:w-[180px] w-[150px] h-[30px] border-solid border-black border-[1px] rounded-md text-center text-sm font-bold"
               defaultValue=""
               onChange={(e) => {
                 setUserForm((prev) => ({
@@ -163,10 +163,10 @@ function UserInformation() {
           <div className="text-center ml-[120px] mt-2 text-hpLightRed font-bold">
             {errorMessages.newPassword}
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[320px] mx-auto mt-2 mb-4" />
+          <hr className="h-[1px] border-0 bg-hpGray lg:w-[320px] md:w-[240px] w-full mx-auto mt-2 mb-4" />
         </div>
-        <div className="mb-6 w-full text-right">
-          <span className="pr-12">계정 가입일: {userForm.registerDate}</span>
+        <div className="mb-6 w-full text-right flex justify-center">
+          <span>계정 가입일: {userForm.registerDate}</span>
         </div>
       </div>
       <div className="mx-auto mt-8 flex">

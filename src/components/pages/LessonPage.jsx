@@ -88,24 +88,29 @@ function LessonPage() {
 
   return (
     <div>
-      <div className="flex justify-center items-center my-4">
-        <span className="font-bold text-lg mr-4">
+      <div className="flex justify-center items-center my-6 space-x-6 bg-gradient-to-r from-gray-100 to-blue-50 py-3 px-6 rounded-lg shadow-md">
+        <span className="font-extrabold text-xl text-gray-900 tracking-wide">
           {searchParams.get('date').substring(2).split('-').join('.')} 수업
         </span>
-        <span className="font-bold text-lg ml-4">
+        <span className="font-extrabold text-xl text-indigo-700 tracking-wide">
           {searchParams.get('courseName')}
         </span>
       </div>
       <div className="w-full h-[1.4px] bg-hpGray" />
       {hasMemo ? (
         <div>
-          <div className="px-4 py-2 border-solid border-[1.3px] border-black text-center rounded-lg mx-4 my-4 text-md">
-            <span className="font-bold">{lessonData.title}</span>
+          <div className="text-center mt-3">
+            <span className="text-2xl font-bold text-gray-900">영상 제목</span>
+          </div>
+          <div className="px-6 py-4 border-2 border-gray-700 text-center rounded-xl mx-4 mb-5 mt-1 text-lg bg-gradient-to-r from-blue-100 to-indigo-100 shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out">
+            <span className="font-bold text-gray-900 tracking-wide hover:text-indigo-600 transition-colors duration-300 ease-in-out">
+              {lessonData.title}
+            </span>
           </div>
           <div className="text-center">
-            <span className="text-lg font-bold">영상 내용</span>
+            <span className="text-2xl font-bold text-gray-900">영상 내용</span>
           </div>
-          <div className="px-4 py-2 border-solid border-[1.3px] border-black text-center rounded-lg mx-4 mb-4 mt-1 text-xs font-bold">
+          <div className="px-6 py-4 border-2 border-gray-700 text-center rounded-xl mx-4 mb-4 mt-1 text-sm font-medium bg-gradient-to-r from-yellow-50 to-orange-50 shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">
             {convertToLinks(lessonData.desc)}
           </div>
           {videoData.length !== 0 && (
@@ -126,8 +131,9 @@ function LessonPage() {
                       setSelectedVideoIndex(videoData.length - 1);
                     else setSelectedVideoIndex(selectedVideoIndex - 1);
                   }}
+                  className="relative mr-4  px-3 py-1 bg-green-500 text-white font-bold rounded-lg transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 group"
                 >
-                  <span className="mr-4 font-bold">이전 강의</span>
+                  <span className="font-bold">이전 강의</span>
                 </button>
                 <button
                   type="button"
@@ -136,8 +142,9 @@ function LessonPage() {
                       setSelectedVideoIndex(0);
                     else setSelectedVideoIndex(selectedVideoIndex + 1);
                   }}
+                  className="relative ml-4 px-3 py-1 bg-green-500 text-white font-bold rounded-lg transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 group"
                 >
-                  <span className="ml-4 font-bold">다음 강의</span>
+                  <span className="font-bold">다음 강의</span>
                 </button>
               </div>
               <div className="mt-4">
@@ -147,14 +154,14 @@ function LessonPage() {
                       key={attachmentData.attachmentId}
                       className="flex my-2 items-center"
                     >
-                      <div className="w-[14rem] border-solid border-[1.3px] border-hpGray rounded-lg text-left pl-2 mr-2">
+                      <div className="lg:w-[380px] md:w-[380px] w-[200px] border-solid border-[1.3px] border-hpGray rounded-lg text-left pl-2 mr-2">
                         <span className="font-bold text-md">
                           {attachmentData.fileName}
                         </span>
                       </div>
                       <TextButton
                         color="gray"
-                        moreStyle="w-[8rem] h-[27px] mr-1 ml-2"
+                        moreStyle="lg:w-[150px] md:w-[130px] w-[100px] h-[27px] mr-1 ml-2"
                         textMoreStyle="text-sm"
                         handleClick={() => {
                           downloadAttachmentFile(attachmentData);

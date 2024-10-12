@@ -32,6 +32,7 @@ function App() {
             <Route path="management" element={<ManagementPage />} />
             <Route path="user-information" element={<UserInformationPage />} />
             <Route path="question/:id" element={<QuestionDetailPage />} />
+
             <Route path="enroll-class" element={<WriteClassPage />} />
             <Route path="vedio-management" element={<VedioManagementPage />} />
             <Route path="my-class" element={<MyClassPage />} />

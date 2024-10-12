@@ -4,7 +4,7 @@ import { AiFillEdit } from 'react-icons/ai';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import IconButton from '../atoms/IconButton';
-import { getDetailQuestionById } from '../../apis/question';
+import { deleteQuestionById, getDetailQuestionById } from '../../apis/question';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
 import gradeTransform from '../../utils/gradeTransform';
 import dateTimeToDate from '../../utils/dateTimeToDate';
@@ -14,17 +14,20 @@ import hw1 from '../../assests/hw1.jpg';
 
 function QuestionDetailPage() {
   const { id } = useParams();
-  let questionDetailData;
-  let commentsData;
-  const [data, setData] = useState(null);
 
+  const [data, setData] = useState(null);
   const [isWriteComment, setIsWriteComment] = useState(false);
+
+  const [isModify, setIsModify] = useState(false);
+  const [modificationData, setModificationData] = useState();
 
   useEffect(() => {
     const getData = async () => {
       const response = await getDetailQuestionById(id);
 
-      questionDetailData = {
+      const questionDetailData = {
+        title: response.title,
+        content: response.content,
         imageUrl: response.imageUrls[0]?.imageUrl
           ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
           : hw1,
@@ -33,22 +36,49 @@ function QuestionDetailPage() {
         registerMemberGrade: response.registeredMember.memberGrade + 1,
       };
 
-      commentsData = response.comments;
+      const commentsData = response.comments;
 
       setData({
         questionDetailData,
         commentsData,
       });
       // data를 사용하여 추가 작업을 수행합니다.
+
+      setModificationData({
+        title: response.title,
+        content: response.content,
+      });
     };
 
     getData();
   }, []);
 
+  function handleEdit() {
+    // 수정 로직 구현
+    // navigate(`/question/${id}/modify`);
+    setIsModify(true);
+  }
+
+  const handleDelete = async () => {
+    // 삭제 로직 구현
+    try {
+      deleteQuestionById(id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleModifyCompelte = async () => {};
+
+  const handleModifyCancel = async () => {
+    setIsModify(false);
+  };
+
   if (localStorage.getItem('role') === 'STUDENT') {
     return (
       <div className="w-full">
-        <div className="w-[400px] h-[30px] mx-auto mt-8 bg-hpLightGray">
+        {/* 질문글 상단 */}
+        <div className="w-full h-[30px] mx-auto mt-4 bg-hpLightGray">
           <div className="h-full flex items-center justify-between">
             <div className="h-full flex items-center ml-4">
               <BsBookmarkCheckFill />
@@ -67,14 +97,118 @@ function QuestionDetailPage() {
             </div>
           </div>
         </div>
-        <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-6 mb-2" />
-        <img
-          src={data?.questionDetailData.imageUrl}
-          alt="숙제"
-          className="w-[400px] mx-auto"
-        />
-        <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-2" />
-        <div className="mt-8 w-[900px] mx-auto">
+
+        {/* 구분선 */}
+        <hr className="h-[1px] border-0 bg-hpGray w-full mx-auto mt-6 mb-2" />
+
+        {/* 질문 제목 */}
+        <div className="lg:w-[380px] md:w-[300px] w-[230px] mx-auto mt-4">
+          {isModify ? (
+            <input
+              type="text"
+              className="w-full px-4 py-2 text-xl font-bold text-center border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              value={modificationData.title}
+              onChange={(e) => {
+                setModificationData((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }));
+              }}
+              placeholder="질문 제목을 입력하세요..." // 플레이스홀더 추가
+            />
+          ) : (
+            <h1 className="text-xl font-bold text-center">
+              {data?.questionDetailData.title || ''}
+            </h1>
+          )}
+        </div>
+
+        {/* 구분선 */}
+        {data?.questionDetailData.title && (
+          <hr className="h-[1px] border-0 bg-hpGray w-full mx-auto mt-2" />
+        )}
+
+        {/* 질문 텍스트 */}
+        <div className="lg:w-[380px] md:w-[300px] w-[280px] mx-auto mt-4 px-2">
+          {isModify ? (
+            <input
+              type="text"
+              className="w-full px-4 py-2 text-md text-left border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              value={modificationData.content}
+              onChange={(e) => {
+                setModificationData((prev) => ({
+                  ...prev,
+                  content: e.target.value,
+                }));
+              }}
+              placeholder="질문 내용을 입력하세요..." // 플레이스홀더 추가
+            />
+          ) : (
+            <p className="text-md text-left">
+              {data?.questionDetailData.content || ''}
+            </p>
+          )}
+        </div>
+
+        {/* 구분선 */}
+        {data?.questionDetailData.content && (
+          <hr className="h-[1px] border-0 bg-hpGray w-full mx-auto my-2" />
+        )}
+
+        {/* 질문 이미지 */}
+        <div className="relative w-full mx-auto">
+          <img
+            src={data?.questionDetailData.imageUrl}
+            alt="숙제"
+            className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto"
+          />
+        </div>
+
+        {/* 수정/삭제 버튼 */}
+        {localStorage.getItem('userName') ===
+        data?.questionDetailData.registerMemberName ? (
+          isModify ? (
+            <div className="flex space-x-2 my-2 justify-end mr-4">
+              <button
+                onClick={handleModifyCompelte}
+                className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                type="button"
+              >
+                완료
+              </button>
+              <button
+                onClick={handleModifyCancel}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                type="button"
+              >
+                취소
+              </button>
+            </div>
+          ) : (
+            <div className="flex space-x-2 my-2 justify-end mr-4">
+              <button
+                onClick={handleEdit}
+                className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                type="button"
+              >
+                수정
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                type="button"
+              >
+                삭제
+              </button>
+            </div>
+          )
+        ) : null}
+
+        {/* 구분선 */}
+        <hr className="h-[1px] border-0 bg-hpGray w-full mx-auto" />
+
+        {/* 댓글 섹션 */}
+        <div className="mt-4 w-full mx-auto">
           <div>
             <div className="flex items-center">
               <BiCommentDots size="30px" className="mr-1" />
@@ -88,7 +222,7 @@ function QuestionDetailPage() {
                 {data?.commentsData.length}
               </span>
               <span
-                className="text-xl font-bold text"
+                className="text-xl font-bold"
                 style={{
                   textShadow:
                     '-1px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black',
@@ -97,7 +231,7 @@ function QuestionDetailPage() {
                 Comments
               </span>
             </div>
-            <hr className="h-[1px] border-0 bg-hpGray w-[150px] mt-[0.5px] mb-4" />
+            <hr className="h-[1px] border-0 bg-hpGray w-full mx-auto mt-[0.5px] mb-4" />
           </div>
           {data?.commentsData?.map((comment) => (
             <CommentBox comment={comment} key={comment.commentId} isStudent />
@@ -108,7 +242,8 @@ function QuestionDetailPage() {
   }
   return (
     <div className="w-full">
-      <div className="w-[900px] h-[30px] mx-auto mt-8 bg-hpLightGray">
+      {/* 질문글 상단 */}
+      <div className="w-[400px] h-[30px] mx-auto mt-4 bg-hpLightGray">
         <div className="h-full flex items-center justify-between">
           <div className="h-full flex items-center ml-4">
             <BsBookmarkCheckFill />
@@ -122,22 +257,126 @@ function QuestionDetailPage() {
           <div className="h-full flex items-center mr-4">
             <BsClock />
             <span className="ml-1 font-bold pt-[1px]">
-              {' '}
               {dateTimeToDate(data?.questionDetailData.registeredDateTime)}
             </span>
           </div>
         </div>
       </div>
-      <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto mt-6 mb-2" />
-      <img
-        src={data?.questionDetailData.imageUrl}
-        alt="숙제"
-        className="w-[900px] mx-auto"
-      />
-      <hr className="h-[1px] border-0 bg-hpGray w-[900px] mx-auto mt-2" />
-      <div className="mt-8 w-[900px] mx-auto">
+
+      {/* 구분선 */}
+      <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-6 mb-2" />
+
+      {/* 질문 제목 */}
+      <div className="w-[400px] mx-auto mt-4">
+        {isModify ? (
+          <input
+            type="text"
+            className="w-full px-4 py-2 text-xl font-bold text-center border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            value={modificationData.title}
+            onChange={(e) => {
+              setModificationData((prev) => ({
+                ...prev,
+                title: e.target.value,
+              }));
+            }}
+            placeholder="질문 제목을 입력하세요..." // 플레이스홀더 추가
+          />
+        ) : (
+          <h1 className="text-xl font-bold text-center">
+            {data?.questionDetailData.title || ''}
+          </h1>
+        )}
+      </div>
+
+      {/* 구분선 */}
+      {data?.questionDetailData.title && (
+        <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-2" />
+      )}
+
+      {/* 질문 텍스트 */}
+      <div className="w-[400px] mx-auto mt-4 px-2">
+        {isModify ? (
+          <input
+            type="text"
+            className="w-full px-4 py-2 text-md text-left border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            value={modificationData.content}
+            onChange={(e) => {
+              setModificationData((prev) => ({
+                ...prev,
+                content: e.target.value,
+              }));
+            }}
+            placeholder="질문 내용을 입력하세요..." // 플레이스홀더 추가
+          />
+        ) : (
+          <p className="text-md text-left">
+            {data?.questionDetailData.content || ''}
+          </p>
+        )}
+      </div>
+
+      {/* 구분선 */}
+      {data?.questionDetailData.content && (
+        <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-2" />
+      )}
+
+      {/* 질문 이미지 */}
+      <div className="relative w-[400px] mx-auto">
+        <img
+          src={data?.questionDetailData.imageUrl}
+          alt="숙제"
+          className="w-[400px] mx-auto"
+        />
+      </div>
+
+      {/* 수정/삭제 버튼 */}
+      {localStorage.getItem('userName') ===
+        data?.questionDetailData.registerMemberName ||
+      localStorage.getItem('role') === 'TEACHER' ? (
+        isModify ? (
+          <div className="flex space-x-2 my-2 justify-end w-[400px] mx-auto pr-4">
+            <button
+              onClick={handleModifyCompelte}
+              className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+              type="button"
+            >
+              완료
+            </button>
+            <button
+              onClick={handleModifyCancel}
+              className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+              type="button"
+            >
+              취소
+            </button>
+          </div>
+        ) : (
+          <div className="flex space-x-2 my-2 justify-end w-[400px] mx-auto pr-4">
+            <button
+              onClick={handleEdit}
+              className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+              type="button"
+            >
+              수정
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+              type="button"
+            >
+              삭제
+            </button>
+          </div>
+        )
+      ) : null}
+
+      {/* 구분선 */}
+      <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto" />
+
+      {/* 댓글 섹션 */}
+      <div className="mt-4 w-[400px] mx-auto">
         <div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-left">
             <BiCommentDots size="30px" className="mr-1" />
             <span
               className="text-2xl font-bold mr-1 text-[#FF6B00]"
@@ -149,7 +388,7 @@ function QuestionDetailPage() {
               {data?.commentsData.length}
             </span>
             <span
-              className="text-xl font-bold text"
+              className="text-xl font-bold"
               style={{
                 textShadow:
                   '-1px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black',
@@ -158,10 +397,10 @@ function QuestionDetailPage() {
               Comments
             </span>
           </div>
-          <hr className="h-[1px] border-0 bg-hpGray w-[150px] mt-[0.5px] mb-4" />
+          <hr className="h-[1px] border-0 bg-hpGray w-[400px] mx-auto mt-[0.5px] mb-4" />
         </div>
         {!isWriteComment && (
-          <div className="fixed bottom-8 left-0 right-0 flex justify-center">
+          <div className="absolute bottom-8 left-0 right-0 flex justify-center">
             <IconButton
               bgColor="white"
               icon={<AiFillEdit size="26px" color="black" />}
@@ -179,7 +418,7 @@ function QuestionDetailPage() {
           </div>
         )}
         {data?.commentsData?.map((comment) => (
-          <CommentBox comment={comment} key={comment.commentId} />
+          <CommentBox comment={comment} key={comment.commentId} isStudent />
         ))}
 
         {isWriteComment && (

@@ -4,6 +4,7 @@ import { getDay, getYear, getMonth, addDays, subDays } from 'date-fns'; // date-
 import { BsFillTriangleFill } from 'react-icons/bs';
 import { ko } from 'date-fns/locale'; // 한국어 로케일을 가져옵니다.
 import DatePicker from 'react-datepicker';
+import { dateTimeToDateAndZeroTimes } from '../../utils/dateTimeToDate';
 
 function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
   const [currentDate, setCurrentDate] = useState(startDate);
@@ -75,7 +76,8 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
         withPortal
         className="date date-record"
         locale={ko}
-        selected={startDate}
+        selected={new Date(dateTimeToDateAndZeroTimes(startDate))}
+        // selected={new Date()}
         dateFormat="yyyy.MM.dd(eee)"
         useWeekdaysShort
         shouldCloseOnSelect={false}

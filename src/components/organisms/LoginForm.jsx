@@ -23,18 +23,18 @@ function LoginForm({ setUserForm, errorMessage, handleLoginClick }) {
   };
 
   return (
-    <form className="md:w-[30.25rem] w-[20rem] h-[16rem] flex flex-col justify-between mx-auto">
+    <form className="md:w-[30.25rem] w-[16rem] h-[16rem] flex flex-col justify-between mx-auto">
       <input
-        className="md:w-[30.25rem] w-[20rem] mx-auto mb-2 text-lg font-cantarell font-bold bg-white px-2 py-[0.8rem] focus:outline-none"
+        className="md:w-[30.25rem] w-[16rem] mx-auto mb-2 text-lg font-cantarell font-bold bg-white px-2 py-[0.8rem] border-2 border-gray-300 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:border-hpBlue"
         type="text"
         placeholder="아이디(전화번호)"
         onChange={(e) => {
           handleChangeForm(e, 'id');
         }}
       />
-      <div className="md:w-[30.25rem] w-[20rem] relative">
+      <div className="md:w-[30.25rem] w-[16rem] relative">
         <input
-          className="md:w-[30.25rem] w-[20rem] mx-auto text-lg font-cantarell font-bold bg-white px-2 py-[0.8rem] focus:outline-none"
+          className="md:w-[30.25rem] w-[16rem] mx-auto text-lg font-cantarell font-bold bg-white px-2 py-[0.8rem] border-2 border-gray-300 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:border-hpBlue"
           type={passwordVisibility ? 'text' : 'password'}
           placeholder="비밀번호"
           autoComplete="true"
@@ -44,7 +44,7 @@ function LoginForm({ setUserForm, errorMessage, handleLoginClick }) {
         />
         {passwordVisibility ? (
           <button
-            className="absolute right-4 top-4"
+            className="absolute right-4 top-4 transition-transform transform hover:scale-110"
             type="button"
             aria-label="비밀번호 보기"
             onClick={handleClickPasswordVisibility}
@@ -53,7 +53,7 @@ function LoginForm({ setUserForm, errorMessage, handleLoginClick }) {
           </button>
         ) : (
           <button
-            className="absolute right-4 top-4"
+            className="absolute right-4 top-4 transition-transform transform hover:scale-110"
             type="button"
             aria-label="비밀번호 보이지 않기"
             onClick={handleClickPasswordVisibility}
@@ -62,18 +62,22 @@ function LoginForm({ setUserForm, errorMessage, handleLoginClick }) {
           </button>
         )}
       </div>
-      <div className="md:w-[30.25rem] w-[20rem] h-[5rem] pb-6 relative flex items-center">
+      <div className="md:w-[30.25rem] w-[16rem] h-[5rem] pb-6 relative flex items-center">
         {errorMessage !== '' && (
-          <div className="md:w-[30.25rem] w-[20rem] h-[2.5rem] absolute md:bottom-4 bottom-8 text-center leading-[2.5rem]">
+          <div className="md:w-[30.25rem] w-[16rem] h-[2.5rem] absolute md:bottom-4 bottom-8 text-center leading-[2.5rem]">
             <span className="font-bold text-hpRed text-lg">{errorMessage}</span>
           </div>
         )}
       </div>
       <div
-        className={`md:w-[30.25rem] w-[20rem] h-[3.875rem] rounded-xl mx-auto ${errorMessage !== '' ? 'bg-hpGray ' : ' bg-hpBlue hover:bg-hpDarkBlue'}`}
+        className={`md:w-[30.25rem] w-[16rem] h-[3.875rem] rounded-xl mx-auto transition-all duration-300 ease-in-out ${
+          errorMessage !== ''
+            ? 'bg-hpGray '
+            : 'bg-hpBlue hover:bg-hpDarkBlue hover:scale-105'
+        }`}
       >
         <button
-          className="md:w-[30.25rem] w-[20rem] h-[3.875rem]"
+          className="md:w-[30.25rem] w-[16rem] h-[3.875rem] transition-all duration-300 ease-in-out"
           type="button"
           onClick={handleLoginClick}
           disabled={errorMessage !== ''}

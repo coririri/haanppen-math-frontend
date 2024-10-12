@@ -26,9 +26,9 @@ function CommonLayout() {
       <Header />
       <Navigation />
       {localStorage.getItem('role') === 'STUDENT' ? (
-        <div className="w-[428px] min-h-[620px] relative border-[12px] mx-auto  border-hpBackgroundGray border-solid">
+        <div className="w-full min-h-[620px] relative border-[12px] mx-auto  border-hpBackgroundGray border-solid">
           {location.pathname === '/' ? (
-            <div className="min-h-[620px] bg-gray-100 p-6">
+            <div className="min-h-[620px] p-6 bg-white">
               {/* Introduction Section */}
               <div className="bg-white p-6 rounded-lg shadow-lg mb-6 transition-transform transform hover:scale-105 duration-300">
                 <h3 className="text-2xl font-bold mb-2">웹사이트 소개</h3>
@@ -65,7 +65,7 @@ function CommonLayout() {
       ) : (
         <div className="w-[1440px] min-h-[680px] relative mx-auto border-[20px] border-hpBackgroundGray border-solid">
           {location.pathname === '/' ? (
-            <div className="min-h-screen bg-gray-100">
+            <div className="min-h-screen ">
               {/* Hero Section */}
               <section className="bg-white py-20">
                 <div className="max-w-7xl mx-auto text-center">

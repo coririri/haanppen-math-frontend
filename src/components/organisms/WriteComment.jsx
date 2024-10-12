@@ -35,7 +35,7 @@ function WriteComment({ setIsWriteComment, questionId }) {
   };
 
   return (
-    <div className="w-full relative mt-6 mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
+    <div className="w-[400px] mx-auto relative mt-6 mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
       <button
         type="button"
         aria-label="댓글 작성 닫기 버튼"
@@ -56,7 +56,7 @@ function WriteComment({ setIsWriteComment, questionId }) {
           />
           <textarea
             ref={commentRef}
-            className="outline-none text-lg"
+            className="w-full outline-none text-lg"
             cols={80}
             rows={5}
             placeholder="댓글 작성"

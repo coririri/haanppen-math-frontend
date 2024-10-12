@@ -7,8 +7,8 @@ function Navigation() {
 
   if (role === 'STUDENT') {
     return (
-      <nav className="w-[428px] mx-auto">
-        <div className="w-[428px] h-[61px] mx-auto flex justify-between items-center">
+      <nav className="w-full mx-auto">
+        <div className="w-full h-[61px] mx-auto flex justify-center items-center">
           <button
             type="button"
             className="block w-[120px]"
@@ -37,7 +37,7 @@ function Navigation() {
               질문 게시판
             </Link>
           </button>
-          <button
+          {/* <button
             type="button"
             className="block w-[120px]"
             onClick={() => {
@@ -50,7 +50,7 @@ function Navigation() {
             >
               개념 영상
             </Link>
-          </button>
+          </button> */}
         </div>
       </nav>
     );

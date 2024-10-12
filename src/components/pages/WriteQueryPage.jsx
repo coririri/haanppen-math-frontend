@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BsFillPencilFill } from 'react-icons/bs';
 import { IoMdClose } from 'react-icons/io';
-import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom';
 import InputImageButton from '../atoms/InputImageButton';
 import IconButton from '../atoms/IconButton';
@@ -14,13 +13,24 @@ import writeQuery from '../../apis/question';
 function WriteQueryPage() {
   const [imgPreview, setImgePreview] = useState([]);
   const [imgFiles, setImgFiles] = useState([]);
+  const [questionText, setQuestionText] = useState(''); // 질문 텍스트 상태
+  const [questionTitle, setQuestionTitle] = useState('');
   const [teacherList, setTeacherList] = useState([]);
   const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
   const navigate = useNavigate();
 
-  console.log(selectedTeacherindex);
   const finishWrite = () => {
     const formData = new FormData();
+    if (questionTitle === '') {
+      alert('질문의 제목은 필수입니다.');
+      return;
+    }
+
+    if (questionText === '' && imgFiles.length === 0) {
+      alert('질문에 내용을 적어주세요.');
+      return;
+    }
+
     imgFiles.forEach((img) => {
       formData.append('images', img);
     });
@@ -29,8 +39,9 @@ function WriteQueryPage() {
         'targetMemberId',
         teacherList[selectedTeacherindex - 1].id,
       );
-    formData.append('content', '없음');
-    formData.append('title', '제목 없음');
+    // else formData.append('targetMemberId', null);
+    formData.append('content', questionText);
+    formData.append('title', questionTitle);
     writeQuery(formData, navigate);
     // formdata를 활용해 질문 글 작성
   };
@@ -59,7 +70,18 @@ function WriteQueryPage() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
+      {/* 제목 입력 필드 */}
+      <div className="lg:w-[380px] md:w-[300px] w-[230px] mx-auto mt-6">
+        <input
+          value={questionTitle}
+          onChange={(e) => setQuestionTitle(e.target.value)}
+          placeholder="제목을 입력하세요"
+          className="w-full h-10 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 hover:shadow-lg"
+        />
+      </div>
+
+      {/* DropdownMenu */}
       <div className="w-[233px] mx-auto mt-6">
         <DropdownMenu
           textArr={['지정 안함', ...teacherList.map((teacher) => teacher.name)]}
@@ -67,46 +89,53 @@ function WriteQueryPage() {
           setSelectedIndex={setSelectedTeacherindex}
         />
       </div>
-      <div className="text-center text-lg mt-4 font-bold text-hpRed">
-        *사진으로만 질문하세요*
+
+      {/* 질문 입력 필드 */}
+      <div className="lg:w-[380px] md:w-[300px] w-[280px] mx-auto mt-6">
+        <textarea
+          value={questionText}
+          onChange={(e) => setQuestionText(e.target.value)}
+          placeholder="질문을 작성하세요"
+          className="w-full h-32 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none transition-all duration-300 hover:shadow-lg"
+        />
       </div>
-      <div className="block w-[404px] mx-auto">
-        <Slider
-          dots
-          infinite={false}
-          speed={5}
-          slidesToScroll={1}
-          slidesToShow={1}
-          arrows={false}
-        >
-          {imgPreview.map((src, index) => (
-            <div className="w-[404px] h-[400px] mx-auto mt-6 relative">
-              <button
-                className="absolute right-2 top-4 bg-black"
-                type="button"
-                aria-label="삭제"
-                onClick={() => {
-                  handleDeleteImageButton(index);
-                }}
-              >
-                <IoMdClose size="20px" color="white" />
-              </button>
-              <img className="w-[404px] h-[400px]" src={src} alt="이미지 1" />
-            </div>
-          ))}
-        </Slider>
+
+      {/* 이미지 미리보기 */}
+      <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto">
+        {imgPreview.map((src, index) => (
+          <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
+            <button
+              className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
+              type="button"
+              aria-label="삭제"
+              onClick={() => handleDeleteImageButton(index)}
+            >
+              <IoMdClose size="20px" color="white" />
+            </button>
+
+            <img
+              className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto rounded-lg shadow-lg"
+              src={src}
+              alt={`이미지 ${index + 1}`}
+            />
+          </div>
+        ))}
       </div>
+
+      {/* 버튼 섹션 */}
       <div className="w-full absolute bottom-4">
         <div className="w-full flex justify-between px-12">
           <IconButton
             bgColor="white"
             text="완료"
             icon={<BsFillPencilFill size="1.5rem" />}
-            handleClick={finishWrite}
+            handleClick={() => finishWrite()}
+            className="transition-transform transform hover:scale-110 duration-300 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
           />
           <InputImageButton
             setImgFiles={setImgFiles}
             setImgePreview={setImgePreview}
+            className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
           />
         </div>
       </div>

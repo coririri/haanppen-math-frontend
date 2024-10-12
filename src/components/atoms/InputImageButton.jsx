@@ -6,12 +6,12 @@ function InputImageButton({ setImgFiles, setImgePreview }) {
 
   const saveImgFile = () => {
     const file = imgRef.current.files.item(0);
-    setImgFiles(() => [file]);
+    setImgFiles((prev) => [...prev, file]);
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setImgePreview(() => [reader.result]);
+        setImgePreview((prev) => [...prev, reader.result]);
       };
     }
   };
@@ -19,7 +19,7 @@ function InputImageButton({ setImgFiles, setImgePreview }) {
   return (
     <form>
       <label htmlFor="imageUpload">
-        <div className="w-[113px] h-[44px] border-[1.5px] border-solid border-hpBlack rounded-md">
+        <div className="w-[113px] h-[44px] border-[1.5px] border-solid border-hpBlack rounded-md bg-white">
           <div className="flex items-center justify-center">
             <div className="mr-2">
               <AiOutlineFileImage size="24px" />

@@ -1,4 +1,3 @@
-import imageUrlToSrc from '../utils/imageUrlToSrc';
 import instance from './instance';
 
 const writeQuery = (formData, navigate) => {
@@ -19,63 +18,32 @@ const writeQuery = (formData, navigate) => {
     });
 };
 
-export const getQuestionsList = async ({ pageParam, queryKey }) => {
-  try {
-    const response = await instance.get('/api/board/questions', {
-      params: {
-        size: 1,
-        cursorIndex: pageParam,
-        sort: queryKey[1] ?? '',
-      },
-    });
+export const getQuestionsList = async (page, searchValue) =>
+  instance.get('/api/board/questions', {
+    params: {
+      size: 8,
+      page,
+      sort: 'date,DESC',
+      title: searchValue,
+    },
+  });
 
-    const { data } = response;
-    const { contents } = data;
-
-    for (let i = 0; i < contents.length; i += 1) {
-      const question = contents[i];
-      if (question.images.length !== 0) {
-        const { imageUrl } = question.images[0];
-        question.images[0] = imageUrlToSrc(imageUrl);
-      }
-    }
-    return data;
-  } catch (error) {
-    console.error('Error fetching questions list:', error);
-    throw error;
-  }
-};
-
-export const getMyQuestionsList = async ({ pageParam, queryKey }) => {
-  try {
-    const response = await instance.get('/api/board/questions/my', {
-      params: {
-        size: 1,
-        cursorIndex: pageParam,
-        sort: queryKey[1] ?? '',
-      },
-    });
-
-    const { data } = response;
-    const { contents } = data;
-
-    for (let i = 0; i < contents.length; i += 1) {
-      const question = contents[i];
-      if (question.images.length !== 0) {
-        const { imageUrl } = question.images[0];
-        question.images[0] = imageUrlToSrc(imageUrl);
-      }
-    }
-    return data;
-  } catch (error) {
-    console.error('Error fetching questions list:', error);
-    throw error;
-  }
-};
+export const getMyQuestionsList = async (page, searchValue) =>
+  instance.get('/api/board/questions/my', {
+    params: {
+      size: 8,
+      page,
+      sort: 'date,DESC',
+      title: searchValue,
+    },
+  });
 
 export const getDetailQuestionById = async (id) => {
   const response = await instance.get(`/api/board/questions/${id}`);
   return response.data;
 };
+
+export const deleteQuestionById = async (id) =>
+  instance.delete(`/api/board/questions/${id}`);
 
 export default writeQuery;

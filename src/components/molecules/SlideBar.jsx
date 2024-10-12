@@ -12,41 +12,48 @@ function SlideBar({
 }) {
   const [leftPosition, setLeftPosition] = useState('left-[130px]');
   const [twoLeftPosition, setTwoLeftPosition] = useState('left-[20px]');
-  const [studentLeftPosition, setStudentLeftPosition] =
-    useState('left-[6.5rem]');
 
   if (num === 2) {
     if (isStudent) {
       return (
         <div>
-          <div className="flex items-center justify-center mx-auto">
-            <TextButton
-              color="white"
-              moreStyle="w-[100px] mr-2"
-              isClick={isClickArr[0]}
-              handleClick={() => {
-                setIsClickArr([true, false]);
-                setStudentLeftPosition('left-[6.5rem]');
-              }}
-            >
-              {firstText}
-            </TextButton>
+          <div>
+            {/* 첫 번째 버튼 */}
+            <div>
+              <TextButton
+                color="white"
+                moreStyle={`w-[120px] mb-2 mr-1 transition-transform transform hover:scale-105 duration-300 ${
+                  isClickArr[0]
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 text-black'
+                }`}
+                isClick={isClickArr[0]}
+                handleClick={() => {
+                  setIsClickArr([true, false]);
+                }}
+                textMoreStyle="leading-[16px] text-md"
+              >
+                {firstText}
+              </TextButton>
+            </div>
 
+            {/* 두 번째 버튼 */}
             <TextButton
               color="white"
-              moreStyle="w-[100px] ml-2"
+              moreStyle={`w-[120px]  transition-transform transform hover:scale-105 duration-300 ${
+                isClickArr[1]
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-black'
+              }`}
               isClick={isClickArr[1]}
               handleClick={() => {
                 setIsClickArr([false, true]);
-                setStudentLeftPosition('left-[13.7rem]');
               }}
+              textMoreStyle="leading-[16px] text-md"
             >
               {secondText}
             </TextButton>
           </div>
-          <div
-            className={`transition-[left] relative h-1 w-20 mt-1 bg-hpBlue ${studentLeftPosition}`}
-          />
         </div>
       );
     }
