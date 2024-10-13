@@ -257,10 +257,11 @@ export const getMyCourseStudents = async (
     let tempStudentsNum = 0;
 
     studentPreviews.forEach((student) => {
-      newStudents[student.grade].students.push({
-        id: student.studentId,
-        name: student.studentName,
-      });
+      if (student)
+        newStudents[student.grade].students.push({
+          id: student.studentId,
+          name: student.studentName,
+        });
       tempStudentsNum += 1;
     });
     setMyCourseStudents(newStudents);

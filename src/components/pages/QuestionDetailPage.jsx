@@ -44,6 +44,7 @@ function QuestionDetailPage() {
         registeredDateTime: response.registeredDateTime,
         registerMemberName: response.registeredMember.memberName,
         registerMemberGrade: response.registeredMember.memberGrade + 1,
+        targetMemberId: response.targetMember.memberId,
       };
 
       const commentsData = response.comments;
@@ -80,7 +81,11 @@ function QuestionDetailPage() {
 
   const handleModifyCompelte = async () => {
     try {
-      modifyQuery(modificationData, id);
+      modifyQuery(
+        modificationData,
+        id,
+        data?.questionDetailData.targetMemberId,
+      );
     } catch (e) {
       console.log(e);
     }

@@ -18,10 +18,11 @@ const writeQuery = (formData, navigate) => {
     });
 };
 
-export const modifyQuery = (data, questionId) =>
+export const modifyQuery = (data, questionId, targetMemberId) =>
   instance.put(`/api/board/questions/${questionId}`, {
     title: data.title,
     content: data.content,
+    targetMemberId,
   });
 
 export const getQuestionsList = async (page, searchValue) =>

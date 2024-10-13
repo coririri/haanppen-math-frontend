@@ -17,7 +17,7 @@ export const deleteComment = (commentId) =>
   instance.delete(`/api/board/comments/${commentId}`);
 
 export const modifyComment = (data, commentId) =>
-  instance.put(`/api/board/comments/${commentId}`, {
+  instance.patch(`/api/board/comments/${commentId}`, {
     content: data.content,
   });
 
