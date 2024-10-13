@@ -33,7 +33,6 @@ function WriteQueryPage() {
 
     imgFiles.forEach((img) => {
       formData.append('images', img);
-      alert(img.size);
     });
     if (selectedTeacherindex !== 0)
       formData.append(
@@ -48,7 +47,7 @@ function WriteQueryPage() {
       writeQuery(formData, navigate);
       // formdata를 활용해 질문 글 작성
     } catch (e) {
-      alert(e);
+      console.log(e);
     }
   };
 

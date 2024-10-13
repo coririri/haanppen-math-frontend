@@ -1,10 +1,14 @@
 import { BsBookmarkCheckFill, BsClock } from 'react-icons/bs';
 import { BiCommentDots } from 'react-icons/bi';
 import { AiFillEdit } from 'react-icons/ai';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import IconButton from '../atoms/IconButton';
-import { deleteQuestionById, getDetailQuestionById } from '../../apis/question';
+import {
+  deleteQuestionById,
+  getDetailQuestionById,
+  modifyQuery,
+} from '../../apis/question';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
 import gradeTransform from '../../utils/gradeTransform';
 import dateTimeToDate from '../../utils/dateTimeToDate';
@@ -14,12 +18,16 @@ import hw1 from '../../assests/hw1.jpg';
 
 function QuestionDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [data, setData] = useState(null);
   const [isWriteComment, setIsWriteComment] = useState(false);
 
   const [isModify, setIsModify] = useState(false);
-  const [modificationData, setModificationData] = useState();
+  const [modificationData, setModificationData] = useState({
+    title: '',
+    conent: '',
+  });
 
   useEffect(() => {
     const getData = async () => {
@@ -55,22 +63,28 @@ function QuestionDetailPage() {
     getData();
   }, []);
 
-  function handleEdit() {
+  const handleEdit = async () => {
     // 수정 로직 구현
-    // navigate(`/question/${id}/modify`);
     setIsModify(true);
-  }
+  };
 
   const handleDelete = async () => {
     // 삭제 로직 구현
     try {
       deleteQuestionById(id);
+      navigate('/question-board');
     } catch (e) {
       console.log(e);
     }
   };
 
-  const handleModifyCompelte = async () => {};
+  const handleModifyCompelte = async () => {
+    try {
+      modifyQuery(modificationData, id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleModifyCancel = async () => {
     setIsModify(false);
@@ -422,7 +436,13 @@ function QuestionDetailPage() {
           </div>
         )}
         {data?.commentsData?.map((comment) => (
-          <CommentBox comment={comment} key={comment.commentId} isStudent />
+          <CommentBox
+            comment={comment}
+            key={comment.commentId}
+            setData={setData}
+            setModificationData={setModificationData}
+            isStudent
+          />
         ))}
 
         {isWriteComment && (
@@ -430,6 +450,8 @@ function QuestionDetailPage() {
             <WriteComment
               setIsWriteComment={setIsWriteComment}
               questionId={id}
+              setModificationData={setModificationData}
+              setData={setData}
             />
           </div>
         )}

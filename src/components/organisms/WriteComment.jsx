@@ -4,23 +4,68 @@ import { BsFillPencilFill } from 'react-icons/bs';
 import writeComment from '../../apis/comment';
 import ImageModal from '../modals/ImageModal';
 import InputImagesButton from '../atoms/InputImagesButton';
+import { getDetailQuestionById } from '../../apis/question';
+import imageUrlToSrc from '../../utils/imageUrlToSrc';
+import hw1 from '../../assests/hw1.jpg';
 
-function WriteComment({ setIsWriteComment, questionId }) {
+function WriteComment({
+  setIsWriteComment,
+  questionId,
+  setModificationData,
+  setData,
+}) {
   const [imgsFiles, setImgsFiles] = useState([]);
   const [imgsPreview, setImgsPreview] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
   const commentRef = useRef();
 
-  const finishWrite = () => {
-    const formData = new FormData();
-    imgsFiles.forEach((img) => {
-      formData.append('images', img);
-    });
-    formData.append('questionId ', questionId);
-    formData.append('content', commentRef.current.value);
-    writeComment(formData);
-    // formdata를 활용해 질문 글 작성
+  const finishWrite = async () => {
+    try {
+      const formData = new FormData();
+      imgsFiles.forEach((img) => {
+        formData.append('images', img);
+      });
+      formData.append('questionId ', questionId);
+      formData.append('content', commentRef.current.value);
+      await writeComment(formData);
+      // formdata를 활용해 질문 글 작성
+      setIsWriteComment(false);
+
+      const getData = async () => {
+        const response = await getDetailQuestionById(questionId);
+
+        const questionDetailData = {
+          title: response.title,
+          content: response.content,
+          imageUrls: response.imageUrls.map((imageUrl) =>
+            imageUrl.imageUrl
+              ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
+              : hw1,
+          ),
+          registeredDateTime: response.registeredDateTime,
+          registerMemberName: response.registeredMember.memberName,
+          registerMemberGrade: response.registeredMember.memberGrade + 1,
+        };
+
+        const commentsData = response.comments;
+
+        setData({
+          questionDetailData,
+          commentsData,
+        });
+        // data를 사용하여 추가 작업을 수행합니다.
+
+        setModificationData({
+          title: response.title,
+          content: response.content,
+        });
+      };
+
+      getData();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleDeleteImagesButton = (index) => {

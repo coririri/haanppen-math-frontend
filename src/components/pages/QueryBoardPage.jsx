@@ -44,7 +44,7 @@ function QueryBoardPage() {
       }
     };
     fetchData();
-  }, [page, slideBarIndex, searchState]);
+  }, [page, slideBarIndex, searchState, window.location.pathname]);
 
   if (localStorage.getItem('role') === 'STUDENT') {
     return (

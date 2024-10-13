@@ -18,6 +18,12 @@ const writeQuery = (formData, navigate) => {
     });
 };
 
+export const modifyQuery = (data, questionId) =>
+  instance.put(`/api/board/questions/${questionId}`, {
+    title: data.title,
+    content: data.content,
+  });
+
 export const getQuestionsList = async (page, searchValue) =>
   instance.get('/api/board/questions', {
     params: {
