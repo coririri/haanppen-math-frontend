@@ -71,6 +71,40 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
   const handleModifyCompelte = async () => {
     try {
       await modifyComment(modificationCommentData, comment?.commentId);
+
+      const getData = async () => {
+        const response = await getDetailQuestionById(id);
+
+        const questionDetailData = {
+          title: response.title,
+          content: response.content,
+          imageUrls: response.imageUrls.map((imageUrl) =>
+            imageUrl.imageUrl
+              ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
+              : hw1,
+          ),
+          registeredDateTime: response.registeredDateTime,
+          registerMemberName: response.registeredMember.memberName,
+          registerMemberGrade: response.registeredMember.memberGrade + 1,
+        };
+
+        const commentsData = response.comments;
+
+        setData({
+          questionDetailData,
+          commentsData,
+        });
+        // data를 사용하여 추가 작업을 수행합니다.
+
+        setModificationData({
+          title: response.title,
+          content: response.content,
+        });
+      };
+
+      await getData();
+
+      setIsModify(false);
     } catch (e) {
       console.log(e);
     }
@@ -78,6 +112,9 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
 
   const handleModifyCancel = async () => {
     setIsModify(false);
+    setModificationCommentData({
+      content: comment?.content,
+    });
   };
 
   // URL을 감지하고 <a> 태그로 변환하는 함수

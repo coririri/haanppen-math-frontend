@@ -19,7 +19,8 @@ const writeQuery = (formData, navigate) => {
 };
 
 export const modifyQuery = (data, questionId, targetMemberId) =>
-  instance.put(`/api/board/questions/${questionId}`, {
+  instance.put(`/api/board/questions`, {
+    questionId,
     title: data.title,
     content: data.content,
     targetMemberId,
