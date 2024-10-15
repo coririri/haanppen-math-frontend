@@ -5,6 +5,7 @@ import phoneNumberValidation from '../../utils/idValidation';
 import passwordValidation from '../../utils/passwordValidation';
 import login from '../../apis/login';
 import LoginForm from '../organisms/LoginForm';
+import FindPasswordModal from '../modals/FindPasswordModal';
 
 function LoginPage() {
   const [userForm, setUserForm] = useState({ id: '', password: '' });
@@ -12,6 +13,7 @@ function LoginPage() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [installable, setInstallable] = useState(false);
   const navigate = useNavigate();
+  const [findPasswordModalOpen, setFindPasswordModalOpen] = useState(false);
 
   // ID와 패스워드 유효성 검사
   useEffect(() => {
@@ -46,6 +48,9 @@ function LoginPage() {
     login(userForm, setErrorMessage, navigate);
   };
 
+  const handlefindPassword = async () => {
+    setFindPasswordModalOpen(true);
+  };
   const handleInstallClick = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt(); // 설치 프롬프트 실행
@@ -65,6 +70,10 @@ function LoginPage() {
 
   return (
     <main className="lg:w-[1440px] md:w-[834px] w-full mx-auto h-[100vh] flex flex-col items-center justify-center">
+      <FindPasswordModal
+        findPasswordModalOpen={findPasswordModalOpen}
+        setFindPasswordModalOpen={setFindPasswordModalOpen}
+      />
       <div className="mb-24">
         <img
           className="mx-auto md:w-[250px] w-[220px]"
@@ -78,15 +87,34 @@ function LoginPage() {
         handleLoginClick={handleLoginClick}
       />
 
-      {/* PWA 설치 버튼 추가 */}
-      {installable && (
-        <button
-          onClick={handleInstallClick}
-          className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition duration-300"
-          type="button"
-        >
-          앱 설치
-        </button>
+      {installable ? (
+        <div className="flex justify-center">
+          {/* PWA 설치 버튼 추가 */}
+          <button
+            onClick={handleInstallClick}
+            className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition duration-300 mr-2"
+            type="button"
+          >
+            앱 설치
+          </button>
+          <button
+            onClick={handlefindPassword}
+            className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition duration-300 ml-2"
+            type="button"
+          >
+            비밀번호 찾기
+          </button>
+        </div>
+      ) : (
+        <div className="flex justify-center">
+          <button
+            onClick={handlefindPassword}
+            className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition duration-300"
+            type="button"
+          >
+            비밀번호 찾기
+          </button>
+        </div>
       )}
     </main>
   );
