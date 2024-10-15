@@ -60,10 +60,17 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
         type="button"
         aria-label="왼쪽 넘기기"
         onClick={() => {
-          setStartDate((prevDate) => subDays(prevDate, 1)); // 현재 날짜에서 하루를 빼서 업데이트
-          searchParams.set('date', subDays(startDate, 1));
+          setStartDate((prevDate) =>
+            subDays(new Date(dateTimeToDateAndZeroTimes(prevDate)), 1),
+          ); // 현재 날짜에서 하루를 빼서 업데이트
+          searchParams.set(
+            'date',
+            subDays(new Date(dateTimeToDateAndZeroTimes(startDate)), 1),
+          );
           setSearchParams(searchParams);
-          setCurrentDate((prevDate) => subDays(prevDate, 1));
+          setCurrentDate((prevDate) =>
+            subDays(new Date(dateTimeToDateAndZeroTimes(prevDate)), 1),
+          );
         }}
       >
         <BsFillTriangleFill
@@ -135,10 +142,17 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
         type="button"
         aria-label="왼쪽 넘기기"
         onClick={() => {
-          setStartDate((prevDate) => addDays(prevDate, 1)); // 현재 날짜에서 하루를 더해서 업데이트
-          searchParams.set('date', addDays(startDate, 1));
+          setStartDate((prevDate) =>
+            addDays(new Date(dateTimeToDateAndZeroTimes(prevDate)), 1),
+          ); // 현재 날짜에서 하루를 더해서 업데이트
+          searchParams.set(
+            'date',
+            addDays(new Date(dateTimeToDateAndZeroTimes(startDate)), 1),
+          );
           setSearchParams(searchParams);
-          setCurrentDate((prevDate) => addDays(prevDate, 1));
+          setCurrentDate((prevDate) =>
+            addDays(new Date(dateTimeToDateAndZeroTimes(prevDate)), 1),
+          );
         }}
       >
         <BsFillTriangleFill

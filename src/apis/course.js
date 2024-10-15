@@ -1,15 +1,12 @@
 import instance from './instance';
 
-const enrollCourse = async (courseName, teacherId, students) => {
-  await instance
-    .post('/api/manage/courses', {
-      courseName,
-      teacherId,
-      students,
-    })
-    .then(() => {})
-    .catch(() => {});
-};
+const enrollCourse = async (courseName, teacherId, students) =>
+  instance.post('/api/manage/courses', {
+    courseName,
+    teacherId,
+    students,
+  });
+
 export const getAllCourses = (setCourseListData) =>
   instance.get('/api/courses').then((response) => {
     setCourseListData(response.data);

@@ -8,7 +8,7 @@ export const createDirectory = async (dirPath, dirName) =>
   instance.post(`/api/directories`, {
     directoryPath: dirPath,
     directoryName: dirName,
-    canViewByEveryone: true,
+    canViewByEveryone: false,
     canModifyByEveryone: false,
   });
 

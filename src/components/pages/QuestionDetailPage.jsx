@@ -15,6 +15,7 @@ import dateTimeToDate from '../../utils/dateTimeToDate';
 import WriteComment from '../organisms/WriteComment';
 import CommentBox from '../organisms/CommentBox';
 import hw1 from '../../assests/hw1.jpg';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function QuestionDetailPage() {
   const { id } = useParams();
@@ -28,6 +29,7 @@ function QuestionDetailPage() {
     title: '',
     content: '',
   });
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -44,7 +46,7 @@ function QuestionDetailPage() {
         registeredDateTime: response.registeredDateTime,
         registerMemberName: response.registeredMember.memberName,
         registerMemberGrade: response.registeredMember.memberGrade + 1,
-        targetMemberId: response.targetMember.memberId,
+        targetMemberId: response.targetMember?.memberId,
       };
 
       const commentsData = response.comments;
@@ -72,7 +74,7 @@ function QuestionDetailPage() {
   const handleDelete = async () => {
     // 삭제 로직 구현
     try {
-      deleteQuestionById(id);
+      await deleteQuestionById(id);
       navigate('/question-board');
     } catch (e) {
       console.log(e);
@@ -134,6 +136,15 @@ function QuestionDetailPage() {
     return (
       <div className="w-full">
         {/* 질문글 상단 */}
+        <DeleteCheckModal
+          deleteCheckModalOpen={deleteCheckModalOpen}
+          setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+          handleDelete={async () => {
+            await handleDelete();
+            setDeleteCheckModalOpen(false);
+          }}
+        />
+
         <div className="w-full h-[30px] mx-auto mt-4 bg-hpLightGray">
           <div className="h-full flex items-center justify-between">
             <div className="h-full flex items-center ml-4">
@@ -252,7 +263,9 @@ function QuestionDetailPage() {
                 수정
               </button>
               <button
-                onClick={handleDelete}
+                onClick={() => {
+                  setDeleteCheckModalOpen(true);
+                }}
                 className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
                 type="button"
               >
@@ -301,6 +314,14 @@ function QuestionDetailPage() {
   return (
     <div className="w-full">
       {/* 질문글 상단 */}
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          await handleDelete();
+          setDeleteCheckModalOpen(false);
+        }}
+      />
       <div className="w-[400px] h-[30px] mx-auto mt-4 bg-hpLightGray">
         <div className="h-full flex items-center justify-between">
           <div className="h-full flex items-center ml-4">
@@ -420,7 +441,10 @@ function QuestionDetailPage() {
               수정
             </button>
             <button
-              onClick={handleDelete}
+              onClick={() => {
+                setDeleteCheckModalOpen(true);
+                console.log('짜증나');
+              }}
               className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
               type="button"
             >

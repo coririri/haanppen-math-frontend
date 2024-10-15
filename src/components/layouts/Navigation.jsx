@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { dateTimeToDateAndZeroTimes } from '../../utils/dateTimeToDate';
 
 function Navigation() {
   const [, setClickIndex] = useState(1);
   const role = localStorage.getItem('role');
-
+  console.log(new Date(dateTimeToDateAndZeroTimes(new Date())));
   if (role === 'STUDENT') {
     return (
       <nav className="w-full mx-auto">
@@ -60,7 +61,7 @@ function Navigation() {
       <nav className="w-[1440px] mx-auto">
         <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">
           <Link
-            to={`/enroll-class?date=${new Date()}&classIndex=${0}`}
+            to={`/enroll-class?date=${new Date(dateTimeToDateAndZeroTimes(new Date()))}&classIndex=${0}`}
             className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
           >
             <button
@@ -111,7 +112,7 @@ function Navigation() {
     <nav className="w-[1440px] mx-auto">
       <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">
         <Link
-          to={`/enroll-class?date=${new Date()}&classIndex=${0}`}
+          to={`/enroll-class?date=${new Date(dateTimeToDateAndZeroTimes(new Date()))}&classIndex=${0}`}
           className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
         >
           <button

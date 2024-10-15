@@ -6,6 +6,7 @@ import IconButton from '../atoms/IconButton';
 import TeacherList from '../organisms/TeacherList';
 import TeacherEnrollmentModal from '../modals/TeacherEnrollmentModal';
 import Pagenation from '../organisms/Pagenation';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function TeacherManagementPage() {
   const searchRef = useRef();
@@ -21,6 +22,8 @@ function TeacherManagementPage() {
   //     initialPageParam: 0,
   //     getNextPageParam: (lastPage) => lastPage?.data?.nextCursor,
   //   });
+
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: () => deleteTeacherAccount(forDeletedTeacherIds),
@@ -43,6 +46,15 @@ function TeacherManagementPage() {
         searchNameValue={searchNameValue}
         page={page}
       />
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          await mutation.mutate();
+          setDeleteCheckModalOpen(false);
+        }}
+      />
+
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
         <div className="flex items-center">
@@ -63,7 +75,7 @@ function TeacherManagementPage() {
               icon={<AiFillEdit size="26px" color="black" />}
               text="강사 삭제"
               handleClick={() => {
-                mutation.mutate();
+                setDeleteCheckModalOpen(true);
               }}
             />
           </div>

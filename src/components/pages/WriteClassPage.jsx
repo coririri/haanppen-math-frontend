@@ -6,7 +6,9 @@ import VideoListTab from '../organisms/VideoListTab';
 import DropdownMenu from '../molecules/DropdownMenu';
 import Canlendar from '../molecules/Canlendar';
 import { getOwnCourses } from '../../apis/course';
-import dateTimeToDate from '../../utils/dateTimeToDate';
+import dateTimeToDate, {
+  dateTimeToDateAndZeroTimes,
+} from '../../utils/dateTimeToDate';
 import { getLessonByDateAndCourse } from '../../apis/lesson';
 
 function WriteClassPage() {
@@ -36,7 +38,7 @@ function WriteClassPage() {
     const fetchData = async () => {
       const response = await getLessonByDateAndCourse(
         courseList[selectedClassindex]?.courseId,
-        dateTimeToDate(startDate),
+        dateTimeToDate(new Date(dateTimeToDateAndZeroTimes(startDate))),
       );
       if (response.status === 200) {
         const { data } = response;
@@ -68,7 +70,7 @@ function WriteClassPage() {
   useEffect(() => {
     setStartDate(searchParams.get('date'));
   }, [searchParams.get('date')]);
-
+  console.log(startDate);
   return (
     <div className="w-[950px] mx-auto">
       <div>

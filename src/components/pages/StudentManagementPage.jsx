@@ -12,6 +12,7 @@ import StudentList from '../organisms/StudentList';
 import StudentEnrollmentModal from '../modals/StudentEnrollmentModal';
 import { deleteStudent, getStudentByPage } from '../../apis/student';
 import Pagenation from '../organisms/Pagenation';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function StudentManagementPage() {
   const queryClient = useQueryClient();
@@ -26,6 +27,7 @@ function StudentManagementPage() {
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [forDeletedStudentIds, setForDeletedStudentIds] = useState([]);
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: () => deleteStudent(forDeletedStudentIds),
@@ -36,6 +38,9 @@ function StudentManagementPage() {
         searchNameValue,
         page - 1,
       ]);
+    },
+    onError: () => {
+      alert('실패');
     },
   });
 
@@ -53,6 +58,14 @@ function StudentManagementPage() {
         queryKeyChoosenGradeIndex={choosenGradeIndex}
         queryKeySearchNameValue={searchNameValue}
         page={page}
+      />
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          await mutation.mutate(forDeletedStudentIds);
+          setDeleteCheckModalOpen(false);
+        }}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="mt-3 flex items-center justify-between w-[300px] mx-auto">
@@ -124,7 +137,7 @@ function StudentManagementPage() {
               icon={<AiFillEdit size="26px" color="black" />}
               text="학생 삭제"
               handleClick={async () => {
-                mutation.mutate(forDeletedStudentIds);
+                setDeleteCheckModalOpen(true);
               }}
             />
           </div>

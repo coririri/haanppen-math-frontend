@@ -6,6 +6,7 @@ import imageUrlToSrc from '../../utils/imageUrlToSrc';
 import { deleteComment, modifyComment } from '../../apis/comment';
 import { getDetailQuestionById } from '../../apis/question';
 import hw1 from '../../assests/hw1.jpg';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function CommentBox({ comment, setData, setModificationData, isStudent }) {
   const { id } = useParams();
@@ -16,6 +17,7 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
   const [modificationCommentData, setModificationCommentData] = useState({
     content: '',
   });
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
   useEffect(() => {
     setModificationCommentData({ content: comment?.content });
@@ -142,6 +144,14 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
   if (isStudent) {
     return (
       <div className="px-2">
+        <DeleteCheckModal
+          deleteCheckModalOpen={deleteCheckModalOpen}
+          setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+          handleDelete={async () => {
+            await handleDelete();
+            setDeleteCheckModalOpen(false);
+          }}
+        />
         <div className="mt-6 mb-2 flex items-center justify-between font-bold">
           <div className="flex items-center ml-2">
             <PiChalkboardTeacherFill size="3rem" />
@@ -180,7 +190,9 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
                   수정
                 </button>
                 <button
-                  onClick={handleDelete}
+                  onClick={() => {
+                    setDeleteCheckModalOpen(true);
+                  }}
                   className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
                   type="button"
                 >
@@ -244,6 +256,15 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
   }
   return (
     <div>
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          await handleDelete();
+          setDeleteCheckModalOpen(false);
+        }}
+      />
+
       <div className="mt-6 mb-2 flex items-center font-bold justify-between">
         <div className="ml-2">
           <PiChalkboardTeacherFill size="3rem" />

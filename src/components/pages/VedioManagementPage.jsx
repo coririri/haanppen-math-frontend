@@ -10,6 +10,7 @@ import getDirectory, { deleteDirectory } from '../../apis/directory';
 import CreateFolderModal from '../modals/CreateFolderModal';
 import enrollVideo, { deleteVideo } from '../../apis/video';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 // import enrollVideo from '../../apis/video';
 
 function VedioManagementPage() {
@@ -29,6 +30,10 @@ function VedioManagementPage() {
     end: 0,
   });
   const [isVideoUploadingModalOpen, setIsVideoUploadingModalOpen] =
+    useState(false);
+  const [deleteFolderCheckModalOpen, setDeleteFolderCheckModalOpen] =
+    useState(false);
+  const [deleteVideoCheckModalOpen, setDeleteVideoCheckModalOpen] =
     useState(false);
 
   const videoRef = useRef(null);
@@ -163,6 +168,125 @@ function VedioManagementPage() {
 
   return (
     <div>
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteFolderCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteFolderCheckModalOpen}
+        handleDelete={async () => {
+          if (directoryError !== '') {
+            alert('뒤로 가기를 눌러주세요');
+            return;
+          }
+          let deletedDirectory = checkedDirectoryArr.map(
+            (value) => directoryDatas[value].fileName,
+          );
+          try {
+            for (let i = 0; i < checkedDirectoryArr.length; i += 1) {
+              if (directoryDatas[checkedDirectoryArr[i]].isDir === true) {
+                const deletedForName =
+                  directoryDatas[checkedDirectoryArr[i]].fileName;
+                await handleDeleteDirectory(deletedForName);
+                deletedDirectory = deletedDirectory.filter(
+                  (value) =>
+                    directoryDatas[checkedDirectoryArr[i]].fileName !== value,
+                );
+              }
+            }
+
+            const absolutePath = breadscrumArray.join('/');
+            if (absolutePath !== '/') {
+              const { data } = await getDirectory(absolutePath.slice(1));
+
+              setDirectoryDatas(data);
+              setCheckedDirectoryArr(
+                data
+                  .map((directory, index) => {
+                    if (deletedDirectory.includes(directory.fileName))
+                      return index;
+                    return null;
+                  })
+                  .filter((value) => value !== null),
+              );
+            } else {
+              const { data } = await getDirectory(absolutePath);
+
+              setDirectoryDatas(data);
+              setCheckedDirectoryArr(
+                data
+                  .map((directory, index) => {
+                    if (deletedDirectory.includes(directory.fileName))
+                      return index;
+                    return null;
+                  })
+                  .filter((value) => value !== null),
+              );
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
+          setDeleteFolderCheckModalOpen(false);
+        }}
+      />
+
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteVideoCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteVideoCheckModalOpen}
+        handleDelete={async () => {
+          if (directoryError !== '') {
+            alert('뒤로 가기를 눌러주세요');
+            return;
+          }
+          try {
+            let deletedDirectory = checkedDirectoryArr.map(
+              (value) => directoryDatas[value].fileName,
+            );
+            console.log(deletedDirectory);
+            for (let i = 0; i < checkedDirectoryArr.length; i += 1) {
+              if (directoryDatas[checkedDirectoryArr[i]].isDir === false) {
+                const deletedPath = directoryDatas[checkedDirectoryArr[i]].path;
+                await deleteVideo(deletedPath);
+
+                deletedDirectory = deletedDirectory.filter(
+                  (value) =>
+                    directoryDatas[checkedDirectoryArr[i]].fileName !== value,
+                );
+              }
+            }
+            console.log(deletedDirectory);
+            const absolutePath = breadscrumArray.join('/');
+            if (absolutePath !== '/') {
+              const { data } = await getDirectory(absolutePath.slice(1));
+              console.log(data);
+              setDirectoryDatas(data);
+              setCheckedDirectoryArr(
+                data
+                  .map((directory, index) => {
+                    if (deletedDirectory.includes(directory.fileName))
+                      return index;
+                    return null;
+                  })
+                  .filter((value) => value !== null),
+              );
+            } else {
+              const { data } = await getDirectory(absolutePath);
+
+              setDirectoryDatas(data);
+              setCheckedDirectoryArr(
+                data
+                  .map((directory, index) => {
+                    if (deletedDirectory.includes(directory.fileName))
+                      return index;
+                    return null;
+                  })
+                  .filter((value) => value !== null),
+              );
+            }
+          } catch (e) {
+            console.log(e);
+          }
+          setDeleteVideoCheckModalOpen(false);
+        }}
+      />
       <CreateFolderModal
         modalOpen={isFolderCreateModalOpen}
         setModalOpen={setIsFolderCreateModalOpen}
@@ -231,58 +355,7 @@ function VedioManagementPage() {
             color="gray"
             moreStyle="w-[9rem]  mr-4"
             handleClick={async () => {
-              if (directoryError !== '') {
-                alert('뒤로 가기를 눌러주세요');
-                return;
-              }
-              let deletedDirectory = checkedDirectoryArr.map(
-                (value) => directoryDatas[value].fileName,
-              );
-              try {
-                for (let i = 0; i < checkedDirectoryArr.length; i += 1) {
-                  if (directoryDatas[checkedDirectoryArr[i]].isDir === true) {
-                    const deletedForName =
-                      directoryDatas[checkedDirectoryArr[i]].fileName;
-                    await handleDeleteDirectory(deletedForName);
-                    deletedDirectory = deletedDirectory.filter(
-                      (value) =>
-                        directoryDatas[checkedDirectoryArr[i]].fileName !==
-                        value,
-                    );
-                  }
-                }
-
-                const absolutePath = breadscrumArray.join('/');
-                if (absolutePath !== '/') {
-                  const { data } = await getDirectory(absolutePath.slice(1));
-
-                  setDirectoryDatas(data);
-                  setCheckedDirectoryArr(
-                    data
-                      .map((directory, index) => {
-                        if (deletedDirectory.includes(directory.fileName))
-                          return index;
-                        return null;
-                      })
-                      .filter((value) => value !== null),
-                  );
-                } else {
-                  const { data } = await getDirectory(absolutePath);
-
-                  setDirectoryDatas(data);
-                  setCheckedDirectoryArr(
-                    data
-                      .map((directory, index) => {
-                        if (deletedDirectory.includes(directory.fileName))
-                          return index;
-                        return null;
-                      })
-                      .filter((value) => value !== null),
-                  );
-                }
-              } catch (e) {
-                console.log(e);
-              }
+              setDeleteFolderCheckModalOpen(true);
             }}
           >
             폴더 삭제
@@ -316,60 +389,7 @@ function VedioManagementPage() {
             color="gray"
             moreStyle="w-[9rem]"
             handleClick={async () => {
-              if (directoryError !== '') {
-                alert('뒤로 가기를 눌러주세요');
-                return;
-              }
-              try {
-                let deletedDirectory = checkedDirectoryArr.map(
-                  (value) => directoryDatas[value].fileName,
-                );
-                console.log(deletedDirectory);
-                for (let i = 0; i < checkedDirectoryArr.length; i += 1) {
-                  if (directoryDatas[checkedDirectoryArr[i]].isDir === false) {
-                    const deletedPath =
-                      directoryDatas[checkedDirectoryArr[i]].path;
-                    await deleteVideo(deletedPath);
-
-                    deletedDirectory = deletedDirectory.filter(
-                      (value) =>
-                        directoryDatas[checkedDirectoryArr[i]].fileName !==
-                        value,
-                    );
-                  }
-                }
-                console.log(deletedDirectory);
-                const absolutePath = breadscrumArray.join('/');
-                if (absolutePath !== '/') {
-                  const { data } = await getDirectory(absolutePath.slice(1));
-                  console.log(data);
-                  setDirectoryDatas(data);
-                  setCheckedDirectoryArr(
-                    data
-                      .map((directory, index) => {
-                        if (deletedDirectory.includes(directory.fileName))
-                          return index;
-                        return null;
-                      })
-                      .filter((value) => value !== null),
-                  );
-                } else {
-                  const { data } = await getDirectory(absolutePath);
-
-                  setDirectoryDatas(data);
-                  setCheckedDirectoryArr(
-                    data
-                      .map((directory, index) => {
-                        if (deletedDirectory.includes(directory.fileName))
-                          return index;
-                        return null;
-                      })
-                      .filter((value) => value !== null),
-                  );
-                }
-              } catch (e) {
-                console.log(e);
-              }
+              setDeleteVideoCheckModalOpen(true);
             }}
           >
             영상 삭제

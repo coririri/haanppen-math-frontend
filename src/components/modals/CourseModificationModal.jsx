@@ -445,6 +445,16 @@ function CourseModificationModal({
               icon={<AiFillEdit size="20px" />}
               text="완료"
               handleClick={async () => {
+                if (selectedTeacherindex === 0) {
+                  alert('선생님을 선택해주세요');
+                  return;
+                }
+
+                if (courseName === '') {
+                  alert('반 이름을 입력해주세요');
+                  return;
+                }
+
                 const tempMyCourseStudents = myCourseStudents.filter(
                   (grade) => grade.students.length !== 0,
                 );

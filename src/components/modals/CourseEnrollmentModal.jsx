@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import enrollCourse, { getAllCourses, getCoursesById } from '../../apis/course';
@@ -43,6 +44,8 @@ function CourseEnrollmentModal({
   teacherArr,
   selectedIndex,
 }) {
+  const notify = (text) => toast(text);
+
   const [teacherList, setTeacherList] = useState([]);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
   const [courseName, setCourseName] = useState('');
@@ -206,7 +209,7 @@ function CourseEnrollmentModal({
     const fetchData = async () => {
       try {
         const { data } = await getAllTeachers();
-        console.log(data);
+
         setTeacherList([...data]);
         getAllStudents(setEntireStudents, setEntireStudentsNum);
       } catch (error) {
@@ -283,9 +286,6 @@ function CourseEnrollmentModal({
       getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
     }
   };
-
-  console.log(teacherList);
-  console.log(selectedTeacherindex);
 
   return (
     <ReactModal
@@ -372,27 +372,37 @@ function CourseEnrollmentModal({
               icon={<AiFillEdit size="20px" />}
               text="완료"
               handleClick={async () => {
-                const tempMyCourseStudents = myCourseStudents.filter(
-                  (grade) => grade.students.length !== 0,
-                );
-                const newCourseStudents = [];
-                tempMyCourseStudents.forEach((grade) => {
-                  grade.students.forEach((student) => {
-                    newCourseStudents.push(student.id);
+                try {
+                  const tempMyCourseStudents = myCourseStudents.filter(
+                    (grade) => grade.students.length !== 0,
+                  );
+                  const newCourseStudents = [];
+                  tempMyCourseStudents.forEach((grade) => {
+                    grade.students.forEach((student) => {
+                      newCourseStudents.push(student.id);
+                    });
                   });
-                });
-                if (selectedTeacherindex === 0) {
-                  alert('선생님을 선택해주세요');
-                  return;
-                }
-                await enrollCourse(
-                  courseName,
-                  teacherList[selectedTeacherindex - 1].id,
-                  newCourseStudents,
-                );
+                  if (selectedTeacherindex === 0) {
+                    alert('선생님을 선택해주세요');
+                    return;
+                  }
 
-                await resetModalState();
-                setEnrollmentModalOpen(false);
+                  if (courseName === '') {
+                    alert('반 이름을 입력해주세요');
+                    return;
+                  }
+                  await enrollCourse(
+                    courseName,
+                    teacherList[selectedTeacherindex - 1].id,
+                    newCourseStudents,
+                  );
+
+                  resetModalState();
+                  setEnrollmentModalOpen(false);
+                } catch (e) {
+                  notify('본인 반만 생성할 수 있습니다.');
+                  alert('본인 반만 생성할 수 있습니다');
+                }
               }}
             />
           </div>

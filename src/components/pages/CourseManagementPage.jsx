@@ -10,6 +10,7 @@ import {
 } from '../../apis/course';
 import getAllTeachers from '../../apis/teacher';
 import TeacherDropdown from '../molecules/TeacherDropdown';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function CourseManagementPage() {
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
@@ -17,6 +18,8 @@ function CourseManagementPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [courseListData, setCourseListData] = useState(null);
   const [deletedCoursesIndex, setDeletedCoursesIndex] = useState([]);
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+
   useEffect(() => {
     // 비동기 함수 정의
     const fetchData = async () => {
@@ -48,6 +51,17 @@ function CourseManagementPage() {
         teacherArr={teacherArr}
         selectedIndex={selectedIndex}
       />
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          for (let i = 0; i < deletedCoursesIndex.length; i += 1)
+            await deleteCourses(deletedCoursesIndex[i]);
+          await getAllCourses(setCourseListData);
+          setDeleteCheckModalOpen(false);
+        }}
+      />
+
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
         <div className="flex items-center">
@@ -66,10 +80,8 @@ function CourseManagementPage() {
               bgColor="white"
               icon={<AiFillEdit size="26px" color="black" />}
               text="반 삭제"
-              handleClick={async () => {
-                for (let i = 0; i < deletedCoursesIndex.length; i += 1)
-                  await deleteCourses(deletedCoursesIndex[i]);
-                await getAllCourses(setCourseListData);
+              handleClick={() => {
+                setDeleteCheckModalOpen(true);
               }}
             />
           </div>

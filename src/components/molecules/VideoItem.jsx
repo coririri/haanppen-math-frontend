@@ -14,6 +14,7 @@ import {
   deleteAttachmentFile,
 } from '../../apis/lesson';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function VideoItem({
   videoData,
@@ -33,6 +34,10 @@ function VideoItem({
     end: 0,
   });
   const [isVideoUploadingModalOpen, setIsVideoUploadingModalOpen] =
+    useState(false);
+  const [deleteVideoCheckModalOpen, setDeleteVideoCheckModalOpen] =
+    useState(false);
+  const [deleteAttachmentCheckModalOpen, setDeleteAttachmentCheckModalOpen] =
     useState(false);
 
   const upToOrder = async () => {
@@ -260,6 +265,15 @@ function VideoItem({
         uploadingInfo={uploadingInfo}
       />
 
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteVideoCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteVideoCheckModalOpen}
+        handleDelete={async () => {
+          await deleteVideo();
+          setDeleteVideoCheckModalOpen(false);
+        }}
+      />
+
       <div className="flex justify-between items-center">
         <div className="w-[750px] h-[80px] bg-hpBgGray rounded-3xl my-4 flex items-center">
           {isVideoSelected ? (
@@ -314,7 +328,9 @@ function VideoItem({
               bgColor="white"
               icon={<AiFillEdit size="20px" />}
               text="영상 목록 삭제"
-              handleClick={deleteVideo}
+              handleClick={() => {
+                setDeleteVideoCheckModalOpen(true);
+              }}
             />
           )}
           {isVideoSelected && (
@@ -332,6 +348,16 @@ function VideoItem({
         console.log(attachment);
         return (
           <div className="w-full flex mb-2" key={attachment.attachmentId}>
+            <DeleteCheckModal
+              deleteCheckModalOpen={deleteAttachmentCheckModalOpen}
+              setDeleteCheckModalOpen={setDeleteAttachmentCheckModalOpen}
+              handleDelete={async (e) => {
+                if (attachment.attachmentId !== undefined)
+                  await deleteAttachmentFile(attachment.attachmentId);
+                deleteAttachment(e, attachmentIndex);
+                setDeleteAttachmentCheckModalOpen(false);
+              }}
+            />
             <label
               htmlFor={`uploadedFile${vedioIndex}${attachmentIndex}`}
               aria-label="파일 수정"
@@ -352,10 +378,8 @@ function VideoItem({
             <TextButton
               color="gray"
               moreStyle="w-[130px] mr-4"
-              handleClick={async (e) => {
-                if (attachment.attachmentId !== undefined)
-                  await deleteAttachmentFile(attachment.attachmentId);
-                deleteAttachment(e, attachmentIndex);
+              handleClick={async () => {
+                setDeleteAttachmentCheckModalOpen(true);
               }}
             >
               삭제 하기

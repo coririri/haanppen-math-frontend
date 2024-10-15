@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { AiFillEdit, AiOutlineBook } from 'react-icons/ai';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 import 'react-datepicker/dist/react-datepicker.css'; // 스타일을 불러옵니다.
 import IconButton from '../atoms/IconButton';
 import InputBox from '../atoms/InputBox';
@@ -20,8 +22,24 @@ function ClassDetailTab({
   courseList,
   selectedClassindex,
 }) {
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+
   return (
     <div className="w-[750px] mx-auto">
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          try {
+            await deleteLessonById(classId);
+            setIsCreated(false);
+            setDeleteCheckModalOpen(false);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
+      />
+
       <div className="flex justify-center items-center mt-4">
         <AiOutlineBook size="1.7rem" className="mr-2" />
         <span className="font-bold text-2xl">수업 세부 내용</span>
@@ -101,12 +119,7 @@ function ClassDetailTab({
             icon={<AiFillEdit size="20px" />}
             text="수업 삭제"
             handleClick={async () => {
-              try {
-                await deleteLessonById(classId);
-                setIsCreated(false);
-              } catch (e) {
-                console.log(e);
-              }
+              setDeleteCheckModalOpen(true);
             }}
           />
         </div>
