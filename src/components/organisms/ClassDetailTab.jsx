@@ -11,6 +11,7 @@ import enrollLesson, {
   deleteLessonById,
   putLessonDetailContentByClassId,
 } from '../../apis/lesson';
+import { dateTimeToDateAndZeroTimes } from '../../utils/dateTimeToDate';
 
 function ClassDetailTab({
   classId,
@@ -138,7 +139,7 @@ function ClassDetailTab({
               try {
                 await enrollLesson(
                   courseList[selectedClassindex].courseId,
-                  startDate,
+                  new Date(dateTimeToDateAndZeroTimes(startDate)),
                   classDetailData.title,
                   classDetailData.content,
                 );
