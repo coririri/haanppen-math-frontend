@@ -65,7 +65,7 @@ function UserInformation() {
   }, [userForm.newPassword]);
 
   return (
-    <div className="lg:w-[1440px] md:w-[834px] w-[280px] mt-[70px] flex flex-col px-4 mx-auto">
+    <div className="lg:w-[1440px] md:w-[834px] w-[280px] mt-[30px] flex flex-col mx-auto">
       <div className="flex flex-col justify-between lg:w-[380px] md:w-[320px] w-[280px] mx-auto border-hpBlack border-[1px] border-solid rounded-lg">
         <div className="flex flex-col justify-center mt-8">
           <div className="flex justify-center">
