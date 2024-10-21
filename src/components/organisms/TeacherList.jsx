@@ -10,7 +10,8 @@ function TeacherList({
     <div className="w-full">
       <div className="w-[800px] mx-auto">
         <div className="flex items-center justify-between">
-          <input type="checkbox" className="w-[16px] h-[16px]" disabled />
+          {/* <input type="checkbox" className="w-[16px] h-[16px]" disabled /> */}
+          <div className="w-[16px] h-[16px]" />
           <span className="text-lg font-bold text-hpGray w-[90px]">
             선생님 이름
           </span>
