@@ -11,6 +11,7 @@ import {
 import getAllTeachers from '../../apis/teacher';
 import TeacherDropdown from '../molecules/TeacherDropdown';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import ErrorConfirmModal from '../modals/ErrorConfirmModal';
 
 function CourseManagementPage() {
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
@@ -19,6 +20,7 @@ function CourseManagementPage() {
   const [courseListData, setCourseListData] = useState(null);
   const [deletedCoursesIndex, setDeletedCoursesIndex] = useState([]);
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
 
   useEffect(() => {
     // 비동기 함수 정의
@@ -55,13 +57,22 @@ function CourseManagementPage() {
         deleteCheckModalOpen={deleteCheckModalOpen}
         setDeleteCheckModalOpen={setDeleteCheckModalOpen}
         handleDelete={async () => {
-          for (let i = 0; i < deletedCoursesIndex.length; i += 1)
-            await deleteCourses(deletedCoursesIndex[i]);
-          await getAllCourses(setCourseListData);
-          setDeleteCheckModalOpen(false);
+          try {
+            for (let i = 0; i < deletedCoursesIndex.length; i += 1)
+              await deleteCourses(deletedCoursesIndex[i]);
+            await getAllCourses(setCourseListData);
+            setDeleteCheckModalOpen(false);
+          } catch (e) {
+            setDeleteCheckModalOpen(false);
+            setErrorModalOpen(true);
+          }
         }}
       />
-
+      <ErrorConfirmModal
+        errorModalOpen={errorModalOpen}
+        setErrorModalOpen={setErrorModalOpen}
+        errorMessage="선생님은 본인 반만 삭제 가능합니다."
+      />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">
         <div className="flex items-center">
