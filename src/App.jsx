@@ -1,24 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import ReactModal from 'react-modal';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import LoginPage from './components/pages/LoginPage';
+import CommonLayout from './components/layouts/CommonLayout';
+import WriteQueryPage from './components/pages/WriteQueryPage';
+import ManagementPage from './components/pages/ManagementPage';
+import UserInformationPage from './components/pages/UserInformationPage';
+import QueryBoardPage from './components/pages/QueryBoardPage';
+import QuestionDetailPage from './components/pages/QuestionDetailPage';
+import WriteClassPage from './components/pages/WriteClassPage';
+import 'react-datepicker/dist/react-datepicker.css';
+import VedioManagementPage from './components/pages/VedioManagementPage';
+import MyClassPage from './components/pages/MyClassPage';
+import LessonPage from './components/pages/LessonPage';
 
 function App() {
+  const queryClient = new QueryClient();
+  ReactModal.setAppElement('#root');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {/* 공통 레이아웃 */}
+          <Route path="/" element={<CommonLayout />}>
+            <Route path="question-board" element={<QueryBoardPage />} />
+            <Route path="write-query" element={<WriteQueryPage />} />
+            <Route path="management" element={<ManagementPage />} />
+            <Route path="user-information" element={<UserInformationPage />} />
+            <Route path="question/:id" element={<QuestionDetailPage />} />
+
+            <Route path="enroll-class" element={<WriteClassPage />} />
+            <Route path="vedio-management" element={<VedioManagementPage />} />
+            <Route path="my-class" element={<MyClassPage />} />
+            <Route path="lesson" element={<LessonPage />} />
+          </Route>
+          {/* 단독 레이아웃 */}
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

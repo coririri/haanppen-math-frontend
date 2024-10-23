@@ -1,0 +1,16 @@
+/* index.css 또는 다른 CSS 파일 */
+@keyframes flicker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.flicker {
+  animation-name: flicker;
+  animation-duration: 1600ms;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}

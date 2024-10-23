@@ -1,0 +1,49 @@
+.sunday {
+  color: red; /* 주말의 텍스트 색상을 빨간색으로 설정 */
+}
+
+.react-datepicker__day {
+  font-weight: bold;
+  width: 2.3rem !important;
+  line-height: 2.3rem !important;
+}
+
+.react-datepicker {
+  border-radius: 1.5rem;
+}
+
+.react-datepicker__header {
+  border-radius: 1.5rem !important;
+  background-color: white;
+  border-bottom: 0px !important;
+}
+
+.react-datepicker__day-name {
+  font-weight: bold;
+  font-size: 14px;
+  width: 2.3rem !important;
+  line-height: 2.3rem !important;
+}
+
+.react-datepicker__day-name[aria-label='일요일'] {
+  color: red;
+}
+
+.react-datepicker__month-container {
+  float: none !important;
+}
+
+.react-datepicker__children-container {
+  width: auto !important;
+}
+
+.date-record {
+  width: 240px;
+  text-align: center;
+  line-height: 42px;
+  border: solid 1.5px black;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 18px;
+  position: relative;
+}
