@@ -29,5 +29,13 @@
     "no-await-in-loop": "off",
     "no-console": "off",
     "no-alert": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   }
 }
