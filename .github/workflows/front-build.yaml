@@ -2,7 +2,7 @@ name: Test deploy_6 # Workflow 이름
 on: # Event 감지
   push:
     branches:
-      - develop
+      - main
 jobs: # Job 설정
   build:
     runs-on: ubuntu-latest
@@ -26,7 +26,7 @@ jobs: # Job 설정
           # .env에 있던 환경변수들을 등록해주는 단계
       - name: .env setting
         run: |
-          echo "REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }}" >> .env
+          echo "REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL_DEPLOY }}" >> .env
 
       - name: Build # React Build
         run: npm run build
@@ -34,8 +34,8 @@ jobs: # Job 설정
       - name: copy file to server via ssh key
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.AWS_SSH_KEY }}
+          host: ${{ secrets.AWS_HOST_DEPLOY }}
+          username: ${{ secrets.AWS_USERNAME_DEPLOY }}
+          key: ${{ secrets.AWS_SSH_KEY_DEPLOY }}
           source: 'build/*'
           target: '/home/ubuntu/frontserver'
