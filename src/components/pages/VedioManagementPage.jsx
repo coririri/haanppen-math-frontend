@@ -404,7 +404,7 @@ function VedioManagementPage() {
                 if (data.isDir === true) {
                   return (
                     <Folder
-                      key={data.createdTime}
+                      key={data.createdTime + data.fileName}
                       name={data.fileName}
                       setCheckedDirectoryArr={setCheckedDirectoryArr}
                       index={index}
