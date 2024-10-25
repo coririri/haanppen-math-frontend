@@ -115,6 +115,7 @@ function VedioManagementPage() {
         isLast: totalChunks - 1 === currentChunk,
         extension: '.mp4',
       };
+      console.log(info);
       formData.append('media', chunk);
       formData.append(
         'info',
