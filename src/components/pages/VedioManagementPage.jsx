@@ -165,6 +165,7 @@ function VedioManagementPage() {
     sendNextChunk();
   };
   console.log(checkedDirectoryArr);
+  console.log(directoryDatas);
 
   return (
     <div>
