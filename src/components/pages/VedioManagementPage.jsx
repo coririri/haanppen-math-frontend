@@ -99,7 +99,7 @@ function VedioManagementPage() {
     // chunk file 전송
     const sendNextChunk = async () => {
       // chunk size 만큼 데이터 분할
-      console.log(file.name);
+
       const start = currentChunk * chunkSize;
       const end = Math.min(start + chunkSize, file.size);
 
@@ -123,7 +123,7 @@ function VedioManagementPage() {
 
       try {
         const response = await enrollVideo(formData);
-        console.log(response);
+
         if (response.status === 201) {
           setIsVideoUploadingModalOpen(false);
           alert('파일 전송이 끝났습니다');
@@ -164,8 +164,6 @@ function VedioManagementPage() {
 
     sendNextChunk();
   };
-  console.log(checkedDirectoryArr);
-  console.log(directoryDatas);
 
   return (
     <div>
@@ -415,7 +413,7 @@ function VedioManagementPage() {
                 }
                 return (
                   <VideoFile
-                    key={data.createdTime}
+                    key={data.createdTime + data.fileName}
                     name={data.fileName}
                     setCheckedDirectoryArr={setCheckedDirectoryArr}
                     index={index}
