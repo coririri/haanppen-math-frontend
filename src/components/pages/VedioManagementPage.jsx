@@ -109,7 +109,7 @@ function VedioManagementPage() {
       const formData = new FormData();
       const info = {
         targetDirectoryPath: absolutePath,
-        fileName: file.name.split('.')[0],
+        fileName: file.name.split('.')[0] ?? '기본',
         totalChunkCount: file.size,
         currChunkIndex: start === 0 ? 0 : start + 1,
         isLast: totalChunks - 1 === currentChunk,
