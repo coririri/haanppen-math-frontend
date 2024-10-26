@@ -1,11 +1,12 @@
 import React from 'react';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoImages from '../../images/header/sm_logo_image.png';
 
 function Header() {
   const role = localStorage.getItem('role');
   const userName = localStorage.getItem('userName');
+  const navigate = useNavigate();
   let roleTheme;
   if (role === 'ADMIN') {
     roleTheme = '관리자';
@@ -25,7 +26,8 @@ function Header() {
             type="button"
             className="ml-4"
             onClick={() => {
-              window.location.href = 'https://hanapi.hopto.org/';
+              navigate('/');
+              window.location.reload();
             }}
           >
             <img
@@ -59,7 +61,8 @@ function Header() {
           type="button"
           className="block w-[200px]"
           onClick={() => {
-            window.location.href = 'http://localhost:3000';
+            navigate('/');
+            window.location.reload();
           }}
         >
           <img
