@@ -187,8 +187,16 @@ function UserInformation() {
               />
             }
             text="저장"
-            handleClick={() => {
-              putAccountInfo(userForm, setErrorMessages);
+            handleClick={async () => {
+              try {
+                await putAccountInfo(userForm);
+                logout();
+              } catch (e) {
+                setErrorMessages((prev) => ({
+                  ...prev,
+                  password: '기존 비밀번호가 틀렸습니다',
+                }));
+              }
             }}
             disabled={
               errorMessages.name !== '' ||
