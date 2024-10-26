@@ -59,14 +59,14 @@ function Navigation() {
   if (role === 'ADMIN')
     return (
       <nav className="w-[1440px] mx-auto">
-        <div className="w-[660px] h-[50px] mx-auto flex justify-between items-center">
+        <div className="h-[50px] mx-[300px] flex justify-between items-center">
           <Link
             to={`/enroll-class?date=${new Date(dateTimeToDateAndZeroTimes(new Date()))}&classIndex=${0}`}
-            className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+            className=" block text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
           >
             <button
               type="button"
-              className="text-right w-[160px]"
+              className="text-right"
               onClick={() => {
                 setClickIndex(1);
               }}
@@ -81,7 +81,7 @@ function Navigation() {
           >
             <button
               type="button"
-              className="block w-[100px]"
+              className="block"
               onClick={() => {
                 setClickIndex(2);
               }}
@@ -92,16 +92,31 @@ function Navigation() {
 
           <Link
             to="/management"
-            className=" block  w-[160px] text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+            className=" block  text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
           >
             <button
               type="button"
-              className="block w-[160px] text-left"
+              className="block text-left"
               onClick={() => {
                 setClickIndex(3);
               }}
             >
               관리
+            </button>
+          </Link>
+
+          <Link
+            to="/vedio-management?breadscrum=/&date=Wed%20Oct%2023%202024%2018:32:03%20GMT+0900%20(%ED%95%9C%EA%B5%AD%20%ED%91%9C%EC%A4%80%EC%8B%9C)"
+            className="block  text-xl   hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+          >
+            <button
+              type="button"
+              className="block  text-left"
+              onClick={() => {
+                setClickIndex(3);
+              }}
+            >
+              영상 관리
             </button>
           </Link>
         </div>
