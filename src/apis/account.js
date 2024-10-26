@@ -21,22 +21,13 @@ const getMyAccountInfo = (setUserForm) => {
     });
 };
 
-export const putAccountInfo = (userForm, setErrorMessages) => {
-  instance
-    .patch('/api/accounts/my', {
-      phoneNumber: userForm.phoneNumber,
-      name: userForm.name,
-      prevPassword: userForm.password,
-      newPassword: userForm.newPassword,
-    })
-    .then(() => {})
-    .catch(() => {
-      setErrorMessages((prev) => ({
-        ...prev,
-        password: '기존 비밀번호가 틀렸습니다',
-      }));
-    });
-};
+export const putAccountInfo = (userForm) =>
+  instance.patch('/api/accounts/my', {
+    phoneNumber: userForm.phoneNumber,
+    name: userForm.name,
+    prevPassword: userForm.password,
+    newPassword: userForm.newPassword,
+  });
 
 export const getPasswordValidCode = (phoneNumber) =>
   axios.post(
