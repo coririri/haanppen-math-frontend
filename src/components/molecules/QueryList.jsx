@@ -15,7 +15,7 @@ function QueryList({ question, isStudent }) {
       >
         <div className="font-bold text-md bg-white py-2 flex items-center min-h-[40px] border-b-2 border-solid border-[#C9C9C9]">
           <span className="inline-block w-[60px] text-center ml-[10px]">
-            <QueryBadge isSolved isStudent />
+            <QueryBadge isSolved={question.solved} isStudent />
           </span>
           <span className="inline-block w-[165px] text-center">
             {question.title}
@@ -35,7 +35,7 @@ function QueryList({ question, isStudent }) {
     >
       <div className="font-bold text-md bg-white py-2 flex items-center min-h-[40px] border-b-2 border-solid border-[#C9C9C9]">
         <span className="inline-block w-[60px] text-center ml-[10px]">
-          <QueryBadge isSolved isStudent />
+          <QueryBadge isSolved={question.solved} isStudent />
         </span>
         <span className="inline-block w-[165px] text-center">
           {question.title}
