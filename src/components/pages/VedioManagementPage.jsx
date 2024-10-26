@@ -120,6 +120,7 @@ function VedioManagementPage() {
         'info',
         new Blob([JSON.stringify(info)], { type: 'application/json' }),
       );
+      console.log(info);
 
       try {
         const response = await enrollVideo(formData);
@@ -148,7 +149,7 @@ function VedioManagementPage() {
           // 서버로부터 chunkIndex를 받아옴
           const { nextChunkIndex } = e.response.data;
           console.log(nextChunkIndex);
-          currentChunk = ((nextChunkIndex - 1) / 1024) * 1024;
+          currentChunk = (nextChunkIndex - 1) / 1024 / 1024;
           setUploadingInfo((prev) => ({
             ...prev,
             current: currentChunk,
