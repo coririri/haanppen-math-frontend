@@ -6,6 +6,7 @@ import IconButton from '../atoms/IconButton';
 import phonenumberValidate from '../../utils/phonenumberValidation';
 import studentAccountRegist from '../../apis/student';
 import GradeDropdown from '../molecules/GradeDropdown';
+import ErrorConfirmModal from './ErrorConfirmModal';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -65,6 +66,8 @@ function StudentEnrollmentModal({
   const [isDisabled, setIsDisabled] = useState(true);
   const [userform, setUserform] = useState({ name: '', phoneNumber: '' });
   const [errorMessage, setErrorMessage] = useState('');
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorEnrollMessage, setErrorEnrollMessage] = useState('');
 
   useEffect(() => {
     if (choosenGradeIndex[0] === true) {
@@ -98,6 +101,12 @@ function StudentEnrollmentModal({
       onRequestClose={setEnrollmentModalOpen}
       style={customModalStyles}
     >
+      <ErrorConfirmModal
+        errorModalOpen={errorModalOpen}
+        setErrorModalOpen={setErrorModalOpen}
+        errorMessage={errorEnrollMessage}
+      />
+
       <div className="flex flex-col items-center">
         <h1 className="text-xl font-bold">학생 등록</h1>
         <div className="flex items-center mt-4">
@@ -195,7 +204,7 @@ function StudentEnrollmentModal({
                 />
               }
               text="완료"
-              handleClick={() => {
+              handleClick={async () => {
                 let grade;
                 if (choosenGradeIndex[0] === true) {
                   grade = selectedIndex;
@@ -209,14 +218,22 @@ function StudentEnrollmentModal({
                   grade,
                   phoneNumber: userform.phoneNumber,
                 };
-                studentAccountRegist(
-                  setEnrollmentModalOpen,
-                  payload,
-                  queryKeyQueryClient,
-                  queryKeyChoosenGradeIndex,
-                  queryKeySearchNameValue,
-                  queryKeyPage,
-                );
+                try {
+                  await studentAccountRegist(payload);
+                  setEnrollmentModalOpen(false);
+                  queryKeyQueryClient.invalidateQueries([
+                    'students',
+                    queryKeyChoosenGradeIndex,
+                    queryKeySearchNameValue,
+                    queryKeyPage - 1,
+                  ]);
+                } catch (e) {
+                  // setEnrollmentModalOpen(false);
+                  setErrorEnrollMessage(
+                    `${e?.response?.data?.details}는 등록할 수 없습니다.`,
+                  );
+                  setErrorModalOpen(true);
+                }
               }}
               disabled={isDisabled}
             />{' '}

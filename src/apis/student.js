@@ -95,36 +95,14 @@ export const modifyStudent = (
       console.log(error);
     });
 
-const studentAccountRegist = (
-  setEnrollmentModalOpen,
-  payload,
-  queryClient,
-  choosenGradeIndex,
-  searchNameValue,
-  page,
-) => {
-  instance
-    .post('/api/accounts', {
-      name: payload.name,
-      grade: payload.grade,
-      phoneNumber: payload.phoneNumber,
-      role: 'student',
-      password: '0000',
-    })
-    .then(() => {
-      setEnrollmentModalOpen(false);
-
-      queryClient.invalidateQueries([
-        'students',
-        choosenGradeIndex,
-        searchNameValue,
-        page - 1,
-      ]);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+const studentAccountRegist = (payload) =>
+  instance.post('/api/accounts', {
+    name: payload.name,
+    grade: payload.grade,
+    phoneNumber: payload.phoneNumber,
+    role: 'student',
+    password: '0000',
+  });
 
 export const getAllStudents = async (
   setEntireStudents,
