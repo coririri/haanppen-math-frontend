@@ -135,7 +135,7 @@ function QueryBoardPage() {
             page={page}
             setPage={setPage}
             totalItemNumbers={pageInfo?.totalItemSize}
-            size={8}
+            itemNumPerPage={8}
           />
         </div>
       </div>
@@ -213,7 +213,7 @@ function QueryBoardPage() {
           page={page}
           setPage={setPage}
           totalItemNumbers={pageInfo?.totalItemSize}
-          size={8}
+          itemNumPerPage={8}
         />
       </div>
     </div>

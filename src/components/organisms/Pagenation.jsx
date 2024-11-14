@@ -1,46 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
-function Pagenation({ totalItemNumbers = 0, size, page, setPage }) {
-  const [maxPage, setMaxPage] = useState(10);
-  const [pageUi, setPageUi] = useState(
-    Array(
-      Math.ceil(totalItemNumbers / size) > maxPage
+const maxPage = 10; // 최대로 표시할 페이지 수 (기본적으로, 10개)
+function Pagenation({ totalItemNumbers = 0, itemNumPerPage, page, setPage }) {
+  const [pageUi, setPageUi] = useState({
+    startPage: 1,
+    pageLevel: 0, // 1~10페이지는 0, 11~20페이지는 1 이런 변수임
+    pageNums:
+      Math.ceil(totalItemNumbers / itemNumPerPage) - maxPage * 0 >= maxPage
         ? maxPage
-        : Math.ceil(totalItemNumbers / size) - maxPage + 10,
-    ).fill(0),
-  );
+        : Math.ceil(totalItemNumbers / itemNumPerPage) - maxPage * 0,
+  });
 
   function leftPage() {
     if (page === 1) {
       return;
     }
-    if (page === maxPage - 10 + 1) {
-      setMaxPage((prev) => prev - 10);
+
+    if (page - 1 < pageUi.startPage) {
+      setPageUi((prev) => ({
+        startPage: page - maxPage,
+        pageLevel: prev.pageLevel - 1,
+        pageNums:
+          Math.ceil(totalItemNumbers / itemNumPerPage) -
+            maxPage * (prev.pageLevel - 1) >=
+          maxPage
+            ? maxPage
+            : Math.ceil(totalItemNumbers / itemNumPerPage) -
+              maxPage * (prev.pageLevel - 1),
+      }));
     }
+
     setPage((prev) => prev - 1);
   }
 
   function rightPage() {
-    if (page === Math.ceil(totalItemNumbers / size)) {
+    if (page === Math.ceil(totalItemNumbers / itemNumPerPage)) {
       return;
     }
-    if (page === maxPage) {
-      setMaxPage((prev) => prev + 10);
+
+    if (pageUi.startPage + maxPage - 1 < page + 1) {
+      setPageUi((prev) => ({
+        startPage: page + 1,
+        pageLevel: prev.pageLevel + 1,
+        pageNums:
+          Math.ceil(totalItemNumbers / itemNumPerPage) -
+            maxPage * (prev.pageLevel + 1) >=
+          maxPage
+            ? maxPage
+            : Math.ceil(totalItemNumbers / itemNumPerPage) -
+              maxPage * (prev.pageLevel + 1),
+      }));
     }
+
     setPage((prev) => prev + 1);
   }
 
   useEffect(() => {
-    setPageUi(
-      Array(
-        Math.ceil(totalItemNumbers / size) > maxPage
-          ? 10
-          : Math.ceil(totalItemNumbers / size) - maxPage + 10,
-      ).fill(0),
-    );
+    setPageUi((prev) => ({
+      startPage: prev.startPage,
+      pageLevel: prev.pageLevel,
+      pageNums:
+        Math.ceil(totalItemNumbers / itemNumPerPage) -
+          maxPage * prev.pageLevel >=
+          maxPage ||
+        Math.ceil(totalItemNumbers / itemNumPerPage) -
+          maxPage * prev.pageLevel <
+          0
+          ? maxPage
+          : Math.ceil(totalItemNumbers / itemNumPerPage) -
+            maxPage * prev.pageLevel,
+    }));
   }, [page, totalItemNumbers]);
 
+  console.log(pageUi);
   return (
     <div className="flex justify-center">
       <button
@@ -54,24 +87,26 @@ function Pagenation({ totalItemNumbers = 0, size, page, setPage }) {
           <AiOutlineLeft className="font-bold" />
         </div>
       </button>
-      {pageUi.map((value, index) => {
-        const pageNumber = index - 10 + maxPage + 1;
-        return (
-          <button
-            key={pageNumber}
-            type="button"
-            onClick={() => {
-              setPage(index - 10 + maxPage + 1);
-            }}
-          >
-            <div
-              className={`w-[30px] h-[30px] leading-[30px] text-center rounded-2xl  ${index - 10 + maxPage + 1 === page ? 'text-white bg-hpHoverLightGray' : 'text-black hover:bg-hpWhiteBlue hover:bg-opacity-25 hover:text-hpDarkBlue'}`}
+      {Array(pageUi.pageNums)
+        .fill(0)
+        .map((value, index) => {
+          const pageNumber = pageUi.startPage + index;
+          return (
+            <button
+              key={pageNumber}
+              type="button"
+              onClick={() => {
+                setPage(pageNumber);
+              }}
             >
-              <span className="font-bold">{index - 10 + maxPage + 1}</span>
-            </div>
-          </button>
-        );
-      })}
+              <div
+                className={`w-[30px] h-[30px] leading-[30px] text-center rounded-2xl  ${pageNumber === page ? 'text-white bg-hpHoverLightGray' : 'text-black hover:bg-hpWhiteBlue hover:bg-opacity-25 hover:text-hpDarkBlue'}`}
+              >
+                <span className="font-bold">{pageNumber}</span>
+              </div>
+            </button>
+          );
+        })}
 
       <button
         type="button"

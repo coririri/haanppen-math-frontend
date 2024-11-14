@@ -175,16 +175,16 @@ function StudentManagementPage() {
               searchNameValue={searchNameValue}
             />
           </div>
-          <div className="w-[360px] mx-auto my-1">
-            <Pagenation
-              page={page}
-              setPage={setPage}
-              totalItemNumbers={data?.pageInfo?.totalItemSize}
-              size={10}
-            />
-          </div>
         </div>
       )}
+      <div className="w-[360px] mx-auto my-1">
+        <Pagenation
+          page={page}
+          setPage={setPage}
+          totalItemNumbers={data?.pageInfo?.totalItemSize}
+          itemNumPerPage={10}
+        />
+      </div>
     </div>
   );
 }

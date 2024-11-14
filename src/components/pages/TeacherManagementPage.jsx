@@ -120,7 +120,7 @@ function TeacherManagementPage() {
               page={page}
               setPage={setPage}
               totalItemNumbers={data?.pageInfo?.totalItemSize}
-              size={10}
+              itemNumPerPage={10}
             />
           </div>
         </div>
