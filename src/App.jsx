@@ -14,6 +14,8 @@ import VedioManagementPage from './components/pages/VedioManagementPage';
 import MyClassPage from './components/pages/MyClassPage';
 import LessonPage from './components/pages/LessonPage';
 
+// 배포1
+
 function App() {
   const queryClient = new QueryClient();
   ReactModal.setAppElement('#root');
