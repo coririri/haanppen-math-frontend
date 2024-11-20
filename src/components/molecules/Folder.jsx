@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { useSearchParams } from 'react-router-dom';
 
-function Folder({ name, setCheckedDirectoryArr, index }) {
+function Folder({ name, setCheckedDirectoryArr, createTime, index, layout }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isChecked, setIsChecked] = useState(false);
@@ -21,6 +21,50 @@ function Folder({ name, setCheckedDirectoryArr, index }) {
       );
     });
   }, [isChecked]);
+
+  if (layout === 'line')
+    return (
+      <div>
+        <button
+          type="button"
+          className="w-[1000px] flex justify-between items-center py-1 hover:bg-blue-100 transition"
+          onClick={() => {
+            const currentBreadscrumb = searchParams.get('breadscrum');
+            searchParams.set('breadscrum', `${currentBreadscrumb}_${name}`);
+            // setSearchParams를 사용하여 URL을 업데이트합니다.
+            setSearchParams(searchParams);
+            setCheckedDirectoryArr([]);
+          }}
+        >
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              onChange={() => {
+                setIsChecked((prev) => !prev);
+              }}
+              className="w-[15px] h-[15px] border-solid border-[1px] border-hpLightGray bg-white hover:border-black"
+            />
+            <div
+              type="button"
+              aria-label="폴더"
+              className="flex items-center justify-center w-[25px] h-[25px] outline-none ml-3"
+            >
+              <FcFolder size="4rem" />
+            </div>
+            <span className="font-bold text-md ml-6">{name}</span>
+          </div>
+          <span className="mr-6 font-bold text-md">
+            {createTime.split('T')[0]} {createTime.split('T')[1].split(':')[0]}:
+            {createTime.split('T')[1].split(':')[1]}:
+            {createTime.split('T')[1].split(':')[2].split('.')[0]}
+          </span>
+        </button>
+        <hr />
+      </div>
+    );
 
   return (
     <div className="w-[140px] max-h-[160px] flex flex-col items-center relative">

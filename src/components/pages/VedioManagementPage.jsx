@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineRight } from 'react-icons/ai';
+import { CgLayoutList, CgLayoutGrid } from 'react-icons/cg';
 import TextButton from '../atoms/TextButton';
 import Folder from '../molecules/Folder';
 import VideoFile from '../molecules/ViedoFile';
@@ -35,6 +36,8 @@ function VedioManagementPage() {
     useState(false);
   const [deleteVideoCheckModalOpen, setDeleteVideoCheckModalOpen] =
     useState(false);
+
+  const [uiStatus, setUiStatus] = useState('line');
 
   const videoRef = useRef(null);
 
@@ -166,6 +169,8 @@ function VedioManagementPage() {
 
     sendNextChunk();
   };
+
+  console.log(directoryDatas);
 
   return (
     <div>
@@ -338,30 +343,8 @@ function VedioManagementPage() {
             );
           })}
         </div>
-        <div className="mt-2">
-          <TextButton
-            color="gray"
-            moreStyle="w-[9rem] mr-4"
-            handleClick={() => {
-              if (directoryError !== '') {
-                alert('뒤로 가기를 눌러주세요');
-                return;
-              }
-              setIsFolderCreateModalOpen(true);
-            }}
-          >
-            폴더 생성
-          </TextButton>
-          <TextButton
-            color="gray"
-            moreStyle="w-[9rem]  mr-4"
-            handleClick={async () => {
-              setDeleteFolderCheckModalOpen(true);
-            }}
-          >
-            폴더 삭제
-          </TextButton>
-          <label htmlFor="vedioUpload">
+        <div className="mt-2 flex items-center justify-between">
+          <div>
             <TextButton
               color="gray"
               moreStyle="w-[9rem] mr-4"
@@ -370,124 +353,280 @@ function VedioManagementPage() {
                   alert('뒤로 가기를 눌러주세요');
                   return;
                 }
-                videoRef.current.click();
+                setIsFolderCreateModalOpen(true);
               }}
             >
-              영상 업로드
+              폴더 생성
             </TextButton>
-            <input
-              id="vedioUpload"
-              ref={videoRef}
-              type="file"
-              accept="video/mp4"
-              capture="environment"
-              className="hidden"
-              onChange={handleEnrollVideo}
-            />
-          </label>
+            <TextButton
+              color="gray"
+              moreStyle="w-[9rem]  mr-4"
+              handleClick={async () => {
+                setDeleteFolderCheckModalOpen(true);
+              }}
+            >
+              폴더 삭제
+            </TextButton>
+            <label htmlFor="vedioUpload">
+              <TextButton
+                color="gray"
+                moreStyle="w-[9rem] mr-4"
+                handleClick={() => {
+                  if (directoryError !== '') {
+                    alert('뒤로 가기를 눌러주세요');
+                    return;
+                  }
+                  videoRef.current.click();
+                }}
+              >
+                영상 업로드
+              </TextButton>
+              <input
+                id="vedioUpload"
+                ref={videoRef}
+                type="file"
+                accept="video/mp4"
+                capture="environment"
+                className="hidden"
+                onChange={handleEnrollVideo}
+              />
+            </label>
 
-          <TextButton
-            color="gray"
-            moreStyle="w-[9rem]"
-            handleClick={async () => {
-              setDeleteVideoCheckModalOpen(true);
-            }}
-          >
-            영상 삭제
-          </TextButton>
+            <TextButton
+              color="gray"
+              moreStyle="w-[9rem]"
+              handleClick={async () => {
+                setDeleteVideoCheckModalOpen(true);
+              }}
+            >
+              영상 삭제
+            </TextButton>
+          </div>
+
+          <div className="mr-24 flex">
+            <button
+              type="button"
+              aria-label="줄 레이아웃"
+              className={`p-2 rounded-lg bg-gray-100 hover:bg-gray-200  active:bg-gray-300 transition mr-4 ${uiStatus === 'line' ? 'ring-blue-500 ring-2 outline-none' : ''}`}
+              onClick={() => {
+                setUiStatus('line');
+              }}
+            >
+              <CgLayoutList className="text-2xl text-gray-700" />
+            </button>
+            <button
+              type="button"
+              aria-label="그리드 레이아웃"
+              className={`p-2 rounded-lg bg-gray-100 hover:bg-gray-200  active:bg-gray-300 transition mr-4 ${uiStatus === 'grid' ? 'ring-blue-500 ring-2 outline-none' : ''}`}
+              onClick={() => {
+                setUiStatus('grid');
+              }}
+            >
+              <CgLayoutGrid className="text-2xl text-gray-700" />
+            </button>
+          </div>
         </div>
       </div>
       <hr className="w-[1300px] h-[1.3px] mx-auto bg-hpGray mt-3" />
-      <div className="pl-24">
-        {directoryError === '' ? (
-          <div className="flex justify-end px-4">
-            <div className="grow grid grid-cols-4 gap-y-1 gap-x-0 mt-6">
-              {directoryDatas.map((data, index) => {
-                if (data.isDir === true) {
+      {uiStatus === 'line' ? (
+        <div className="pl-24 h-[800px] overflow-y-auto">
+          {directoryError === '' ? (
+            <div className="flex justify-start">
+              <div className="mt-6">
+                <hr />
+                <div className="w-[1000px] flex justify-between py-2">
+                  <div className="ml-6">
+                    <span className="text-md">종류</span>
+                    <span className="ml-6 text-md">이름</span>
+                  </div>
+                  <span className="mr-6  text-md">생성 날짜</span>
+                </div>
+                <hr />
+
+                {directoryDatas.map((data, index) => {
+                  if (data.isDir === true) {
+                    return (
+                      <Folder
+                        key={data.createdTime + data.fileName}
+                        name={data.fileName}
+                        createTime={data.createdTime}
+                        setCheckedDirectoryArr={setCheckedDirectoryArr}
+                        index={index}
+                        layout={uiStatus}
+                      />
+                    );
+                  }
                   return (
-                    <Folder
+                    <VideoFile
                       key={data.createdTime + data.fileName}
                       name={data.fileName}
+                      createTime={data.createdTime}
                       setCheckedDirectoryArr={setCheckedDirectoryArr}
                       index={index}
+                      path={data.path}
+                      layout={uiStatus}
                     />
                   );
-                }
-                return (
-                  <VideoFile
-                    key={data.createdTime + data.fileName}
-                    name={data.fileName}
-                    setCheckedDirectoryArr={setCheckedDirectoryArr}
-                    index={index}
-                    path={data.path}
-                  />
-                );
-              })}
-            </div>
-            <div className="w-[300px] min-h-[530px] border-hpGray border-l-[1.3px] border-solid relative">
-              {checkedDirectoryArr.length === 0 && (
-                <div>선택 된 파일 및 폴더가 없습니다</div>
-              )}
-              {checkedDirectoryArr.length !== 0 &&
-                directoryDatas[
-                  checkedDirectoryArr[checkedDirectoryArr.length - 1]
-                ].isDir === true && (
-                  <FolderDetailTab
-                    folderData={
-                      directoryDatas[
-                        checkedDirectoryArr[checkedDirectoryArr.length - 1]
-                      ]
-                    }
-                    breadscrumArray={breadscrumArray}
-                    setDirectoryDatas={setDirectoryDatas}
-                  />
+                })}
+              </div>
+              <div className="w-[300px] min-h-[530px] border-hpGray border-l-[1.3px] border-solid relative">
+                {checkedDirectoryArr.length === 0 && (
+                  <div>선택 된 파일 및 폴더가 없습니다</div>
                 )}
-              {checkedDirectoryArr.length !== 0 &&
-                directoryDatas[
-                  checkedDirectoryArr[checkedDirectoryArr.length - 1]
-                ].isDir === false && (
-                  <FileDetailTab
-                    fileData={
-                      directoryDatas[
-                        checkedDirectoryArr[checkedDirectoryArr.length - 1]
-                      ]
-                    }
-                  />
-                )}
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-[540px] ">
-            <div className="bg-gray-100 p-8 rounded-lg shadow-md text-center">
-              <h2 className="text-2xl font-bold text-red-500 mb-4">
-                권한 없음
-              </h2>
-              <p className="text-gray-700 mb-6">
-                해당 디렉토리에 접근할 수 있는 권한이 없습니다.
-              </p>
-              <div className="flex justify-center space-x-4">
-                {/* 뒤로가기 버튼 */}
-                <button
-                  type="button"
-                  onClick={() => window.history.back()}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                >
-                  뒤로가기
-                </button>
-
-                {/* 디렉토리 이동 버튼 */}
-                <button
-                  type="button"
-                  onClick={() => window.history.back()}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                >
-                  디렉토리 이동
-                </button>
+                {checkedDirectoryArr.length !== 0 &&
+                  directoryDatas[
+                    checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                  ].isDir === true && (
+                    <FolderDetailTab
+                      folderData={
+                        directoryDatas[
+                          checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                        ]
+                      }
+                      breadscrumArray={breadscrumArray}
+                      setDirectoryDatas={setDirectoryDatas}
+                    />
+                  )}
+                {checkedDirectoryArr.length !== 0 &&
+                  directoryDatas[
+                    checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                  ].isDir === false && (
+                    <FileDetailTab
+                      fileData={
+                        directoryDatas[
+                          checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                        ]
+                      }
+                    />
+                  )}
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[540px] ">
+              <div className="bg-gray-100 p-8 rounded-lg shadow-md text-center">
+                <h2 className="text-2xl font-bold text-red-500 mb-4">
+                  권한 없음
+                </h2>
+                <p className="text-gray-700 mb-6">
+                  해당 디렉토리에 접근할 수 있는 권한이 없습니다.
+                </p>
+                <div className="flex justify-center space-x-4">
+                  {/* 뒤로가기 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => window.history.back()}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  >
+                    뒤로가기
+                  </button>
+
+                  {/* 디렉토리 이동 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => window.history.back()}
+                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  >
+                    디렉토리 이동
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="pl-24 h-[800px] overflow-y-auto">
+          {directoryError === '' ? (
+            <div className="flex justify-end px-4">
+              <div className="grow grid grid-cols-4 gap-y-1 gap-x-0 mt-6">
+                {directoryDatas.map((data, index) => {
+                  if (data.isDir === true) {
+                    return (
+                      <Folder
+                        key={data.createdTime + data.fileName}
+                        name={data.fileName}
+                        createTime={data.createdTime}
+                        setCheckedDirectoryArr={setCheckedDirectoryArr}
+                        index={index}
+                      />
+                    );
+                  }
+                  return (
+                    <VideoFile
+                      key={data.createdTime + data.fileName}
+                      name={data.fileName}
+                      createTime={data.createdTime}
+                      setCheckedDirectoryArr={setCheckedDirectoryArr}
+                      index={index}
+                      path={data.path}
+                    />
+                  );
+                })}
+              </div>
+              <div className="w-[300px] min-h-[530px] border-hpGray border-l-[1.3px] border-solid relative">
+                {checkedDirectoryArr.length === 0 && (
+                  <div>선택 된 파일 및 폴더가 없습니다</div>
+                )}
+                {checkedDirectoryArr.length !== 0 &&
+                  directoryDatas[
+                    checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                  ].isDir === true && (
+                    <FolderDetailTab
+                      folderData={
+                        directoryDatas[
+                          checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                        ]
+                      }
+                      breadscrumArray={breadscrumArray}
+                      setDirectoryDatas={setDirectoryDatas}
+                    />
+                  )}
+                {checkedDirectoryArr.length !== 0 &&
+                  directoryDatas[
+                    checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                  ].isDir === false && (
+                    <FileDetailTab
+                      fileData={
+                        directoryDatas[
+                          checkedDirectoryArr[checkedDirectoryArr.length - 1]
+                        ]
+                      }
+                    />
+                  )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[540px] ">
+              <div className="bg-gray-100 p-8 rounded-lg shadow-md text-center">
+                <h2 className="text-2xl font-bold text-red-500 mb-4">
+                  권한 없음
+                </h2>
+                <p className="text-gray-700 mb-6">
+                  해당 디렉토리에 접근할 수 있는 권한이 없습니다.
+                </p>
+                <div className="flex justify-center space-x-4">
+                  {/* 뒤로가기 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => window.history.back()}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  >
+                    뒤로가기
+                  </button>
+
+                  {/* 디렉토리 이동 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => window.history.back()}
+                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  >
+                    디렉토리 이동
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

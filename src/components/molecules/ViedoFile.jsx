@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { FcVideoFile } from 'react-icons/fc';
 
-function VideoFile({ name, setCheckedDirectoryArr, index }) {
+function VideoFile({
+  name,
+  setCheckedDirectoryArr,
+  createTime,
+  index,
+  layout,
+}) {
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
@@ -18,6 +24,39 @@ function VideoFile({ name, setCheckedDirectoryArr, index }) {
       );
     });
   }, [isChecked]);
+
+  if (layout === 'line')
+    return (
+      <div>
+        <div className="w-[1000px] flex justify-between items-center py-1">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              onChange={() => {
+                setIsChecked((prev) => !prev);
+              }}
+              className="w-[15px] h-[15px] border-solid border-[1px] border-hpLightGray bg-white hover:border-black"
+            />
+            <div
+              type="button"
+              aria-label="파일"
+              className="flex items-center justify-center w-[25px] h-[25px] outline-none ml-3"
+            >
+              <FcVideoFile size="4rem" />
+            </div>
+            <span className="font-bold text-md ml-6">
+              {name.slice(0, -4)}.mp4
+            </span>
+          </div>
+          <span className="mr-6 font-bold text-md">
+            {createTime.split('T')[0]} {createTime.split('T')[1].split(':')[0]}:
+            {createTime.split('T')[1].split(':')[1]}:
+            {createTime.split('T')[1].split(':')[2].split('.')[0]}
+          </span>
+        </div>
+        <hr />
+      </div>
+    );
 
   return (
     <div className="w-[140px] h-[160px] flex flex-col items-center relative">
