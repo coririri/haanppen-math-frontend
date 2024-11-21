@@ -26,14 +26,16 @@ function FolderDetailTab({ folderData, breadscrumArray, setDirectoryDatas }) {
           color="gray"
           moreStyle="w-[4rem]"
           handleClick={async () => {
+            console.log(breadscrumArray);
             const absolutePath = breadscrumArray.join('/');
+            console.log(absolutePath);
             try {
               if (absolutePath !== '/') {
                 await changeDirectoryName(
                   `${absolutePath.slice(1)}/${folderData.fileName}`,
                   folderName,
                 );
-                const { data } = await getDirectory(absolutePath);
+                const { data } = await getDirectory(`${absolutePath.slice(1)}`);
                 console.log(data);
                 setDirectoryDatas(data);
               } else {

@@ -170,7 +170,7 @@ function VedioManagementPage() {
     sendNextChunk();
   };
 
-  console.log(directoryDatas);
+  console.log(breadscrumArray);
 
   return (
     <div>
@@ -432,7 +432,7 @@ function VedioManagementPage() {
         <div className="pl-24 h-[800px] overflow-y-auto">
           {directoryError === '' ? (
             <div className="flex justify-start">
-              <div className="mt-6">
+              <div className="mt-6 mr-2">
                 <hr />
                 <div className="w-[1000px] flex justify-between py-2">
                   <div className="ml-6">

@@ -27,7 +27,7 @@ function Folder({ name, setCheckedDirectoryArr, createTime, index, layout }) {
       <div>
         <button
           type="button"
-          className="w-[1000px] flex justify-between items-center py-1 hover:bg-blue-100 transition"
+          className="w-[1000px] flex justify-between items-center py-1 hover:bg-blue-100 transition rounded-lg"
           onClick={() => {
             const currentBreadscrumb = searchParams.get('breadscrum');
             searchParams.set('breadscrum', `${currentBreadscrumb}_${name}`);
@@ -36,7 +36,7 @@ function Folder({ name, setCheckedDirectoryArr, createTime, index, layout }) {
             setCheckedDirectoryArr([]);
           }}
         >
-          <div className="flex items-center">
+          <div className="flex items-center pl-2">
             <input
               type="checkbox"
               onClick={(e) => {

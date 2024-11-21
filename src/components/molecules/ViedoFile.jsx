@@ -28,8 +28,8 @@ function VideoFile({
   if (layout === 'line')
     return (
       <div>
-        <div className="w-[1000px] flex justify-between items-center py-1">
-          <div className="flex items-center">
+        <div className="w-[1000px] flex justify-between items-center py-1  rounded-lg">
+          <div className="flex items-center  pl-2">
             <input
               type="checkbox"
               onChange={() => {
