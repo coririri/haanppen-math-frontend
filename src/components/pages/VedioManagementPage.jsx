@@ -435,7 +435,7 @@ function VedioManagementPage() {
               <div className="mt-6 mr-2">
                 <hr />
                 <div className="w-[1000px] flex justify-between py-2">
-                  <div className="ml-6">
+                  <div className="ml-8">
                     <span className="text-md">종류</span>
                     <span className="ml-6 text-md">이름</span>
                   </div>
