@@ -1,12 +1,8 @@
 import instance from './instance';
 
-const writeComment = (formData) =>
+const writeComment = (data) =>
   instance
-    .post('/api/board/comments', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Content-Type을 반드시 이렇게 하여야 한다.
-      },
-    })
+    .post('/api/board/comments', data)
     .then(() => {})
     .catch((e) => {
       console.log(e);
@@ -16,10 +12,11 @@ const writeComment = (formData) =>
 export const deleteComment = (commentId) =>
   instance.delete(`/api/board/comments/${commentId}`);
 
-export const modifyComment = (data, commentId) =>
+export const modifyComment = (data, commentId, comment, images) =>
   instance.put(`/api/board/comments`, {
     commentId,
     content: data.content,
+    imageSources: [...comment.images.map((value) => value.imageUrl), ...images],
   });
 
 export default writeComment;

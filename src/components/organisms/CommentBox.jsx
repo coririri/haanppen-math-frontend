@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PiChalkboardTeacherFill } from 'react-icons/pi';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import { useParams } from 'react-router-dom';
 import ImageModal from '../modals/ImageModal';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
@@ -7,8 +8,10 @@ import { deleteComment, modifyComment } from '../../apis/comment';
 import { getDetailQuestionById } from '../../apis/question';
 import hw1 from '../../assests/hw1.jpg';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import InputImagesButton from '../atoms/InputImagesButton';
+import { uploadImageToS3 } from '../../apis/media';
 
-function CommentBox({ comment, setData, setModificationData, isStudent }) {
+function CommentBox({ comment, commentIndex, setData, setModificationData }) {
   const { id } = useParams();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -18,6 +21,8 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
     content: '',
   });
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+  const [modificationImgPreview, setModificationImgPreview] = useState([]);
+  const [modificationImgFiles, setModificationImgFiles] = useState([]);
 
   useEffect(() => {
     setModificationCommentData({ content: comment?.content });
@@ -70,9 +75,34 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
     }
   };
 
+  const handleDeleteImagesButton = (index) => {
+    setModificationImgFiles(() => [
+      ...modificationImgFiles.slice(0, index),
+      ...modificationImgFiles.slice(index + 1, modificationImgFiles.length),
+    ]);
+    setModificationImgPreview(() => [
+      ...modificationImgPreview.slice(0, index),
+      ...modificationImgPreview.slice(index + 1, modificationImgPreview.length),
+    ]);
+  };
+
   const handleModifyCompelte = async () => {
     try {
-      await modifyComment(modificationCommentData, comment?.commentId);
+      const images = [];
+
+      for (let i = 0; i < modificationImgFiles.length; i += 1) {
+        const formData = new FormData();
+        formData.append('image', modificationImgFiles[i]);
+        const { data } = await uploadImageToS3(formData);
+        images.push(data.imageUrl);
+      }
+      console.log(comment);
+      await modifyComment(
+        modificationCommentData,
+        comment?.commentId,
+        comment,
+        images,
+      );
 
       const getData = async () => {
         const response = await getDetailQuestionById(id);
@@ -106,6 +136,10 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
 
       await getData();
 
+      setModificationCommentData({ content: '' });
+      setModificationImgPreview([]);
+      setModificationImgFiles([]);
+
       setIsModify(false);
     } catch (e) {
       console.log(e);
@@ -114,6 +148,8 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
 
   const handleModifyCancel = async () => {
     setIsModify(false);
+    setModificationImgPreview([]);
+    setModificationImgFiles([]);
     setModificationCommentData({
       content: comment?.content,
     });
@@ -141,79 +177,79 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
     );
   };
 
-  if (isStudent) {
-    return (
-      <div className="px-2">
-        <DeleteCheckModal
-          deleteCheckModalOpen={deleteCheckModalOpen}
-          setDeleteCheckModalOpen={setDeleteCheckModalOpen}
-          handleDelete={async () => {
-            await handleDelete();
-            setDeleteCheckModalOpen(false);
-          }}
-        />
-        <div className="mt-6 mb-2 flex items-center justify-between font-bold">
-          <div className="flex items-center ml-2">
-            <PiChalkboardTeacherFill size="3rem" />
-            <span className="text-xl">
-              {comment?.registeredMemberDetails?.memberName}
-            </span>
-          </div>
-
-          {/* 수정/삭제 버튼 */}
-          {localStorage.getItem('userName') ===
-          comment?.registeredMemberDetails.memberName ? (
-            isModify ? (
-              <div className="flex space-x-2 my-2 justify-end mr-4">
-                <button
-                  onClick={handleModifyCompelte}
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
-                  type="button"
-                >
-                  완료
-                </button>
-                <button
-                  onClick={handleModifyCancel}
-                  className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
-                  type="button"
-                >
-                  취소
-                </button>
-              </div>
-            ) : (
-              <div className="flex space-x-2 my-2 justify-end mr-4">
-                <button
-                  onClick={handleEdit}
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
-                  type="button"
-                >
-                  수정
-                </button>
-                <button
-                  onClick={() => {
-                    setDeleteCheckModalOpen(true);
-                  }}
-                  className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
-                  type="button"
-                >
-                  삭제
-                </button>
-              </div>
-            )
-          ) : null}
+  return (
+    <div className="px-2 mb-24">
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          await handleDelete();
+          setDeleteCheckModalOpen(false);
+        }}
+      />
+      <div className="mt-6 mb-2 flex items-center justify-between font-bold">
+        <div className="flex items-center ml-2">
+          <PiChalkboardTeacherFill size="3rem" />
+          <span className="text-xl ">
+            {comment?.registeredMemberDetails?.memberName}
+          </span>
         </div>
-        <div className="w-full mt-6 mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
+
+        {/* 수정/삭제 버튼 */}
+        {localStorage.getItem('userName') ===
+        comment?.registeredMemberDetails.memberName ? (
+          isModify ? (
+            <div className="flex space-x-2 my-2 justify-end mr-4">
+              <button
+                onClick={handleModifyCompelte}
+                className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                type="button"
+              >
+                완료
+              </button>
+              <button
+                onClick={handleModifyCancel}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                type="button"
+              >
+                취소
+              </button>
+            </div>
+          ) : (
+            <div className="flex space-x-2 my-2 justify-end mr-4">
+              <button
+                onClick={handleEdit}
+                className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                type="button"
+              >
+                수정
+              </button>
+              <button
+                onClick={() => {
+                  setDeleteCheckModalOpen(true);
+                }}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                type="button"
+              >
+                삭제
+              </button>
+            </div>
+          )
+        ) : null}
+      </div>
+      <div className="w-full mt-6 mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
+        <div>
           <div>
-            <div>
-              <ImageModal
-                modalOpen={modalOpen}
-                setModalOpen={setModalOpen}
-                imageSrc={modalImage}
-              />
-              {isModify ? (
+            <ImageModal
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              imageSrc={modalImage}
+            />
+            {isModify ? (
+              <div>
                 <textarea
                   type="text"
-                  className="w-full h-full px-4 py-2 text-xl font-bold border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full h-[150px] px-4 py-2 text-xl font-bold border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   value={modificationCommentData.content}
                   placeholder="댓글 내용을 입력하세요..." // 플레이스홀더 추가
                   onChange={(e) => {
@@ -222,15 +258,144 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
                     }));
                   }}
                 />
+              </div>
+            ) : (
+              <span className="outline-none text-lg w-full block h-[150px]">
+                {convertToLinks(comment?.content)}
+              </span>
+            )}
+            <div className="flex justify-between items-center h-[80px]">
+              {isModify ? (
+                <div className="flex justify-between items-center">
+                  <div className="flex w-[192px] overflow-x-auto">
+                    {comment?.images.map((previewImage, index) => (
+                      <div
+                        className="relative  w-[96px] flex-shrink-0 "
+                        key={previewImage?.imageUrl}
+                      >
+                        <button
+                          className="absolute top-1 right-5"
+                          type="button"
+                          aria-label="댓글 이미지 삭제"
+                          onClick={() => {
+                            setData((prev) => {
+                              console.log(prev);
+                              const copiedData = {
+                                questionDetailData: prev.questionDetailData,
+                                commentsData: prev.commentsData,
+                              };
+                              copiedData.questionDetailData = {
+                                title: prev.questionDetailData.title,
+                                content: prev.questionDetailData.content,
+                                imageUrls: [
+                                  ...prev.questionDetailData.imageUrls,
+                                ],
+                                registeredDateTime:
+                                  prev.questionDetailData.registeredDateTime,
+                                registerMemberName:
+                                  prev.questionDetailData.registeredMember,
+                                registerMemberGrade:
+                                  prev.questionDetailData.registerMemberGrade +
+                                  1,
+                              };
+                              copiedData.commentsData = prev.commentsData.map(
+                                (commentData) => ({
+                                  commentId: commentData.commentId,
+                                  content: commentData.content,
+                                  selected: commentData.selected,
+                                  images: [...commentData.images],
+                                  registeredDateTime:
+                                    commentData.registeredDateTime,
+                                  registeredMemberDetails: {
+                                    memberId:
+                                      commentData.registeredMemberDetails
+                                        .memberId,
+                                    memberName:
+                                      commentData.registeredMemberDetails
+                                        .memberName,
+                                    memberGrade:
+                                      commentData.registeredMemberDetails
+                                        .memberGrade,
+                                    role: commentData.registeredMemberDetails
+                                      .role,
+                                  },
+                                }),
+                              );
+                              copiedData.commentsData[
+                                commentIndex
+                              ].images.splice(index, 1);
+                              return copiedData;
+                            });
+                          }}
+                        >
+                          <div>
+                            <AiFillCloseCircle size="16px" />
+                          </div>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setModalImage(
+                              imageUrlToSrc(previewImage?.imageUrl),
+                            );
+                            setModalOpen(true);
+                          }}
+                        >
+                          <img
+                            src={imageUrlToSrc(previewImage?.imageUrl)}
+                            alt="이미지"
+                            className="w-[80px] h-[80px] mr-4"
+                          />
+                        </button>
+                      </div>
+                    ))}
+                    {modificationImgPreview.map((previewImage, index) => (
+                      <div
+                        className="relative w-[96px] flex-shrink-0 "
+                        key={previewImage}
+                      >
+                        <button
+                          className="absolute top-1 right-5"
+                          type="button"
+                          aria-label="댓글 이미지 삭제"
+                          onClick={() => {
+                            handleDeleteImagesButton(index);
+                          }}
+                        >
+                          <div>
+                            <AiFillCloseCircle size="16px" />
+                          </div>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setModalImage(previewImage);
+                            setModalOpen(true);
+                          }}
+                        >
+                          <img
+                            src={previewImage}
+                            alt="이미지"
+                            className="w-[80px] h-[80px] mr-4"
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-col h-[80px] items-center justify-center">
+                    <InputImagesButton
+                      setImgFiles={setModificationImgFiles}
+                      setImgePreview={setModificationImgPreview}
+                    />
+                  </div>
+                </div>
               ) : (
-                <span className="outline-none text-lg w-full block">
-                  {convertToLinks(comment?.content)}
-                </span>
-              )}
-              <div className="flex justify-between items-center mt-12">
-                <div className="flex">
+                <div className="flex w-[300px] overflow-x-auto">
                   {comment?.images.map((previewImage) => (
-                    <div key={previewImage?.imageUrl}>
+                    <div
+                      key={previewImage?.imageUrl}
+                      className="w-[96px] flex-shrink-0 "
+                    >
                       <button
                         type="button"
                         onClick={() => {
@@ -247,63 +412,7 @@ function CommentBox({ comment, setData, setModificationData, isStudent }) {
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <DeleteCheckModal
-        deleteCheckModalOpen={deleteCheckModalOpen}
-        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
-        handleDelete={async () => {
-          await handleDelete();
-          setDeleteCheckModalOpen(false);
-        }}
-      />
-
-      <div className="mt-6 mb-2 flex items-center font-bold justify-between">
-        <div className="ml-2">
-          <PiChalkboardTeacherFill size="3rem" />
-          <span className="text-xl">
-            {comment?.registeredMemberDetails?.memberName}
-          </span>
-        </div>
-      </div>
-      <div className="w-full mb-4 border-[1.5px] border-hpGray border-solid rounded-xl py-4 px-8">
-        <div>
-          <div>
-            <ImageModal
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              imageSrc={modalImage}
-            />
-            <span className="outline-none text-lg w-[800px] block">
-              {convertToLinks(comment?.content)}
-            </span>
-            <div className="flex justify-between items-center mt-12">
-              <div className="flex">
-                {comment?.images.map((previewImage) => (
-                  <div key={previewImage}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setModalImage(imageUrlToSrc(previewImage?.imageUrl));
-                        setModalOpen(true);
-                      }}
-                    >
-                      <img
-                        src={imageUrlToSrc(previewImage?.imageUrl)}
-                        alt="이미지"
-                        className="w-[80px] h-[80px] mr-4"
-                      />
-                    </button>
-                  </div>
-                ))}
-              </div>
+              )}
             </div>
           </div>
         </div>

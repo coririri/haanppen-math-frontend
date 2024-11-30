@@ -1,6 +1,7 @@
 import { BsBookmarkCheckFill, BsClock } from 'react-icons/bs';
 import { BiCommentDots } from 'react-icons/bi';
 import { AiFillEdit } from 'react-icons/ai';
+import { IoMdClose } from 'react-icons/io';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import IconButton from '../atoms/IconButton';
@@ -16,6 +17,8 @@ import WriteComment from '../organisms/WriteComment';
 import CommentBox from '../organisms/CommentBox';
 import hw1 from '../../assests/hw1.jpg';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import InputImageButton from '../atoms/InputImageButton';
+import { uploadImageToS3 } from '../../apis/media';
 
 function QuestionDetailPage() {
   const { id } = useParams();
@@ -23,11 +26,14 @@ function QuestionDetailPage() {
 
   const [data, setData] = useState(null);
   const [isWriteComment, setIsWriteComment] = useState(false);
+  const [modificationImgPreview, setModificationImgPreview] = useState([]);
+  const [modificationImgFiles, setModificationImgFiles] = useState([]);
 
   const [isModify, setIsModify] = useState(false);
   const [modificationData, setModificationData] = useState({
     title: '',
     content: '',
+    images: [],
   });
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
@@ -39,9 +45,7 @@ function QuestionDetailPage() {
         title: response.title,
         content: response.content,
         imageUrls: response.imageUrls.map((imageUrl) =>
-          imageUrl.imageUrl
-            ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
-            : hw1,
+          imageUrl.imageUrl ? imageUrlToSrc(imageUrl.imageUrl) : hw1,
         ),
         registeredDateTime: response.registeredDateTime,
         registerMemberName: response.registeredMember.memberName,
@@ -60,6 +64,7 @@ function QuestionDetailPage() {
       setModificationData({
         title: response.title,
         content: response.content,
+        images: response.imageUrls.map((value) => value.imageUrl),
       });
     };
 
@@ -83,10 +88,21 @@ function QuestionDetailPage() {
 
   const handleModifyCompelte = async () => {
     try {
+      const images = [];
+
+      for (let i = 0; i < modificationImgFiles.length; i += 1) {
+        const formData = new FormData();
+        formData.append('image', modificationImgFiles[i]);
+        const response = await uploadImageToS3(formData);
+        images.push(response.data.imageUrl);
+      }
+      setModificationImgFiles([]);
+      setModificationImgPreview([]);
       await modifyQuery(
         modificationData,
         id,
         data?.questionDetailData.targetMemberId,
+        images,
       );
 
       const getData = async () => {
@@ -96,14 +112,12 @@ function QuestionDetailPage() {
           title: response.title,
           content: response.content,
           imageUrls: response.imageUrls.map((imageUrl) =>
-            imageUrl.imageUrl
-              ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
-              : hw1,
+            imageUrl.imageUrl ? imageUrlToSrc(imageUrl.imageUrl) : hw1,
           ),
           registeredDateTime: response.registeredDateTime,
           registerMemberName: response.registeredMember.memberName,
           registerMemberGrade: response.registeredMember.memberGrade + 1,
-          targetMemberId: response.targetMember.memberId,
+          targetMemberId: response.targetMember?.memberId,
         };
 
         const commentsData = response.comments;
@@ -117,6 +131,7 @@ function QuestionDetailPage() {
         setModificationData({
           title: response.title,
           content: response.content,
+          images: response.imageUrls.map((value) => value.imageUrl),
         });
       };
 
@@ -130,6 +145,17 @@ function QuestionDetailPage() {
 
   const handleModifyCancel = async () => {
     setIsModify(false);
+  };
+
+  const handleDeleteImageButton = (index) => {
+    setModificationImgFiles(() => [
+      ...modificationImgFiles.slice(0, index),
+      ...modificationImgFiles.slice(index + 1, modificationImgFiles.length),
+    ]);
+    setModificationImgPreview(() => [
+      ...modificationImgPreview.slice(0, index),
+      ...modificationImgPreview.slice(index + 1, modificationImgPreview.length),
+    ]);
   };
 
   if (localStorage.getItem('role') === 'STUDENT') {
@@ -224,13 +250,65 @@ function QuestionDetailPage() {
 
         {/* 질문 이미지 */}
         <div className="relative w-full mx-auto">
-          {data?.questionDetailData.imageUrls.map((imageUrl) => (
-            <img
-              src={imageUrl}
-              alt="숙제"
-              className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto my-2"
-            />
-          ))}
+          {isModify
+            ? modificationData.images.map((imageUrl, index) => (
+                <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
+                  <button
+                    className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
+                    type="button"
+                    aria-label="삭제"
+                    onClick={() => {
+                      setModificationData((prev) => {
+                        const copiedModificationData = { ...prev };
+                        copiedModificationData.images = [
+                          ...copiedModificationData.images,
+                        ];
+                        copiedModificationData.images.splice(index, 1);
+                        console.log(copiedModificationData);
+                        return copiedModificationData;
+                      });
+                    }}
+                  >
+                    <IoMdClose size="20px" color="white" />
+                  </button>
+                  <img
+                    src={imageUrlToSrc(imageUrl)}
+                    alt="숙제"
+                    className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto my-2"
+                  />
+                </div>
+              ))
+            : data?.questionDetailData.imageUrls.map((imageUrl) => (
+                <img
+                  src={imageUrl}
+                  alt="숙제"
+                  className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto my-2"
+                />
+              ))}
+
+          {/* 이미지 미리보기 */}
+          {isModify && (
+            <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto">
+              {modificationImgPreview.map((src, index) => (
+                <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
+                  <button
+                    className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
+                    type="button"
+                    aria-label="삭제"
+                    onClick={() => handleDeleteImageButton(index)}
+                  >
+                    <IoMdClose size="20px" color="white" />
+                  </button>
+
+                  <img
+                    className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto rounded-lg shadow-lg"
+                    src={src}
+                    alt={`이미지 ${index + 1}`}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* 수정/삭제 버튼 */}
@@ -252,6 +330,11 @@ function QuestionDetailPage() {
               >
                 취소
               </button>
+              <InputImageButton
+                setImgFiles={setModificationImgFiles}
+                setImgePreview={setModificationImgPreview}
+                className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
+              />
             </div>
           ) : (
             <div className="flex space-x-2 my-2 justify-end mr-4">
@@ -401,13 +484,65 @@ function QuestionDetailPage() {
 
       {/* 질문 이미지 */}
       <div className="relative w-full mx-auto">
-        {data?.questionDetailData.imageUrls.map((imageUrl) => (
-          <img
-            src={imageUrl}
-            alt="숙제"
-            className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto my-2"
-          />
-        ))}
+        {isModify
+          ? modificationData.images.map((imageUrl, index) => (
+              <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
+                <button
+                  className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
+                  type="button"
+                  aria-label="삭제"
+                  onClick={() => {
+                    setModificationData((prev) => {
+                      const copiedModificationData = { ...prev };
+                      copiedModificationData.images = [
+                        ...copiedModificationData.images,
+                      ];
+                      copiedModificationData.images.splice(index, 1);
+                      console.log(copiedModificationData);
+                      return copiedModificationData;
+                    });
+                  }}
+                >
+                  <IoMdClose size="20px" color="white" />
+                </button>
+                <img
+                  src={imageUrlToSrc(imageUrl)}
+                  alt="숙제"
+                  className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto my-2"
+                />
+              </div>
+            ))
+          : data?.questionDetailData.imageUrls.map((imageUrl) => (
+              <img
+                src={imageUrl}
+                alt="숙제"
+                className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto my-2"
+              />
+            ))}
+
+        {/* 이미지 미리보기 */}
+        {isModify && (
+          <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto">
+            {modificationImgPreview.map((src, index) => (
+              <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
+                <button
+                  className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
+                  type="button"
+                  aria-label="삭제"
+                  onClick={() => handleDeleteImageButton(index)}
+                >
+                  <IoMdClose size="20px" color="white" />
+                </button>
+
+                <img
+                  className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto rounded-lg shadow-lg"
+                  src={src}
+                  alt={`이미지 ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 수정/삭제 버튼 */}
@@ -430,6 +565,11 @@ function QuestionDetailPage() {
             >
               취소
             </button>
+            <InputImageButton
+              setImgFiles={setModificationImgFiles}
+              setImgePreview={setModificationImgPreview}
+              className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
+            />
           </div>
         ) : (
           <div className="flex space-x-2 my-2 justify-end w-[400px] mx-auto pr-4">
@@ -501,9 +641,10 @@ function QuestionDetailPage() {
             />
           </div>
         )}
-        {data?.commentsData?.map((comment) => (
+        {data?.commentsData?.map((comment, commentIndex) => (
           <CommentBox
             comment={comment}
+            commentIndex={commentIndex}
             key={comment.commentId}
             setData={setData}
             setModificationData={setModificationData}

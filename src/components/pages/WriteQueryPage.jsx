@@ -9,6 +9,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import getAllTeachers from '../../apis/teacher';
 import writeQuery from '../../apis/question';
+import { uploadImageToS3 } from '../../apis/media';
 
 function WriteQueryPage() {
   const [imgPreview, setImgePreview] = useState([]);
@@ -19,33 +20,36 @@ function WriteQueryPage() {
   const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
   const navigate = useNavigate();
 
-  const finishWrite = () => {
-    const formData = new FormData();
-    if (questionTitle === '') {
-      alert('질문의 제목은 필수입니다.');
-      return;
-    }
-
-    if (questionText === '' && imgFiles.length === 0) {
-      alert('질문에 내용을 적어주세요.');
-      return;
-    }
-
-    imgFiles.forEach((img) => {
-      formData.append('images', img);
-    });
-    if (selectedTeacherindex !== 0)
-      formData.append(
-        'targetMemberId',
-        teacherList[selectedTeacherindex - 1].id,
-      );
-    // else formData.append('targetMemberId', null);
-    formData.append('content', questionText);
-    formData.append('title', questionTitle);
-
+  const finishWrite = async () => {
     try {
-      writeQuery(formData, navigate);
-      // formdata를 활용해 질문 글 작성
+      if (questionTitle === '') {
+        alert('질문의 제목은 필수입니다.');
+        return;
+      }
+
+      if (questionText === '' && imgFiles.length === 0) {
+        alert('질문에 내용을 적어주세요.');
+        return;
+      }
+      const images = [];
+
+      for (let i = 0; i < imgFiles.length; i += 1) {
+        const formData = new FormData();
+        formData.append('image', imgFiles[i]);
+        const { data } = await uploadImageToS3(formData);
+        images.push(data.imageUrl);
+      }
+      const dataToServer = {
+        title: questionTitle,
+        content: questionText,
+        images,
+      };
+
+      if (selectedTeacherindex !== 0)
+        dataToServer.targetMemberId = teacherList[selectedTeacherindex - 1].id;
+      else dataToServer.targetMemberId = null;
+      console.log(dataToServer);
+      writeQuery(dataToServer, navigate);
     } catch (e) {
       console.log(e);
     }

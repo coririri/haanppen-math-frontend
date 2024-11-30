@@ -402,7 +402,7 @@ function CommonLayout() {
     return (
       <div>
         <Header />
-        <Navigation />(
+        <Navigation />
         <div className="w-[1440px] min-h-[680px] relative mx-auto border-[20px] border-hpBackgroundGray border-solid">
           {location.pathname === '/' ? (
             <div className="min-h-screen ">
@@ -468,7 +468,6 @@ function CommonLayout() {
             <Outlet />
           )}
         </div>
-        )
       </div>
     );
 

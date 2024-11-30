@@ -7,6 +7,7 @@ import InputImagesButton from '../atoms/InputImagesButton';
 import { getDetailQuestionById } from '../../apis/question';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
 import hw1 from '../../assests/hw1.jpg';
+import { uploadImageToS3 } from '../../apis/media';
 
 function WriteComment({
   setIsWriteComment,
@@ -22,13 +23,22 @@ function WriteComment({
 
   const finishWrite = async () => {
     try {
-      const formData = new FormData();
-      imgsFiles.forEach((img) => {
-        formData.append('images', img);
-      });
-      formData.append('questionId ', questionId);
-      formData.append('content', commentRef.current.value);
-      await writeComment(formData);
+      const images = [];
+
+      for (let i = 0; i < imgsFiles.length; i += 1) {
+        const formData = new FormData();
+        formData.append('image', imgsFiles[i]);
+        const { data } = await uploadImageToS3(formData);
+        images.push(data.imageUrl);
+      }
+
+      const dataToServer = {
+        questionId,
+        content: commentRef.current.value,
+        images,
+      };
+
+      await writeComment(dataToServer);
       // formdata를 활용해 질문 글 작성
       setIsWriteComment(false);
 
