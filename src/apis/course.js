@@ -7,11 +7,6 @@ const enrollCourse = async (courseName, teacherId, students) =>
     students,
   });
 
-export const getAllCourses = (setCourseListData) =>
-  instance.get('/api/courses').then((response) => {
-    setCourseListData(response.data);
-  });
-
 export const getCoursesById = (teacherId, setCourseListData) =>
   instance.get(`/api/courses/teachers/${teacherId}`).then((response) => {
     setCourseListData(response.data);
@@ -41,7 +36,10 @@ export const getMyCourse = (
   });
 };
 
-export const getAllCourse = () => instance.get('api/courses');
+export const getAllCourses = (setCourseListData) =>
+  instance.get('/api/courses').then((response) => {
+    setCourseListData(response.data);
+  });
 
 export const putCourseStudents = async (courseId, students) => {
   await instance

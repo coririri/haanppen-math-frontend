@@ -41,10 +41,10 @@ function DropdownMenu({
   );
 
   return (
-    <div className="w-40 h-[2.4rem] relative mx-auto">
+    <div className="w-44 h-[2.4rem] relative mx-auto">
       <button
         type="button"
-        className={`w-40 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
+        className={`w-44 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
         key={textArr[selectedIndex]}
         onClick={() => {
           setIsOpen((prev) => !prev);
@@ -61,7 +61,7 @@ function DropdownMenu({
       </button>
 
       {isOpen && (
-        <div className="absolute w-40  bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpLightkBlack border-solid flex flex-col overflow-y-auto overflow-x-hidden">
+        <div className="absolute w-44  bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpLightkBlack border-solid flex flex-col overflow-y-auto overflow-x-hidden">
           {filteredList}
         </div>
       )}

@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
-import {
-  getAllCourses,
-  getCoursesById,
-  getMyCourse,
-  putCourseNameAndTeacher,
-  putCourseStudents,
-} from '../../apis/course';
+import enrollCourse, {
+  getAllOnlineCourses,
+  getOnlineCoursesById,
+} from '../../apis/onlineCourse';
 import getAllTeachers from '../../apis/teacher';
-import { getAllStudents, getMyCourseStudents } from '../../apis/student';
+import { getAllStudents } from '../../apis/student';
 import DropdownMenu from '../molecules/DropdownMenu';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
@@ -42,16 +40,17 @@ const customModalStyles = {
   },
 };
 
-function CourseModificationModal({
+function OnlineCourseEnrollmentModal({
   enrollmentModalOpen,
   setEnrollmentModalOpen,
   setCourseListData,
-  courseId,
   teacherArr,
   selectedIndex,
 }) {
-  const [teacherList, setTeacherList] = useState(['선택 없음']);
-  const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
+  const notify = (text) => toast(text);
+
+  const [teacherList, setTeacherList] = useState([]);
+  const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
   const [courseName, setCourseName] = useState('');
   const [entireStudentsNum, setEntireStudentsNum] = useState(0);
   const [differentStudentsNum, setDifferentStudentsNum] = useState(0);
@@ -210,95 +209,26 @@ function CourseModificationModal({
   ]);
 
   useEffect(() => {
-    const getAllData = async () => {
-      const { data } = await getAllTeachers();
-      setTeacherList(data);
-      await getAllStudents(setEntireStudents, setEntireStudentsNum);
-      await getMyCourseStudents(
-        courseId,
-        setMyCourseStudents,
-        setMyStudentsNum,
-      );
+    const fetchData = async () => {
+      try {
+        const { data } = await getAllTeachers();
+
+        setTeacherList([...data]);
+        getAllStudents(setEntireStudents, setEntireStudentsNum);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
-    getAllData();
+    fetchData();
   }, []);
 
   useEffect(() => {
-    const newDifferntStudents = [
-      {
-        grade: 0,
-        students: [],
-      },
-      {
-        grade: 1,
-        students: [],
-      },
-      {
-        grade: 2,
-        students: [],
-      },
-      {
-        grade: 3,
-        students: [],
-      },
-      {
-        grade: 4,
-        students: [],
-      },
-      {
-        grade: 5,
-        students: [],
-      },
-      {
-        grade: 6,
-        students: [],
-      },
-      {
-        grade: 7,
-        students: [],
-      },
-      {
-        grade: 8,
-        students: [],
-      },
-      {
-        grade: 9,
-        students: [],
-      },
-      {
-        grade: 10,
-        students: [],
-      },
-      {
-        grade: 11,
-        students: [],
-      },
-    ];
-    let tempDifferentStudentsNum = 0;
-
-    entireStudents.forEach((grade, index) => {
-      grade.students.forEach((student) => {
-        let flag = true;
-        myCourseStudents[index].students.forEach((filterStudent) => {
-          if (student.name === filterStudent.name) {
-            flag = false;
-          }
-        });
-        if (flag === true) {
-          newDifferntStudents[index].students.push(student);
-          tempDifferentStudentsNum += 1;
-        }
-      });
-    });
-
-    setDifferntCourseStudents(newDifferntStudents);
-    setDifferentStudentsNum(tempDifferentStudentsNum);
-    getMyCourse(courseId, teacherList, setSelectedTeacherindex, setCourseName);
-  }, [entireStudents, entireStudentsNum, myCourseStudents]);
+    setDifferntCourseStudents(entireStudents);
+    setDifferentStudentsNum(entireStudentsNum);
+  }, [entireStudents, entireStudentsNum]);
 
   const resetModalState = () => {
-    console.log(teacherList);
-    setSelectedTeacherindex(0);
+    setSelectedTeacherindexIndex(0);
     setCourseName('');
     setMyStudentsNum(0);
     setMyCourseStudents([
@@ -352,16 +282,14 @@ function CourseModificationModal({
       },
     ]);
 
-    getMyCourseStudents(courseId, setMyCourseStudents, setMyStudentsNum);
     getAllStudents(setEntireStudents, setEntireStudentsNum);
     if (teacherArr.length === 0 || selectedIndex === 0) {
-      getAllCourses(setCourseListData);
+      getAllOnlineCourses(setCourseListData);
     } else {
-      getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
+      getOnlineCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
     }
   };
-
-  console.log(teacherList);
+  console.log(selectedTeacherindex);
   return (
     <ReactModal
       isOpen={enrollmentModalOpen}
@@ -369,7 +297,7 @@ function CourseModificationModal({
       style={customModalStyles}
     >
       <div className="flex flex-col w-full">
-        <h1 className="w-full font-bold text-3xl text-center mt-2">반 수정</h1>
+        <h1 className="w-full font-bold text-3xl text-center mt-2">반 등록</h1>
         <div className="flex items-center w-full justify-center mt-5">
           <div className="flex items-center mr-8">
             <label
@@ -386,14 +314,16 @@ function CourseModificationModal({
               onChange={(e) => {
                 setCourseName(e.target.value);
               }}
-              defaultValue={courseName}
             />
           </div>
           <div className="ml-8">
             <DropdownMenu
-              textArr={[...teacherList.map((teacher) => teacher.name)]}
+              textArr={[
+                '선택 없음',
+                ...teacherList.map((teacher) => teacher.name),
+              ]}
               selectedIndex={selectedTeacherindex}
-              setSelectedIndex={setSelectedTeacherindex}
+              setSelectedIndex={setSelectedTeacherindexIndex}
             />
           </div>
         </div>
@@ -445,30 +375,37 @@ function CourseModificationModal({
               icon={<AiFillEdit size="20px" />}
               text="완료"
               handleClick={async () => {
-                if (courseName === '') {
-                  alert('반 이름을 입력해주세요');
-                  return;
-                }
-
-                const tempMyCourseStudents = myCourseStudents.filter(
-                  (grade) => grade.students.length !== 0,
-                );
-                const newCourseStudents = [];
-                tempMyCourseStudents.forEach((grade) => {
-                  grade.students.forEach((student) => {
-                    newCourseStudents.push(student.id);
+                try {
+                  const tempMyCourseStudents = myCourseStudents.filter(
+                    (grade) => grade.students.length !== 0,
+                  );
+                  const newCourseStudents = [];
+                  tempMyCourseStudents.forEach((grade) => {
+                    grade.students.forEach((student) => {
+                      newCourseStudents.push(student.id);
+                    });
                   });
-                });
+                  if (selectedTeacherindex === 0) {
+                    alert('선생님을 선택해주세요');
+                    return;
+                  }
 
-                await putCourseStudents(courseId, newCourseStudents);
-                await putCourseNameAndTeacher(
-                  courseId,
-                  courseName,
-                  teacherList[selectedTeacherindex].id,
-                );
+                  if (courseName === '') {
+                    alert('반 이름을 입력해주세요');
+                    return;
+                  }
+                  await enrollCourse(
+                    courseName,
+                    teacherList[selectedTeacherindex - 1].id,
+                    newCourseStudents,
+                  );
 
-                await resetModalState();
-                setEnrollmentModalOpen(false);
+                  resetModalState();
+                  setEnrollmentModalOpen(false);
+                } catch (e) {
+                  notify('본인 반만 생성할 수 있습니다.');
+                  alert('본인 반만 생성할 수 있습니다');
+                }
               }}
             />
           </div>
@@ -489,4 +426,4 @@ function CourseModificationModal({
   );
 }
 
-export default CourseModificationModal;
+export default OnlineCourseEnrollmentModal;

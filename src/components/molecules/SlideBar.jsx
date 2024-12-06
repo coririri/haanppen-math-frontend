@@ -9,9 +9,45 @@ function SlideBar({
   isClickArr,
   setIsClickArr,
   isStudent,
+  type,
 }) {
   const [leftPosition, setLeftPosition] = useState('left-[130px]');
   const [twoLeftPosition, setTwoLeftPosition] = useState('left-[20px]');
+  const [courseLeftPosition, setCourseLeftPosition] = useState('left-[10px]');
+  if (type === 'course') {
+    return (
+      <div>
+        <div>
+          <TextButton
+            color="white"
+            isClick={isClickArr[0]}
+            moreStyle="w-[120px] mr-4"
+            handleClick={() => {
+              setIsClickArr([true, false]);
+              setCourseLeftPosition('left-[10px]');
+            }}
+          >
+            {firstText}
+          </TextButton>
+
+          <TextButton
+            color="white"
+            isClick={isClickArr[1]}
+            moreStyle="w-[120px] mr-4"
+            handleClick={() => {
+              setIsClickArr([false, true]);
+              setCourseLeftPosition('left-[150px]');
+            }}
+          >
+            {secondText}
+          </TextButton>
+        </div>
+        <div
+          className={`transition-[left] relative h-1 w-24 mt-1 bg-hpBlue ${courseLeftPosition}`}
+        />
+      </div>
+    );
+  }
 
   if (num === 2) {
     if (isStudent) {

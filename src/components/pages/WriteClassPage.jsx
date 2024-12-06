@@ -15,8 +15,9 @@ function WriteClassPage() {
         isClickArr={classTypeArr}
         setIsClickArr={setClassArrType}
       />
-
-      {classTypeArr[0] ? <WriteOfflineClassPage /> : <WriteOnlineClassPage />}
+      <div className="mt-4">
+        {classTypeArr[0] ? <WriteOfflineClassPage /> : <WriteOnlineClassPage />}
+      </div>
     </div>
   );
 }

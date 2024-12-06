@@ -4,14 +4,15 @@ import { AiFillEdit } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import {
-  getAllCourses,
-  getCoursesById,
-  getMyCourse,
-  putCourseNameAndTeacher,
-  putCourseStudents,
-} from '../../apis/course';
+  getAllOnlineCourses,
+  getOnlineCoursesById,
+  getMyOnlineCourse,
+  putOnlineCourseNameAndTeacher,
+  putOnlineCourseStudents,
+  getMyOnlineCourseStudents,
+} from '../../apis/onlineCourse';
 import getAllTeachers from '../../apis/teacher';
-import { getAllStudents, getMyCourseStudents } from '../../apis/student';
+import { getAllStudents } from '../../apis/student';
 import DropdownMenu from '../molecules/DropdownMenu';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
@@ -42,7 +43,7 @@ const customModalStyles = {
   },
 };
 
-function CourseModificationModal({
+function OnlineCourseModificationModal({
   enrollmentModalOpen,
   setEnrollmentModalOpen,
   setCourseListData,
@@ -214,7 +215,7 @@ function CourseModificationModal({
       const { data } = await getAllTeachers();
       setTeacherList(data);
       await getAllStudents(setEntireStudents, setEntireStudentsNum);
-      await getMyCourseStudents(
+      await getMyOnlineCourseStudents(
         courseId,
         setMyCourseStudents,
         setMyStudentsNum,
@@ -293,7 +294,12 @@ function CourseModificationModal({
 
     setDifferntCourseStudents(newDifferntStudents);
     setDifferentStudentsNum(tempDifferentStudentsNum);
-    getMyCourse(courseId, teacherList, setSelectedTeacherindex, setCourseName);
+    getMyOnlineCourse(
+      courseId,
+      teacherList,
+      setSelectedTeacherindex,
+      setCourseName,
+    );
   }, [entireStudents, entireStudentsNum, myCourseStudents]);
 
   const resetModalState = () => {
@@ -352,16 +358,17 @@ function CourseModificationModal({
       },
     ]);
 
-    getMyCourseStudents(courseId, setMyCourseStudents, setMyStudentsNum);
+    getMyOnlineCourseStudents(courseId, setMyCourseStudents, setMyStudentsNum);
     getAllStudents(setEntireStudents, setEntireStudentsNum);
     if (teacherArr.length === 0 || selectedIndex === 0) {
-      getAllCourses(setCourseListData);
+      getAllOnlineCourses(setCourseListData);
     } else {
-      getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
+      getOnlineCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
     }
   };
 
   console.log(teacherList);
+  console.log(selectedTeacherindex);
   return (
     <ReactModal
       isOpen={enrollmentModalOpen}
@@ -460,8 +467,8 @@ function CourseModificationModal({
                   });
                 });
 
-                await putCourseStudents(courseId, newCourseStudents);
-                await putCourseNameAndTeacher(
+                await putOnlineCourseStudents(courseId, newCourseStudents);
+                await putOnlineCourseNameAndTeacher(
                   courseId,
                   courseName,
                   teacherList[selectedTeacherindex].id,
@@ -489,4 +496,4 @@ function CourseModificationModal({
   );
 }
 
-export default CourseModificationModal;
+export default OnlineCourseModificationModal;
