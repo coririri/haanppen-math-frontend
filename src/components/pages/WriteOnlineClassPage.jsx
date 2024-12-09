@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AiFillEdit } from 'react-icons/ai';
 import DropdownMenu from '../molecules/DropdownMenu';
-import { getOwnCourses } from '../../apis/course';
+import { getOwnOnlineCourses } from '../../apis/onlineCourse';
 import IconButton from '../atoms/IconButton';
 import OnlinePrimaryForm from '../organisms/OnlinePrimaryForm';
 import OnlineVedioManagement from '../organisms/OnlineVedioManagement';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import enrollOnlineLesson from '../../apis/onlineLesson';
 
 function WriteOnlineClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,12 +28,12 @@ function WriteOnlineClassPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getOwnCourses();
+      const { data } = await getOwnOnlineCourses();
       setCourseList(data);
     };
     fetchData();
   }, []);
-
+  console.log(courseList);
   return (
     <div>
       <DeleteCheckModal
@@ -45,6 +46,7 @@ function WriteOnlineClassPage() {
       />
       <DropdownMenu
         type="search"
+        size="long"
         textArr={courseList.map((course) => course.courseName)}
         selectedIndex={selectedClassindex}
         setSelectedIndex={setSelectedClassindex}
@@ -100,8 +102,19 @@ function WriteOnlineClassPage() {
                 bgColor="white"
                 icon={<AiFillEdit size="20px" />}
                 text="수업 생성"
-                handleClick={() => {
-                  setIsCreated(true);
+                handleClick={async () => {
+                  try {
+                    setIsCreated(true);
+                    enrollOnlineLesson(
+                      courseList[selectedClassindex].courseId,
+                      primaryClassInfo.title,
+                      primaryClassInfo.lessonRange,
+                      primaryClassInfo.lessonDesc,
+                      0,
+                    );
+                  } catch (e) {
+                    console.log(e);
+                  }
                 }}
               />
             )}

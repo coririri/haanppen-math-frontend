@@ -38,6 +38,20 @@ function Navigation() {
               질문 게시판
             </Link>
           </button>
+          <button
+            type="button"
+            className="block w-[120px]"
+            onClick={() => {
+              setClickIndex(3);
+            }}
+          >
+            <Link
+              to="/lesson-overview"
+              className="text-xl text-center hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+            >
+              개설 강좌
+            </Link>
+          </button>
           {/* <button
             type="button"
             className="block w-[120px]"
@@ -155,6 +169,20 @@ function Navigation() {
             질문 게시판
           </button>
         </Link>
+        <button
+          type="button"
+          className="block w-[120px]"
+          onClick={() => {
+            setClickIndex(3);
+          }}
+        >
+          <Link
+            to="/lesson-overview"
+            className="text-xl text-center hover:text-hpDarkBlue hover:font-sjBold  text-black font-bold"
+          >
+            개설 강좌
+          </Link>
+        </button>
 
         <Link
           to="/management"

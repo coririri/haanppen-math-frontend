@@ -13,6 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import VedioManagementPage from './components/pages/VedioManagementPage';
 import MyClassPage from './components/pages/MyClassPage';
 import LessonPage from './components/pages/LessonPage';
+import LessonOverviewPage from './components/pages/LessonOverviewPage';
 
 // 배포1
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="vedio-management" element={<VedioManagementPage />} />
             <Route path="my-class" element={<MyClassPage />} />
             <Route path="lesson" element={<LessonPage />} />
+            <Route path="lesson-overview" element={<LessonOverviewPage />} />
           </Route>
           {/* 단독 레이아웃 */}
           <Route path="/login" element={<LoginPage />} />
