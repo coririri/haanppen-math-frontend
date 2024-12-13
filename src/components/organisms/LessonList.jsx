@@ -5,7 +5,7 @@ function LessonList({ lessons, courseList, selectedClassindex }) {
   const navigate = useNavigate();
 
   return (
-    <div className="w-[330px] mx-auto mt-4">
+    <div className="w-[330px] mx-auto mt-[-8px]">
       <div className="flex bg-[#D9D9D9] py-2">
         <span className="block w-[100px] text-center font-bold text-md">
           수업 날짜

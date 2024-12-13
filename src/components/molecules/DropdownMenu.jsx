@@ -18,7 +18,8 @@ function DropdownMenu({
         <button
           type="button"
           className="w-42 h-[40px] flex items-center font-bold text-lg hover:bg-hpLightGray"
-          key={text}
+          // eslint-disable-next-line react/no-array-index-key
+          key={text + index}
           onClick={() => {
             if (type === 'search') {
               searchParams.set('classIndex', index);

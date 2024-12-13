@@ -10,8 +10,8 @@ function WriteClassPage() {
     <div className="flex flex-col items-center justify-center mt-2">
       <SlideBar
         num={2}
-        firstText="오프라인 수업"
-        secondText="온라인 수업"
+        firstText="학원강좌"
+        secondText="단과강좌"
         isClickArr={classTypeArr}
         setIsClickArr={setClassArrType}
       />

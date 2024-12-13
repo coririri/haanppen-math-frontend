@@ -1,50 +1,6 @@
 import TextButton from '../atoms/TextButton';
 import DropdownMenu from '../molecules/DropdownMenu';
 
-const mainCategorys = ['초등', '중등', '고등', '[고등] (개정)'];
-const subCategorys = [
-  [
-    '1-1',
-    '1-2',
-    '2-1',
-    '2-2',
-    '3-1',
-    '3-2',
-    '4-1',
-    '4-2',
-    '5-1',
-    '5-2',
-    '6-1',
-    '6-2',
-    '기타',
-  ],
-  ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', '내신기출', '기타'],
-  [
-    '수학(상)',
-    '수학(하)',
-    '수학Ⅰ',
-    '수학Ⅱ',
-    '확률과통계',
-    '미적분',
-    '기하',
-    '내신기출',
-    '모의고사/수능',
-    '기타',
-  ],
-  [
-    '공통수학Ⅰ',
-    '공통수학Ⅱ',
-    '대수',
-    '미적분Ⅰ',
-    '확률과통계',
-    '미적분Ⅱ',
-    '기하',
-    '내신기출',
-    '모의고사/수능',
-    '기타',
-  ],
-];
-
 function OnlinePrimaryForm({
   isCreated,
   primaryClassInfo,
@@ -53,6 +9,8 @@ function OnlinePrimaryForm({
   setMainCategorySelected,
   subCategorySelected,
   setSubCategorySelected,
+  mainCategorys,
+  subCategorys,
 }) {
   return (
     <div className="flex flex-col items-start justify-center my-6">
@@ -161,14 +119,18 @@ function OnlinePrimaryForm({
         <div className="flex justify-center">
           <div className="mr-4">
             <DropdownMenu
-              textArr={mainCategorys}
+              textArr={mainCategorys.map(
+                (mainCategory) => mainCategory.categoryName,
+              )}
               selectedIndex={mainCategorySelected}
               setSelectedIndex={setMainCategorySelected}
             />
           </div>
 
           <DropdownMenu
-            textArr={subCategorys[mainCategorySelected]}
+            textArr={subCategorys.map(
+              (subCategory) => subCategory.categoryName,
+            )}
             selectedIndex={subCategorySelected}
             setSelectedIndex={setSubCategorySelected}
           />

@@ -11,8 +11,8 @@ function CourseManagementPage() {
       <div className="inline-block my-2">
         <SlideBar
           num={2}
-          firstText="오프라인 반"
-          secondText="온라인 반"
+          firstText="학원강좌 반"
+          secondText="단과강좌 반"
           isClickArr={classManagementType}
           setIsClickArr={setClassManagementType}
           type="course"

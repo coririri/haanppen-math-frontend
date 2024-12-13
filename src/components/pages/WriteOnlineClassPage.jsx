@@ -7,7 +7,11 @@ import IconButton from '../atoms/IconButton';
 import OnlinePrimaryForm from '../organisms/OnlinePrimaryForm';
 import OnlineVedioManagement from '../organisms/OnlineVedioManagement';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
-import enrollOnlineLesson from '../../apis/onlineLesson';
+import enrollOnlineLesson, {
+  getOnlineLesson,
+  getRootCategory,
+  getSubCategory,
+} from '../../apis/onlineLesson';
 
 function WriteOnlineClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,7 +19,7 @@ function WriteOnlineClassPage() {
   const [selectedClassindex, setSelectedClassindex] = useState(
     searchParams.get('classIndex'),
   );
-  const [isCreated, setIsCreated] = useState(true);
+  const [isCreated, setIsCreated] = useState(false);
   const [primaryClassInfo, setPrimaryClassInfo] = useState({
     title: '',
     lessonRange: '',
@@ -25,15 +29,72 @@ function WriteOnlineClassPage() {
   const [subCategorySelected, setSubCategorySelected] = useState(0);
   const [deleteClassCheckModalOpen, setDeleteClassCheckModalOpen] =
     useState(false);
+  const [mainCategorys, setMainCategorys] = useState([]);
+  const [subCategorys, setSubCategorys] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const mainCategorysResponse = await getRootCategory();
+      let subategorysResponse;
+
+      setMainCategorys(mainCategorysResponse.data);
+      if (mainCategorysResponse.data.length === 0) setSubCategorys([]);
+      else {
+        subategorysResponse = await getSubCategory(
+          mainCategorysResponse.data[0].categoryId,
+        );
+        setSubCategorys(subategorysResponse.data);
+      }
+
       const { data } = await getOwnOnlineCourses();
       setCourseList(data);
+      const onlineLessonRespose = await getOnlineLesson(
+        data[selectedClassindex].courseId,
+      );
+
+      if (onlineLessonRespose.data.title === null) {
+        setPrimaryClassInfo({
+          title: '',
+          lessonRange: '',
+          lessonDesc: '',
+        });
+
+        setMainCategorySelected(0);
+        setSubCategorySelected(0);
+        setIsCreated(false);
+      } else {
+        setPrimaryClassInfo({
+          title: onlineLessonRespose.data.title,
+          lessonRange: onlineLessonRespose.data.lessonRange,
+          lessonDesc: onlineLessonRespose.data.lessonDesc,
+        });
+
+        for (let i = 0; i < mainCategorysResponse.data.length; i += 1) {
+          if (
+            mainCategorysResponse.data[i].categoryName ===
+            onlineLessonRespose.data.lessonCategoryInfo.parentCategoryName
+          ) {
+            setMainCategorySelected(i);
+            break;
+          }
+        }
+
+        for (let i = 0; i < subategorysResponse.data.length; i += 1) {
+          if (
+            subategorysResponse.data[i].categoryId ===
+            onlineLessonRespose.data.lessonCategoryInfo.categoryId
+          ) {
+            setSubCategorySelected(i);
+            break;
+          }
+        }
+
+        setIsCreated(true);
+      }
     };
     fetchData();
-  }, []);
-  console.log(courseList);
+  }, [selectedClassindex]);
+
   return (
     <div>
       <DeleteCheckModal
@@ -65,6 +126,8 @@ function WriteOnlineClassPage() {
                 setMainCategorySelected={setMainCategorySelected}
                 subCategorySelected={subCategorySelected}
                 setSubCategorySelected={setSubCategorySelected}
+                mainCategorys={mainCategorys}
+                subCategorys={subCategorys}
               />
             </div>
           ) : (
@@ -78,6 +141,8 @@ function WriteOnlineClassPage() {
                   setMainCategorySelected={setMainCategorySelected}
                   subCategorySelected={subCategorySelected}
                   setSubCategorySelected={setSubCategorySelected}
+                  mainCategorys={mainCategorys}
+                  subCategorys={subCategorys}
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
@@ -104,14 +169,14 @@ function WriteOnlineClassPage() {
                 text="수업 생성"
                 handleClick={async () => {
                   try {
-                    setIsCreated(true);
-                    enrollOnlineLesson(
+                    await enrollOnlineLesson(
                       courseList[selectedClassindex].courseId,
                       primaryClassInfo.title,
                       primaryClassInfo.lessonRange,
                       primaryClassInfo.lessonDesc,
-                      0,
+                      subCategorys[subCategorySelected].categoryId,
                     );
+                    setIsCreated(true);
                   } catch (e) {
                     console.log(e);
                   }

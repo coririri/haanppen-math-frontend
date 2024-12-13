@@ -6,6 +6,7 @@ function SlideBar({
   firstText,
   secondText,
   thirdText,
+  fourthText,
   isClickArr,
   setIsClickArr,
   isStudent,
@@ -14,6 +15,65 @@ function SlideBar({
   const [leftPosition, setLeftPosition] = useState('left-[130px]');
   const [twoLeftPosition, setTwoLeftPosition] = useState('left-[20px]');
   const [courseLeftPosition, setCourseLeftPosition] = useState('left-[10px]');
+  const [fourLeftPosition, setFourLeftPosition] = useState('left-[35px]');
+  if (num === 4) {
+    return (
+      <div className="w-[836px]">
+        <div>
+          <TextButton
+            color="white"
+            isClick={isClickArr[0]}
+            moreStyle="w-[180px] mr-4"
+            handleClick={() => {
+              setIsClickArr([true, false, false, false]);
+              setFourLeftPosition('left-[35px]');
+            }}
+          >
+            {firstText}
+          </TextButton>
+
+          <TextButton
+            color="white"
+            isClick={isClickArr[1]}
+            moreStyle="w-[180px] mr-4"
+            handleClick={() => {
+              setIsClickArr([false, true, false, false]);
+              setFourLeftPosition('left-[230px]');
+            }}
+          >
+            {secondText}
+          </TextButton>
+
+          <TextButton
+            color="white"
+            isClick={isClickArr[2]}
+            moreStyle="w-[180px] mr-4"
+            handleClick={() => {
+              setIsClickArr([false, false, true, false]);
+              setFourLeftPosition('left-[425px]');
+            }}
+          >
+            {thirdText}
+          </TextButton>
+
+          <TextButton
+            color="white"
+            isClick={isClickArr[3]}
+            moreStyle="w-[180px] mr-4"
+            handleClick={() => {
+              setIsClickArr([false, false, false, true]);
+              setFourLeftPosition('left-[625px]');
+            }}
+          >
+            {fourthText}
+          </TextButton>
+        </div>
+        <div
+          className={`transition-[left] relative h-1 w-40 mt-1 bg-hpBlue ${fourLeftPosition}`}
+        />
+      </div>
+    );
+  }
   if (type === 'course') {
     return (
       <div>
