@@ -8,6 +8,7 @@ import OnlinePrimaryForm from '../organisms/OnlinePrimaryForm';
 import OnlineVedioManagement from '../organisms/OnlineVedioManagement';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import enrollOnlineLesson, {
+  deleteOnlineLesson,
   getOnlineLesson,
   getRootCategory,
   getSubCategory,
@@ -128,8 +129,13 @@ function WriteOnlineClassPage() {
         deleteCheckModalOpen={deleteClassCheckModalOpen}
         setDeleteCheckModalOpen={setDeleteClassCheckModalOpen}
         handleDelete={async () => {
-          setIsCreated(false);
-          setDeleteClassCheckModalOpen(false);
+          try {
+            await deleteOnlineLesson(courseList[selectedClassindex].courseId);
+            setIsCreated(false);
+            setDeleteClassCheckModalOpen(false);
+          } catch (e) {
+            console.log(e);
+          }
         }}
       />
       <DropdownMenu

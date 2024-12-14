@@ -14,6 +14,8 @@ import VedioManagementPage from './components/pages/VedioManagementPage';
 import MyClassPage from './components/pages/MyClassPage';
 import LessonPage from './components/pages/LessonPage';
 import LessonOverviewPage from './components/pages/LessonOverviewPage';
+import OnlineLessonPage from './components/pages/OnlineLessonPage';
+import PreviewClassPage from './components/pages/PreviewClassPage';
 
 // 배포1
 
@@ -36,7 +38,9 @@ function App() {
             <Route path="enroll-class" element={<WriteClassPage />} />
             <Route path="vedio-management" element={<VedioManagementPage />} />
             <Route path="my-class" element={<MyClassPage />} />
+            <Route path="preview-class" element={<PreviewClassPage />} />
             <Route path="lesson" element={<LessonPage />} />
+            <Route path="online-lesson" element={<OnlineLessonPage />} />
             <Route path="lesson-overview" element={<LessonOverviewPage />} />
           </Route>
           {/* 단독 레이아웃 */}

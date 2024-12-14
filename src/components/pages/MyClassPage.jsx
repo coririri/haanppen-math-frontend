@@ -47,7 +47,7 @@ function MyClassPage() {
     currentPage: 0,
     pageSize: 8,
   });
-  const [courseType, setCourseType] = useState('offline');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,7 +64,12 @@ function MyClassPage() {
           })),
         ]);
 
-        if (offlienCourseResponse.data.length === 0) setCourseType('online');
+        if (offlienCourseResponse.data.length === 0) {
+          searchParams.set('courseType', 'offline');
+          setSearchParams(searchParams);
+        }
+        searchParams.set('courseType', 'online');
+        setSearchParams(searchParams);
       } catch (e) {
         console.log(e);
       }
@@ -76,13 +81,15 @@ function MyClassPage() {
     const fetchData = async () => {
       if (courseList.length > 0) {
         try {
-          const { data } = await getLessonsByClassId(
-            courseList[selectedClassindex].courseId,
-            selectedCategoryindex,
-            page - 1,
-          );
-          setLessons(data.data);
-          setPageInfo(data.pageInfo);
+          if (courseList[selectedClassindex]?.type === 'offline') {
+            const { data } = await getLessonsByClassId(
+              courseList[selectedClassindex].courseId,
+              selectedCategoryindex,
+              page - 1,
+            );
+            setLessons(data.data);
+            setPageInfo(data.pageInfo);
+          }
         } catch (e) {
           console.log(e);
         }
@@ -92,12 +99,17 @@ function MyClassPage() {
   }, [selectedClassindex, selectedCategoryindex, courseList, page]);
 
   useEffect(() => {
-    if (courseList[selectedClassindex]?.type === 'offline')
-      setCourseType('offline');
+    console.log(courseList);
+    if (courseList[selectedClassindex]?.type === 'offline') {
+      searchParams.set('courseType', 'offline');
+      setSearchParams(searchParams);
+    }
 
-    if (courseList[selectedClassindex]?.type === 'online')
-      setCourseType('online');
-  }, [selectedClassindex]);
+    if (courseList[selectedClassindex]?.type === 'online') {
+      searchParams.set('courseType', 'online');
+      setSearchParams(searchParams);
+    }
+  }, [courseList, selectedClassindex]);
 
   console.log(courseList);
   if (courseList.length === 0)
@@ -137,7 +149,7 @@ function MyClassPage() {
           setSearchParams={setSearchParams}
         />
       </div>
-      {courseType === 'offline' && (
+      {searchParams.get('courseType') === 'offline' && (
         <div className="relative flex justify-center mt-[12px]">
           <div className="mr-4">
             <DateSelector
@@ -158,46 +170,34 @@ function MyClassPage() {
           </div>
         </div>
       )}
-      {courseType === 'offline' && (
+      {searchParams.get('courseType') === 'offline' && (
         <LessonList
           lessons={lessons}
           courseList={courseList}
           selectedClassindex={selectedClassindex}
         />
       )}
-      {courseType === 'online' && (
+      {searchParams.get('courseType') === 'online' && (
         <OnlineLessonList
-          lessons={[
-            {
-              title: '수학(상) 곱셈정리를 이용한 인수분해 정리 1강',
-              runtime: '35:00',
-              alreadyView: true,
-            },
-            {
-              title: '수학(상) 곱셈정리를 이용한 인수분해 정리 1강',
-              runtime: '35:00',
-              alreadyView: false,
-            },
-          ]}
-          lessonInformation={{
-            teacherName: '하경현',
-            lessoneRange: '집합과 명제, 함수, 수와 연산, 기본 도형과 논리',
-            lessonDesc:
-              '수학(상) 수업은 수학의 기초 개념을 다루며, 고등학교 수학 학습의 토대를 마련하는 중요한 내용으로 구성되어 있습니다. 먼저, 집합과 명제 부분에서는 집합의 개념과 표현 방법, 그리고 집합의 연산을 배우며, 명제와 논리 연산을 이해합니다.이를 통해 조건명제와 대우의 개념을 익히고 기본적인 논리적 사고를 키울 수 있습니다.',
-          }}
+          teacherName={
+            courseList[selectedClassindex].teacherPreview.teacherName
+          }
           courseList={courseList}
           selectedClassindex={selectedClassindex}
+          onlineCourseId={courseList[selectedClassindex].courseId}
         />
       )}
 
-      <div className="w-[360px] mx-auto my-1">
-        <Pagenation
-          page={page}
-          setPage={setPage}
-          totalItemNumbers={pageInfo?.totalItemSize}
-          itemNumPerPage={8}
-        />
-      </div>
+      {searchParams.get('courseType') === 'offline' && (
+        <div className="w-[360px] mx-auto my-1">
+          <Pagenation
+            page={page}
+            setPage={setPage}
+            totalItemNumbers={pageInfo?.totalItemSize}
+            itemNumPerPage={8}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -92,3 +92,9 @@ export const putOnlineVedioSequence = (
     targetVideoId,
     updatedSequence,
   });
+
+export const deleteOnlineLesson = (onlineCourseId) =>
+  instance.delete(`/api/online-courses/lesson/${onlineCourseId}`);
+
+export const getOnlineCourseByCategoryId = (categoryId) =>
+  instance.get(`/api/online-courses/categories/${categoryId}`);

@@ -3,12 +3,7 @@ import { GoTriangleRight, GoTriangleDown } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 import { getOnlineLesson } from '../../apis/onlineLesson';
 
-function OnlineLessonList({
-  teacherName,
-  onlineCourseId,
-  courseList,
-  selectedClassindex,
-}) {
+function PreviewOnlineLessonList({ teacherName, onlineCourseId }) {
   const navigate = useNavigate();
 
   const [isOpenInformation, setIsOpenInformation] = useState(false);
@@ -21,12 +16,10 @@ function OnlineLessonList({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (courseList[selectedClassindex]?.type === 'online') {
-          const { data } = await getOnlineLesson(onlineCourseId);
-          setOnlineLessonInformation(data);
-          setVideoList(data.onlineVideoDetails);
-          console.log(data);
-        }
+        const { data } = await getOnlineLesson(onlineCourseId);
+        setOnlineLessonInformation(data);
+        setVideoList(data.onlineVideoDetails);
+        console.log(data);
       } catch (e) {
         console.log(e);
       }
@@ -100,26 +93,30 @@ function OnlineLessonList({
         <span className="block w-[50px]  text-center font-bold text-md" />
       </div>
 
-      {videoList.map((lesson) => (
+      {videoList.map((video) => (
         <div
           className="flex items-center border-[#D9D9D9] border-b-2 border-solid py-4"
-          key={lesson.videoId}
+          key={video.videoId}
         >
           <span className="block w-[200px] text-center font-bold text-md">
-            {lesson.mediaName}
+            {video.mediaName}
           </span>
 
           <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
-            {lesson.runtime}
+            {video.runtime}
           </span>
 
           <button
             type="button"
             className="mr-2"
             onClick={() => {
-              navigate(
-                `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${lesson.videoId}&courseName=${onlineLessonInformation.title}`,
-              );
+              if (video.isPreview === true)
+                navigate(
+                  `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${video.videoId}&courseName=${onlineLessonInformation.title}`,
+                );
+              else {
+                alert('수업을 등록해주세요');
+              }
             }}
           >
             <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
@@ -132,4 +129,4 @@ function OnlineLessonList({
   );
 }
 
-export default OnlineLessonList;
+export default PreviewOnlineLessonList;
