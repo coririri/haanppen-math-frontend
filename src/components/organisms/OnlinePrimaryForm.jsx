@@ -1,3 +1,4 @@
+import enrollOnlineLesson from '../../apis/onlineLesson';
 import TextButton from '../atoms/TextButton';
 import DropdownMenu from '../molecules/DropdownMenu';
 
@@ -11,6 +12,8 @@ function OnlinePrimaryForm({
   setSubCategorySelected,
   mainCategorys,
   subCategorys,
+  courseList,
+  selectedClassindex,
 }) {
   return (
     <div className="flex flex-col items-start justify-center my-6">
@@ -24,7 +27,19 @@ function OnlinePrimaryForm({
             <TextButton
               color="gray"
               moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {}}
+              handleClick={async () => {
+                try {
+                  await enrollOnlineLesson(
+                    courseList[selectedClassindex].courseId,
+                    primaryClassInfo.title,
+                    primaryClassInfo.lessonRange,
+                    primaryClassInfo.lessonDesc,
+                    subCategorys[subCategorySelected].categoryId,
+                  );
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
             >
               저장
             </TextButton>
@@ -53,7 +68,19 @@ function OnlinePrimaryForm({
             <TextButton
               color="gray"
               moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {}}
+              handleClick={async () => {
+                try {
+                  await enrollOnlineLesson(
+                    courseList[selectedClassindex].courseId,
+                    primaryClassInfo.title,
+                    primaryClassInfo.lessonRange,
+                    primaryClassInfo.lessonDesc,
+                    subCategorys[subCategorySelected].categoryId,
+                  );
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
             >
               저장
             </TextButton>
@@ -82,7 +109,19 @@ function OnlinePrimaryForm({
             <TextButton
               color="gray"
               moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {}}
+              handleClick={async () => {
+                try {
+                  await enrollOnlineLesson(
+                    courseList[selectedClassindex].courseId,
+                    primaryClassInfo.title,
+                    primaryClassInfo.lessonRange,
+                    primaryClassInfo.lessonDesc,
+                    subCategorys[subCategorySelected].categoryId,
+                  );
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
             >
               저장
             </TextButton>
@@ -110,7 +149,19 @@ function OnlinePrimaryForm({
             <TextButton
               color="gray"
               moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {}}
+              handleClick={async () => {
+                try {
+                  await enrollOnlineLesson(
+                    courseList[selectedClassindex].courseId,
+                    primaryClassInfo.title,
+                    primaryClassInfo.lessonRange,
+                    primaryClassInfo.lessonDesc,
+                    subCategorys[subCategorySelected].categoryId,
+                  );
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
             >
               저장
             </TextButton>

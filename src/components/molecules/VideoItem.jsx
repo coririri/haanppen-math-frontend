@@ -314,7 +314,7 @@ function VideoItem({
                   );
                 }}
               >
-                영상 관리
+                영상 선택
               </TextButton>
             ) : (
               video.mediaName.slice(0, -4)

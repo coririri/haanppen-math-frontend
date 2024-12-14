@@ -31,6 +31,10 @@ function WriteOnlineClassPage() {
     useState(false);
   const [mainCategorys, setMainCategorys] = useState([]);
   const [subCategorys, setSubCategorys] = useState([]);
+  const [videoList, setVideoList] = useState([]);
+  const [deleteCheckArr, setDeleteCheckArr] = useState(
+    Array(videoList.length).fill(false),
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +52,7 @@ function WriteOnlineClassPage() {
 
       const { data } = await getOwnOnlineCourses();
       setCourseList(data);
+      if (data.length === 0) return;
       const onlineLessonRespose = await getOnlineLesson(
         data[selectedClassindex].courseId,
       );
@@ -69,15 +74,22 @@ function WriteOnlineClassPage() {
           lessonDesc: onlineLessonRespose.data.lessonDesc,
         });
 
+        let mainCategoryIndex = 0;
         for (let i = 0; i < mainCategorysResponse.data.length; i += 1) {
           if (
             mainCategorysResponse.data[i].categoryName ===
             onlineLessonRespose.data.lessonCategoryInfo.parentCategoryName
           ) {
             setMainCategorySelected(i);
+            mainCategoryIndex = i;
             break;
           }
         }
+
+        subategorysResponse = await getSubCategory(
+          mainCategorysResponse.data[mainCategoryIndex].categoryId,
+        );
+        setSubCategorys(subategorysResponse.data);
 
         for (let i = 0; i < subategorysResponse.data.length; i += 1) {
           if (
@@ -89,11 +101,26 @@ function WriteOnlineClassPage() {
           }
         }
 
+        setVideoList(onlineLessonRespose.data.onlineVideoDetails);
         setIsCreated(true);
       }
     };
     fetchData();
-  }, [selectedClassindex]);
+  }, [selectedClassindex, isCreated]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const subategorysResponse = await getSubCategory(
+          mainCategorys[mainCategorySelected].categoryId,
+        );
+        setSubCategorys(subategorysResponse.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, [mainCategorySelected]);
 
   return (
     <div>
@@ -128,6 +155,8 @@ function WriteOnlineClassPage() {
                 setSubCategorySelected={setSubCategorySelected}
                 mainCategorys={mainCategorys}
                 subCategorys={subCategorys}
+                courseList={courseList}
+                selectedClassindex={selectedClassindex}
               />
             </div>
           ) : (
@@ -143,6 +172,8 @@ function WriteOnlineClassPage() {
                   setSubCategorySelected={setSubCategorySelected}
                   mainCategorys={mainCategorys}
                   subCategorys={subCategorys}
+                  courseList={courseList}
+                  selectedClassindex={selectedClassindex}
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
@@ -157,7 +188,16 @@ function WriteOnlineClassPage() {
                 />
               </div>
               <div>
-                <OnlineVedioManagement />
+                <OnlineVedioManagement
+                  videoList={videoList.sort(
+                    (a, b) => a.videoSequence - b.videoSequence,
+                  )}
+                  setVideoList={setVideoList}
+                  onlineCourseId={courseList[selectedClassindex].courseId}
+                  classIndex={selectedClassindex}
+                  deleteCheckArr={deleteCheckArr}
+                  setDeleteCheckArr={setDeleteCheckArr}
+                />
               </div>
             </div>
           )}

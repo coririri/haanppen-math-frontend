@@ -3,29 +3,19 @@ import { AiFillEdit } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
 import VideoCard from '../molecules/VideoCard';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import {
+  deleteOnlineCourseVedio,
+  getOnlineLesson,
+} from '../../apis/onlineLesson';
 
-function OnlineVedioManagement() {
-  const [videoList, setVideoList] = useState([
-    {
-      title: '수학(하) 로그와 실생활의 관계를 이용한 인수분해 정리 1강',
-      attachmentViews: [],
-      alreadyView: false,
-    },
-    {
-      title: '수학(하) 로그와 실생활의 관계를 이용한 인수분해 정리 1강',
-      attachmentViews: [],
-      alreadyView: false,
-    },
-    {
-      title: '수학(하) 로그와 실생활의 관계를 이용한 인수분해 정리 1강',
-      attachmentViews: [],
-      alreadyView: false,
-    },
-  ]);
-
-  const [deleteCheckArr, setDeleteCheckArr] = useState(
-    Array(videoList.length).fill(false),
-  );
+function OnlineVedioManagement({
+  videoList,
+  setVideoList,
+  onlineCourseId,
+  classIndex,
+  deleteCheckArr,
+  setDeleteCheckArr,
+}) {
   const [deleteVideoCheckModalOpen, setDeleteVideoCheckModalOpen] =
     useState(false);
   return (
@@ -34,7 +24,27 @@ function OnlineVedioManagement() {
         deleteCheckModalOpen={deleteVideoCheckModalOpen}
         setDeleteCheckModalOpen={setDeleteVideoCheckModalOpen}
         handleDelete={async () => {
-          setDeleteVideoCheckModalOpen(false);
+          try {
+            for (let i = 0; i < deleteCheckArr.length; i += 1) {
+              // eslint-disable-next-line no-continue
+              if (!deleteCheckArr[i]) continue;
+              await deleteOnlineCourseVedio(
+                onlineCourseId,
+                videoList[i].videoId,
+              );
+
+              const onlineLessonRespose = await getOnlineLesson(onlineCourseId);
+              setVideoList(onlineLessonRespose.data.onlineVideoDetails);
+              setDeleteCheckArr(
+                Array(onlineLessonRespose.data.onlineVideoDetails.length).fill(
+                  false,
+                ),
+              );
+            }
+            setDeleteVideoCheckModalOpen(false);
+          } catch (e) {
+            console.log(e);
+          }
         }}
       />
       <h3 className="font-bold text-3xl">수업 영상 관리</h3>
@@ -44,7 +54,19 @@ function OnlineVedioManagement() {
             bgColor="white"
             icon={<AiFillEdit size="20px" />}
             text="영상 추가"
-            handleClick={() => {}}
+            handleClick={() => {
+              setVideoList((prev) => {
+                const copiedVideoList = [...prev];
+                copiedVideoList.push({
+                  videoSequnce: videoList.length + 1,
+                  videoId: -1,
+                  mediaName: '',
+                  attachmentDetails: [],
+                  isPreview: false,
+                });
+                return copiedVideoList;
+              });
+            }}
           />
         </div>
         <div>
@@ -52,7 +74,7 @@ function OnlineVedioManagement() {
             bgColor="white"
             icon={<AiFillEdit size="20px" />}
             text="영상 삭제"
-            handleClick={() => {
+            handleClick={async () => {
               setDeleteVideoCheckModalOpen(true);
             }}
           />
@@ -77,15 +99,20 @@ function OnlineVedioManagement() {
             미리보기
           </span>
         </div>
-        {videoList.map((video, index) => (
-          <VideoCard
-            video={video}
-            videoIndex={index}
-            deleteCheckArr={deleteCheckArr}
-            setDeleteCheckArr={setDeleteCheckArr}
-            setVideoList={setVideoList}
-          />
-        ))}
+        {videoList
+          .sort((a, b) => a.videoSequnce - b.videoSequnce)
+          .map((video, index) => (
+            <VideoCard
+              video={video}
+              videoIndex={index}
+              videoList={videoList}
+              deleteCheckArr={deleteCheckArr}
+              setDeleteCheckArr={setDeleteCheckArr}
+              setVideoList={setVideoList}
+              onlineCourseId={onlineCourseId}
+              classIndex={classIndex}
+            />
+          ))}
       </div>
     </div>
   );

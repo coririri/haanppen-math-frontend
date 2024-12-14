@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import TextButton from '../atoms/TextButton';
 import { dateTimeToDateAndTimes } from '../../utils/dateTimeToDate';
 import { addLessonVideo } from '../../apis/lesson';
+import { postOnlineCourseVedio } from '../../apis/onlineLesson';
 
 function FileDetailTab({ fileData }) {
   const navigate = useNavigate();
@@ -49,10 +50,24 @@ function FileDetailTab({ fileData }) {
             moreStyle="w-[9rem]"
             handleClick={async () => {
               try {
-                await addLessonVideo(searchParams.get('memoId'), fileData.path);
-                navigate(
-                  `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}`,
-                );
+                console.log(searchParams.onlineCourseId);
+                if (searchParams.onlineCourseId === 'undefined') {
+                  await addLessonVideo(
+                    searchParams.get('memoId'),
+                    fileData.path,
+                  );
+                  navigate(
+                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType="offline"`,
+                  );
+                } else {
+                  await postOnlineCourseVedio(
+                    searchParams.get('onlineCourseId'),
+                    fileData.path,
+                  );
+                  navigate(
+                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType="online"`,
+                  );
+                }
               } catch (e) {
                 console.log(e);
               }
