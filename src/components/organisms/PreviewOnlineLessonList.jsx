@@ -93,38 +93,40 @@ function PreviewOnlineLessonList({ teacherName, onlineCourseId }) {
         <span className="block w-[50px]  text-center font-bold text-md" />
       </div>
 
-      {videoList.map((video) => (
-        <div
-          className="flex items-center border-[#D9D9D9] border-b-2 border-solid py-4"
-          key={video.videoId}
-        >
-          <span className="block w-[200px] text-center font-bold text-md">
-            {video.mediaName}
-          </span>
-
-          <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
-            {video.runtime}
-          </span>
-
-          <button
-            type="button"
-            className="mr-2"
-            onClick={() => {
-              if (video.isPreview === true)
-                navigate(
-                  `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${video.videoId}&courseName=${onlineLessonInformation.title}`,
-                );
-              else {
-                alert('수업을 등록해주세요');
-              }
-            }}
+      {videoList
+        .sort((a, b) => a.videoSequence - b.videoSequence)
+        .map((video) => (
+          <div
+            className="flex items-center border-[#D9D9D9] border-b-2 border-solid py-4"
+            key={video.videoId}
           >
-            <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
-              Play
+            <span className="block w-[200px] text-center font-bold text-md">
+              {video.mediaName}
             </span>
-          </button>
-        </div>
-      ))}
+
+            <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
+              {video.runtime}
+            </span>
+
+            <button
+              type="button"
+              className="mr-2"
+              onClick={() => {
+                if (video.isPreview === true)
+                  navigate(
+                    `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${video.videoId}&courseName=${onlineLessonInformation.title}`,
+                  );
+                else {
+                  alert('수업을 등록해주세요');
+                }
+              }}
+            >
+              <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
+                Play
+              </span>
+            </button>
+          </div>
+        ))}
     </div>
   );
 }

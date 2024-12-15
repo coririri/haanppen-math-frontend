@@ -100,34 +100,36 @@ function OnlineLessonList({
         <span className="block w-[50px]  text-center font-bold text-md" />
       </div>
 
-      {videoList.map((lesson) => (
-        <div
-          className="flex items-center border-[#D9D9D9] border-b-2 border-solid py-4"
-          key={lesson.videoId}
-        >
-          <span className="block w-[200px] text-center font-bold text-md">
-            {lesson.mediaName}
-          </span>
-
-          <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
-            {lesson.runtime}
-          </span>
-
-          <button
-            type="button"
-            className="mr-2"
-            onClick={() => {
-              navigate(
-                `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${lesson.videoId}&courseName=${onlineLessonInformation.title}`,
-              );
-            }}
+      {videoList
+        .sort((a, b) => a.videoSequence - b.videoSequence)
+        .map((lesson) => (
+          <div
+            className="flex items-center border-[#D9D9D9] border-b-2 border-solid py-4"
+            key={lesson.videoId}
           >
-            <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
-              Play
+            <span className="block w-[200px] text-center font-bold text-md">
+              {lesson.mediaName}
             </span>
-          </button>
-        </div>
-      ))}
+
+            <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
+              {lesson.runtime}
+            </span>
+
+            <button
+              type="button"
+              className="mr-2"
+              onClick={() => {
+                navigate(
+                  `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${lesson.videoId}&courseName=${onlineLessonInformation.title}`,
+                );
+              }}
+            >
+              <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
+                Play
+              </span>
+            </button>
+          </div>
+        ))}
     </div>
   );
 }
