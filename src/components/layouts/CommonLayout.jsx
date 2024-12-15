@@ -34,9 +34,26 @@ function CommonLayout() {
       const curToken = instance.defaults.headers.common.Authorization;
       const curUserName = localStorage.getItem('userName');
       const curRole = localStorage.getItem('role');
-      if (!curToken || !curUserName || !curRole) {
-        refreshLogin();
+      try {
+        if (!curToken || !curUserName || !curRole) {
+          const response = await refreshLogin();
+
+          const newToken = response.data.accessToken;
+          const { role, userName } = response.data;
+          instance.defaults.headers.common.Authorization = newToken;
+          localStorage.setItem('role', role);
+          localStorage.setItem('userName', userName);
+        }
+      } catch (e) {
+        console.error('토큰을 갱신하는 중 에러가 발생했습니다:', e);
+        // 토큰 갱신에 실패한 경우 여기에 적절한 처리를 추가할 수 있습니다.
+        // 토큰 갱신에 실패한 경우 여기에 적절한 처리를 추가할 수 있습니다.
+        alert('로그인 페이지로 이동합니다');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 100);
       }
+
       const { data } = await getBanners();
       setNotifications(
         data.map((item) => ({
@@ -395,6 +412,10 @@ function CommonLayout() {
               <DatePicker
                 selected={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
+                onMonthChange={(date) => {
+                  setSelectedDate(date);
+                  console.log('Month Changed:', date);
+                }}
                 inline
                 dayClassName={(date) =>
                   isMarkedDate(date) ? 'highlighted-date' : undefined
