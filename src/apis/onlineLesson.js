@@ -98,3 +98,6 @@ export const deleteOnlineLesson = (onlineCourseId) =>
 
 export const getOnlineCourseByCategoryId = (categoryId) =>
   instance.get(`/api/online-courses/categories/${categoryId}`);
+
+export const getMonthlyCourse = (date) =>
+  instance.get(`/api/courses/memos/month?monthInfo=${date}`);

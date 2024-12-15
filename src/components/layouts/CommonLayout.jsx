@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AiOutlineCheck } from 'react-icons/ai';
+import DatePicker from 'react-datepicker';
 import instance from '../../apis/instance';
 import Header from './Header';
 import Navigation from './Navigation';
@@ -11,21 +12,9 @@ import getBanners, {
   postBanner,
   putBanner,
 } from '../../apis/banner';
-
-const todayLessonItems = [
-  {
-    courseName: '월25 반',
-    lessonTitle: '24.11.21 오프라인 강의',
-  },
-  {
-    courseName: '수학(상) 중간고사 특강',
-    lessonTitle: '1주차 - 수학 (상) 지수법칙과 로그의 관계',
-  },
-  {
-    courseName: '수학(하) 중간고사 특강',
-    lessonTitle: '다항식의 덧셈과 뺄셈, 곱셈',
-  },
-];
+import { getMonthlyCourse } from '../../apis/onlineLesson';
+import { formatDate } from '../../utils/dateTimeToDate';
+import './css/custom-datepicker.css';
 
 function CommonLayout() {
   const location = useLocation(); // 현재 경로 가져오기
@@ -36,6 +25,9 @@ function CommonLayout() {
   const [isModificationNotificationArr, setIsModificationNotificationArr] =
     useState(); // 공지사항 리스트 수정할지 말지?
   const [addNotificationArr, setAddNotificationArr] = useState([]); // 추가할 공지사항들
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [monthClass, setMonthClass] = useState([]);
+  const [markedDates, setMarkedDates] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +54,18 @@ function CommonLayout() {
       console.log(data);
     };
 
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await getMonthlyCourse(formatDate(selectedDate));
+      setMonthClass(data);
+
+      setMarkedDates(
+        data.map((course) => course.registeredDateTime.split('T')[0]),
+      );
+    };
     fetchData();
   }, []);
 
@@ -96,8 +100,16 @@ function CommonLayout() {
     console.log(newArr);
     setAddNotificationArr(newArr);
   };
-  console.log(notifications);
-  console.log(modificationNotificationTextArr);
+
+  console.log(monthClass);
+  console.log(selectedDate);
+
+  // 날짜를 'YYYY-MM-DD' 형식으로 변환하여 비교하는 함수
+  const isMarkedDate = (date) => {
+    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    return markedDates.includes(formattedDate);
+  };
+
   if (localStorage.getItem('role') === 'ADMIN')
     return (
       <div>
@@ -379,16 +391,35 @@ function CommonLayout() {
       <div className="w-full min-h-[620px] relative border-[12px] mx-auto  border-hpBackgroundGray border-solid">
         {location.pathname === '/' ? (
           <div className="min-h-[620px] p-6 bg-gray-100">
+            <di className="flex justify-center mb-2">
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                inline
+                dayClassName={(date) =>
+                  isMarkedDate(date) ? 'highlighted-date' : undefined
+                }
+              />
+            </di>
             {/* 오늘의 강의 */}
             <div className="bg-indigo-600 text-white p-6 rounded-lg shadow-lg mb-6">
               <h3 className="text-2xl font-bold mb-4">오늘의 강의</h3>
               <ul className="space-y-4">
-                {todayLessonItems.map((todayLessonItem) => (
-                  <TodayLessonItem
-                    courseName={todayLessonItem.courseName}
-                    lessonTitle={todayLessonItem.lessonTitle}
-                  />
-                ))}
+                {monthClass
+                  .filter(
+                    (lessonItem) =>
+                      // eslint-disable-next-line eqeqeq
+                      lessonItem.registeredDateTime.split('T')[0] ===
+                      formatDate(selectedDate),
+                  )
+                  .map((lessonItem) => (
+                    <TodayLessonItem
+                      courseId={lessonItem.courseId}
+                      courseDate={lessonItem.registeredDateTime}
+                      courseName={lessonItem.courseName}
+                      lessonTitle={`${lessonItem.registeredDateTime.split('T')[0]} 수업`}
+                    />
+                  ))}
               </ul>
             </div>
 

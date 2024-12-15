@@ -67,4 +67,14 @@ export const dateTimeToDateAndZeroTimes = (dateTimeString) => {
   return formattedDateTime; // 예: "2024-09-03 09:42:32"
 };
 
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+
+  const year = String(date.getFullYear()); // 연도에서 마지막 두 자리 추출
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 월 (0부터 시작하므로 +1 필요)
+  const day = String(date.getDate()).padStart(2, '0'); // 날짜
+
+  return `${year}-${month}-${day}`;
+};
+
 export default dateTimeToDate;
