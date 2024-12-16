@@ -31,6 +31,23 @@ function LessonOverviewPage() {
           );
           setSubCategorys(subategorysResponse.data);
           if (subategorysResponse.data.length > 0) {
+            if (subCategorySelected === 0) {
+              console.log(
+                mainCategorysResponse.data[mainCategorySelected].categoryId,
+              );
+              try {
+                const onlineCourseByMainCategory =
+                  await getOnlineCourseByCategoryId(
+                    mainCategorysResponse.data[mainCategorySelected].categoryId,
+                  );
+                setLessonOverviewDatas(onlineCourseByMainCategory.data);
+                console.log(onlineCourseByMainCategory.data);
+                return;
+              } catch (e) {
+                console.log(e);
+              }
+            }
+
             const categoryOnlineCourse = await getOnlineCourseByCategoryId(
               subategorysResponse.data[subCategorySelected - 1].categoryId,
             );
