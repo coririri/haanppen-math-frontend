@@ -32,7 +32,7 @@ function LessonOverviewPage() {
           setSubCategorys(subategorysResponse.data);
           if (subategorysResponse.data.length > 0) {
             const categoryOnlineCourse = await getOnlineCourseByCategoryId(
-              subategorysResponse.data[subCategorySelected].categoryId,
+              subategorysResponse.data[subCategorySelected - 1].categoryId,
             );
             setLessonOverviewDatas(categoryOnlineCourse.data);
           }
@@ -53,9 +53,23 @@ function LessonOverviewPage() {
         setSubCategorys(subategorysResponse.data);
 
         if (subCategorys[subCategorySelected]?.categoryId !== undefined) {
+          if (subCategorySelected === 0) {
+            console.log(mainCategorys[mainCategorySelected]);
+            try {
+              const { data } = await getOnlineCourseByCategoryId(
+                mainCategorys[mainCategorySelected].categoryId,
+              );
+              setLessonOverviewDatas(data);
+              console.log(data);
+            } catch (e) {
+              console.log(e);
+            }
+            return;
+          }
+
           try {
             const { data } = await getOnlineCourseByCategoryId(
-              subategorysResponse.data[subCategorySelected].categoryId,
+              subategorysResponse.data[subCategorySelected - 1].categoryId,
             );
             setLessonOverviewDatas(data);
             console.log(data);
@@ -73,10 +87,28 @@ function LessonOverviewPage() {
   useEffect(() => {
     const fetchData = async () => {
       console.log(subCategorys[subCategorySelected]?.categoryId !== undefined);
+      console.log(subCategorySelected);
+      if (mainCategorys.length === 0) {
+        return;
+      }
+      if (subCategorySelected === 0) {
+        console.log(mainCategorys[mainCategorySelected]);
+        try {
+          const { data } = await getOnlineCourseByCategoryId(
+            mainCategorys[mainCategorySelected].categoryId,
+          );
+          setLessonOverviewDatas(data);
+          console.log(data);
+        } catch (e) {
+          console.log(e);
+        }
+        return;
+      }
+
       if (subCategorys[subCategorySelected]?.categoryId !== undefined) {
         try {
           const { data } = await getOnlineCourseByCategoryId(
-            subCategorys[subCategorySelected].categoryId,
+            subCategorys[subCategorySelected - 1].categoryId,
           );
           setLessonOverviewDatas(data);
           console.log(data);
@@ -113,7 +145,10 @@ function LessonOverviewPage() {
               />
             </div>
             <TypeDropdownMenu
-              textArr={subCategorys.map((category) => category.categoryName)}
+              textArr={[
+                '전체',
+                ...subCategorys.map((category) => category.categoryName),
+              ]}
               selectedIndex={subCategorySelected}
               setSelectedIndex={setSubCategorySelected}
               size="long"
