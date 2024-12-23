@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import instance from './instance';
 
 const getAllTeachers = async () => instance.get('/api/members/teachers/all');

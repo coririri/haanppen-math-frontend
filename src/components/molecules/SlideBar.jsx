@@ -5,12 +5,12 @@ function SlideBar({
   num,
   firstText,
   secondText,
-  thirdText,
-  fourthText,
+  thirdText = '',
+  fourthText = '',
   isClickArr,
   setIsClickArr,
   isStudent,
-  type,
+  type = '',
 }) {
   const [leftPosition, setLeftPosition] = useState('left-[130px]');
   const [twoLeftPosition, setTwoLeftPosition] = useState('left-[20px]');

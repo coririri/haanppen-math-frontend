@@ -9,16 +9,47 @@ import QueryList from '../molecules/QueryList';
 import Pagenation from '../organisms/Pagenation';
 import TextButton from '../atoms/TextButton';
 
+interface Owner {
+  memberId: number;
+  memberName: string;
+  memberGrade: number | null;
+  role: 'student' | 'teacher';
+}
+
+interface Target {
+  memberId: number;
+  memberName: string;
+  memberGrade: number | null;
+  role: 'student' | 'teacher';
+}
+
+interface Question {
+  questionId: number;
+  title: string;
+  registeredDateTime: string;
+  solved: boolean;
+  commentCount: number;
+  viewCount: number;
+  owner: Owner;
+  target: Target | null;
+}
+
+interface PageInfo {
+  totalItemSize: number;
+  currentPage: number;
+  pageSize: number;
+}
+
 function QueryBoardPage() {
   const navigate = useNavigate();
 
   const [slideBarIndex, setSlideBarIndex] = useState([true, false]);
-  const [queryListData, setQueryListData] = useState([]);
+  const [queryListData, setQueryListData] = useState<Question[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [searchState, setSearchState] = useState(false);
 
   const [page, setPage] = useState(1);
-  const [pageInfo, setPageInfo] = useState({
+  const [pageInfo, setPageInfo] = useState<PageInfo>({
     totalItemSize: 0,
     currentPage: 0,
     pageSize: 8,
@@ -26,7 +57,6 @@ function QueryBoardPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(page);
       try {
         if (slideBarIndex[0] === true) {
           const { data } = await getQuestionsList(page - 1, searchValue);
@@ -147,6 +177,9 @@ function QueryBoardPage() {
       {/* SlideBar */}
       <div className="flex my-2 ml-4 items-center justify-center">
         <TextButton
+          handleClick={() => {
+            console.log('전체 질문 버튼 클릭');
+          }}
           color="white"
           moreStyle={`w-[120px] mr-2 transition-transform transform hover:scale-105 duration-300 bg-blue-500 text-white'
               }`}
@@ -193,7 +226,11 @@ function QueryBoardPage() {
             </span>
           </div>
           {queryListData.map((question) => (
-            <QueryList key={question.questionId} question={question} />
+            <QueryList
+              key={question.questionId}
+              question={question}
+              isStudent={false}
+            />
           ))}
           {Array(8 - queryListData.length)
             .fill(0)
