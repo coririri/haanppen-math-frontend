@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,js,jsx}'],
+  content: [
+    './src/**/*.{html,js,jsx,ts,tsx}', // .tsx 파일이 포함되어야 합니다
+  ],
   theme: {
     extend: {
       colors: {

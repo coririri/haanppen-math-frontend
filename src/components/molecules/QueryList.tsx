@@ -1,13 +1,45 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+// eslint-disable-next-line import/extensions
 import QueryBadge from '../atoms/QueryBadge';
 
-function QueryList({ question, isStudent }) {
+interface Owner {
+  memberId: number;
+  memberName: string;
+  memberGrade: number | null;
+  role: 'student' | 'teacher';
+}
+
+interface Target {
+  memberId: number;
+  memberName: string;
+  memberGrade: number | null;
+  role: 'student' | 'teacher';
+}
+
+interface QuestionProps {
+  questionId: number;
+  title: string;
+  registeredDateTime: string;
+  solved: boolean;
+  commentCount: number;
+  viewCount: number;
+  owner: Owner;
+  target: Target | null;
+}
+
+interface QueyListProps {
+  question: QuestionProps;
+  isStudent: boolean;
+}
+
+function QueryList({ question, isStudent }: QueyListProps) {
   const navigate = useNavigate();
 
   if (isStudent)
     return (
       <button
+        className="block"
         type="button"
         onClick={() => {
           navigate(`/question/${question.questionId}`);
@@ -28,6 +60,7 @@ function QueryList({ question, isStudent }) {
     );
   return (
     <button
+      className="block"
       type="button"
       onClick={() => {
         navigate(`/question/${question.questionId}`);

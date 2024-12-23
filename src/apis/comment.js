@@ -4,6 +4,7 @@ import instance from './instance';
 const writeComment = (data) =>
   instance
     .post('/api/board/comments', data)
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     .then(() => {})
     .catch((e) => {
       console.log(e);
