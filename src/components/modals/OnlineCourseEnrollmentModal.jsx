@@ -293,7 +293,7 @@ function OnlineCourseEnrollmentModal({
   return (
     <ReactModal
       isOpen={enrollmentModalOpen}
-      onRequestClose={setEnrollmentModalOpen}
+      onRequestClose={() => setEnrollmentModalOpen(false)}
       style={customModalStyles}
     >
       <div className="flex flex-col w-full">

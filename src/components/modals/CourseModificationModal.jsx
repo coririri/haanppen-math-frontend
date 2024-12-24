@@ -6,13 +6,12 @@ import StudentListByClass from '../organisms/StudentListByClass';
 import {
   getAllCourses,
   getCoursesById,
-  getMyCourse,
   putCourseNameAndTeacher,
   putCourseStudents,
 } from '../../apis/course';
-import getAllTeachers from '../../apis/teacher';
-import { getAllStudents, getMyCourseStudents } from '../../apis/student';
+import { getMyCourseStudents } from '../../apis/student';
 import DropdownMenu from '../molecules/DropdownMenu';
+import { useCourseStudentStore } from '../../store/courseStudentsStore';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -50,64 +49,13 @@ function CourseModificationModal({
   teacherArr,
   selectedIndex,
 }) {
-  const [teacherList, setTeacherList] = useState(['선택 없음']);
+  const { entireStudentsNum, entireStudents } = useCourseStudentStore();
+
   const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
   const [courseName, setCourseName] = useState('');
-  const [entireStudentsNum, setEntireStudentsNum] = useState(0);
   const [differentStudentsNum, setDifferentStudentsNum] = useState(0);
   const [myStudentsNum, setMyStudentsNum] = useState(0);
   const [myCourseStudents, setMyCourseStudents] = useState([
-    {
-      grade: 0,
-      students: [],
-    },
-    {
-      grade: 1,
-      students: [],
-    },
-    {
-      grade: 2,
-      students: [],
-    },
-    {
-      grade: 3,
-      students: [],
-    },
-    {
-      grade: 4,
-      students: [],
-    },
-    {
-      grade: 5,
-      students: [],
-    },
-    {
-      grade: 6,
-      students: [],
-    },
-    {
-      grade: 7,
-      students: [],
-    },
-    {
-      grade: 8,
-      students: [],
-    },
-    {
-      grade: 9,
-      students: [],
-    },
-    {
-      grade: 10,
-      students: [],
-    },
-    {
-      grade: 11,
-      students: [],
-    },
-  ]);
-
-  const [entireStudents, setEntireStudents] = useState([
     {
       grade: 0,
       students: [],
@@ -211,93 +159,153 @@ function CourseModificationModal({
 
   useEffect(() => {
     const getAllData = async () => {
-      const { data } = await getAllTeachers();
-      setTeacherList(data);
-      await getAllStudents(setEntireStudents, setEntireStudentsNum);
-      await getMyCourseStudents(
-        courseId,
-        setMyCourseStudents,
-        setMyStudentsNum,
-      );
-    };
-    getAllData();
-  }, []);
+      const { data } = await getMyCourseStudents(courseId);
+      const newStudents = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempStudentsNum = 0;
 
-  useEffect(() => {
-    const newDifferntStudents = [
-      {
-        grade: 0,
-        students: [],
-      },
-      {
-        grade: 1,
-        students: [],
-      },
-      {
-        grade: 2,
-        students: [],
-      },
-      {
-        grade: 3,
-        students: [],
-      },
-      {
-        grade: 4,
-        students: [],
-      },
-      {
-        grade: 5,
-        students: [],
-      },
-      {
-        grade: 6,
-        students: [],
-      },
-      {
-        grade: 7,
-        students: [],
-      },
-      {
-        grade: 8,
-        students: [],
-      },
-      {
-        grade: 9,
-        students: [],
-      },
-      {
-        grade: 10,
-        students: [],
-      },
-      {
-        grade: 11,
-        students: [],
-      },
-    ];
-    let tempDifferentStudentsNum = 0;
+      data.studentPreviews.forEach((student) => {
+        if (student)
+          newStudents[student.grade].students.push({
+            id: student.studentId,
+            name: student.studentName,
+          });
+        tempStudentsNum += 1;
+      });
+      setMyCourseStudents(newStudents);
+      setMyStudentsNum(tempStudentsNum);
 
-    entireStudents.forEach((grade, index) => {
-      grade.students.forEach((student) => {
-        let flag = true;
-        myCourseStudents[index].students.forEach((filterStudent) => {
-          if (student.name === filterStudent.name) {
-            flag = false;
-          }
-        });
-        if (flag === true) {
-          newDifferntStudents[index].students.push(student);
-          tempDifferentStudentsNum += 1;
+      teacherArr.forEach((teacher, index) => {
+        if (teacher?.name === data.teacherPreview.teacherName) {
+          setSelectedTeacherindex(index + 1);
         }
       });
-    });
+      setCourseName(data.courseName);
 
-    setDifferntCourseStudents(newDifferntStudents);
-    setDifferentStudentsNum(tempDifferentStudentsNum);
-    getMyCourse(courseId, teacherList, setSelectedTeacherindex, setCourseName);
-  }, [entireStudents, entireStudentsNum, myCourseStudents]);
+      const newDifferntStudents = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempDifferentStudentsNum = 0;
 
-  const resetModalState = () => {
-    console.log(teacherList);
+      entireStudents.forEach((grade, index) => {
+        grade.students.forEach((student) => {
+          let flag = true;
+          newStudents[index].students.forEach((filterStudent) => {
+            if (student.name === filterStudent.name) {
+              flag = false;
+            }
+          });
+          if (flag === true) {
+            newDifferntStudents[index].students.push(student);
+            tempDifferentStudentsNum += 1;
+          }
+        });
+      });
+      console.log('몇번?');
+      setDifferntCourseStudents(newDifferntStudents);
+      setDifferentStudentsNum(tempDifferentStudentsNum);
+    };
+    console.log(entireStudents);
+    console.log(entireStudentsNum);
+    if (entireStudentsNum !== 0) getAllData();
+  }, [entireStudentsNum]);
+
+  const resetModalState = async () => {
     setSelectedTeacherindex(0);
     setCourseName('');
     setMyStudentsNum(0);
@@ -352,8 +360,78 @@ function CourseModificationModal({
       },
     ]);
 
-    getMyCourseStudents(courseId, setMyCourseStudents, setMyStudentsNum);
-    getAllStudents(setEntireStudents, setEntireStudentsNum);
+    const { data } = await getMyCourseStudents(courseId);
+
+    const newStudents = [
+      {
+        grade: 0,
+        students: [],
+      },
+      {
+        grade: 1,
+        students: [],
+      },
+      {
+        grade: 2,
+        students: [],
+      },
+      {
+        grade: 3,
+        students: [],
+      },
+      {
+        grade: 4,
+        students: [],
+      },
+      {
+        grade: 5,
+        students: [],
+      },
+      {
+        grade: 6,
+        students: [],
+      },
+      {
+        grade: 7,
+        students: [],
+      },
+      {
+        grade: 8,
+        students: [],
+      },
+      {
+        grade: 9,
+        students: [],
+      },
+      {
+        grade: 10,
+        students: [],
+      },
+      {
+        grade: 11,
+        students: [],
+      },
+    ];
+    let tempStudentsNum = 0;
+
+    data.studentPreviews.forEach((student) => {
+      if (student)
+        newStudents[student.grade].students.push({
+          id: student.studentId,
+          name: student.studentName,
+        });
+      tempStudentsNum += 1;
+    });
+    setMyCourseStudents(newStudents);
+    setMyStudentsNum(tempStudentsNum);
+
+    teacherArr.forEach((teacher, index) => {
+      if (teacher?.name === data.teacherPreview.teacherName) {
+        setSelectedTeacherindex(index);
+      }
+    });
+    setCourseName(data.courseName);
+
     if (teacherArr.length === 0 || selectedIndex === 0) {
       getAllCourses(setCourseListData);
     } else {
@@ -361,11 +439,10 @@ function CourseModificationModal({
     }
   };
 
-  console.log(teacherList);
   return (
     <ReactModal
       isOpen={enrollmentModalOpen}
-      onRequestClose={setEnrollmentModalOpen}
+      onRequestClose={() => setEnrollmentModalOpen(false)}
       style={customModalStyles}
     >
       <div className="flex flex-col w-full">
@@ -391,7 +468,10 @@ function CourseModificationModal({
           </div>
           <div className="ml-8">
             <DropdownMenu
-              textArr={[...teacherList.map((teacher) => teacher.name)]}
+              textArr={[
+                '선택 없음',
+                ...teacherArr.map((teacher) => teacher.name),
+              ]}
               selectedIndex={selectedTeacherindex}
               setSelectedIndex={setSelectedTeacherindex}
             />
@@ -464,7 +544,7 @@ function CourseModificationModal({
                 await putCourseNameAndTeacher(
                   courseId,
                   courseName,
-                  teacherList[selectedTeacherindex].id,
+                  teacherArr[selectedTeacherindex - 1].id,
                 );
 
                 await resetModalState();

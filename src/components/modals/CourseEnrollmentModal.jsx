@@ -5,9 +5,9 @@ import { toast } from 'react-toastify';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import enrollCourse, { getAllCourses, getCoursesById } from '../../apis/course';
-import getAllTeachers from '../../apis/teacher';
 import { getAllStudents } from '../../apis/student';
 import DropdownMenu from '../molecules/DropdownMenu';
+import { useCourseStudentStore } from '../../store/courseStudentsStore';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -45,65 +45,13 @@ function CourseEnrollmentModal({
   selectedIndex,
 }) {
   const notify = (text) => toast(text);
+  const { entireStudentsNum, entireStudents } = useCourseStudentStore();
 
-  const [teacherList, setTeacherList] = useState([]);
   const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
   const [courseName, setCourseName] = useState('');
-  const [entireStudentsNum, setEntireStudentsNum] = useState(0);
   const [differentStudentsNum, setDifferentStudentsNum] = useState(0);
   const [myStudentsNum, setMyStudentsNum] = useState(0);
   const [myCourseStudents, setMyCourseStudents] = useState([
-    {
-      grade: 0,
-      students: [],
-    },
-    {
-      grade: 1,
-      students: [],
-    },
-    {
-      grade: 2,
-      students: [],
-    },
-    {
-      grade: 3,
-      students: [],
-    },
-    {
-      grade: 4,
-      students: [],
-    },
-    {
-      grade: 5,
-      students: [],
-    },
-    {
-      grade: 6,
-      students: [],
-    },
-    {
-      grade: 7,
-      students: [],
-    },
-    {
-      grade: 8,
-      students: [],
-    },
-    {
-      grade: 9,
-      students: [],
-    },
-    {
-      grade: 10,
-      students: [],
-    },
-    {
-      grade: 11,
-      students: [],
-    },
-  ]);
-
-  const [entireStudents, setEntireStudents] = useState([
     {
       grade: 0,
       students: [],
@@ -206,21 +154,12 @@ function CourseEnrollmentModal({
   ]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await getAllTeachers();
-
-        setTeacherList([...data]);
-        getAllStudents(setEntireStudents, setEntireStudentsNum);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    setDifferntCourseStudents(entireStudents);
+    setDifferntCourseStudents(
+      entireStudents.map((studentsByGrade) => ({
+        grade: studentsByGrade.grade,
+        students: [...studentsByGrade.students],
+      })),
+    );
     setDifferentStudentsNum(entireStudentsNum);
   }, [entireStudents, entireStudentsNum]);
 
@@ -279,18 +218,19 @@ function CourseEnrollmentModal({
       },
     ]);
 
-    getAllStudents(setEntireStudents, setEntireStudentsNum);
-    if (teacherArr.length === 0 || selectedIndex === 0) {
-      getAllCourses(setCourseListData);
-    } else {
-      getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
-    }
+    setDifferntCourseStudents(
+      entireStudents.map((studentsByGrade) => ({
+        grade: studentsByGrade.grade,
+        students: [...studentsByGrade.students],
+      })),
+    );
+    setDifferentStudentsNum(entireStudentsNum);
   };
 
   return (
     <ReactModal
       isOpen={enrollmentModalOpen}
-      onRequestClose={setEnrollmentModalOpen}
+      onRequestClose={() => setEnrollmentModalOpen(false)}
       style={customModalStyles}
     >
       <div className="flex flex-col w-full">
@@ -317,7 +257,7 @@ function CourseEnrollmentModal({
             <DropdownMenu
               textArr={[
                 '선택 없음',
-                ...teacherList.map((teacher) => teacher.name),
+                ...teacherArr.map((teacher) => teacher.name),
               ]}
               selectedIndex={selectedTeacherindex}
               setSelectedIndex={setSelectedTeacherindexIndex}
@@ -393,10 +333,18 @@ function CourseEnrollmentModal({
                   }
                   await enrollCourse(
                     courseName,
-                    teacherList[selectedTeacherindex - 1].id,
+                    teacherArr[selectedTeacherindex - 1].id,
                     newCourseStudents,
                   );
 
+                  if (teacherArr.length === 0 || selectedIndex === 0) {
+                    await getAllCourses(setCourseListData);
+                  } else {
+                    await getCoursesById(
+                      teacherArr[selectedIndex - 1].id,
+                      setCourseListData,
+                    );
+                  }
                   resetModalState();
                   setEnrollmentModalOpen(false);
                 } catch (e) {

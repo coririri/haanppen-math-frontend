@@ -12,8 +12,12 @@ import getAllTeachers from '../../apis/teacher';
 import TeacherDropdown from '../molecules/TeacherDropdown';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import ErrorConfirmModal from '../modals/ErrorConfirmModal';
+import { getAllStudents } from '../../apis/student';
+import { useCourseStudentStore } from '../../store/courseStudentsStore';
 
 function OfflineCourseManagementPage() {
+  const { setEntireStudents } = useCourseStudentStore();
+
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   const [teacherArr, setTeacherArr] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -31,10 +35,16 @@ function OfflineCourseManagementPage() {
         setTeacherArr(data);
 
         if (teacherArr.length === 0 || selectedIndex === 0) {
-          getAllCourses(setCourseListData);
+          await getAllCourses(setCourseListData);
         } else {
-          getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
+          await getCoursesById(
+            teacherArr[selectedIndex - 1].id,
+            setCourseListData,
+          );
         }
+
+        const studentResponse = await getAllStudents();
+        setEntireStudents(studentResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
