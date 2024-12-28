@@ -8,6 +8,9 @@ https://hanapi.hopto.org/
 
 수학 학원 내부에서 온라인 수업을 진행하거나 오프라인 수업을 보존하여 학생이 자기주도적으로 학습을 할 수 있는데 도움을 주는 웹 서비스 프로젝트입니다.
 
+## 전체 아키텍쳐
+![about 틀 (1)](https://github.com/user-attachments/assets/2a3a507a-6604-428c-a158-c236a880fff2)
+
 ## 개발 동기
 
 오프라인 강의 영상을 유튜브에 공유하면 외부에서 쉽게 접근이 가능해 보안적인 문제가 발생하고, 학생이 스스로 영상을 찾아보기 힘들기 때문에 학원 자체적인 온라인 수업 웹 서비스를 개발하게 되었습니다.
@@ -29,9 +32,6 @@ https://hanapi.hopto.org/
   
 ### BE
 윤희종 [@huhdy32](https://github.com/huhdy32)
-
-## 전체 아키텍쳐
-![about 틀 (1)](https://github.com/user-attachments/assets/2a3a507a-6604-428c-a158-c236a880fff2)
 
 
 ## 기술 스택
