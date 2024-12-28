@@ -9,7 +9,7 @@ https://hanapi.hopto.org/
 수학 학원 내부에서 온라인 수업을 진행하거나 오프라인 수업을 보존하여 학생이 자기주도적으로 학습을 할 수 있는데 도움을 주는 웹 서비스 프로젝트입니다.
 
 ## 전체 아키텍쳐
-![about 틀 (1)](https://github.com/user-attachments/assets/2a3a507a-6604-428c-a158-c236a880fff2)
+![about 틀 (2)](https://github.com/user-attachments/assets/495ac464-8578-441c-bae3-363a38b3aa85)
 
 ## 개발 동기
 
