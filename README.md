@@ -31,6 +31,7 @@ https://hanapi.hopto.org/
 윤희종 [@huhdy32](https://github.com/huhdy32)
 
 ## 전체 아키텍쳐
+![about 틀 (1)](https://github.com/user-attachments/assets/2a3a507a-6604-428c-a158-c236a880fff2)
 
 
 ## 기술 스택
