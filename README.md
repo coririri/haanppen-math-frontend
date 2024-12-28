@@ -30,7 +30,7 @@ https://hanapi.hopto.org/
 ### BE
 윤희종 [@huhdy32](https://github.com/huhdy32)
 
-### 전체 아키텍쳐
+## 전체 아키텍쳐
 
 
 ## 기술 스택
