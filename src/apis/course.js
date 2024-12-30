@@ -15,34 +15,31 @@ export const getCoursesById = (teacherId, setCourseListData) =>
 
 export const getOwnCourses = () => instance.get(`/api/courses/my`);
 
-export const deleteCourses = async (courseId) => {
-  await instance.delete(`/api/manage/courses/${courseId}`);
-};
+export const deleteCourses = async (courseId) =>
+  instance.delete(`/api/manage/courses/${courseId}`);
 
 export const getAllCourses = (setCourseListData) =>
   instance.get('/api/courses').then((response) => {
     setCourseListData(response.data);
   });
 
-export const putCourseStudents = async (courseId, students) => {
-  await instance
+export const putCourseStudents = async (courseId, students) =>
+  instance
     .put(`/api/course/${courseId}/students`, {
       studentIds: students,
     })
     .then(() => {});
-};
 
 export const putCourseNameAndTeacher = async (
   courseId,
   courseName,
   newTeacherId,
-) => {
-  await instance
+) =>
+  instance
     .put(`/api/manage/courses/${courseId}`, {
       courseName,
       newTeacherId,
     })
     .then(() => {});
-};
 
 export default enrollCourse;

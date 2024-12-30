@@ -9,7 +9,7 @@ import {
   putCourseNameAndTeacher,
   putCourseStudents,
 } from '../../apis/course';
-import { getMyCourseStudents } from '../../apis/student';
+import { getCourseStudents } from '../../apis/student';
 import DropdownMenu from '../molecules/DropdownMenu';
 import { useCourseStudentStore } from '../../store/courseStudentsStore';
 
@@ -159,7 +159,7 @@ function CourseModificationModal({
 
   useEffect(() => {
     const getAllData = async () => {
-      const { data } = await getMyCourseStudents(courseId);
+      const { data } = await getCourseStudents(courseId);
       const newStudents = [
         {
           grade: 0,
@@ -360,7 +360,7 @@ function CourseModificationModal({
       },
     ]);
 
-    const { data } = await getMyCourseStudents(courseId);
+    const { data } = await getCourseStudents(courseId);
 
     const newStudents = [
       {

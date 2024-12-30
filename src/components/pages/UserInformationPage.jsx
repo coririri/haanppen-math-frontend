@@ -5,6 +5,7 @@ import getMyAccountInfo, { putAccountInfo } from '../../apis/account';
 import idValidation from '../../utils/idValidation';
 import passwordValidation from '../../utils/passwordValidation';
 import { logout } from '../../apis/login';
+import instance from '../../apis/instance';
 
 function UserInformation() {
   const [userForm, setUserForm] = useState({
@@ -23,7 +24,22 @@ function UserInformation() {
   });
 
   useEffect(() => {
-    getMyAccountInfo(setUserForm);
+    const fetchData = async () => {
+      try {
+        const { data } = await getMyAccountInfo(setUserForm);
+
+        setUserForm({
+          name: data.userName,
+          phoneNumber: data.phoneNumber,
+          password: '',
+          newPassword: '',
+          registerDate: '24.08.02',
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -190,7 +206,9 @@ function UserInformation() {
             handleClick={async () => {
               try {
                 await putAccountInfo(userForm);
-                logout();
+                await logout();
+                window.location.href = '/login';
+                instance.defaults.headers.common.Authorization = null;
               } catch (e) {
                 setErrorMessages((prev) => ({
                   ...prev,

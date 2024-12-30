@@ -3,23 +3,7 @@ import instance from './instance';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-const getMyAccountInfo = (setUserForm) => {
-  instance
-    .get('/api/accounts/my')
-    .then((response) => {
-      const userData = response.data;
-      setUserForm({
-        name: userData.userName,
-        phoneNumber: userData.phoneNumber,
-        password: '',
-        newPassword: '',
-        registerDate: '24.08.02',
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+const getMyAccountInfo = () => instance.get('/api/accounts/my');
 
 export const putAccountInfo = (userForm) =>
   instance.patch('/api/accounts/my', {

@@ -12,8 +12,11 @@ import getAllTeachers from '../../apis/teacher';
 import TeacherDropdown from '../molecules/TeacherDropdown';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import ErrorConfirmModal from '../modals/ErrorConfirmModal';
+import { useOnlineCourseStudentStore } from '../../store/onluneCourseStudentsStore';
+import { getAllStudents } from '../../apis/student';
 
 function OnlineCourseManagementPage() {
+  const { setEntireStudents } = useOnlineCourseStudentStore();
   const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
   const [teacherArr, setTeacherArr] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -38,6 +41,9 @@ function OnlineCourseManagementPage() {
             setCourseListData,
           );
         }
+
+        const studentResponse = await getAllStudents();
+        setEntireStudents(studentResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

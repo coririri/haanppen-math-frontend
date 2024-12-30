@@ -29,12 +29,10 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
       overflow: 'auto',
     },
   };
-  console.log(uploadingInfo);
-  console.log(((uploadingInfo.current + 1) / uploadingInfo.end) * 100);
+
   const loadingBarWidth = `${Math.round(
     ((uploadingInfo.current + 1) / uploadingInfo.end) * 100,
   )}%`;
-  console.log(loadingBarWidth);
 
   return (
     <ReactModal

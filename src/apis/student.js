@@ -107,8 +107,11 @@ const studentAccountRegist = (payload) =>
 
 export const getAllStudents = () => instance.get('/api/members/students/all');
 
-export const getMyCourseStudents = async (courseId) =>
+export const getCourseStudents = async (courseId) =>
   instance.get(`/api/manage/courses/${courseId}`);
+
+export const getOnlineCourseStudents = async (courseId) =>
+  instance.get(`/api/online-courses/${courseId}`);
 
 export const getStudentByPage = ({ queryKey }) => {
   if (queryKey[1][0] === true)

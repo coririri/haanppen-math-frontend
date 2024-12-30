@@ -58,18 +58,6 @@ const login = (userForm, setErrorMessage, navigate) => {
 export const refreshLogin = async () =>
   loginInstance.post('/api/login/refresh');
 
-export const logout = () => {
-  instance
-    .post('api/logout')
-    .then((response) => {
-      console.log(response);
-      window.location.href = '/login';
-      instance.defaults.headers.common.Authorization = null;
-    })
-    .catch((error) => {
-      console.log(error);
-      // window.location.href = '/login';
-    });
-};
+export const logout = async () => instance.post('api/logout');
 
 export default login;
