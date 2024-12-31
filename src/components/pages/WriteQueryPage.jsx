@@ -9,7 +9,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import getAllTeachers from '../../apis/teacher';
 import writeQuery from '../../apis/question';
-import { uploadImageToS3 } from '../../apis/media';
+import uploadImageToS3 from '../../apis/media';
 
 function WriteQueryPage() {
   const [imgPreview, setImgePreview] = useState([]);

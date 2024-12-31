@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import IconButton from '../atoms/IconButton';
 import StudentListByClass from '../organisms/StudentListByClass';
 import enrollCourse, { getAllCourses, getCoursesById } from '../../apis/course';
-import { getAllStudents } from '../../apis/student';
 import DropdownMenu from '../molecules/DropdownMenu';
 import { useCourseStudentStore } from '../../store/courseStudentsStore';
 

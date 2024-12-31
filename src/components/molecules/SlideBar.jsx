@@ -232,6 +232,46 @@ function SlideBar({
       </div>
     );
   }
+
+  return (
+    <div>
+      <div>
+        {/* 첫 번째 버튼 */}
+        <div>
+          <TextButton
+            color="white"
+            moreStyle={`w-[120px] mb-2 mr-1 transition-transform transform hover:scale-105 duration-300 ${
+              isClickArr[0]
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-black'
+            }`}
+            isClick={isClickArr[0]}
+            handleClick={() => {
+              setIsClickArr([true, false]);
+            }}
+            textMoreStyle="leading-[16px] text-md"
+          >
+            {firstText}
+          </TextButton>
+        </div>
+
+        {/* 두 번째 버튼 */}
+        <TextButton
+          color="white"
+          moreStyle={`w-[120px]  transition-transform transform hover:scale-105 duration-300 ${
+            isClickArr[1] ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
+          }`}
+          isClick={isClickArr[1]}
+          handleClick={() => {
+            setIsClickArr([false, true]);
+          }}
+          textMoreStyle="leading-[16px] text-md"
+        >
+          {secondText}
+        </TextButton>
+      </div>
+    </div>
+  );
 }
 
 export default SlideBar;

@@ -9,7 +9,7 @@ import { getDetailQuestionById } from '../../apis/question';
 import hw1 from '../../assests/hw1.jpg';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import InputImagesButton from '../atoms/InputImagesButton';
-import { uploadImageToS3 } from '../../apis/media';
+import uploadImageToS3 from '../../apis/media';
 
 function CommentBox({ comment, commentIndex, setData, setModificationData }) {
   const { id } = useParams();

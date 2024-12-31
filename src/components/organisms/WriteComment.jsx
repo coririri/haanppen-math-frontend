@@ -7,7 +7,7 @@ import InputImagesButton from '../atoms/InputImagesButton';
 import { getDetailQuestionById } from '../../apis/question';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
 import hw1 from '../../assests/hw1.jpg';
-import { uploadImageToS3 } from '../../apis/media';
+import uploadImageToS3 from '../../apis/media';
 
 function WriteComment({
   setIsWriteComment,

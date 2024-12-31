@@ -32,6 +32,18 @@ function TextButton({
         </span>
       </button>
     );
+
+  return (
+    <button
+      className={`inline-block border-hpGray border-[0.072rem] rounded-full bg-hpLightGray hover:bg-hpHoverLightGray ${moreStyle}`}
+      type="button"
+      onClick={handleClick}
+    >
+      <span className={`font-bold text-lg text-black ${textMoreStyle}`}>
+        {children}
+      </span>
+    </button>
+  );
 }
 
 export default TextButton;
