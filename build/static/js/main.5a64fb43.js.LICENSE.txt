@@ -5,7 +5,7 @@
 */
 
 /*!
-  react-datepicker v7.3.0
+  react-datepicker v7.5.0
   https://github.com/Hacker0x01/react-datepicker
   Released under the MIT License.
 */
@@ -68,7 +68,7 @@
  */
 
 /**
- * @remix-run/router v1.15.3
+ * @remix-run/router v1.21.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -79,7 +79,7 @@
  */
 
 /**
- * React Router DOM v6.22.3
+ * React Router DOM v6.28.1
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -90,7 +90,7 @@
  */
 
 /**
- * React Router v6.22.3
+ * React Router v6.28.1
  *
  * Copyright (c) Remix Software Inc.
  *
