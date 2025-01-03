@@ -56,8 +56,25 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
     >
       <div className="flex flex-col justify-between h-[350px]">
         <div>
-          {/* 모달 제목 */}
-          <h2 className="text-xl font-bold text-center mb-4">수업자료 관리</h2>
+          <div className="p-6 bg-white rounded-lg flex justify-center items-center mr-4">
+            {/* 모달 제목 */}
+            <h2 className="text-2xl font-extrabold text-center  text-gray-800">
+              수업자료 관리
+            </h2>
+
+            {/* 버튼 */}
+            <div className="flex justify-center ml-4">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition duration-300"
+                onClick={() => {
+                  window.open('https://zxing.org/w/decode.jspx', '_blank');
+                }}
+              >
+                QR코드 링크로 변환
+              </button>
+            </div>
+          </div>
 
           {/* 링크 리스트 */}
           <div className="flex flex-col space-y-3">

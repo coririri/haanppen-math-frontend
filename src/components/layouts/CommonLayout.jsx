@@ -54,21 +54,25 @@ function CommonLayout() {
         }, 100);
       }
 
-      const { data } = await getBanners();
-      setNotifications(
-        data.map((item) => ({
-          bannerId: item.bannerId,
-          bannerContent: item.bannerContent,
-        })),
-      );
-      setModificationNotificationTextArr(
-        data.map((item) => ({
-          bannerId: item.bannerId,
-          bannerContent: item.bannerContent,
-        })),
-      );
-      setIsModificationNotificationArr(Array(data.length).fill(false));
-      console.log(data);
+      try {
+        const { data } = await getBanners();
+        setNotifications(
+          data.map((item) => ({
+            bannerId: item.bannerId,
+            bannerContent: item.bannerContent,
+          })),
+        );
+        setModificationNotificationTextArr(
+          data.map((item) => ({
+            bannerId: item.bannerId,
+            bannerContent: item.bannerContent,
+          })),
+        );
+        setIsModificationNotificationArr(Array(data.length).fill(false));
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
     };
 
     fetchData();
@@ -76,12 +80,16 @@ function CommonLayout() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getMonthlyCourse(formatDate(selectedDate));
-      setMonthClass(data);
+      try {
+        const { data } = await getMonthlyCourse(formatDate(selectedDate));
+        setMonthClass(data);
 
-      setMarkedDates(
-        data.map((course) => course.registeredDateTime.split('T')[0]),
-      );
+        setMarkedDates(
+          data.map((course) => course.registeredDateTime.split('T')[0]),
+        );
+      } catch (e) {
+        console.log(e);
+      }
     };
     fetchData();
   }, []);

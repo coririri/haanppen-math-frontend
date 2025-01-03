@@ -1,5 +1,6 @@
 import { AiFillEdit } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import IconButton from '../atoms/IconButton';
 import getMyAccountInfo, { putAccountInfo } from '../../apis/account';
 import idValidation from '../../utils/idValidation';
@@ -8,6 +9,7 @@ import { logout } from '../../apis/login';
 import instance from '../../apis/instance';
 
 function UserInformation() {
+  const navigate = useNavigate();
   const [userForm, setUserForm] = useState({
     name: '',
     phoneNumber: '',
@@ -229,8 +231,9 @@ function UserInformation() {
             bgColor="white"
             icon={<AiFillEdit size="20px" />}
             text="로그아웃"
-            handleClick={() => {
-              logout();
+            handleClick={async () => {
+              await logout();
+              navigate('/login');
             }}
           />
         </div>
