@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.77de1911.css",
-    "main.js": "/static/js/main.5a64fb43.js",
+    "main.js": "/static/js/main.ec14ae9f.js",
     "static/js/453.dd633453.chunk.js": "/static/js/453.dd633453.chunk.js",
     "static/media/Sejong hospital Bold.ttf": "/static/media/Sejong hospital Bold.0270d7801f8df96f1870.ttf",
     "static/media/Sejong hospital Light.ttf": "/static/media/Sejong hospital Light.3c1d2db5782b38b23cb4.ttf",
@@ -14,11 +14,11 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "main.77de1911.css.map": "/static/css/main.77de1911.css.map",
-    "main.5a64fb43.js.map": "/static/js/main.5a64fb43.js.map",
+    "main.ec14ae9f.js.map": "/static/js/main.ec14ae9f.js.map",
     "453.dd633453.chunk.js.map": "/static/js/453.dd633453.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.77de1911.css",
-    "static/js/main.5a64fb43.js"
+    "static/js/main.ec14ae9f.js"
   ]
 }

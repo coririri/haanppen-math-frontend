@@ -6,6 +6,7 @@ import IconButton from '../atoms/IconButton';
 import phonenumberValidate from '../../utils/phonenumberValidation';
 import { modifyStudent } from '../../apis/student';
 import GradeDropdown from '../molecules/GradeDropdown';
+import ErrorConfirmModal from './ErrorConfirmModal';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -53,6 +54,8 @@ function StudentModificationModal({
     if (grade <= 8) return [false, true, false];
     return [false, false, true];
   });
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorEnrollMessage, setErrorEnrollMessage] = useState('');
 
   const [dropdownContentsText, setDropdownContentsText] = useState(() => {
     if (grade <= 5) return ['초1', '초2', '초3', '초4', '초5', '초6'];
@@ -125,6 +128,11 @@ function StudentModificationModal({
       onRequestClose={setModificationModalOpen}
       style={customModalStyles}
     >
+      <ErrorConfirmModal
+        errorModalOpen={errorModalOpen}
+        setErrorModalOpen={setErrorModalOpen}
+        errorMessage={errorEnrollMessage}
+      />
       <div className="flex flex-col items-center">
         <h1 className="text-xl font-bold">학생 수정</h1>
         <div className="flex items-center mt-4">
@@ -224,7 +232,7 @@ function StudentModificationModal({
                 />
               }
               text="완료"
-              handleClick={() => {
+              handleClick={async () => {
                 let modificationGrade;
                 if (choosenGradeIndex[0] === true) {
                   modificationGrade = selectedIndex;
@@ -239,17 +247,26 @@ function StudentModificationModal({
                   phoneNumber: userform.phoneNumber,
                   id,
                 };
-                modifyStudent(
-                  setModificationModalOpen,
-                  payload,
-                  page,
-                  queryKeyQueryClient,
-                  queryKeyChoosenGradeIndex,
-                  queryKeySearchNameValue,
-                );
+                try {
+                  await modifyStudent(payload);
+
+                  queryKeyQueryClient.invalidateQueries([
+                    'students',
+                    queryKeyChoosenGradeIndex,
+                    queryKeySearchNameValue,
+                    page - 1,
+                  ]);
+                  setModificationModalOpen(false);
+                } catch (e) {
+                  setErrorEnrollMessage(
+                    `이미 등록된 학생은 등록할 수 없습니다.`,
+                  );
+                  setErrorModalOpen(true);
+                  console.log(e);
+                }
               }}
               disabled={isDisabled}
-            />{' '}
+            />
           </div>
           <div>
             <IconButton

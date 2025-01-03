@@ -34,7 +34,7 @@ function OnlineCourseManagementPage() {
         setTeacherArr(data);
 
         if (teacherArr.length === 0 || selectedIndex === 0) {
-          getAllOnlineCourses(setCourseListData);
+          await getAllOnlineCourses(setCourseListData);
         } else {
           getOnlineCoursesById(
             teacherArr[selectedIndex - 1].id,
@@ -72,6 +72,7 @@ function OnlineCourseManagementPage() {
             await getAllOnlineCourses(setCourseListData);
             setDeleteCheckModalOpen(false);
           } catch (e) {
+            console.log(e);
             setDeleteCheckModalOpen(false);
             setErrorModalOpen(true);
           }

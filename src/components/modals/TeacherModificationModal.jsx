@@ -4,6 +4,7 @@ import { AiFillEdit } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
 import phonenumberValidate from '../../utils/phonenumberValidation';
 import { modifyTeacher } from '../../apis/teacher';
+import ErrorConfirmModal from './ErrorConfirmModal';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
@@ -46,6 +47,8 @@ function TeacherModificationModal({
   const [isDisabled, setIsDisabled] = useState(true);
   const [userform, setUserform] = useState({ name, phoneNumber });
   const [errorMessage, setErrorMessage] = useState('');
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorEnrollMessage, setErrorEnrollMessage] = useState('');
 
   useEffect(() => {
     if (userform.phoneNumber === '') {
@@ -69,6 +72,11 @@ function TeacherModificationModal({
       onRequestClose={setModificationModalOpen}
       style={customModalStyles}
     >
+      <ErrorConfirmModal
+        errorModalOpen={errorModalOpen}
+        setErrorModalOpen={setErrorModalOpen}
+        errorMessage={errorEnrollMessage}
+      />
       <div className="flex flex-col items-center">
         <h1 className="text-xl font-bold">강사 수정</h1>
         <form>
@@ -127,19 +135,28 @@ function TeacherModificationModal({
                 />
               }
               text="완료"
-              handleClick={() => {
+              handleClick={async () => {
                 const payload = {
                   id,
                   name: userform.name,
                   phoneNumber: userform.phoneNumber,
                 };
-                modifyTeacher(
-                  setModificationModalOpen,
-                  payload,
-                  queryKeyQueryClient,
-                  queryKeySearchNameValue,
-                  page,
-                );
+                try {
+                  await modifyTeacher(payload);
+
+                  queryKeyQueryClient.invalidateQueries([
+                    'teachers',
+                    queryKeySearchNameValue,
+                    page - 1,
+                  ]);
+                  setModificationModalOpen(false);
+                } catch (e) {
+                  setErrorEnrollMessage(
+                    `이미 등록된 학생은 등록할 수 없습니다.`,
+                  );
+                  setErrorModalOpen(true);
+                  console.log(e);
+                }
               }}
               disabled={isDisabled}
             />

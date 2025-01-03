@@ -10,9 +10,15 @@ import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
 import StudentList from '../organisms/StudentList';
 import StudentEnrollmentModal from '../modals/StudentEnrollmentModal';
-import { deleteStudent, getStudentByPage } from '../../apis/student';
+import {
+  deleteStudent,
+  getAllStudents,
+  getStudentByPage,
+  modifyStudent,
+} from '../../apis/student';
 import Pagenation from '../organisms/Pagenation';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import LoadingBarModal from '../modals/LoadingBarModal';
 
 function StudentManagementPage() {
   const queryClient = useQueryClient();
@@ -28,6 +34,8 @@ function StudentManagementPage() {
   const [page, setPage] = useState(1);
   const [forDeletedStudentIds, setForDeletedStudentIds] = useState([]);
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+  const [loadingInfo, setLaodingInfo] = useState({ current: 0, end: 0 });
+  const [loadingBarModalOpen, setLoadingBarModalOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: () => deleteStudent(forDeletedStudentIds),
@@ -67,8 +75,17 @@ function StudentManagementPage() {
           setDeleteCheckModalOpen(false);
         }}
       />
+
+      <LoadingBarModal
+        modalOpen={loadingBarModalOpen}
+        setModalOpen={setLoadingBarModalOpen}
+        loadingInfo={loadingInfo}
+      />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
-      <div className="mt-3 flex items-center justify-between w-[300px] mx-auto">
+
+      <div
+        className={`mt-3 flex items-center justify-between mx-auto ${localStorage.getItem('role') === 'ADMIN' ? 'w-[460px]' : 'w-[300px]'}`}
+      >
         <TextButton
           color="white"
           moreStyle="w-[70px]"
@@ -117,6 +134,85 @@ function StudentManagementPage() {
         <span className="text-xl font-bold">
           {data?.pageInfo?.totalItemSize}명
         </span>
+        {localStorage.getItem('role') === 'ADMIN' && (
+          <div className="flex flex-col gap-2">
+            <TextButton
+              type="button"
+              color="gray"
+              textMoreStyle="p-4"
+              handleClick={async () => {
+                const allStudentResponse = await getAllStudents();
+                setLaodingInfo({
+                  current: 0,
+                  end: allStudentResponse.data.length,
+                });
+                setLoadingBarModalOpen(true);
+                for (let i = 0; i < allStudentResponse.data.length; i += 1) {
+                  const student = allStudentResponse.data[i];
+                  const payload = {
+                    id: student.id,
+                    name: student.name,
+                    phoneNumber: student.phoneNumber,
+                    grade:
+                      student.grade === 11 ? student.grade : student.grade + 1,
+                  };
+                  await modifyStudent(payload);
+                  setLaodingInfo((prev) => ({
+                    current: prev.current + 1,
+                    end: allStudentResponse.data.length,
+                  }));
+                }
+                queryClient.invalidateQueries([
+                  'students',
+                  choosenGradeIndex,
+                  searchNameValue,
+                  page - 1,
+                ]);
+                setLoadingBarModalOpen(false);
+              }}
+            >
+              전체 학년 승급
+            </TextButton>
+            <TextButton
+              type="button"
+              color="gray"
+              textMoreStyle="p-4"
+              handleClick={async () => {
+                const allStudentResponse = await getAllStudents();
+                setLaodingInfo({
+                  current: 0,
+                  end: allStudentResponse.data.length,
+                });
+                setLoadingBarModalOpen(true);
+                for (let i = 0; i < allStudentResponse.data.length; i += 1) {
+                  const student = allStudentResponse.data[i];
+                  const payload = {
+                    id: student.id,
+                    name: student.name,
+                    phoneNumber: student.phoneNumber,
+                    grade:
+                      student.grade === 0 ? student.grade : student.grade - 1,
+                  };
+                  await modifyStudent(payload);
+                  setLaodingInfo((prev) => ({
+                    current: prev.current + 1,
+                    end: allStudentResponse.data.length,
+                  }));
+                }
+
+                queryClient.invalidateQueries([
+                  'students',
+                  choosenGradeIndex,
+                  searchNameValue,
+                  page - 1,
+                ]);
+                setLoadingBarModalOpen(false);
+              }}
+            >
+              전체 학년 강등
+            </TextButton>
+          </div>
+        )}
       </div>
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
       <div className="flex items-center  w-[550px] mx-auto justify-between mt-4">

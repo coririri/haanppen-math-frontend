@@ -3,28 +3,13 @@ import instance from './instance';
 
 const getAllTeachers = async () => instance.get('/api/members/teachers/all');
 
-export const registTeacherAccount = (
-  setEnrollmentModalOpen,
-  payload,
-  queryClient,
-  searchNameValue,
-  page,
-) => {
-  instance
-    .post('/api/accounts', {
-      name: payload.name,
-      phoneNumber: payload.phoneNumber,
-      role: 'teacher',
-      password: '0000',
-    })
-    .then(() => {
-      queryClient.invalidateQueries(['teachers', searchNameValue, page - 1]);
-      setEnrollmentModalOpen(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+export const registTeacherAccount = (payload) =>
+  instance.post('/api/accounts', {
+    name: payload.name,
+    phoneNumber: payload.phoneNumber,
+    role: 'teacher',
+    password: '0000',
+  });
 
 export const deleteTeacherAccount = (forDeletedTeacherIds) =>
   instance
@@ -38,30 +23,12 @@ export const deleteTeacherAccount = (forDeletedTeacherIds) =>
       console.log(error);
     });
 
-export const modifyTeacher = (
-  setEnrollmentModalOpen,
-  payload,
-  queryKeyQueryClient,
-  queryKeySearchNameValue,
-  page,
-) =>
-  instance
-    .put('api/accounts/teacher', {
-      targetId: payload.id,
-      name: payload.name,
-      phoneNumber: payload.phoneNumber,
-    })
-    .then(() => {
-      queryKeyQueryClient.invalidateQueries([
-        'teachers',
-        queryKeySearchNameValue,
-        page - 1,
-      ]);
-      setEnrollmentModalOpen(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+export const modifyTeacher = (payload) =>
+  instance.put('api/accounts/teacher', {
+    targetId: payload.id,
+    name: payload.name,
+    phoneNumber: payload.phoneNumber,
+  });
 
 export const getTeacherList = ({ pageParam, queryKey }) =>
   instance.get('/api/members/teachers', {
