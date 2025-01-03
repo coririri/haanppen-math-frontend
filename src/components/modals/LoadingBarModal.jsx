@@ -1,7 +1,7 @@
 import ReactModal from 'react-modal';
 import './css/LoadingTtitleAnimation.css';
 
-function LoadingBarModal({ modalOpen, setModalOpen, loadingInfo }) {
+function LoadingBarModal({ modalOpen, loadingInfo }) {
   /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
   const customModalStyles = {
