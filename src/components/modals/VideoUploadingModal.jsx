@@ -1,7 +1,7 @@
 import ReactModal from 'react-modal';
 import './css/LoadingTtitleAnimation.css';
 
-function VideoUploadingModal({ modalOpen, setModalOpen, uploadingInfo }) {
+function VideoUploadingModal({ modalOpen, uploadingInfo }) {
   /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
   const customModalStyles = {
@@ -35,11 +35,7 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
   )}%`;
 
   return (
-    <ReactModal
-      isOpen={modalOpen}
-      onRequestClose={setModalOpen}
-      style={customModalStyles}
-    >
+    <ReactModal isOpen={modalOpen} style={customModalStyles}>
       <div className="relative mx-auto">
         <section className="flex flex-col text-center justify-center w-[400px] h-[150px] mx-auto">
           <h1 className="font-bold text-xl leading-10 text-[#151B26] mb-[20px] flicker">
