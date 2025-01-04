@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { CommentType } from '../types/commentType';
 import instance from './instance';
 
-const writeComment = (data) =>
+const writeComment = (data: CommentType) =>
   instance
     .post('/api/board/comments', data)
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -11,10 +12,15 @@ const writeComment = (data) =>
       alert('게시글 작성에 실패 했습니다');
     });
 
-export const deleteComment = (commentId) =>
+export const deleteComment = (commentId: number) =>
   instance.delete(`/api/board/comments/${commentId}`);
 
-export const modifyComment = (data, commentId, comment, images) =>
+export const modifyComment = (
+  data: { content: string },
+  commentId: number,
+  comment: { images: { imageUrl: string }[] },
+  images: string[],
+) =>
   instance.put(`/api/board/comments`, {
     commentId,
     content: data.content,

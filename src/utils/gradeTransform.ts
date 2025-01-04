@@ -1,4 +1,4 @@
-const gradeTransform = (grade) => {
+const gradeTransform = (grade: number): string => {
   switch (grade) {
     case 1:
       return '초1';

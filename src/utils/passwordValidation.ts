@@ -1,4 +1,4 @@
-function passwordValidation(password) {
+function passwordValidation(password: string): string {
   if (password === undefined) return '';
   // const num = password.search(/[0-9]/g);
   // const eng = password.search(/[a-zA-Z]/gi);
@@ -19,7 +19,10 @@ function passwordValidation(password) {
   return '';
 }
 
-export const isPasswordSame = (password, newPassword) => {
+export const isPasswordSame = (
+  password: string,
+  newPassword: string,
+): string => {
   if (password === newPassword) return '';
   return '기존 비밀번호와 일치하지 않습니다';
 };

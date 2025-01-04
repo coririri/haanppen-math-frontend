@@ -3,7 +3,10 @@ import instance from './instance';
 
 const getAllTeachers = async () => instance.get('/api/members/teachers/all');
 
-export const registTeacherAccount = (payload) =>
+export const registTeacherAccount = (payload: {
+  name: string;
+  phoneNumber: number;
+}) =>
   instance.post('/api/accounts', {
     name: payload.name,
     phoneNumber: payload.phoneNumber,
@@ -11,7 +14,7 @@ export const registTeacherAccount = (payload) =>
     password: '0000',
   });
 
-export const deleteTeacherAccount = (forDeletedTeacherIds) =>
+export const deleteTeacherAccount = (forDeletedTeacherIds: number[]) =>
   instance
     .delete('api/accounts', {
       data: {
@@ -23,14 +26,24 @@ export const deleteTeacherAccount = (forDeletedTeacherIds) =>
       console.log(error);
     });
 
-export const modifyTeacher = (payload) =>
+export const modifyTeacher = (payload: {
+  id: number;
+  name: string;
+  phoneNumber: number;
+}) =>
   instance.put('api/accounts/teacher', {
     targetId: payload.id,
     name: payload.name,
     phoneNumber: payload.phoneNumber,
   });
 
-export const getTeacherList = ({ pageParam, queryKey }) =>
+export const getTeacherList = ({
+  pageParam,
+  queryKey,
+}: {
+  pageParam: number;
+  queryKey: [string, string];
+}) =>
   instance.get('/api/members/teachers', {
     params: {
       size: 10,
@@ -39,7 +52,11 @@ export const getTeacherList = ({ pageParam, queryKey }) =>
     },
   });
 
-export const getTeacherByPage = ({ queryKey }) =>
+export const getTeacherByPage = ({
+  queryKey,
+}: {
+  queryKey: [string, string, number];
+}) =>
   instance
     .get('/api/members/teachers/paging', {
       params: {

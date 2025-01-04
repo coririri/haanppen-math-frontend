@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { StudentType } from '../types/studentType';
 import instance from './instance';
 
-export const getStudentList = ({ queryKey, pageParam }) => {
+export const getStudentList = ({
+  queryKey,
+  pageParam,
+}: {
+  queryKey: [string, boolean[], string];
+  pageParam: number;
+}) => {
   if (queryKey[1][0] === true)
     return instance.get('/api/members/students', {
       params: {
@@ -56,7 +63,7 @@ export const getStudentList = ({ queryKey, pageParam }) => {
   });
 };
 
-export const deleteStudent = (forDeletedStudentIds) =>
+export const deleteStudent = (forDeletedStudentIds: number[]) =>
   instance
     .delete('api/accounts', {
       data: {
@@ -68,7 +75,7 @@ export const deleteStudent = (forDeletedStudentIds) =>
       console.log(error);
     });
 
-export const modifyStudent = (payload) =>
+export const modifyStudent = (payload: StudentType) =>
   instance.put('api/accounts/student', {
     studentId: payload.id,
     name: payload.name,
@@ -76,7 +83,11 @@ export const modifyStudent = (payload) =>
     grade: payload.grade,
   });
 
-const studentAccountRegist = (payload) =>
+const studentAccountRegist = (payload: {
+  name: string;
+  phoneNumber: string;
+  grade: number;
+}) =>
   instance.post('/api/accounts', {
     name: payload.name,
     grade: payload.grade,
@@ -87,13 +98,17 @@ const studentAccountRegist = (payload) =>
 
 export const getAllStudents = () => instance.get('/api/members/students/all');
 
-export const getCourseStudents = async (courseId) =>
+export const getCourseStudents = async (courseId: number) =>
   instance.get(`/api/manage/courses/${courseId}`);
 
-export const getOnlineCourseStudents = async (courseId) =>
+export const getOnlineCourseStudents = async (courseId: number) =>
   instance.get(`/api/online-courses/${courseId}`);
 
-export const getStudentByPage = ({ queryKey }) => {
+export const getStudentByPage = ({
+  queryKey,
+}: {
+  queryKey: [string, boolean[], string, number];
+}) => {
   if (queryKey[1][0] === true)
     return instance
       .get('/api/members/students/paging', {

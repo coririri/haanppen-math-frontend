@@ -1,4 +1,4 @@
-export default function phonenumberValidate(phonenumber) {
+export default function phonenumberValidate(phonenumber: string): boolean {
   const phonenumberRegex = /^010[0-9]{8}$/;
   const phonenumberTest = phonenumberRegex.test(phonenumber);
 

@@ -51,7 +51,7 @@ function FileDetailTab({ fileData }) {
             handleClick={async () => {
               try {
                 console.log(searchParams.onlineCourseId);
-                if (searchParams.onlineCourseId === 'undefined') {
+                if (searchParams.onlineCourseId === undefined) {
                   await addLessonVideo(
                     searchParams.get('memoId'),
                     fileData.path,

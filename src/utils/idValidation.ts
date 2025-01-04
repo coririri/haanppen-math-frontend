@@ -1,4 +1,4 @@
-function idValidation(id) {
+function idValidation(id: string): string {
   const idRegex = /^010[0-9]{8}$/;
   const idTest = idRegex.test(id);
 

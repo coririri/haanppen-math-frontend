@@ -1,6 +1,8 @@
+import { NavigateFunction } from 'react-router-dom';
 import instance from './instance';
+import { QuestionType } from '../types/question';
 
-const writeQuery = (data, navigate) => {
+const writeQuery = (data: QuestionType, navigate: NavigateFunction) => {
   instance
     .post('/api/board/questions', data)
     .then(() => {
@@ -14,7 +16,16 @@ const writeQuery = (data, navigate) => {
     });
 };
 
-export const modifyQuery = (data, questionId, targetMemberId, newImages) =>
+export const modifyQuery = (
+  data: {
+    title: string;
+    content: string;
+    images: string[];
+  },
+  questionId: number,
+  targetMemberId: number,
+  newImages: string[],
+) =>
   instance.put(`/api/board/questions`, {
     questionId,
     title: data.title,
@@ -23,7 +34,7 @@ export const modifyQuery = (data, questionId, targetMemberId, newImages) =>
     imageSources: [...data.images, ...newImages],
   });
 
-export const getQuestionsList = async (page, searchValue) =>
+export const getQuestionsList = async (page: number, searchValue: string) =>
   instance.get('/api/board/questions', {
     params: {
       size: 8,
@@ -33,7 +44,7 @@ export const getQuestionsList = async (page, searchValue) =>
     },
   });
 
-export const getMyQuestionsList = async (page, searchValue) =>
+export const getMyQuestionsList = async (page: number, searchValue: string) =>
   instance.get('/api/board/questions/my', {
     params: {
       size: 8,
@@ -43,12 +54,12 @@ export const getMyQuestionsList = async (page, searchValue) =>
     },
   });
 
-export const getDetailQuestionById = async (id) => {
+export const getDetailQuestionById = async (id: number) => {
   const response = await instance.get(`/api/board/questions/${id}`);
   return response.data;
 };
 
-export const deleteQuestionById = async (id) =>
+export const deleteQuestionById = async (id: number) =>
   instance.delete(`/api/board/questions/${id}`);
 
 export default writeQuery;

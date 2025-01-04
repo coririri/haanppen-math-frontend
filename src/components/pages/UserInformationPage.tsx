@@ -7,10 +7,15 @@ import idValidation from '../../utils/idValidation';
 import passwordValidation from '../../utils/passwordValidation';
 import { logout } from '../../apis/login';
 import instance from '../../apis/instance';
+import {
+  AccountInfoType,
+  UserFormType,
+  UserInformationErrorMessageType,
+} from '../../types/userType';
 
 function UserInformation() {
   const navigate = useNavigate();
-  const [userForm, setUserForm] = useState({
+  const [userForm, setUserForm] = useState<UserFormType>({
     name: '',
     phoneNumber: '',
     password: '',
@@ -18,17 +23,18 @@ function UserInformation() {
     registerDate: '24.08.02',
   });
 
-  const [errorMessages, setErrorMessages] = useState({
-    name: '',
-    phoneNumber: '',
-    password: '',
-    newPassword: '',
-  });
+  const [errorMessages, setErrorMessages] =
+    useState<UserInformationErrorMessageType>({
+      name: '',
+      phoneNumber: '',
+      password: '',
+      newPassword: '',
+    });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await getMyAccountInfo(setUserForm);
+        const { data }: { data: AccountInfoType } = await getMyAccountInfo();
 
         setUserForm({
           name: data.userName,
@@ -62,7 +68,7 @@ function UserInformation() {
     const validationMessage = idValidation(userForm.phoneNumber);
     setErrorMessages((prev) => ({
       ...prev,
-      id: validationMessage,
+      phoneNumber: validationMessage,
     }));
   }, [userForm.phoneNumber]);
 
@@ -131,7 +137,7 @@ function UserInformation() {
             />
           </div>
           <div className="text-center ml-[120px] mt-2 text-hpLightRed font-bold">
-            {errorMessages.id}
+            {errorMessages.phoneNumber}
           </div>
           <hr className="h-[1px] border-0 bg-hpGray lg:w-[320px] md:w-[240px] w-full mx-auto mt-2 mb-4" />
           <div className="flex justify-center">

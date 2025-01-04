@@ -1,6 +1,11 @@
+import { NavigateFunction } from 'react-router-dom';
 import instance, { loginInstance } from './instance';
 
-const login = (userForm, setErrorMessage, navigate) => {
+const login = (
+  userForm: { id: string; password: string },
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+  navigate: NavigateFunction,
+) => {
   loginInstance
     .post('/api/login', {
       userPhoneNumber: userForm.id,
