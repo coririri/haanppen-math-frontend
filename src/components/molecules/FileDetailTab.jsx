@@ -50,14 +50,17 @@ function FileDetailTab({ fileData }) {
             moreStyle="w-[9rem]"
             handleClick={async () => {
               try {
-                console.log(searchParams.onlineCourseId);
-                if (searchParams.onlineCourseId === undefined) {
+                console.log(searchParams.get('onlineCourseId'));
+                if (searchParams.get('onlineCourseId') === null) {
                   await addLessonVideo(
                     searchParams.get('memoId'),
                     fileData.path,
                   );
+                  console.log(
+                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType=offline`,
+                  );
                   navigate(
-                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType="offline"`,
+                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType=offline`,
                   );
                 } else {
                   await postOnlineCourseVedio(
@@ -65,7 +68,7 @@ function FileDetailTab({ fileData }) {
                     fileData.path,
                   );
                   navigate(
-                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType="online"`,
+                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType=online`,
                   );
                 }
               } catch (e) {

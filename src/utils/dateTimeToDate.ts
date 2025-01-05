@@ -1,4 +1,4 @@
-const dateTimeToDate = (dateTimeString: string): string => {
+const dateTimeToDate = (dateTimeString: Date): string => {
   const date = new Date(dateTimeString);
 
   // 연, 월, 일 추출
@@ -12,7 +12,7 @@ const dateTimeToDate = (dateTimeString: string): string => {
   return formattedDate; // 출력: 2024-07-13
 };
 
-export const dateTimeToDateAndTimes = (dateTimeString: string): string => {
+export const dateTimeToDateAndTimes = (dateTimeString: Date): string => {
   const date = new Date(dateTimeString);
 
   // 연, 월, 일 추출
@@ -31,7 +31,8 @@ export const dateTimeToDateAndTimes = (dateTimeString: string): string => {
   return formattedDateTime; // 예: "2024-09-03 09:42:32"
 };
 
-export const dateTimeToDateAndZeroTimes = (dateTimeString: string): string => {
+export const dateTimeToDateAndZeroTimes = (dateTimeString: Date): string => {
+  console.log(typeof dateTimeString);
   // 월 이름과 숫자 매핑
   const monthMap = {
     Jan: 0,
@@ -47,8 +48,8 @@ export const dateTimeToDateAndZeroTimes = (dateTimeString: string): string => {
     Nov: 10,
     Dec: 11,
   };
-  if (typeof dateTimeString !== 'string') return '2030-01-01 00:00:00';
-  const monthEng = dateTimeString.split(' ')[1] as
+
+  const monthEng = dateTimeString.toString().split(' ')[1] as
     | 'Jan'
     | 'Feb'
     | 'Mar'
@@ -81,7 +82,7 @@ export const dateTimeToDateAndZeroTimes = (dateTimeString: string): string => {
   return formattedDateTime; // 예: "2024-09-03 09:42:32"
 };
 
-export const formatDate = (dateString: string): string => {
+export const formatDate = (dateString: Date): string => {
   const date = new Date(dateString);
 
   const year = String(date.getFullYear()); // 연도에서 마지막 두 자리 추출

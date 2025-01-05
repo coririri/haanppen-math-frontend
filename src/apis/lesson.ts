@@ -4,7 +4,7 @@ import instance from './instance';
 
 const enrollLesson = async (
   targetCourseId: number,
-  registerTargetDateTime: string,
+  registerTargetDateTime: Date,
   title: string,
   content: string,
 ) =>

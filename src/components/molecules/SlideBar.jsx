@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextButton from '../atoms/TextButton';
 
 function SlideBar({
@@ -16,6 +16,14 @@ function SlideBar({
   const [twoLeftPosition, setTwoLeftPosition] = useState('left-[20px]');
   const [courseLeftPosition, setCourseLeftPosition] = useState('left-[10px]');
   const [fourLeftPosition, setFourLeftPosition] = useState('left-[35px]');
+
+  useEffect(() => {
+    if (isClickArr[0] === true) {
+      setTwoLeftPosition('left-[20px]');
+    } else {
+      setTwoLeftPosition('left-[215px]');
+    }
+  }, [isClickArr]);
   if (num === 4) {
     return (
       <div className="w-[836px]">
@@ -174,7 +182,7 @@ function SlideBar({
             moreStyle="w-[180px] mr-4"
             handleClick={() => {
               setIsClickArr([false, true]);
-              setTwoLeftPosition('left-[220px]');
+              setTwoLeftPosition('left-[215px]');
             }}
           >
             {secondText}
