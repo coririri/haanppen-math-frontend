@@ -1,20 +1,27 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, Ref } from 'react';
+
+interface TextareaType {
+  placeholder: string;
+  isError?: boolean;
+  moreStyle: string;
+  onChange: () => void;
+  disabled?: boolean;
+  value: string;
+}
 
 const Textarea = forwardRef(
   (
     {
-      type,
       placeholder,
       isError = false,
       moreStyle,
       onChange,
       disabled = false,
       value = '',
-    },
-    ref,
+    }: TextareaType,
+    ref: Ref<HTMLTextAreaElement>,
   ) => (
     <textarea
-      type={type}
       placeholder={placeholder}
       onChange={onChange}
       className={`block px-4 py-3 text-md outline-none rounded-lg ${moreStyle} ${isError ? 'border-red-500 border-solid border-[2px]' : 'border-hpLightkBlack border-solid border-[1.3px]'}`}

@@ -1,17 +1,28 @@
 import React, { useRef } from 'react';
 import { AiOutlineFileImage } from 'react-icons/ai';
 
-function InputImagesButton({ setImgFiles, setImgePreview }) {
-  const imgRef = useRef();
+interface InputImageButtonType {
+  setImgFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setImgPreview: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+function InputImagesButton({
+  setImgFiles,
+  setImgPreview,
+}: InputImageButtonType) {
+  const imgRef = useRef<HTMLInputElement>(null);
 
   const saveImgFile = () => {
+    if (imgRef.current === null || imgRef.current.files === null) return;
     const file = imgRef.current.files.item(0);
-    setImgFiles((prev) => [...prev, file]);
+
+    if (file !== null) setImgFiles((prev) => [...prev, file]);
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setImgePreview((prev) => [...prev, reader.result]);
+        if (typeof reader.result === 'string')
+          setImgPreview((prev) => [...prev, reader.result as string]);
       };
     }
   };

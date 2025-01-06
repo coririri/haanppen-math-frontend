@@ -1,4 +1,13 @@
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
+
+interface IconButtonType {
+  bgColor: string;
+  icon: ReactNode;
+  text: string;
+  handleClick: () => void;
+  disabled?: boolean;
+  isStudent?: boolean | undefined;
+}
 
 function IconButton({
   bgColor,
@@ -7,8 +16,9 @@ function IconButton({
   handleClick,
   disabled = false,
   isStudent = false,
-}) {
+}: IconButtonType) {
   // icon의 크기는 1.5rem으로 주세요
+
   if (bgColor === 'white') {
     if (isStudent === true) {
       return (
@@ -82,12 +92,5 @@ function IconButton({
     </button>
   );
 }
-
-IconButton.propTypes = {
-  bgColor: PropTypes.string.isRequired,
-  icon: PropTypes.node.isRequired,
-  text: PropTypes.string.isRequired,
-  handleClick: PropTypes.func.isRequired,
-};
 
 export default IconButton;

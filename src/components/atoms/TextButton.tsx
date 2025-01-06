@@ -1,3 +1,12 @@
+interface TextButtonType {
+  color: 'white' | 'gray'; // 색상 옵션 확장 가능
+  children: React.ReactNode;
+  handleClick: () => void;
+  moreStyle?: string; // optional로 변경
+  textMoreStyle?: string; // optional로 변경
+  isClick?: boolean; // optional로 변경
+}
+
 function TextButton({
   color,
   children,
@@ -5,7 +14,7 @@ function TextButton({
   moreStyle,
   textMoreStyle,
   isClick,
-}) {
+}: TextButtonType) {
   if (color === 'white') {
     return (
       <button type="button" onClick={handleClick}>

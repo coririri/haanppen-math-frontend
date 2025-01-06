@@ -1,16 +1,25 @@
 import React, { useRef } from 'react';
 import { AiOutlineFileImage } from 'react-icons/ai';
 
-function InputImageButton({ setImgFiles, setImgePreview }) {
-  const imgRef = useRef();
+interface InputImageButtonType {
+  setImgFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setImgPreview: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
-  const resizeImage = (file) =>
+function InputImageButton({
+  setImgFiles,
+  setImgPreview,
+}: InputImageButtonType) {
+  const imgRef = useRef<HTMLInputElement>(null);
+
+  const resizeImage = (file: File): Promise<Blob | null> =>
     new Promise((resolve, reject) => {
       const img = new Image();
       const reader = new FileReader();
 
       reader.onload = (e) => {
-        img.src = e.target.result;
+        if (e.target !== null && typeof e.target.result === 'string')
+          img.src = e.target.result;
       };
 
       img.onload = () => {
@@ -34,7 +43,7 @@ function InputImageButton({ setImgFiles, setImgePreview }) {
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
+        if (ctx !== null) ctx.drawImage(img, 0, 0, width, height);
 
         // 리사이즈된 이미지 데이터를 PNG 형식으로 변환
         canvas.toBlob((blob) => {
@@ -47,9 +56,11 @@ function InputImageButton({ setImgFiles, setImgePreview }) {
     });
 
   const saveImgFile = async () => {
+    if (imgRef.current === null || imgRef.current.files === null) return;
     const file = imgRef.current.files.item(0);
-
+    if (file === null) return;
     const resizedBlob = await resizeImage(file);
+    if (resizedBlob === null) return;
     const resizedFile = new File([resizedBlob], file.name, {
       type: 'image/png',
     });
@@ -59,7 +70,7 @@ function InputImageButton({ setImgFiles, setImgePreview }) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setImgePreview((prev) => [...prev, reader.result]);
+        setImgPreview((prev) => [...prev, reader.result as string]);
       };
     }
   };

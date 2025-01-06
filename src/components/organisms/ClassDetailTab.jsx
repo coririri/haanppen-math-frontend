@@ -100,7 +100,6 @@ function ClassDetailTab({
             저장
           </TextButton>
         )}
-
         <Textarea
           moreStyle="w-full font-bold leading-[26px] h-[120px] mt-1"
           value={classDetailData.content}

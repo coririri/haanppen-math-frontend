@@ -1,4 +1,14 @@
-import React, { forwardRef } from 'react';
+import { forwardRef, Ref } from 'react';
+
+interface InputBoxType {
+  type: string;
+  placeholder: string;
+  isError: boolean;
+  moreStyle: string;
+  onChange: () => void;
+  disabled: boolean;
+  value: string;
+}
 
 const InputBox = forwardRef(
   (
@@ -10,8 +20,8 @@ const InputBox = forwardRef(
       onChange,
       disabled = false,
       value = '',
-    },
-    ref,
+    }: InputBoxType,
+    ref: Ref<HTMLInputElement>,
   ) => (
     <input
       type={type}
