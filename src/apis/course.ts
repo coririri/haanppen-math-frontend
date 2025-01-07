@@ -33,7 +33,7 @@ export const getAllCourses = (
     setCourseListData(response.data);
   });
 
-export const putCourseStudents = async (courseId: number, students: string[]) =>
+export const putCourseStudents = async (courseId: number, students: number[]) =>
   instance
     .put(`/api/course/${courseId}/students`, {
       studentIds: students,

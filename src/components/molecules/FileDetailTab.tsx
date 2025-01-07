@@ -4,8 +4,9 @@ import TextButton from '../atoms/TextButton';
 import { dateTimeToDateAndTimes } from '../../utils/dateTimeToDate';
 import { addLessonVideo } from '../../apis/lesson';
 import { postOnlineCourseVedio } from '../../apis/onlineLesson';
+import { DirectoryType } from '../../types/directoryType';
 
-function FileDetailTab({ fileData }) {
+function FileDetailTab({ fileData }: { fileData: DirectoryType }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   console.log(fileData);
@@ -37,7 +38,7 @@ function FileDetailTab({ fileData }) {
           <span className="block w-[100px] text-[#BFBFBF]">올린 날짜</span>
           <span className="font-bold">
             {' '}
-            {dateTimeToDateAndTimes(fileData.createdTime)}
+            {dateTimeToDateAndTimes(new Date(fileData.createdTime))}
           </span>
         </div>
         <div className="flex mt-2">
@@ -52,21 +53,20 @@ function FileDetailTab({ fileData }) {
               try {
                 console.log(searchParams.get('onlineCourseId'));
                 if (searchParams.get('onlineCourseId') === null) {
-                  await addLessonVideo(
-                    searchParams.get('memoId'),
-                    fileData.path,
-                  );
-                  console.log(
-                    `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType=offline`,
-                  );
+                  const memoId = searchParams.get('memoId');
+                  if (memoId !== null) {
+                    await addLessonVideo(Number(memoId), fileData.path); // Ensure it's a number
+                  }
                   navigate(
                     `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType=offline`,
                   );
                 } else {
-                  await postOnlineCourseVedio(
-                    searchParams.get('onlineCourseId'),
-                    fileData.path,
-                  );
+                  const onlineCourseId = searchParams.get('onlineCourseId');
+                  if (onlineCourseId !== null)
+                    await postOnlineCourseVedio(
+                      Number(onlineCourseId),
+                      fileData.path,
+                    );
                   navigate(
                     `/enroll-class?date=${searchParams.get('date')}&classIndex=${searchParams.get('classIndex')}&classType=online`,
                   );

@@ -151,7 +151,7 @@ function WriteComment({
             <div className="flex flex-col">
               <InputImagesButton
                 setImgFiles={setImgsFiles}
-                setImgePreview={setImgsPreview}
+                setImgPreview={setImgsPreview}
               />
               <button
                 type="button"

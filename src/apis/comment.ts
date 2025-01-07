@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { CommentType } from '../types/commentType';
+import { WriteCommentType } from '../types/commentType';
 import instance from './instance';
 
-const writeComment = (data: CommentType) =>
+const writeComment = (data: WriteCommentType) =>
   instance
     .post('/api/board/comments', data)
     // eslint-disable-next-line @typescript-eslint/no-empty-function

@@ -5,6 +5,7 @@ import {
   AiOutlineArrowUp,
   AiFillEdit,
 } from 'react-icons/ai';
+import { AxiosError } from 'axios';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
 import {
@@ -15,6 +16,18 @@ import {
 } from '../../apis/lesson';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import { AttachmentViewType, VideoType } from '../../types/videoType';
+
+interface VideoItemProps {
+  videoData: VideoType[];
+  video: VideoType;
+  setVideoData: React.Dispatch<React.SetStateAction<VideoType[]>>;
+  vedioIndex: number;
+  lastVideoIndex: number;
+  memoId: number;
+  startDate: Date;
+  selectedClassindex: number;
+}
 
 function VideoItem({
   videoData,
@@ -25,8 +38,7 @@ function VideoItem({
   memoId,
   startDate,
   selectedClassindex,
-}) {
-  console.log(videoData);
+}: VideoItemProps) {
   const navigate = useNavigate();
   const [isVideoSelected] = useState(video.title !== '');
   const [uploadingInfo, setUploadingInfo] = useState({
@@ -147,7 +159,11 @@ function VideoItem({
     }
   };
 
-  const uploadAttachmentFile = async (event, attachmentIndex) => {
+  const uploadAttachmentFile = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    attachmentIndex: number,
+  ) => {
+    if (event.target.files === null) return;
     const file = event.target.files[0];
     const chunkSize = 1024 * 1024; // 1MB
     // 시작
@@ -211,8 +227,12 @@ function VideoItem({
           }));
           sendNextChunk();
         }
-      } catch (e) {
-        if (e.response && e.response.status === 406) {
+      } catch (e: unknown) {
+        if (
+          e instanceof AxiosError &&
+          e.response &&
+          e.response.status === 406
+        ) {
           console.log('406 Not Acceptable 에러 발생:', e.response.data);
           // 서버로부터 chunkIndex를 받아옴
           const { nextChunkIndex } = e.response.data;
@@ -240,13 +260,12 @@ function VideoItem({
         ...tempVideo,
         attachmentViews: [...tempVideo.attachmentViews],
       }));
-      copiedVideoData[vedioIndex].attachmentViews.push('');
+      copiedVideoData[vedioIndex].attachmentViews.push({ fileName: '' });
       return copiedVideoData;
     });
   };
 
-  const deleteAttachment = (e, attachmentIndex) => {
-    console.log(attachmentIndex);
+  const deleteAttachment = (e: any, attachmentIndex: number) => {
     setVideoData((prev) => {
       const copiedVideoData = prev.map((tempVideo) => ({
         ...tempVideo,
@@ -261,7 +280,6 @@ function VideoItem({
     <div className="mx-auto">
       <VideoUploadingModal
         modalOpen={isVideoUploadingModalOpen}
-        setModalOpen={setIsVideoUploadingModalOpen}
         uploadingInfo={uploadingInfo}
       />
 
@@ -344,52 +362,54 @@ function VideoItem({
         </div>
       </div>
 
-      {video.attachmentViews.map((attachment, attachmentIndex) => {
-        console.log(attachment);
-        return (
-          <div className="w-full flex mb-2" key={attachment.attachmentId}>
-            <DeleteCheckModal
-              deleteCheckModalOpen={deleteAttachmentCheckModalOpen}
-              setDeleteCheckModalOpen={setDeleteAttachmentCheckModalOpen}
-              handleDelete={async (e) => {
-                if (attachment.attachmentId !== undefined)
-                  await deleteAttachmentFile(attachment.attachmentId);
-                deleteAttachment(e, attachmentIndex);
-                setDeleteAttachmentCheckModalOpen(false);
-              }}
-            />
-            <label
-              htmlFor={`uploadedFile${vedioIndex}${attachmentIndex}`}
-              aria-label="파일 수정"
-            >
-              <div className="w-[130px] mr-4 text-center border-hpGray border-[0.072rem] border-solid rounded-full bg-hpLightGray hover:bg-hpHoverLightGray">
-                <span className="font-bold text-lg">파일 선택</span>
-              </div>
-            </label>
-            <input
-              id={`uploadedFile${vedioIndex}${attachmentIndex}`}
-              className="hidden"
-              type="file"
-              accept=".zip,.tar"
-              onChange={(e) => {
-                uploadAttachmentFile(e, attachmentIndex);
-              }}
-            />
-            <TextButton
-              color="gray"
-              moreStyle="w-[130px] mr-4"
-              handleClick={async () => {
-                setDeleteAttachmentCheckModalOpen(true);
-              }}
-            >
-              삭제 하기
-            </TextButton>
-            <span className="border-solid border-[1.3px] rounded-xl border-black w-[450px] text-lg text-center font-bold">
-              {attachment.fileName}
-            </span>
-          </div>
-        );
-      })}
+      {video.attachmentViews.map(
+        (attachment: AttachmentViewType, attachmentIndex: number) => {
+          console.log(attachment);
+          return (
+            <div className="w-full flex mb-2" key={attachment.attachmentId}>
+              <DeleteCheckModal
+                deleteCheckModalOpen={deleteAttachmentCheckModalOpen}
+                setDeleteCheckModalOpen={setDeleteAttachmentCheckModalOpen}
+                handleDelete={async (e: any) => {
+                  if (attachment.attachmentId !== undefined)
+                    await deleteAttachmentFile(attachment.attachmentId);
+                  deleteAttachment(e, attachmentIndex);
+                  setDeleteAttachmentCheckModalOpen(false);
+                }}
+              />
+              <label
+                htmlFor={`uploadedFile${vedioIndex}${attachmentIndex}`}
+                aria-label="파일 수정"
+              >
+                <div className="w-[130px] mr-4 text-center border-hpGray border-[0.072rem] border-solid rounded-full bg-hpLightGray hover:bg-hpHoverLightGray">
+                  <span className="font-bold text-lg">파일 선택</span>
+                </div>
+              </label>
+              <input
+                id={`uploadedFile${vedioIndex}${attachmentIndex}`}
+                className="hidden"
+                type="file"
+                accept=".zip,.tar"
+                onChange={(e) => {
+                  uploadAttachmentFile(e, attachmentIndex);
+                }}
+              />
+              <TextButton
+                color="gray"
+                moreStyle="w-[130px] mr-4"
+                handleClick={async () => {
+                  setDeleteAttachmentCheckModalOpen(true);
+                }}
+              >
+                삭제 하기
+              </TextButton>
+              <span className="border-solid border-[1.3px] rounded-xl border-black w-[450px] text-lg text-center font-bold">
+                {attachment.fileName}
+              </span>
+            </div>
+          );
+        },
+      )}
     </div>
   );
 }

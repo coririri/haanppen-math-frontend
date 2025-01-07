@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
+interface DropdownMenuProps {
+  size: 'long' | 'short'; // Assuming 'long' and 'short' are the valid values
+  type: 'search' | 'default'; // Assuming 'search' and 'default' are possible types
+  textArr: string[]; // Array of text options in the dropdown
+  selectedIndex: number; // Index of the currently selected item
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>; // Setter for selected index
+  searchParams: URLSearchParams; // Assuming URLSearchParams is used for search params
+  setSearchParams: React.Dispatch<React.SetStateAction<URLSearchParams>>; // Setter for searchParams
+}
 function DropdownMenu({
   size,
   type,
@@ -9,7 +18,7 @@ function DropdownMenu({
   setSelectedIndex,
   searchParams,
   setSearchParams,
-}) {
+}: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownList = textArr.map((text, index) => {
@@ -22,7 +31,7 @@ function DropdownMenu({
           key={text + index}
           onClick={() => {
             if (type === 'search') {
-              searchParams.set('classIndex', index);
+              searchParams.set('classIndex', index.toString());
               setSearchParams(searchParams);
             }
 

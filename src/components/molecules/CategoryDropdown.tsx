@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
+interface CategoryDropdownType {
+  textArr: string[];
+  selectedIndex: number;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+  searchParams: URLSearchParams;
+  setSearchParams: (params: URLSearchParams) => void;
+}
+
 function CategoryDropdown({
   textArr,
   selectedIndex,
   setSelectedIndex,
   searchParams,
   setSearchParams,
-}) {
+}: CategoryDropdownType) {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownList = textArr.map((text, index) => {
@@ -18,7 +26,7 @@ function CategoryDropdown({
           className="w-24 h-[40px] flex items-center font-bold text-lg hover:bg-hpLightGray"
           key={text}
           onClick={() => {
-            searchParams.set('sortIndex', index);
+            searchParams.set('sortIndex', index.toString());
             setSearchParams(searchParams);
             setSelectedIndex(index);
             setIsOpen((prev) => !prev);

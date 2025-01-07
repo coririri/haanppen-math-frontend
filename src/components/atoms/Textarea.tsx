@@ -1,10 +1,10 @@
 import React, { forwardRef, Ref } from 'react';
 
 interface TextareaType {
-  placeholder: string;
+  placeholder?: string;
   isError?: boolean;
   moreStyle: string;
-  onChange: () => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // event 타입 추가
   disabled?: boolean;
   value: string;
 }
@@ -12,7 +12,7 @@ interface TextareaType {
 const Textarea = forwardRef(
   (
     {
-      placeholder,
+      placeholder = '',
       isError = false,
       moreStyle,
       onChange,

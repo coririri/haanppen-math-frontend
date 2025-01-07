@@ -1,8 +1,23 @@
 import React from 'react';
 import { BsFillTriangleFill } from 'react-icons/bs';
 
-function Carousel({ dataList, selectedDataindex, setSelectedDataindex }) {
-  const handleChangeSelectedTeacherindex = (flag) => {
+interface CarouselData {
+  name: string; // name은 필수
+  [key: string]: any; // 그 외의 속성은 유연하게 추가 가능
+}
+
+interface CarouselType {
+  dataList: CarouselData[]; // Adjust this based on your actual data structure
+  selectedDataindex: number;
+  setSelectedDataindex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function Carousel({
+  dataList,
+  selectedDataindex,
+  setSelectedDataindex,
+}: CarouselType) {
+  const handleChangeSelectedTeacherindex = (flag: 'left' | 'right') => {
     if (flag === 'left') {
       if (selectedDataindex === 0) {
         setSelectedDataindex(dataList.length - 1);

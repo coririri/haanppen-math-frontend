@@ -1,8 +1,21 @@
 import { useState } from 'react';
 import TextButton from '../atoms/TextButton';
-import OnlineCourseModificationModal from '../modals/OnlineCourseModificationModal';
+import CourseModificationModal from '../modals/CourseModificationModal';
+import { CourseType } from '../../types/courseType';
 
-function OnlineCourseItem({
+// CourseItemType에 대해 각 prop에 대한 타입을 명시
+interface CourseItemType {
+  className: string;
+  studentNum: number;
+  teacherName: string;
+  courseId: number;
+  setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>; // 데이터 형식에 맞춰 수정 가능
+  setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>; // courseId에 따라 타입 설정
+  teacherArr: string[]; // 예시로 teacherArr를 string[]로 설정, 실제 배열의 타입에 맞게 수정 필요
+  selectedIndex: number;
+}
+
+function CourseItem({
   className,
   studentNum,
   teacherName,
@@ -11,11 +24,11 @@ function OnlineCourseItem({
   setDeletedCoursesIndex,
   teacherArr,
   selectedIndex,
-}) {
+}: CourseItemType) {
   const [isClick, setIsClick] = useState(false);
   return (
     <div>
-      <OnlineCourseModificationModal
+      <CourseModificationModal
         enrollmentModalOpen={isClick}
         setEnrollmentModalOpen={setIsClick}
         setCourseListData={setCourseListData}
@@ -28,7 +41,8 @@ function OnlineCourseItem({
           type="checkbox"
           className="w-[16px] h-[16px]"
           onClick={(e) => {
-            if (e.target.checked) {
+            const target = e.target as HTMLInputElement; // 타입 단언으로 HTMLInputElement로 변환
+            if (target.checked) {
               setDeletedCoursesIndex((prev) => [...prev, courseId]);
             } else {
               setDeletedCoursesIndex((prev) =>
@@ -64,4 +78,4 @@ function OnlineCourseItem({
   );
 }
 
-export default OnlineCourseItem;
+export default CourseItem;

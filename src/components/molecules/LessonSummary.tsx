@@ -1,7 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LessonOverviewType } from '../../types/LessonOverviewType';
 
-function LessonSummary({ lessonOverviewData, mainCategoryName }) {
+interface LessonSummaryProps {
+  lessonOverviewData: LessonOverviewType; // 강좌의 개요 데이터
+  mainCategoryName: string; // 카테고리 이름
+}
+
+function LessonSummary({
+  lessonOverviewData,
+  mainCategoryName,
+}: LessonSummaryProps) {
   const navigate = useNavigate();
   return (
     <div className="relative bg-white w-72  rounded-3xl shadow-lg transform hover:scale-105 transition-all duration-300">

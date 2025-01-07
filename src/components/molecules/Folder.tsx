@@ -2,7 +2,21 @@ import { useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { useSearchParams } from 'react-router-dom';
 
-function Folder({ name, setCheckedDirectoryArr, createTime, index, layout }) {
+interface FolderProps {
+  name: string;
+  setCheckedDirectoryArr: React.Dispatch<React.SetStateAction<number[]>>;
+  createTime: string;
+  index: number;
+  layout: 'line' | 'grid';
+}
+
+function Folder({
+  name,
+  setCheckedDirectoryArr,
+  createTime,
+  index,
+  layout,
+}: FolderProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isChecked, setIsChecked] = useState(false);
@@ -47,13 +61,13 @@ function Folder({ name, setCheckedDirectoryArr, createTime, index, layout }) {
               }}
               className="w-[15px] h-[15px] border-solid border-[1px] border-hpLightGray bg-white hover:border-black"
             />
-            <div
+            <button
               type="button"
               aria-label="폴더"
               className="flex items-center justify-center w-[25px] h-[25px] outline-none ml-3"
             >
               <FcFolder size="4rem" />
-            </div>
+            </button>
             <span className="font-bold text-md ml-6">{name}</span>
           </div>
           <span className="mr-6 font-bold text-md">

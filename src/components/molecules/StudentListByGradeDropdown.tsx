@@ -1,6 +1,23 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 import gradeTransform from '../../utils/gradeTransform';
+import { StudentByGradeType, StudentType } from '../../types/studentType';
+
+interface StudentListByGradeDropdownProps {
+  type: 'entire' | 'other'; // Adjust if there are more types for 'type'
+  grade: number;
+  students: StudentType[];
+  differntCourseStudents: StudentByGradeType[];
+  myCourseStudents: StudentByGradeType[];
+  setDifferntCourseStudents: React.Dispatch<
+    React.SetStateAction<StudentByGradeType[]>
+  >;
+  setMyCourseStudents: React.Dispatch<
+    React.SetStateAction<StudentByGradeType[]>
+  >;
+  setMyStudentsNum: React.Dispatch<React.SetStateAction<number>>;
+  setDifferentStudentsNum: React.Dispatch<React.SetStateAction<number>>;
+}
 
 function StudentListByGradeDropdown({
   type,
@@ -12,7 +29,7 @@ function StudentListByGradeDropdown({
   setMyCourseStudents,
   setMyStudentsNum,
   setDifferentStudentsNum,
-}) {
+}: StudentListByGradeDropdownProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   if (type === 'entire') {
@@ -65,9 +82,7 @@ function StudentListByGradeDropdown({
                 }}
               >
                 <div className="mr-4 bg-[#BCF7FF] px-2 rounded-xl">
-                  <span className="text-xl">
-                    {type === 'entire' ? '+' : '-'}
-                  </span>
+                  <span className="text-xl">+</span>
                 </div>
               </button>
             </div>
@@ -76,7 +91,7 @@ function StudentListByGradeDropdown({
         <hr className="h-[0.8px] bg-hpGray w-full" />
         {isDropdownOpen &&
           students.map((student) => (
-            <div key={student.studentId}>
+            <div key={student.id}>
               <div className="bg-white">
                 <button
                   type="button"
@@ -110,9 +125,7 @@ function StudentListByGradeDropdown({
                       <span className="text-md ml-8">{student.name}</span>
                     </div>
                     <div className="mr-[18px] bg-hpLightkBlack px-2 rounded-xl">
-                      <span className="text-sm text-white">
-                        {type === 'entire' ? '+' : '-'}
-                      </span>
+                      <span className="text-sm text-white">+</span>
                     </div>
                   </div>
                 </button>
@@ -170,7 +183,7 @@ function StudentListByGradeDropdown({
               }}
             >
               <div className="mr-4 bg-[#BCF7FF] px-2 rounded-xl">
-                <span className="text-xl">{type === 'entire' ? '+' : '-'}</span>
+                <span className="text-xl">-</span>
               </div>
             </button>
           </div>
@@ -179,7 +192,7 @@ function StudentListByGradeDropdown({
       <hr className="h-[0.8px] bg-hpGray w-full" />
       {isDropdownOpen &&
         students.map((student) => (
-          <div key={student.studentId}>
+          <div key={student.id}>
             <div className="bg-white">
               <button
                 type="button"
@@ -213,9 +226,7 @@ function StudentListByGradeDropdown({
                     <span className="text-md ml-8">{student.name}</span>
                   </div>
                   <div className="mr-[18px] bg-hpLightkBlack px-2 rounded-xl">
-                    <span className="text-sm text-white">
-                      {type === 'entire' ? '+' : '-'}
-                    </span>
+                    <span className="text-sm text-white">-</span>
                   </div>
                 </div>
               </button>

@@ -4,6 +4,17 @@ import TextButton from '../atoms/TextButton';
 import gradeTransform from '../../utils/gradeTransform';
 import StudentModificationModal from '../modals/StudentModificationModal';
 
+interface StudentItemProps {
+  grade: number;
+  name: string;
+  id: number;
+  page: number;
+  phoneNumber: string;
+  setForDeletedStudentIds: React.Dispatch<React.SetStateAction<number[]>>;
+  choosenGradeIndex: number;
+  searchNameValue: string;
+}
+
 function StudentItem({
   grade,
   name,
@@ -13,7 +24,7 @@ function StudentItem({
   setForDeletedStudentIds,
   choosenGradeIndex,
   searchNameValue,
-}) {
+}: StudentItemProps) {
   const [modificationModalOpen, setModificationModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -59,7 +70,6 @@ function StudentItem({
             <TextButton
               moreStyle="w-[4rem]"
               color="gray"
-              shape="square"
               isClick={modificationModalOpen}
               handleClick={() => {
                 setModificationModalOpen((prev) => !prev);

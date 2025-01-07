@@ -1,8 +1,20 @@
 import { useState } from 'react';
 import TextButton from '../atoms/TextButton';
-import CourseModificationModal from '../modals/CourseModificationModal';
+import OnlineCourseModificationModal from '../modals/OnlineCourseModificationModal';
+import { CourseType } from '../../types/courseType';
 
-function CourseItem({
+interface OnlineCourseItemProps {
+  className: string; // 강좌 이름
+  studentNum: number; // 수강생 수
+  teacherName: string; // 강사 이름
+  courseId: number; // 강좌 ID
+  setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>; // 강좌 리스트 데이터 업데이트 함수
+  setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>; // 삭제된 강좌 ID 리스트 업데이트 함수
+  teacherArr: string[]; // 강사 배열
+  selectedIndex: number; // 선택된 강사 인덱스
+}
+
+function OnlineCourseItem({
   className,
   studentNum,
   teacherName,
@@ -11,11 +23,11 @@ function CourseItem({
   setDeletedCoursesIndex,
   teacherArr,
   selectedIndex,
-}) {
+}: OnlineCourseItemProps) {
   const [isClick, setIsClick] = useState(false);
   return (
     <div>
-      <CourseModificationModal
+      <OnlineCourseModificationModal
         enrollmentModalOpen={isClick}
         setEnrollmentModalOpen={setIsClick}
         setCourseListData={setCourseListData}
@@ -28,7 +40,8 @@ function CourseItem({
           type="checkbox"
           className="w-[16px] h-[16px]"
           onClick={(e) => {
-            if (e.target.checked) {
+            const target = e.target as HTMLInputElement; // 명시적으로 HTMLInputElement로 캐스팅
+            if (target.checked) {
               setDeletedCoursesIndex((prev) => [...prev, courseId]);
             } else {
               setDeletedCoursesIndex((prev) =>
@@ -64,4 +77,4 @@ function CourseItem({
   );
 }
 
-export default CourseItem;
+export default OnlineCourseItem;

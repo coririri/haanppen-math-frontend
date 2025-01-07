@@ -3,6 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import QueryBadge from '../atoms/QueryBadge';
 import gradeTransfrom from '../../utils/gradeTransform';
 
+interface QueryBoxProps {
+  id: number;
+  imgSrc: string;
+  grade: number;
+  studentName: string;
+  isSolved: boolean;
+  teacherName: string;
+  isStudent: boolean;
+}
+
 function QueryBox({
   id,
   imgSrc,
@@ -11,7 +21,7 @@ function QueryBox({
   isSolved,
   teacherName,
   isStudent,
-}) {
+}: QueryBoxProps) {
   const navigate = useNavigate();
   if (isStudent) {
     return (

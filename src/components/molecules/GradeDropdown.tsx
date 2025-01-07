@@ -1,7 +1,17 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
-function GradeDropdown({ textArr, selectedIndex, setSelectedIndex }) {
+interface GradeDropdownProps {
+  textArr: string[]; // 드롭다운에 표시할 텍스트 배열
+  selectedIndex: number; // 현재 선택된 텍스트의 인덱스
+  setSelectedIndex: (index: number) => void; // 선택된 인덱스를 업데이트하는 함수
+}
+
+function GradeDropdown({
+  textArr,
+  selectedIndex,
+  setSelectedIndex,
+}: GradeDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownList = textArr.map((text, index) => {

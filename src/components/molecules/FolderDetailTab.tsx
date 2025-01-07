@@ -3,8 +3,20 @@ import { FcFolder } from 'react-icons/fc';
 import TextButton from '../atoms/TextButton';
 import { dateTimeToDateAndTimes } from '../../utils/dateTimeToDate';
 import getDirectory, { changeDirectoryName } from '../../apis/directory';
+import { DirectoryType } from '../../types/directoryType';
 
-function FolderDetailTab({ folderData, breadscrumArray, setDirectoryDatas }) {
+// Props 타입 정의
+interface FolderDetailTabProps {
+  folderData: DirectoryType;
+  breadscrumArray: string[];
+  setDirectoryDatas: (data: DirectoryType[]) => void;
+}
+
+function FolderDetailTab({
+  folderData,
+  breadscrumArray,
+  setDirectoryDatas,
+}: FolderDetailTabProps) {
   const [folderName, setFolderName] = useState(folderData.fileName);
 
   useEffect(() => {
@@ -76,7 +88,7 @@ function FolderDetailTab({ folderData, breadscrumArray, setDirectoryDatas }) {
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">올린 날짜</span>
           <span className="font-bold">
-            {dateTimeToDateAndTimes(folderData.createdTime)}
+            {dateTimeToDateAndTimes(new Date(folderData.createdTime))}
           </span>
         </div>
         <div className="flex mt-2">

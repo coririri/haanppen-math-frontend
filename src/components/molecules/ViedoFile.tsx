@@ -1,5 +1,13 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { FcVideoFile } from 'react-icons/fc';
+
+interface VideoFileProps {
+  name: string; // 파일 이름
+  setCheckedDirectoryArr: React.Dispatch<SetStateAction<number[]>>; // 선택된 디렉토리 배열을 업데이트하는 함수
+  createTime: string; // 생성 시간 (ISO 문자열)
+  index: number; // 파일의 고유 인덱스
+  layout: 'line' | 'grid'; // 레이아웃 종류 ('line' 또는 'grid')
+}
 
 function VideoFile({
   name,
@@ -7,7 +15,7 @@ function VideoFile({
   createTime,
   index,
   layout,
-}) {
+}: VideoFileProps) {
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
@@ -37,13 +45,13 @@ function VideoFile({
               }}
               className="w-[15px] h-[15px] border-solid border-[1px] border-hpLightGray bg-white hover:border-black"
             />
-            <div
+            <button
               type="button"
               aria-label="파일"
               className="flex items-center justify-center w-[25px] h-[25px] outline-none ml-3"
             >
               <FcVideoFile size="4rem" />
-            </div>
+            </button>
             <span className="font-bold text-md ml-6">
               {name.slice(0, -4)}.mp4
             </span>

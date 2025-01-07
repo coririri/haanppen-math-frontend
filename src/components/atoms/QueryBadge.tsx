@@ -2,10 +2,10 @@ import React from 'react';
 
 interface QueryBadgeProps {
   isSolved: boolean;
-  isStudent: boolean;
+  isStudent?: boolean;
 }
 
-function QueryBadge({ isSolved, isStudent }: QueryBadgeProps) {
+function QueryBadge({ isSolved, isStudent = false }: QueryBadgeProps) {
   if (isStudent === true) {
     if (isSolved === true)
       return (

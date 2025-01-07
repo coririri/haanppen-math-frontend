@@ -3,6 +3,15 @@ import { useQueryClient } from '@tanstack/react-query';
 import TextButton from '../atoms/TextButton';
 import TeacherModificationModal from '../modals/TeacherModificationModal';
 
+interface TeacherItemProps {
+  name: string;
+  phoneNumber: string;
+  id: number; // Assuming the id is a number, adjust if it's a different type
+  setForDeletedTeacherIds: React.Dispatch<React.SetStateAction<number[]>>; // Assuming you want to manage a list of teacher IDs to delete
+  searchNameValue: string;
+  page: number; // Assuming page is a number, adjust if necessary
+}
+
 function TeacherItem({
   name,
   phoneNumber,
@@ -10,7 +19,7 @@ function TeacherItem({
   setForDeletedTeacherIds,
   searchNameValue,
   page,
-}) {
+}: TeacherItemProps) {
   const [modificationModalOpen, setModificationModalOpen] = useState(false);
   const queryClient = useQueryClient();
   return (
@@ -49,7 +58,6 @@ function TeacherItem({
           <TextButton
             moreStyle="w-[4rem]"
             color="gray"
-            shape="square"
             isClick={modificationModalOpen}
             handleClick={() => {
               setModificationModalOpen((prev) => !prev);

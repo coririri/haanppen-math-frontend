@@ -1,7 +1,17 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
-function TeacherDropdown({ textArr, selectedIndex, setSelectedIndex }) {
+interface TeacherDropdownProps {
+  textArr: string[];
+  selectedIndex: number;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function TeacherDropdown({
+  textArr,
+  selectedIndex,
+  setSelectedIndex,
+}: TeacherDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownList = textArr.map((text, index) => {

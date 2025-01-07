@@ -8,6 +8,18 @@ import {
   putOnlineCoursePreview,
   putOnlineVedioSequence,
 } from '../../apis/onlineLesson';
+import { OnlineVideoDataType } from '../../types/onlineVideoType';
+
+interface VideoCardProps {
+  video: OnlineVideoDataType;
+  videoIndex: number;
+  videoList: OnlineVideoDataType[];
+  deleteCheckArr: boolean[];
+  setDeleteCheckArr: React.Dispatch<React.SetStateAction<boolean[]>>;
+  setVideoList: React.Dispatch<React.SetStateAction<OnlineVideoDataType[]>>;
+  onlineCourseId: number;
+  classIndex: number;
+}
 
 function VideoCard({
   video,
@@ -18,7 +30,7 @@ function VideoCard({
   setVideoList,
   onlineCourseId,
   classIndex,
-}) {
+}: VideoCardProps) {
   const [isOpenAttachmentModal, setIsOpenAttachmentModal] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -30,7 +42,6 @@ function VideoCard({
           setModalOpen={setIsOpenAttachmentModal}
           attachmentViews={video.attachmentDetails}
           setVideoList={setVideoList}
-          videoIndex={videoIndex}
           onlineCourseId={onlineCourseId}
           videoId={video.videoId}
         />
@@ -79,7 +90,6 @@ function VideoCard({
         setModalOpen={setIsOpenAttachmentModal}
         attachmentViews={video.attachmentDetails}
         setVideoList={setVideoList}
-        videoIndex={videoIndex}
         onlineCourseId={onlineCourseId}
         videoId={video.videoId}
       />

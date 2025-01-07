@@ -1,6 +1,18 @@
 import { useEffect, useState } from 'react';
 import TextButton from '../atoms/TextButton';
 
+interface SlideBarProps {
+  num: number;
+  firstText: string;
+  secondText: string;
+  thirdText?: string;
+  fourthText?: string;
+  isClickArr: boolean[];
+  setIsClickArr: React.Dispatch<React.SetStateAction<boolean[]>>;
+  isStudent?: boolean;
+  type?: string;
+}
+
 function SlideBar({
   num,
   firstText,
@@ -11,7 +23,7 @@ function SlideBar({
   setIsClickArr,
   isStudent,
   type = '',
-}) {
+}: SlideBarProps) {
   const [leftPosition, setLeftPosition] = useState('left-[130px]');
   const [twoLeftPosition, setTwoLeftPosition] = useState('left-[20px]');
   const [courseLeftPosition, setCourseLeftPosition] = useState('left-[10px]');

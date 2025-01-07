@@ -6,17 +6,25 @@ import DatePicker from 'react-datepicker';
 import { LiaCalendarCheck } from 'react-icons/lia';
 import { useNavigate } from 'react-router-dom';
 import dateTimeToDate from '../../utils/dateTimeToDate';
+import { CourseType } from '../../types/courseType';
+
+interface DateSelectorProps {
+  startDate: Date;
+  setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+  courseList: CourseType[];
+  selectedClassindex: number;
+}
 
 function DateSelector({
   startDate,
   setStartDate,
   courseList,
   selectedClassindex,
-}) {
+}: DateSelectorProps) {
   const [currentDate, setCurrentDate] = useState(startDate);
   const navigate = useNavigate();
 
-  const calendar = useRef(null);
+  const calendar = useRef<any>(null);
 
   const cancelDatePicker = () => {
     setCurrentDate(startDate);
@@ -51,10 +59,10 @@ function DateSelector({
   ];
 
   // 일요일에 빨간색을 적용하는 함수
-  const highlightSunday = (date) => (getDay(date) === 0 ? 'sunday' : ''); // 일요일(0)인 경우 'sunday' 클래스 할당
+  const highlightSunday = (date: Date) => (getDay(date) === 0 ? 'sunday' : ''); // 일요일(0)인 경우 'sunday' 클래스 할당
 
   // 날짜와 이벤트를 처리하는 핸들러 함수
-  const datePickHandler = (date) => {
+  const datePickHandler = (date: Date) => {
     // setStartDate(date);
     // searchParams.set('date', date);
     // setSearchParams(searchParams);
@@ -86,7 +94,9 @@ function DateSelector({
         shouldCloseOnSelect={false}
         ref={calendar}
         onInputClick={() => openDatePicker()}
-        onChange={(date) => datePickHandler(date)}
+        onChange={(date) => {
+          if (date !== null) datePickHandler(date);
+        }}
         dayClassName={highlightSunday} // 일요일에 스타일 적용
         renderCustomHeader={({
           date,
@@ -96,23 +106,25 @@ function DateSelector({
           increaseMonth,
         }) => (
           <div className="m-2 flex justify-center items-center">
-            <div
+            <button
+              type="button"
               className="btn_month btn_month-prev"
               onClick={decreaseMonth}
               disabled={prevMonthButtonDisabled}
             >
               <AiOutlineLeft size="1.1rem" />
-            </div>
+            </button>
             <div className="font-bold text-xl mx-6">
               {getYear(date)}.{MONTHS[getMonth(date)]}
             </div>
-            <div
+            <button
+              type="button"
               className="btn_month btn_month-next"
               onClick={increaseMonth}
               disabled={nextMonthButtonDisabled}
             >
               <AiOutlineRight size="1.1rem" />
-            </div>
+            </button>
           </div>
         )}
       >

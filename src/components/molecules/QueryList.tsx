@@ -2,20 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/extensions
 import QueryBadge from '../atoms/QueryBadge';
-
-interface Owner {
-  memberId: number;
-  memberName: string;
-  memberGrade: number | null;
-  role: 'student' | 'teacher';
-}
-
-interface Target {
-  memberId: number;
-  memberName: string;
-  memberGrade: number | null;
-  role: 'student' | 'teacher';
-}
+import { QuestionOwner, QuestionTarget } from '../../types/question';
 
 interface QuestionProps {
   questionId: number;
@@ -24,8 +11,8 @@ interface QuestionProps {
   solved: boolean;
   commentCount: number;
   viewCount: number;
-  owner: Owner;
-  target: Target | null;
+  owner: QuestionOwner;
+  target: QuestionTarget | null;
 }
 
 interface QueyListProps {

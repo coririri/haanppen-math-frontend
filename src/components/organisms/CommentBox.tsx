@@ -10,8 +10,29 @@ import hw1 from '../../assests/hw1.jpg';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import InputImagesButton from '../atoms/InputImagesButton';
 import uploadImageToS3 from '../../apis/media';
+import { CommentType } from '../../types/commentType';
+import { ImageType } from '../../types/imageType';
+import { QuestionFrontType } from '../../types/question';
 
-function CommentBox({ comment, commentIndex, setData, setModificationData }) {
+interface CommentBoxProps {
+  comment: CommentType;
+  commentIndex: number;
+  setData: React.Dispatch<React.SetStateAction<QuestionFrontType>>;
+  setModificationData: React.Dispatch<
+    React.SetStateAction<{
+      title: string;
+      content: string;
+      images?: string[];
+    }>
+  >;
+}
+
+function CommentBox({
+  comment,
+  commentIndex,
+  setData,
+  setModificationData,
+}: CommentBoxProps) {
   const { id } = useParams();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -21,9 +42,10 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
     content: '',
   });
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
-  const [modificationImgPreview, setModificationImgPreview] = useState([]);
-  const [modificationImgFiles, setModificationImgFiles] = useState([]);
-
+  const [modificationImgPreview, setModificationImgPreview] = useState<
+    string[]
+  >([]);
+  const [modificationImgFiles, setModificationImgFiles] = useState<File[]>([]);
   useEffect(() => {
     setModificationCommentData({ content: comment?.content });
   }, [comment]);
@@ -40,12 +62,12 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
       await deleteComment(comment?.commentId);
 
       const getData = async () => {
-        const response = await getDetailQuestionById(id);
+        const response = await getDetailQuestionById(Number(id));
 
         const questionDetailData = {
           title: response.title,
           content: response.content,
-          imageUrls: response.imageUrls.map((imageUrl) =>
+          imageUrls: response.imageUrls.map((imageUrl: ImageType) =>
             imageUrl.imageUrl
               ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
               : hw1,
@@ -75,7 +97,7 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
     }
   };
 
-  const handleDeleteImagesButton = (index) => {
+  const handleDeleteImagesButton = (index: number) => {
     setModificationImgFiles(() => [
       ...modificationImgFiles.slice(0, index),
       ...modificationImgFiles.slice(index + 1, modificationImgFiles.length),
@@ -105,15 +127,16 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
       );
 
       const getData = async () => {
-        const response = await getDetailQuestionById(id);
+        const response = await getDetailQuestionById(Number(id));
 
         const questionDetailData = {
           title: response.title,
           content: response.content,
-          imageUrls: response.imageUrls.map((imageUrl) =>
-            imageUrl.imageUrl
-              ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
-              : hw1,
+          imageUrls: response.imageUrls.map(
+            (imageUrl: { imageUrl: string | undefined }) =>
+              imageUrl.imageUrl
+                ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
+                : hw1,
           ),
           registeredDateTime: response.registeredDateTime,
           registerMemberName: response.registeredMember.memberName,
@@ -156,7 +179,7 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
   };
 
   // URL을 감지하고 <a> 태그로 변환하는 함수
-  const convertToLinks = (text) => {
+  const convertToLinks = (text: string) => {
     // URL 정규식
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     // 텍스트를 분할하고 URL이면 <a> 태그로 변환
@@ -248,7 +271,6 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
             {isModify ? (
               <div>
                 <textarea
-                  type="text"
                   className="w-full h-[150px] px-4 py-2 text-xl font-bold border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   value={modificationCommentData.content}
                   placeholder="댓글 내용을 입력하세요..." // 플레이스홀더 추가
@@ -293,7 +315,7 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
                                 registeredDateTime:
                                   prev.questionDetailData.registeredDateTime,
                                 registerMemberName:
-                                  prev.questionDetailData.registeredMember,
+                                  prev.questionDetailData.registerMemberName,
                                 registerMemberGrade:
                                   prev.questionDetailData.registerMemberGrade +
                                   1,
@@ -385,7 +407,7 @@ function CommentBox({ comment, commentIndex, setData, setModificationData }) {
                   <div className="flex flex-col h-[80px] items-center justify-center">
                     <InputImagesButton
                       setImgFiles={setModificationImgFiles}
-                      setImgePreview={setModificationImgPreview}
+                      setImgPreview={setModificationImgPreview}
                     />
                   </div>
                 </div>

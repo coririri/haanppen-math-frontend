@@ -1,7 +1,19 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
-function TypeDropdownMenu({ size, textArr, selectedIndex, setSelectedIndex }) {
+interface TypeDropdownMenuProps {
+  size: 'long' | 'medium' | 'short'; // Defining valid values for size
+  textArr: string[];
+  selectedIndex: number;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function TypeDropdownMenu({
+  size,
+  textArr,
+  selectedIndex,
+  setSelectedIndex,
+}: TypeDropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownList = textArr.map((text, index) => {

@@ -1,8 +1,8 @@
 import { NavigateFunction } from 'react-router-dom';
 import instance from './instance';
-import { QuestionType } from '../types/question';
+import { WriteQuestionType } from '../types/question';
 
-const writeQuery = (data: QuestionType, navigate: NavigateFunction) => {
+const writeQuery = (data: WriteQuestionType, navigate: NavigateFunction) => {
   instance
     .post('/api/board/questions', data)
     .then(() => {

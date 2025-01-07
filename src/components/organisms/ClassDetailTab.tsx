@@ -12,6 +12,19 @@ import enrollLesson, {
   putLessonDetailContentByClassId,
 } from '../../apis/lesson';
 import { dateTimeToDateAndZeroTimes } from '../../utils/dateTimeToDate';
+import { OfflineClassType } from '../../types/offlineClassType';
+import { CourseType } from '../../types/courseType';
+
+interface ClassDetailTabProps {
+  classId: number;
+  classDetailData: OfflineClassType;
+  setClassDetailData: React.Dispatch<React.SetStateAction<OfflineClassType>>;
+  isCreated: boolean;
+  setIsCreated: React.Dispatch<React.SetStateAction<boolean>>;
+  startDate: Date;
+  courseList: CourseType[];
+  selectedClassindex: number;
+}
 
 function ClassDetailTab({
   classId,
@@ -22,7 +35,7 @@ function ClassDetailTab({
   startDate,
   courseList,
   selectedClassindex,
-}) {
+}: ClassDetailTabProps) {
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
   return (

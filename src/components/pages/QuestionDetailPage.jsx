@@ -60,7 +60,10 @@ function QuestionDetailPage() {
         commentsData,
       });
       // data를 사용하여 추가 작업을 수행합니다.
-
+      console.log({
+        questionDetailData,
+        commentsData,
+      });
       setModificationData({
         title: response.title,
         content: response.content,
@@ -157,7 +160,7 @@ function QuestionDetailPage() {
       ...modificationImgPreview.slice(index + 1, modificationImgPreview.length),
     ]);
   };
-
+  console.log(data);
   if (localStorage.getItem('role') === 'STUDENT') {
     return (
       <div className="w-full">
@@ -332,7 +335,7 @@ function QuestionDetailPage() {
               </button>
               <InputImageButton
                 setImgFiles={setModificationImgFiles}
-                setImgePreview={setModificationImgPreview}
+                setImgPreview={setModificationImgPreview}
                 className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
               />
             </div>
@@ -567,7 +570,7 @@ function QuestionDetailPage() {
             </button>
             <InputImageButton
               setImgFiles={setModificationImgFiles}
-              setImgePreview={setModificationImgPreview}
+              setImgPreview={setModificationImgPreview}
               className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
             />
           </div>

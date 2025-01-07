@@ -1,20 +1,20 @@
 import { forwardRef, Ref } from 'react';
 
 interface InputBoxType {
-  type: string;
-  placeholder: string;
-  isError: boolean;
+  type?: string;
+  placeholder?: string;
+  isError?: boolean;
   moreStyle: string;
-  onChange: () => void;
-  disabled: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // event 타입 추가
+  disabled?: boolean;
   value: string;
 }
 
 const InputBox = forwardRef(
   (
     {
-      type,
-      placeholder,
+      type = 'text',
+      placeholder = '',
       isError = false,
       moreStyle,
       onChange,

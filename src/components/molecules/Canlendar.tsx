@@ -6,23 +6,39 @@ import { ko } from 'date-fns/locale'; // 한국어 로케일을 가져옵니다.
 import DatePicker from 'react-datepicker';
 import { dateTimeToDateAndZeroTimes } from '../../utils/dateTimeToDate';
 
-function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
-  const [currentDate, setCurrentDate] = useState(startDate);
+interface CanlendarType {
+  startDate: Date;
+  setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+  searchParams: URLSearchParams;
+  setSearchParams: (params: URLSearchParams) => void;
+}
 
-  const calendar = useRef(null);
+function Canlendar({
+  startDate,
+  setStartDate,
+  searchParams,
+  setSearchParams,
+}: CanlendarType) {
+  const [currentDate, setCurrentDate] = useState<Date>(startDate);
+
+  const calendar = useRef<any>(null);
 
   const cancelDatePicker = () => {
     setCurrentDate(startDate);
-    calendar.current.setOpen(false);
+    if (calendar.current) {
+      calendar.current.setOpen(false); // null이 아닌 경우에만 호출
+    }
   };
 
   const openDatePicker = () => {
-    calendar.current.setOpen(true);
+    if (calendar.current) {
+      calendar.current.setOpen(true);
+    }
   };
 
   const closeDatePicker = () => {
     setStartDate(currentDate);
-    searchParams.set('date', currentDate);
+    searchParams.set('date', currentDate.toString());
     setSearchParams(searchParams);
     calendar.current.setOpen(false);
   };
@@ -43,10 +59,10 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
   ];
 
   // 일요일에 빨간색을 적용하는 함수
-  const highlightSunday = (date) => (getDay(date) === 0 ? 'sunday' : ''); // 일요일(0)인 경우 'sunday' 클래스 할당
+  const highlightSunday = (date: Date) => (getDay(date) === 0 ? 'sunday' : ''); // 일요일(0)인 경우 'sunday' 클래스 할당
 
   // 날짜와 이벤트를 처리하는 핸들러 함수
-  const datePickHandler = (date) => {
+  const datePickHandler = (date: Date) => {
     // setStartDate(date);
     // searchParams.set('date', date);
     // setSearchParams(searchParams);
@@ -63,9 +79,13 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
           setStartDate((prevDate) =>
             subDays(new Date(dateTimeToDateAndZeroTimes(prevDate)), 1),
           ); // 현재 날짜에서 하루를 빼서 업데이트
+
           searchParams.set(
             'date',
-            subDays(new Date(dateTimeToDateAndZeroTimes(startDate)), 1),
+            subDays(
+              new Date(dateTimeToDateAndZeroTimes(startDate)),
+              1,
+            ).toString(),
           );
           setSearchParams(searchParams);
           setCurrentDate((prevDate) =>
@@ -90,7 +110,9 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
         shouldCloseOnSelect={false}
         ref={calendar}
         onInputClick={() => openDatePicker()}
-        onChange={(date) => datePickHandler(date)}
+        onChange={(date) => {
+          if (date !== null) datePickHandler(date);
+        }}
         dayClassName={highlightSunday} // 일요일에 스타일 적용
         renderCustomHeader={({
           date,
@@ -100,23 +122,25 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
           increaseMonth,
         }) => (
           <div className="m-2 flex justify-center items-center">
-            <div
+            <button
+              type="button"
               className="btn_month btn_month-prev"
               onClick={decreaseMonth}
               disabled={prevMonthButtonDisabled}
             >
               <AiOutlineLeft size="1.1rem" />
-            </div>
+            </button>
             <div className="font-bold text-xl mx-6">
               {getYear(date)}.{MONTHS[getMonth(date)]}
             </div>
-            <div
+            <button
+              type="button"
               className="btn_month btn_month-next"
               onClick={increaseMonth}
               disabled={nextMonthButtonDisabled}
             >
               <AiOutlineRight size="1.1rem" />
-            </div>
+            </button>
           </div>
         )}
       >
@@ -147,7 +171,10 @@ function Canlendar({ startDate, setStartDate, searchParams, setSearchParams }) {
           ); // 현재 날짜에서 하루를 더해서 업데이트
           searchParams.set(
             'date',
-            addDays(new Date(dateTimeToDateAndZeroTimes(startDate)), 1),
+            addDays(
+              new Date(dateTimeToDateAndZeroTimes(startDate)),
+              1,
+            ).toString(),
           );
           setSearchParams(searchParams);
           setCurrentDate((prevDate) =>

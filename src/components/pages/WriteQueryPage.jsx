@@ -143,7 +143,7 @@ function WriteQueryPage() {
           />
           <InputImageButton
             setImgFiles={setImgFiles}
-            setImgePreview={setImgePreview}
+            setImgPreview={setImgePreview}
             className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
           />
         </div>
