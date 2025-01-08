@@ -63,9 +63,11 @@ function StudentManagementPage() {
         enrollmentModalOpen={enrollmentModalOpen}
         setEnrollmentModalOpen={setEnrollmentModalOpen}
         queryKeyQueryClient={queryClient}
-        queryKeyChoosenGradeIndex={choosenGradeIndex}
+        queryKeyChoosenGradeIndex={choosenGradeIndex.findIndex(
+          (value) => value === true,
+        )}
         queryKeySearchNameValue={searchNameValue}
-        page={page}
+        queryKeyPage={page}
       />
       <DeleteCheckModal
         deleteCheckModalOpen={deleteCheckModalOpen}
@@ -272,6 +274,10 @@ function StudentManagementPage() {
               students={data?.data}
               setForDeletedStudentIds={setForDeletedStudentIds}
               searchNameValue={searchNameValue}
+              page={page}
+              choosenGradeIndex={choosenGradeIndex.findIndex(
+                (value) => value === true,
+              )}
             />
           </div>
         </div>

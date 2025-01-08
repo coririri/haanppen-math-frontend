@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 import gradeTransform from '../../utils/gradeTransform';
-import { StudentByGradeType, StudentType } from '../../types/studentType';
+import { StudentByGradeType, CourseStudentType } from '../../types/studentType';
 
 interface StudentListByGradeDropdownProps {
   type: 'entire' | 'other'; // Adjust if there are more types for 'type'
   grade: number;
-  students: StudentType[];
+  students: CourseStudentType[];
   differntCourseStudents: StudentByGradeType[];
   myCourseStudents: StudentByGradeType[];
   setDifferntCourseStudents: React.Dispatch<

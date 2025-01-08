@@ -2,8 +2,14 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-function ImageModal({ modalOpen, setModalOpen, imageSrc }) {
-  const customModalStyles = {
+interface ImageModalProps {
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  imageSrc: string;
+}
+
+function ImageModal({ modalOpen, setModalOpen, imageSrc }: ImageModalProps) {
+  const customModalStyles: ReactModal.Styles = {
     overlay: {
       backgroundColor: 'rgba(0, 0, 0, 0)', // 배경을 투명하게 설정
       zIndex: '10',

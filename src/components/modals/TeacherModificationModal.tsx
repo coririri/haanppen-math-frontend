@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { AiFillEdit } from 'react-icons/ai';
+import { InvalidateQueryFilters, QueryClient } from '@tanstack/react-query';
 import IconButton from '../atoms/IconButton';
 import phonenumberValidate from '../../utils/phonenumberValidation';
 import { modifyTeacher } from '../../apis/teacher';
@@ -8,7 +9,7 @@ import ErrorConfirmModal from './ErrorConfirmModal';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
-const customModalStyles = {
+const customModalStyles: ReactModal.Styles = {
   overlay: {
     backgroundColor: ' rgba(0, 0, 0, 0.4)',
     width: '100%',
@@ -34,6 +35,17 @@ const customModalStyles = {
   },
 };
 
+interface TeacherModificationModalProps {
+  modificationModalOpen: boolean;
+  setModificationModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  id: number;
+  name: string;
+  phoneNumber: string;
+  queryKeyQueryClient: QueryClient;
+  queryKeySearchNameValue: string;
+  page: number;
+}
+
 function TeacherModificationModal({
   modificationModalOpen,
   setModificationModalOpen,
@@ -43,7 +55,7 @@ function TeacherModificationModal({
   queryKeyQueryClient,
   queryKeySearchNameValue,
   page,
-}) {
+}: TeacherModificationModalProps) {
   const [isDisabled, setIsDisabled] = useState(true);
   const [userform, setUserform] = useState({ name, phoneNumber });
   const [errorMessage, setErrorMessage] = useState('');
@@ -69,7 +81,9 @@ function TeacherModificationModal({
   return (
     <ReactModal
       isOpen={modificationModalOpen}
-      onRequestClose={setModificationModalOpen}
+      onRequestClose={() => {
+        setModificationModalOpen(false);
+      }}
       style={customModalStyles}
     >
       <ErrorConfirmModal
@@ -148,7 +162,7 @@ function TeacherModificationModal({
                     'teachers',
                     queryKeySearchNameValue,
                     page - 1,
-                  ]);
+                  ] as InvalidateQueryFilters);
                   setModificationModalOpen(false);
                 } catch (e) {
                   setErrorEnrollMessage(

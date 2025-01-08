@@ -6,15 +6,18 @@ import {
   getSubCategory,
 } from '../../apis/onlineLesson';
 import AddCategoryModal from '../modals/AddCategoryModal';
+import { CategoryType } from '../../types/categoryType';
 
 function LessonCategoryManagementPage() {
-  const [mainCategorySelected, setMainCategorySelected] = useState(0);
-  const [subCategorySelected, setSubCategorySelected] = useState(0);
-  const [mainCategorys, setMainCategorys] = useState([]);
-  const [subCategorys, setSubCategorys] = useState([]);
-  const [mainAddionModalOpen, setMainAdditionModalOpen] = useState(false);
-  const [subAddionModalOpen, setSubAdditionModalOpen] = useState(false);
-  const [addCategoryName, setAddCategoryName] = useState('');
+  const [mainCategorySelected, setMainCategorySelected] = useState<number>(0);
+  const [subCategorySelected, setSubCategorySelected] = useState<number>(0);
+  const [mainCategorys, setMainCategorys] = useState<CategoryType[]>([]);
+  const [subCategorys, setSubCategorys] = useState<CategoryType[]>([]);
+  const [mainAddionModalOpen, setMainAdditionModalOpen] =
+    useState<boolean>(false);
+  const [subAddionModalOpen, setSubAdditionModalOpen] =
+    useState<boolean>(false);
+  const [addCategoryName, setAddCategoryName] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,11 +1,12 @@
 import { CourseType } from '../../types/courseType';
+import { TeacherType } from '../../types/teacherType';
 import ClassItem from '../molecules/CourseItem';
 
 interface CourseListType {
   courseListData: CourseType[];
   setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>;
   setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>;
-  teacherArr: string[];
+  teacherArr: TeacherType[];
   selectedIndex: number;
 }
 

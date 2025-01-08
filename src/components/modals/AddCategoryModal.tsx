@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import ReactModal from 'react-modal';
+
 import {
   getRootCategory,
   getSubCategory,
   postCategory,
 } from '../../apis/onlineLesson';
+import { CategoryType } from '../../types/categoryType';
 
-const customModalStyles = {
+const customModalStyles: ReactModal.Styles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     zIndex: '10',
@@ -31,21 +33,34 @@ const customModalStyles = {
   },
 };
 
+interface AddCategoryModalProps {
+  type: 'main' | 'sub';
+  mainCategoryId?: number;
+  categoryName: string;
+  setCategoryName: React.Dispatch<SetStateAction<string>>;
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<SetStateAction<boolean>>;
+  setMainCategorys: React.Dispatch<SetStateAction<CategoryType[]>>;
+  setSubCategorys: React.Dispatch<SetStateAction<CategoryType[]>>;
+  mainCategorys?: CategoryType[];
+  mainCategorySelected?: number;
+}
+
 function AddCategoryModal({
   type,
-  mainCategoryId,
+  mainCategoryId = -1,
   categoryName,
   setCategoryName,
   modalOpen,
   setModalOpen,
   setMainCategorys,
   setSubCategorys,
-  mainCategorys,
-  mainCategorySelected,
-}) {
+  mainCategorys = [],
+  mainCategorySelected = -1,
+}: AddCategoryModalProps) {
   const [error, setError] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCategoryName(e.target.value);
     setError(''); // 입력 시 에러 메시지 초기화
   };

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 
-const customModalStyles = {
+const customModalStyles: ReactModal.Styles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     width: 'auto',
@@ -28,11 +28,17 @@ const customModalStyles = {
   },
 };
 
+interface ErrorConfirmModalProps {
+  errorModalOpen: boolean;
+  setErrorModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  errorMessage: string;
+}
+
 function ErrorConfirmModal({
   errorModalOpen,
   setErrorModalOpen,
   errorMessage,
-}) {
+}: ErrorConfirmModalProps) {
   return (
     <ReactModal
       isOpen={errorModalOpen}

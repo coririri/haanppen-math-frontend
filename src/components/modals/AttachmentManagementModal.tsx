@@ -1,12 +1,25 @@
 import { AiOutlineDelete, AiOutlinePlusCircle } from 'react-icons/ai';
 import ReactModal from 'react-modal';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import TextButton from '../atoms/TextButton';
 import {
   deleteOnlineCourseAttachment,
   getOnlineLesson,
   postOnlineCourseAttachment,
 } from '../../apis/onlineLesson';
+import {
+  AttachmentDetailType,
+  OnlineVideoDataType,
+} from '../../types/onlineVideoType';
+
+interface AttachmentManagementModalProps {
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<SetStateAction<boolean>>;
+  attachmentViews: AttachmentDetailType[];
+  setVideoList: React.Dispatch<SetStateAction<OnlineVideoDataType[]>>;
+  onlineCourseId: number;
+  videoId: number;
+}
 
 function AttachmentManagementModal({
   modalOpen,
@@ -15,10 +28,10 @@ function AttachmentManagementModal({
   setVideoList,
   onlineCourseId,
   videoId,
-}) {
+}: AttachmentManagementModalProps) {
   /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
-  const customModalStyles = {
+  const customModalStyles: ReactModal.Styles = {
     overlay: {
       backgroundColor: ' rgba(0, 0, 0, 0.4)',
       width: '100%',
@@ -43,15 +56,19 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
       overflow: 'auto',
     },
   };
-  const [additionAttachmentViews, setAdditionAttachmentViews] = useState([]);
+  const [additionAttachmentViews, setAdditionAttachmentViews] = useState<
+    {
+      title: string;
+      url: string;
+    }[]
+  >([]);
 
-  console.log(attachmentViews);
-  console.log(additionAttachmentViews);
-  console.log(onlineCourseId, videoId);
   return (
     <ReactModal
       isOpen={modalOpen}
-      onRequestClose={setModalOpen}
+      onRequestClose={() => {
+        setModalOpen(false);
+      }}
       style={customModalStyles}
     >
       <div className="flex flex-col justify-between h-[350px]">
@@ -88,7 +105,6 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-blue-300 hover:bg-blue-100 hover:text-blue-700 transition duration-200"
-                  placeholder={`자료 ${index + 1}`}
                 >
                   {link.attachmentTitle}
                 </a>

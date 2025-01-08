@@ -4,7 +4,10 @@ import OfflineCourseManagementPage from './OfflineCourseManagementPage';
 import SlideBar from '../molecules/SlideBar';
 
 function CourseManagementPage() {
-  const [classManagementType, setClassManagementType] = useState([true, false]);
+  const [classManagementType, setClassManagementType] = useState<boolean[]>([
+    true,
+    false,
+  ]);
 
   return (
     <div className="w-full text-center">

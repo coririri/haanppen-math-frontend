@@ -3,16 +3,24 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import ReactModal from 'react-modal';
 import TextButton from '../atoms/TextButton';
 import getDirectory, { createDirectory } from '../../apis/directory';
+import { DirectoryType } from '../../types/directoryType';
+
+interface CreateFolderModalProps {
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  breadscrumArray: string[];
+  setDirectoryDatas: React.Dispatch<React.SetStateAction<DirectoryType[]>>;
+}
 
 function CreateFolderModal({
   modalOpen,
   setModalOpen,
   breadscrumArray,
   setDirectoryDatas,
-}) {
+}: CreateFolderModalProps) {
   /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
-  const customModalStyles = {
+  const customModalStyles: ReactModal.Styles = {
     overlay: {
       backgroundColor: ' rgba(0, 0, 0, 0.4)',
       width: '100%',
@@ -43,7 +51,9 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
   return (
     <ReactModal
       isOpen={modalOpen}
-      onRequestClose={setModalOpen}
+      onRequestClose={() => {
+        setModalOpen(false);
+      }}
       style={customModalStyles}
     >
       <div className="relative">

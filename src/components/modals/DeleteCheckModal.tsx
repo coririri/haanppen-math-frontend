@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 
-const customModalStyles = {
+const customModalStyles: ReactModal.Styles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     width: 'auto',
@@ -28,11 +28,17 @@ const customModalStyles = {
   },
 };
 
+interface DeleteCheckModalProps {
+  deleteCheckModalOpen: boolean;
+  setDeleteCheckModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleDelete: (e: unknown) => Promise<void>;
+}
+
 function DeleteCheckModal({
   deleteCheckModalOpen,
   setDeleteCheckModalOpen,
   handleDelete,
-}) {
+}: DeleteCheckModalProps) {
   return (
     <ReactModal
       isOpen={deleteCheckModalOpen}

@@ -1,10 +1,19 @@
 import ReactModal from 'react-modal';
 import './css/LoadingTtitleAnimation.css';
+import { LoadingType } from '../../types/loadingType';
 
-function VideoUploadingModal({ modalOpen, uploadingInfo }) {
+interface VideoUploadingModalProps {
+  modalOpen: boolean;
+  uploadingInfo: LoadingType;
+}
+
+function VideoUploadingModal({
+  modalOpen,
+  uploadingInfo,
+}: VideoUploadingModalProps) {
   /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
-  const customModalStyles = {
+  const customModalStyles: ReactModal.Styles = {
     overlay: {
       backgroundColor: ' rgba(0, 0, 0, 0.4)',
       width: '100%',

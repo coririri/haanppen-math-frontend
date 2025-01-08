@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import phonenumberValidate from '../../utils/phonenumberValidation'; // 전화번호 유효성 검사 함수
 import { getPasswordValidCode, validePasswordCode } from '../../apis/account';
 
-const customModalStyles = {
+const customModalStyles: ReactModal.Styles = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     width: 'auto',
@@ -30,10 +30,15 @@ const customModalStyles = {
   },
 };
 
+interface FindPasswordModalProps {
+  findPasswordModalOpen: boolean;
+  setFindPasswordModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 function FindPasswordModal({
   findPasswordModalOpen,
   setFindPasswordModalOpen,
-}) {
+}: FindPasswordModalProps) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [validCode, setValidCode] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);

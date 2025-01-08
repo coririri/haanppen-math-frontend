@@ -10,10 +10,13 @@ import enrollCourse, {
 } from '../../apis/onlineCourse';
 import DropdownMenu from '../molecules/DropdownMenu';
 import { useOnlineCourseStudentStore } from '../../store/onluneCourseStudentsStore';
+import { CourseType } from '../../types/courseType';
+import { StudentByGradeType } from '../../types/studentType';
+import { TeacherType } from '../../types/teacherType';
 
 /* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
 content는 모달 창부분이라고 생각하면 쉬울 것이다 */
-const customModalStyles = {
+const customModalStyles: ReactModal.Styles = {
   overlay: {
     backgroundColor: ' rgba(0, 0, 0, 0.4)',
     width: '100%',
@@ -39,20 +42,31 @@ const customModalStyles = {
   },
 };
 
+interface OnlineCourseEnrollmentModalProps {
+  enrollmentModalOpen: boolean;
+  setEnrollmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>; // Adjust the type according to the actual structure of course list data
+  teacherArr: TeacherType[]; // Or another appropriate type for the list of teachers
+  selectedIndex: number;
+}
+
 function OnlineCourseEnrollmentModal({
   enrollmentModalOpen,
   setEnrollmentModalOpen,
   setCourseListData,
   teacherArr,
   selectedIndex,
-}) {
-  const notify = (text) => toast(text);
+}: OnlineCourseEnrollmentModalProps) {
+  const notify = (text: string) => toast(text);
   const { entireStudentsNum, entireStudents } = useOnlineCourseStudentStore();
-  const [selectedTeacherindex, setSelectedTeacherindexIndex] = useState(0);
-  const [courseName, setCourseName] = useState('');
-  const [differentStudentsNum, setDifferentStudentsNum] = useState(0);
-  const [myStudentsNum, setMyStudentsNum] = useState(0);
-  const [myCourseStudents, setMyCourseStudents] = useState([
+  const [selectedTeacherindex, setSelectedTeacherindexIndex] =
+    useState<number>(0);
+  const [courseName, setCourseName] = useState<string>('');
+  const [differentStudentsNum, setDifferentStudentsNum] = useState<number>(0);
+  const [myStudentsNum, setMyStudentsNum] = useState<number>(0);
+  const [myCourseStudents, setMyCourseStudents] = useState<
+    StudentByGradeType[]
+  >([
     {
       grade: 0,
       students: [],
@@ -103,7 +117,9 @@ function OnlineCourseEnrollmentModal({
     },
   ]);
 
-  const [differntCourseStudents, setDifferntCourseStudents] = useState([
+  const [differntCourseStudents, setDifferntCourseStudents] = useState<
+    StudentByGradeType[]
+  >([
     {
       grade: 0,
       students: [],
@@ -156,7 +172,7 @@ function OnlineCourseEnrollmentModal({
 
   useEffect(() => {
     setDifferntCourseStudents(
-      entireStudents.map((studentsByGrade) => ({
+      entireStudents.map((studentsByGrade: StudentByGradeType) => ({
         grade: studentsByGrade.grade,
         students: [...studentsByGrade.students],
       })),
@@ -220,7 +236,7 @@ function OnlineCourseEnrollmentModal({
     ]);
 
     setDifferntCourseStudents(
-      entireStudents.map((studentsByGrade) => ({
+      entireStudents.map((studentsByGrade: StudentByGradeType) => ({
         grade: studentsByGrade.grade,
         students: [...studentsByGrade.students],
       })),
@@ -296,7 +312,7 @@ function OnlineCourseEnrollmentModal({
               </div>
             </div>
             <StudentListByClass
-              type="selected"
+              type="other"
               differntCourseStudents={differntCourseStudents}
               myCourseStudents={myCourseStudents}
               setDifferntCourseStudents={setDifferntCourseStudents}
@@ -317,7 +333,7 @@ function OnlineCourseEnrollmentModal({
                   const tempMyCourseStudents = myCourseStudents.filter(
                     (grade) => grade.students.length !== 0,
                   );
-                  const newCourseStudents = [];
+                  const newCourseStudents: number[] = [];
                   tempMyCourseStudents.forEach((grade) => {
                     grade.students.forEach((student) => {
                       newCourseStudents.push(student.id);
