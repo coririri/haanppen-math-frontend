@@ -1,6 +1,24 @@
+import { SetStateAction } from 'react';
 import enrollOnlineLesson from '../../apis/onlineLesson';
 import TextButton from '../atoms/TextButton';
 import DropdownMenu from '../molecules/DropdownMenu';
+import { PrimaryClassInfoType } from '../../types/onlineClassInfoType';
+import { CategoryType } from '../../types/categoryType';
+import { CourseType } from '../../types/courseType';
+
+interface OnlinePrimaryFormProps {
+  isCreated: boolean;
+  primaryClassInfo: PrimaryClassInfoType;
+  setPrimaryClassInfo: React.Dispatch<SetStateAction<PrimaryClassInfoType>>;
+  mainCategorySelected: number;
+  setMainCategorySelected: React.Dispatch<SetStateAction<number>>;
+  subCategorySelected: number;
+  setSubCategorySelected: React.Dispatch<SetStateAction<number>>;
+  mainCategorys: CategoryType[];
+  subCategorys: CategoryType[];
+  courseList: CourseType[];
+  selectedClassindex: number;
+}
 
 function OnlinePrimaryForm({
   isCreated,
@@ -14,7 +32,7 @@ function OnlinePrimaryForm({
   subCategorys,
   courseList,
   selectedClassindex,
-}) {
+}: OnlinePrimaryFormProps) {
   return (
     <div className="flex flex-col items-start justify-center my-6">
       <h3 className="font-bold text-3xl mx-auto">수업 세부 내용</h3>

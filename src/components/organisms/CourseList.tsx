@@ -1,4 +1,13 @@
+import { CourseType } from '../../types/courseType';
 import ClassItem from '../molecules/CourseItem';
+
+interface CourseListType {
+  courseListData: CourseType[];
+  setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>;
+  setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>;
+  teacherArr: string[];
+  selectedIndex: number;
+}
 
 function CourseList({
   courseListData,
@@ -6,7 +15,7 @@ function CourseList({
   setCourseListData,
   teacherArr,
   selectedIndex,
-}) {
+}: CourseListType) {
   return (
     <div className="w-full">
       <div className="w-[800px] mx-auto">

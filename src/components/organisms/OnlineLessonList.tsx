@@ -2,8 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { GoTriangleRight, GoTriangleDown } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 import { getOnlineLesson } from '../../apis/onlineLesson';
+import { CourseType } from '../../types/courseType';
+import { OnlineVideoDataType } from '../../types/onlineVideoType';
 
-function PreviewOnlineLessonList({ teacherName, onlineCourseId }) {
+// Props 타입 정의
+interface OnlineLessonListProps {
+  teacherName: string;
+  onlineCourseId: number;
+  courseList: CourseType[]; // courseList 내 type만 사용 중.
+  selectedClassindex: number;
+}
+
+function OnlineLessonList({
+  teacherName,
+  onlineCourseId,
+  courseList,
+  selectedClassindex,
+}: OnlineLessonListProps) {
   const navigate = useNavigate();
 
   const [isOpenInformation, setIsOpenInformation] = useState(false);
@@ -12,14 +27,16 @@ function PreviewOnlineLessonList({ teacherName, onlineCourseId }) {
     lessonRange: '',
     title: '',
   });
-  const [videoList, setVideoList] = useState([]);
+  const [videoList, setVideoList] = useState<OnlineVideoDataType[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await getOnlineLesson(onlineCourseId);
-        setOnlineLessonInformation(data);
-        setVideoList(data.onlineVideoDetails);
-        console.log(data);
+        if (courseList[selectedClassindex]?.type === 'online') {
+          const { data } = await getOnlineLesson(onlineCourseId);
+          setOnlineLessonInformation(data);
+          setVideoList(data.onlineVideoDetails);
+          console.log(data);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -95,30 +112,26 @@ function PreviewOnlineLessonList({ teacherName, onlineCourseId }) {
 
       {videoList
         .sort((a, b) => a.videoSequence - b.videoSequence)
-        .map((video) => (
+        .map((lesson) => (
           <div
             className="flex items-center border-[#D9D9D9] border-b-2 border-solid py-4"
-            key={video.videoId}
+            key={lesson.videoId}
           >
             <span className="block w-[200px] text-center font-bold text-md">
-              {video.mediaName}
+              {lesson.mediaName}
             </span>
 
             <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
-              {video.runtime}
+              13:00
             </span>
 
             <button
               type="button"
               className="mr-2"
               onClick={() => {
-                if (video.isPreview === true)
-                  navigate(
-                    `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${video.videoId}&courseName=${onlineLessonInformation.title}`,
-                  );
-                else {
-                  alert('수업을 등록해주세요');
-                }
+                navigate(
+                  `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${lesson.videoId}&courseName=${onlineLessonInformation.title}`,
+                );
               }}
             >
               <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
@@ -131,4 +144,4 @@ function PreviewOnlineLessonList({ teacherName, onlineCourseId }) {
   );
 }
 
-export default PreviewOnlineLessonList;
+export default OnlineLessonList;

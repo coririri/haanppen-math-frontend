@@ -53,7 +53,7 @@ function OfflineCourseManagementPage() {
     // 비동기 함수 호출
     fetchData();
   }, [selectedIndex]);
-
+  console.log(deletedCoursesIndex);
   return (
     <div className="w-full text-center">
       <CourseEnrollmentModal
@@ -72,6 +72,7 @@ function OfflineCourseManagementPage() {
               await deleteCourses(deletedCoursesIndex[i]);
             await getAllCourses(setCourseListData);
             setDeleteCheckModalOpen(false);
+            setDeletedCoursesIndex([]);
           } catch (e) {
             setDeleteCheckModalOpen(false);
             setErrorModalOpen(true);

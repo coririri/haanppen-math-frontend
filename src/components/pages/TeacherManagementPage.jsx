@@ -15,13 +15,6 @@ function TeacherManagementPage() {
   const [searchNameValue, setSearchNameValue] = useState('');
   const [forDeletedTeacherIds, setForDeletedTeacherIds] = useState([]);
   const [page, setPage] = useState(1);
-  // const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-  //   useInfiniteQuery({
-  //     queryKey: ['teacherList', searchNameValue],
-  //     queryFn: getTeacherList,
-  //     initialPageParam: 0,
-  //     getNextPageParam: (lastPage) => lastPage?.data?.nextCursor,
-  //   });
 
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 

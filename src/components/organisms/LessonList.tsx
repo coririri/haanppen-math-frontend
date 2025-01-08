@@ -1,7 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CourseType } from '../../types/courseType';
+import { OfflineLessonType } from '../../types/offlineLessonType';
 
-function LessonList({ lessons, courseList, selectedClassindex }) {
+interface LessonListProps {
+  lessons: OfflineLessonType[];
+  courseList: CourseType[];
+  selectedClassindex: number;
+}
+
+function LessonList({
+  lessons,
+  courseList,
+  selectedClassindex,
+}: LessonListProps) {
   const navigate = useNavigate();
 
   return (

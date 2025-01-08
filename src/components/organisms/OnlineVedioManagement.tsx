@@ -7,6 +7,16 @@ import {
   deleteOnlineCourseVedio,
   getOnlineLesson,
 } from '../../apis/onlineLesson';
+import { OnlineVideoDataType } from '../../types/onlineVideoType';
+
+interface OnlineVedioManagementProps {
+  videoList: OnlineVideoDataType[];
+  setVideoList: React.Dispatch<React.SetStateAction<OnlineVideoDataType[]>>;
+  onlineCourseId: number;
+  classIndex: number;
+  deleteCheckArr: boolean[];
+  setDeleteCheckArr: React.Dispatch<React.SetStateAction<boolean[]>>;
+}
 
 function OnlineVedioManagement({
   videoList,
@@ -15,7 +25,7 @@ function OnlineVedioManagement({
   classIndex,
   deleteCheckArr,
   setDeleteCheckArr,
-}) {
+}: OnlineVedioManagementProps) {
   const [deleteVideoCheckModalOpen, setDeleteVideoCheckModalOpen] =
     useState(false);
   return (
@@ -58,7 +68,7 @@ function OnlineVedioManagement({
               setVideoList((prev) => {
                 const copiedVideoList = [...prev];
                 copiedVideoList.push({
-                  videoSequnce: videoList.length + 1,
+                  videoSequence: videoList.length + 1,
                   videoId: -1,
                   mediaName: '',
                   attachmentDetails: [],
@@ -100,7 +110,7 @@ function OnlineVedioManagement({
           </span>
         </div>
         {videoList
-          .sort((a, b) => a.videoSequnce - b.videoSequnce)
+          .sort((a, b) => a.videoSequence - b.videoSequence)
           .map((video, index) => (
             <VideoCard
               video={video}

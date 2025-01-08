@@ -1,5 +1,20 @@
 import React from 'react';
 import StudentListByGradeDropdown from '../molecules/StudentListByGradeDropdown';
+import { StudentByGradeType } from '../../types/studentType';
+
+interface StudentListByClassProps {
+  type: 'entire' | 'other'; // Type could be 'entire' or 'myCourse'
+  differntCourseStudents: StudentByGradeType[];
+  myCourseStudents: StudentByGradeType[];
+  setDifferntCourseStudents: React.Dispatch<
+    React.SetStateAction<StudentByGradeType[]>
+  >;
+  setMyCourseStudents: React.Dispatch<
+    React.SetStateAction<StudentByGradeType[]>
+  >;
+  setMyStudentsNum: React.Dispatch<React.SetStateAction<number>>;
+  setDifferentStudentsNum: React.Dispatch<React.SetStateAction<number>>;
+}
 
 function StudentListByClass({
   type,
@@ -9,7 +24,7 @@ function StudentListByClass({
   setMyCourseStudents,
   setMyStudentsNum,
   setDifferentStudentsNum,
-}) {
+}: StudentListByClassProps) {
   if (type === 'entire') {
     return (
       <div className="border-solid border-black  border-[1.1px] rounded-lg w-[280px] h-[450px]  bg-hpLightGray overflow-auto">

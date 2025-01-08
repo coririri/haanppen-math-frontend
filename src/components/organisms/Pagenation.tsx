@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
+interface PagenationProps {
+  totalItemNumbers: number;
+  itemNumPerPage: number;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+}
+
 const maxPage = 10; // 최대로 표시할 페이지 수 (기본적으로, 10개)
-function Pagenation({ totalItemNumbers = 0, itemNumPerPage, page, setPage }) {
+function Pagenation({
+  totalItemNumbers = 0,
+  itemNumPerPage,
+  page,
+  setPage,
+}: PagenationProps) {
   const [pageUi, setPageUi] = useState({
     startPage: 1,
     pageLevel: 0, // 1~10페이지는 0, 11~20페이지는 1 이런 변수임

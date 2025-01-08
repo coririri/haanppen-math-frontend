@@ -1,11 +1,29 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { LuEye, LuEyeOff } from 'react-icons/lu';
 
-function LoginForm({ setUserForm, errorMessage, handleLoginClick }) {
+interface LoginFormProps {
+  setUserForm: React.Dispatch<
+    React.SetStateAction<{
+      id: string;
+      password: string;
+    }>
+  >;
+  errorMessage: string;
+  handleLoginClick: () => void;
+}
+
+function LoginForm({
+  setUserForm,
+  errorMessage,
+  handleLoginClick,
+}: LoginFormProps) {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
-  const handleChangeForm = (e, type) => {
+  const handleChangeForm = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: 'password' | 'id',
+  ) => {
     if (type === 'password')
       setUserForm((prev) => ({
         ...prev,

@@ -9,6 +9,6 @@ export interface OnlineVideoDataType {
   videoSequence: number;
   mediaName: string;
   isPreview: boolean;
-  mediaSrc: string;
+  mediaSrc?: string;
   attachmentDetails: AttachmentDetailType[];
 }

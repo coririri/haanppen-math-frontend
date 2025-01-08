@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
 interface DropdownMenuProps {
-  size: 'long' | 'short'; // Assuming 'long' and 'short' are the valid values
-  type: 'search' | 'default'; // Assuming 'search' and 'default' are possible types
+  size?: 'long' | 'short'; // Assuming 'long' and 'short' are the valid values
+  type?: 'search' | 'default'; // Assuming 'search' and 'default' are possible types
   textArr: string[]; // Array of text options in the dropdown
   selectedIndex: number; // Index of the currently selected item
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>; // Setter for selected index
-  searchParams: URLSearchParams; // Assuming URLSearchParams is used for search params
-  setSearchParams: React.Dispatch<React.SetStateAction<URLSearchParams>>; // Setter for searchParams
+  searchParams?: URLSearchParams | undefined; // Assuming URLSearchParams is used for search params
+  setSearchParams?:
+    | React.Dispatch<React.SetStateAction<URLSearchParams>>
+    | undefined; // Setter for searchParams
 }
 function DropdownMenu({
   size,
@@ -19,7 +21,7 @@ function DropdownMenu({
   searchParams,
   setSearchParams,
 }: DropdownMenuProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const dropdownList = textArr.map((text, index) => {
     const resultNode =
@@ -30,6 +32,12 @@ function DropdownMenu({
           // eslint-disable-next-line react/no-array-index-key
           key={text + index}
           onClick={() => {
+            if (searchParams === undefined || setSearchParams === undefined) {
+              setSelectedIndex(index);
+              setIsOpen((prev) => !prev);
+              return;
+            }
+
             if (type === 'search') {
               searchParams.set('classIndex', index.toString());
               setSearchParams(searchParams);

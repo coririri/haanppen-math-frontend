@@ -103,6 +103,7 @@ function StudentManagementPage() {
           size="small"
           isClick={choosenGradeIndex[1]}
           handleClick={() => {
+            setPage(1);
             setForDeletedStudentIds([]);
             setChoosenGradeIndex([false, true, false, false]);
           }}
@@ -114,6 +115,7 @@ function StudentManagementPage() {
           moreStyle="w-[45px]"
           isClick={choosenGradeIndex[2]}
           handleClick={() => {
+            setPage(1);
             setForDeletedStudentIds([]);
             setChoosenGradeIndex([false, false, true, false]);
           }}
@@ -125,6 +127,7 @@ function StudentManagementPage() {
           moreStyle="w-[45px]"
           isClick={choosenGradeIndex[3]}
           handleClick={() => {
+            setPage(1);
             setForDeletedStudentIds([]);
             setChoosenGradeIndex([false, false, false, true]);
           }}

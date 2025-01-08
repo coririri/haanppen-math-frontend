@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { AiOutlineVideoCameraAdd } from 'react-icons/ai';
 import VideoItem from '../molecules/VideoItem';
+import { VideoType } from '../../types/videoType';
 
+interface VideoListTabProps {
+  videoData: VideoType[];
+  setVideoData: React.Dispatch<React.SetStateAction<VideoType[]>>;
+  memoId: number;
+  startDate: Date;
+  selectedClassindex: number;
+}
 function VideoListTab({
   videoData,
   setVideoData,
   memoId,
   startDate,
   selectedClassindex,
-}) {
+}: VideoListTabProps) {
   const [nowPlusVedio, setNowPlusVdeio] = useState(false);
   console.log(videoData);
 
@@ -44,8 +52,12 @@ function VideoListTab({
                 attachmentViews: [...video.attachmentViews],
               }));
               copiedVideoData.push({
+                memoMediaId: -1,
+                mediaName: '',
+                mediaSource: '',
                 title: '',
                 attachmentViews: [],
+                mediaSequence: -1,
               });
               return copiedVideoData;
             });

@@ -1,50 +1,51 @@
-import React from 'react';
-import StudentItem from '../molecules/StudentItem';
+import { TeacherType } from '../../types/teacherType';
+import TeacherItem from '../molecules/TeacherItem';
 
-function StudentList({
-  students,
-  setForDeletedStudentIds,
-  page,
-  choosenGradeIndex,
+interface TeacherListProps {
+  teachers: TeacherType[];
+  setForDeletedTeacherIds: React.Dispatch<React.SetStateAction<number[]>>;
+  searchNameValue: string;
+  page: number;
+}
+
+function TeacherList({
+  teachers,
+  setForDeletedTeacherIds,
   searchNameValue,
-}) {
+  page,
+}: TeacherListProps) {
   return (
     <div className="w-full">
       <div className="w-[800px] mx-auto">
         <div className="flex items-center justify-between">
           {/* <input type="checkbox" className="w-[16px] h-[16px]" disabled /> */}
           <div className="w-[16px] h-[16px]" />
-          <span className="text-lg font-bold text-hpGray w-[60px] text-center">
-            학년
-          </span>
           <span className="text-lg font-bold text-hpGray w-[90px]">
-            학생 이름
+            선생님 이름
           </span>
-          <span className="text-lg font-bold text-hpGray w-[140px]">
-            학생 ID(전화번호)
+          <span className="text-lg font-bold text-hpGray w-[160px]">
+            선생님 ID(전화번호)
           </span>
           <span className="text-lg font-bold text-hpGray w-[100px]">수정</span>
         </div>
       </div>
       <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
       <div className="w-[800px] mx-auto mt-4">
-        {students.map((student) => (
-          <StudentItem
-            key={student.id}
-            id={student.id}
-            page={page}
-            grade={student.grade}
-            name={student.name}
-            phoneNumber={student.phoneNumber}
-            setForDeletedStudentIds={setForDeletedStudentIds}
-            choosenGradeIndex={choosenGradeIndex}
+        {teachers.map((teacher) => (
+          <TeacherItem
+            key={teacher.id}
+            id={teacher.id}
+            name={teacher.name}
+            phoneNumber={teacher.phoneNumber}
+            setForDeletedTeacherIds={setForDeletedTeacherIds}
             searchNameValue={searchNameValue}
+            page={page}
           />
         ))}
-        {Array(10 - students.length)
+        {Array(10 - teachers.length)
           .fill(0)
           .map((value, index) => {
-            const emptyKey = Date.now() + index;
+            const emptyKey = index + Date.now();
             return (
               <div key={emptyKey}>
                 <div>
@@ -61,8 +62,9 @@ function StudentList({
             );
           })}
       </div>
+      <hr className="h-[0.5px] border-0 bg-black w-[900px] mx-auto mt-2" />
     </div>
   );
 }
 
-export default StudentList;
+export default TeacherList;

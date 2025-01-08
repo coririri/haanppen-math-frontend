@@ -8,18 +8,28 @@ import { getDetailQuestionById } from '../../apis/question';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
 import hw1 from '../../assests/hw1.jpg';
 import uploadImageToS3 from '../../apis/media';
+import { QuestionFrontType } from '../../types/question';
+
+interface WriteCommentProps {
+  setIsWriteComment: React.Dispatch<React.SetStateAction<boolean>>;
+  questionId: number;
+  setModificationData: React.Dispatch<
+    React.SetStateAction<{ title: string; content: string; images?: string[] }>
+  >;
+  setData: React.Dispatch<React.SetStateAction<QuestionFrontType>>;
+}
 
 function WriteComment({
   setIsWriteComment,
   questionId,
   setModificationData,
   setData,
-}) {
-  const [imgsFiles, setImgsFiles] = useState([]);
-  const [imgsPreview, setImgsPreview] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalImage, setModalImage] = useState('');
-  const commentRef = useRef();
+}: WriteCommentProps) {
+  const [imgsFiles, setImgsFiles] = useState<File[]>([]);
+  const [imgsPreview, setImgsPreview] = useState<string[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalImage, setModalImage] = useState<string>('');
+  const commentRef = useRef<HTMLTextAreaElement>(null);
 
   const finishWrite = async () => {
     try {
@@ -32,6 +42,7 @@ function WriteComment({
         images.push(data.imageUrl);
       }
 
+      if (commentRef.current === null) return;
       const dataToServer = {
         questionId,
         content: commentRef.current.value,
@@ -48,7 +59,7 @@ function WriteComment({
         const questionDetailData = {
           title: response.title,
           content: response.content,
-          imageUrls: response.imageUrls.map((imageUrl) =>
+          imageUrls: response.imageUrls.map((imageUrl: { imageUrl: string }) =>
             imageUrl.imageUrl
               ? imageUrlToSrc(response.imageUrls[0]?.imageUrl)
               : hw1,
@@ -78,7 +89,7 @@ function WriteComment({
     }
   };
 
-  const handleDeleteImagesButton = (index) => {
+  const handleDeleteImagesButton = (index: number) => {
     setImgsFiles(() => [
       ...imgsFiles.slice(0, index),
       ...imgsFiles.slice(index + 1, imgsFiles.length),

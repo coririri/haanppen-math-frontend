@@ -1,4 +1,14 @@
+import { CourseType } from '../../types/courseType';
 import OnlineClassItem from '../molecules/OnlineCourseItem';
+
+// Props 타입 정의
+interface OnlineCourseListProps {
+  courseListData: CourseType[];
+  setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>;
+  setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>;
+  teacherArr: string[];
+  selectedIndex: number;
+}
 
 function OnlineCourseList({
   courseListData,
@@ -6,7 +16,7 @@ function OnlineCourseList({
   setCourseListData,
   teacherArr,
   selectedIndex,
-}) {
+}: OnlineCourseListProps) {
   return (
     <div className="w-full">
       <div className="w-[800px] mx-auto">

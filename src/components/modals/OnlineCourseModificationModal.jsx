@@ -304,132 +304,150 @@ function OnlineCourseModificationModal({
   }, [entireStudentsNum]);
 
   const resetModalState = async () => {
-    setSelectedTeacherindex(0);
-    setCourseName('');
-    setMyStudentsNum(0);
-    setMyCourseStudents([
-      {
-        grade: 0,
-        students: [],
-      },
-      {
-        grade: 1,
-        students: [],
-      },
-      {
-        grade: 2,
-        students: [],
-      },
-      {
-        grade: 3,
-        students: [],
-      },
-      {
-        grade: 4,
-        students: [],
-      },
-      {
-        grade: 5,
-        students: [],
-      },
-      {
-        grade: 6,
-        students: [],
-      },
-      {
-        grade: 7,
-        students: [],
-      },
-      {
-        grade: 8,
-        students: [],
-      },
-      {
-        grade: 9,
-        students: [],
-      },
-      {
-        grade: 10,
-        students: [],
-      },
-      {
-        grade: 11,
-        students: [],
-      },
-    ]);
+    const getAllData = async () => {
+      const { data } = await getOnlineCourseStudents(courseId);
+      const newStudents = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempStudentsNum = 0;
 
-    const { data } = await getOnlineCourseStudents(courseId);
+      data.studentPreviews.forEach((student) => {
+        if (student)
+          newStudents[student.grade].students.push({
+            id: student.studentId,
+            name: student.studentName,
+          });
+        tempStudentsNum += 1;
+      });
+      setMyCourseStudents(newStudents);
+      setMyStudentsNum(tempStudentsNum);
 
-    const newStudents = [
-      {
-        grade: 0,
-        students: [],
-      },
-      {
-        grade: 1,
-        students: [],
-      },
-      {
-        grade: 2,
-        students: [],
-      },
-      {
-        grade: 3,
-        students: [],
-      },
-      {
-        grade: 4,
-        students: [],
-      },
-      {
-        grade: 5,
-        students: [],
-      },
-      {
-        grade: 6,
-        students: [],
-      },
-      {
-        grade: 7,
-        students: [],
-      },
-      {
-        grade: 8,
-        students: [],
-      },
-      {
-        grade: 9,
-        students: [],
-      },
-      {
-        grade: 10,
-        students: [],
-      },
-      {
-        grade: 11,
-        students: [],
-      },
-    ];
-    let tempStudentsNum = 0;
+      teacherArr.forEach((teacher, index) => {
+        if (teacher?.name === data.teacherPreview.teacherName) {
+          setSelectedTeacherindex(index + 1);
+        }
+      });
+      setCourseName(data.courseName);
 
-    data.studentPreviews.forEach((student) => {
-      if (student)
-        newStudents[student.grade].students.push({
-          id: student.studentId,
-          name: student.studentName,
+      const newDifferntStudents = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempDifferentStudentsNum = 0;
+
+      entireStudents.forEach((grade, index) => {
+        grade.students.forEach((student) => {
+          let flag = true;
+          newStudents[index].students.forEach((filterStudent) => {
+            if (student.name === filterStudent.name) {
+              flag = false;
+            }
+          });
+          if (flag === true) {
+            newDifferntStudents[index].students.push(student);
+            tempDifferentStudentsNum += 1;
+          }
         });
-      tempStudentsNum += 1;
-    });
-    setMyCourseStudents(newStudents);
-    setMyStudentsNum(tempStudentsNum);
+      });
 
-    teacherArr.forEach((teacher, index) => {
-      if (teacher?.name === data.teacherPreview.teacherName) {
-        setSelectedTeacherindex(index);
-      }
-    });
-    setCourseName(data.courseName);
+      setDifferntCourseStudents(newDifferntStudents);
+      setDifferentStudentsNum(tempDifferentStudentsNum);
+    };
 
+    if (entireStudentsNum !== 0) getAllData();
     if (teacherArr.length === 0 || selectedIndex === 0) {
       getAllOnlineCourses(setCourseListData);
     } else {
