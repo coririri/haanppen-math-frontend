@@ -12,37 +12,40 @@ import CreateFolderModal from '../modals/CreateFolderModal';
 import enrollVideo, { deleteVideo } from '../../apis/video';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import { DirectoryType } from '../../types/directoryType';
+import { LoadingType } from '../../types/loadingType';
 // import enrollVideo from '../../apis/video';
 
 function VedioManagementPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const breadscrumb = searchParams.get('breadscrum') || '/'; // 기본값을 "홈"으로 설정
-  const [directoryError, setDirectoryError] = useState('');
+  const [directoryError, setDirectoryError] = useState<string>('');
 
-  const [breadscrumArray, setBreadscrumArray] = useState([
+  const [breadscrumArray, setBreadscrumArray] = useState<string[]>([
     breadscrumb,
     '09.12',
   ]); // breadscrum을 List로 가지고 있는 상태 값
-  const [directoryDatas, setDirectoryDatas] = useState([]); // 현재 UI상의 디렉토리 데이터 상태 값
-  const [isFolderCreateModalOpen, setIsFolderCreateModalOpen] = useState(false); // 디렉토리 생성 모달 Open 상태 값
-  const [checkedDirectoryArr, setCheckedDirectoryArr] = useState([]); // 선택된 디렉토리 리스트를 위한 데이터를 디렉토리 이름으로 가지고 있는 리스트 상태 값
-  const [uploadingInfo, setUploadingInfo] = useState({
+  const [directoryDatas, setDirectoryDatas] = useState<DirectoryType[]>([]); // 현재 UI상의 디렉토리 데이터 상태 값
+  const [isFolderCreateModalOpen, setIsFolderCreateModalOpen] =
+    useState<boolean>(false); // 디렉토리 생성 모달 Open 상태 값
+  const [checkedDirectoryArr, setCheckedDirectoryArr] = useState<number[]>([]); // 선택된 디렉토리 리스트를 위한 데이터를 디렉토리 이름으로 가지고 있는 리스트 상태 값
+  const [uploadingInfo, setUploadingInfo] = useState<LoadingType>({
     current: 0,
     end: 0,
   });
   const [isVideoUploadingModalOpen, setIsVideoUploadingModalOpen] =
-    useState(false);
+    useState<boolean>(false);
   const [deleteFolderCheckModalOpen, setDeleteFolderCheckModalOpen] =
-    useState(false);
+    useState<boolean>(false);
   const [deleteVideoCheckModalOpen, setDeleteVideoCheckModalOpen] =
-    useState(false);
+    useState<boolean>(false);
 
-  const [uiStatus, setUiStatus] = useState('line');
+  const [uiStatus, setUiStatus] = useState<'line' | 'grid'>('line');
 
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const fetchData = async (absolutePath) => {
+    const fetchData = async (absolutePath: string) => {
       try {
         const { data } = await getDirectory(absolutePath);
         setDirectoryDatas(data);
@@ -53,15 +56,17 @@ function VedioManagementPage() {
         setDirectoryError('권한 없음');
       }
     };
-    setBreadscrumArray(searchParams.get('breadscrum').split('_'));
-    const curSearchPrams = searchParams.get('breadscrum').split('_');
+
+    const breadscrumbString = searchParams.get('breadscrum') || '';
+    setBreadscrumArray(breadscrumbString.split('_'));
+    const curSearchPrams = breadscrumbString.split('_');
 
     const absolutePath = curSearchPrams.join('/');
     if (absolutePath !== '/') fetchData(absolutePath.slice(1));
     else fetchData(absolutePath);
   }, [searchParams.get('breadscrum')]); // 브레드 스크럼이 바뀔때마다 directoryDatas값을 서버로 부터 받아옴
 
-  const handleDeleteDirectory = async (targetDirectory) => {
+  const handleDeleteDirectory = async (targetDirectory: string) => {
     try {
       const absolutePath = breadscrumArray.join('/');
       if (absolutePath !== '/') {
@@ -75,6 +80,7 @@ function VedioManagementPage() {
   }; // 개별 디렉토리를 삭제하는 메서드
 
   const handleEnrollVideo = () => {
+    if (videoRef.current === null || videoRef.current.files === null) return;
     const chunkSize = 1024 * 1024; // 1MB
     const file = videoRef.current.files[0];
     if (file === undefined) return;
@@ -147,18 +153,34 @@ function VedioManagementPage() {
           }));
           sendNextChunk();
         }
-      } catch (e) {
-        if (e.response && e.response.status === 406) {
-          console.log('406 Not Acceptable 에러 발생:', e.response.data);
-          // 서버로부터 chunkIndex를 받아옴
-          const { nextChunkIndex } = e.response.data;
-          console.log(nextChunkIndex);
-          currentChunk = (nextChunkIndex - 1) / 1024 / 1024;
-          setUploadingInfo((prev) => ({
-            ...prev,
-            current: currentChunk,
-          }));
-          sendNextChunk();
+      } catch (e: unknown) {
+        // 에러가 AxiosError 타입인지 확인
+        if (e instanceof Error && 'response' in e) {
+          const errorResponse = (e as any).response;
+
+          if (errorResponse && errorResponse.status === 406) {
+            console.log('406 Not Acceptable 에러 발생:', errorResponse.data);
+
+            // 서버로부터 chunkIndex를 받아옴
+            const { nextChunkIndex } = errorResponse.data;
+            console.log(nextChunkIndex);
+
+            // currentChunk 계산
+            currentChunk = (nextChunkIndex - 1) / 1024 / 1024;
+
+            // 업로드 상태 업데이트
+            setUploadingInfo((prev) => ({
+              ...prev,
+              current: currentChunk,
+            }));
+
+            // 다음 청크 전송
+            sendNextChunk();
+          } else {
+            console.log('알 수 없는 에러:', e);
+            alert('영상 업로드에 실패 하였습니다.');
+            setIsVideoUploadingModalOpen(false);
+          }
         } else {
           console.log('알 수 없는 에러:', e);
           alert('영상 업로드에 실패 하였습니다.');
@@ -205,12 +227,12 @@ function VedioManagementPage() {
               setDirectoryDatas(data);
               setCheckedDirectoryArr(
                 data
-                  .map((directory, index) => {
+                  .map((directory: DirectoryType, index: number) => {
                     if (deletedDirectory.includes(directory.fileName))
                       return index;
                     return null;
                   })
-                  .filter((value) => value !== null),
+                  .filter((value: null | number) => value !== null),
               );
             } else {
               const { data } = await getDirectory(absolutePath);
@@ -218,12 +240,12 @@ function VedioManagementPage() {
               setDirectoryDatas(data);
               setCheckedDirectoryArr(
                 data
-                  .map((directory, index) => {
+                  .map((directory: DirectoryType, index: number) => {
                     if (deletedDirectory.includes(directory.fileName))
                       return index;
                     return null;
                   })
-                  .filter((value) => value !== null),
+                  .filter((value: null | number) => value !== null),
               );
             }
           } catch (e) {
@@ -266,12 +288,12 @@ function VedioManagementPage() {
               setDirectoryDatas(data);
               setCheckedDirectoryArr(
                 data
-                  .map((directory, index) => {
+                  .map((directory: DirectoryType, index: number) => {
                     if (deletedDirectory.includes(directory.fileName))
                       return index;
                     return null;
                   })
-                  .filter((value) => value !== null),
+                  .filter((value: null | number) => value !== null),
               );
             } else {
               const { data } = await getDirectory(absolutePath);
@@ -279,12 +301,12 @@ function VedioManagementPage() {
               setDirectoryDatas(data);
               setCheckedDirectoryArr(
                 data
-                  .map((directory, index) => {
+                  .map((directory: DirectoryType, index: number) => {
                     if (deletedDirectory.includes(directory.fileName))
                       return index;
                     return null;
                   })
-                  .filter((value) => value !== null),
+                  .filter((value: null | number) => value !== null),
               );
             }
           } catch (e) {
@@ -298,11 +320,9 @@ function VedioManagementPage() {
         setModalOpen={setIsFolderCreateModalOpen}
         breadscrumArray={breadscrumArray}
         setDirectoryDatas={setDirectoryDatas}
-        setCheckedDirectoryArr={setCheckedDirectoryArr}
       />
       <VideoUploadingModal
         modalOpen={isVideoUploadingModalOpen}
-        setModalOpen={setIsVideoUploadingModalOpen}
         uploadingInfo={uploadingInfo}
       />
       <div className="px-24">
@@ -376,6 +396,7 @@ function VedioManagementPage() {
                     alert('뒤로 가기를 눌러주세요');
                     return;
                   }
+                  if (videoRef.current === null) return;
                   videoRef.current.click();
                 }}
               >
@@ -463,7 +484,6 @@ function VedioManagementPage() {
                       createTime={data.createdTime}
                       setCheckedDirectoryArr={setCheckedDirectoryArr}
                       index={index}
-                      path={data.path}
                       layout={uiStatus}
                     />
                   );
@@ -547,6 +567,7 @@ function VedioManagementPage() {
                         createTime={data.createdTime}
                         setCheckedDirectoryArr={setCheckedDirectoryArr}
                         index={index}
+                        layout="grid"
                       />
                     );
                   }
@@ -557,7 +578,7 @@ function VedioManagementPage() {
                       createTime={data.createdTime}
                       setCheckedDirectoryArr={setCheckedDirectoryArr}
                       index={index}
-                      path={data.path}
+                      layout="grid"
                     />
                   );
                 })}

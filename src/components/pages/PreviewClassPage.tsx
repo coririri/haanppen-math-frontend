@@ -8,8 +8,8 @@ function PreviewClassPage() {
   return (
     <div className="flex justify-center mt-2">
       <PreviewOnlineLessonList
-        teacherName={searchParams.get('teacherName')}
-        onlineCourseId={searchParams.get('onlineCourseId')}
+        teacherName={searchParams.get('teacherName') ?? ''}
+        onlineCourseId={Number(searchParams.get('onlineCourseId'))}
       />
     </div>
   );

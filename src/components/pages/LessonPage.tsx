@@ -2,24 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getAttachmentFile, getLessonByDateAndCourse } from '../../apis/lesson';
 import TextButton from '../atoms/TextButton';
+import { AttachmentViewType, VideoType } from '../../types/videoType';
+import { LessonType } from '../../types/lessonType';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 function LessonPage() {
   const [searchParams] = useSearchParams();
-  const [lessonData, setLessonData] = useState();
-  const [videoData, setVideoData] = useState([]);
-  const [hasMemo, setHasMemo] = useState(false);
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
-  const [videoUrl, setVideoUrl] = useState(null);
+  const [lessonData, setLessonData] = useState<LessonType>({
+    memoId: -1,
+    title: '',
+    desc: '',
+  });
+  const [videoData, setVideoData] = useState<VideoType[]>([]);
+  const [hasMemo, setHasMemo] = useState<boolean>(false);
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState<number>(0);
+  const [videoUrl, setVideoUrl] = useState<string>('');
 
   useEffect(() => {
     const courseId = searchParams.get('courseId');
     const date = searchParams.get('date');
 
     const fetchData = async () => {
+      if (date === null) return;
       try {
-        const response = await getLessonByDateAndCourse(courseId, date);
+        const response = await getLessonByDateAndCourse(Number(courseId), date);
         if (response.status === 200) {
           const { data } = response;
           setLessonData({
@@ -45,7 +52,8 @@ function LessonPage() {
       );
   }, [selectedVideoIndex, videoData]);
 
-  const downloadAttachmentFile = async (attachmentData) => {
+  const downloadAttachmentFile = async (attachmentData: AttachmentViewType) => {
+    if (attachmentData.mediaSource === undefined) return;
     try {
       const response = await getAttachmentFile(attachmentData.mediaSource);
       console.log(response.data);
@@ -65,7 +73,7 @@ function LessonPage() {
   };
 
   // URL을 감지하고 <a> 태그로 변환하는 함수
-  const convertToLinks = (text) => {
+  const convertToLinks = (text: string) => {
     // URL 정규식
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     // 텍스트를 분할하고 URL이면 <a> 태그로 변환
@@ -90,7 +98,7 @@ function LessonPage() {
     <div>
       <div className="flex justify-center items-center my-6 space-x-6 bg-gradient-to-r from-gray-100 to-blue-50 py-3 px-6 rounded-lg shadow-md">
         <span className="font-extrabold text-xl text-gray-900 tracking-wide">
-          {searchParams.get('date').substring(2).split('-').join('.')} 수업
+          {searchParams.get('date')?.substring(2).split('-').join('.')} 수업
         </span>
         <span className="font-extrabold text-xl text-indigo-700 tracking-wide">
           {searchParams.get('courseName')}

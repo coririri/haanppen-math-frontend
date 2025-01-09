@@ -10,21 +10,29 @@ import dateTimeToDate, {
   dateTimeToDateAndZeroTimes,
 } from '../../utils/dateTimeToDate';
 import { getLessonByDateAndCourse } from '../../apis/lesson';
+import { CourseType } from '../../types/courseType';
+import { VideoType } from '../../types/videoType';
 
 function WriteOfflineClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [courseList, setCourseList] = useState([]);
-  const [selectedClassindex, setSelectedClassindex] = useState(
-    searchParams.get('classIndex'),
+  const [courseList, setCourseList] = useState<CourseType[]>([]);
+  const [selectedClassindex, setSelectedClassindex] = useState<number>(
+    Number(searchParams.get('classIndex')),
   );
-  const [startDate, setStartDate] = useState(searchParams.get('date'));
-  const [classDetailData, setClassDetailData] = useState({
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(searchParams.get('date') ?? ''),
+  );
+  const [classDetailData, setClassDetailData] = useState<{
+    id?: number;
+    title: string;
+    content: string;
+  }>({
     id: -1,
     title: '',
     content: '',
   });
-  const [videoData, setVideoData] = useState([]);
-  const [isCreated, setIsCreated] = useState(false);
+  const [videoData, setVideoData] = useState<VideoType[]>([]);
+  const [isCreated, setIsCreated] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,8 +45,10 @@ function WriteOfflineClassPage() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getLessonByDateAndCourse(
-        courseList[selectedClassindex]?.courseId,
-        dateTimeToDate(new Date(dateTimeToDateAndZeroTimes(startDate))),
+        courseList[Number(selectedClassindex)]?.courseId,
+        dateTimeToDate(
+          new Date(dateTimeToDateAndZeroTimes(new Date(startDate))),
+        ),
       );
       if (response.status === 200) {
         const { data } = response;
@@ -58,17 +68,17 @@ function WriteOfflineClassPage() {
         setVideoData([]);
       }
     };
-    if (startDate && courseList[selectedClassindex]?.courseId) {
+    if (startDate && courseList[Number(selectedClassindex)]?.courseId) {
       fetchData();
     }
-  }, [startDate, courseList[selectedClassindex]?.courseId, isCreated]);
+  }, [startDate, courseList[Number(selectedClassindex)]?.courseId, isCreated]);
 
   useEffect(() => {
-    setSelectedClassindex(searchParams.get('classIndex'));
+    setSelectedClassindex(Number(searchParams.get('classIndex')));
   }, [searchParams.get('classIndex')]);
 
   useEffect(() => {
-    setStartDate(searchParams.get('date'));
+    setStartDate(new Date(searchParams.get('date') ?? ''));
   }, [searchParams.get('date')]);
   console.log(startDate);
   return (
@@ -95,7 +105,7 @@ function WriteOfflineClassPage() {
           </div>
         </div>
         <ClassDetailTab
-          classId={classDetailData.id}
+          classId={classDetailData.id ?? -1}
           classDetailData={classDetailData}
           setClassDetailData={setClassDetailData}
           isCreated={isCreated}
@@ -110,7 +120,7 @@ function WriteOfflineClassPage() {
           <VideoListTab
             videoData={videoData}
             setVideoData={setVideoData}
-            memoId={classDetailData.id}
+            memoId={classDetailData.id ?? -1}
             startDate={startDate}
             selectedClassindex={selectedClassindex}
           />

@@ -1,6 +1,12 @@
 import { useRef, useState } from 'react';
 import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  InvalidateQueryFilters,
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { deleteTeacherAccount, getTeacherByPage } from '../../apis/teacher';
 import IconButton from '../atoms/IconButton';
 import TeacherList from '../organisms/TeacherList';
@@ -9,19 +15,27 @@ import Pagenation from '../organisms/Pagenation';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function TeacherManagementPage() {
-  const searchRef = useRef();
-  const queryClient = useQueryClient();
-  const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
-  const [searchNameValue, setSearchNameValue] = useState('');
-  const [forDeletedTeacherIds, setForDeletedTeacherIds] = useState([]);
-  const [page, setPage] = useState(1);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const queryClient: QueryClient = useQueryClient();
+  const [enrollmentModalOpen, setEnrollmentModalOpen] =
+    useState<boolean>(false);
+  const [searchNameValue, setSearchNameValue] = useState<string>('');
+  const [forDeletedTeacherIds, setForDeletedTeacherIds] = useState<number[]>(
+    [],
+  );
+  const [page, setPage] = useState<number>(1);
 
-  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] =
+    useState<boolean>(false);
 
   const mutation = useMutation({
     mutationFn: () => deleteTeacherAccount(forDeletedTeacherIds),
     onSuccess: () => {
-      queryClient.invalidateQueries(['teachers', searchNameValue, page - 1]);
+      queryClient.invalidateQueries([
+        'teachers',
+        searchNameValue,
+        page - 1,
+      ] as InvalidateQueryFilters);
     },
   });
 
@@ -58,7 +72,7 @@ function TeacherManagementPage() {
               text="강사 등록"
               handleClick={() => {
                 setEnrollmentModalOpen(true);
-                setForDeletedTeacherIds();
+                setForDeletedTeacherIds([]);
               }}
             />
           </div>
@@ -86,8 +100,8 @@ function TeacherManagementPage() {
               type="button"
               aria-label="강사 검색"
               onClick={() => {
+                if (searchRef.current === null) return;
                 setSearchNameValue(searchRef.current.value);
-
                 setForDeletedTeacherIds([]);
               }}
             >

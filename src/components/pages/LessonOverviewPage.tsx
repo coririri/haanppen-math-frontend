@@ -7,15 +7,20 @@ import {
   getRootCategory,
   getSubCategory,
 } from '../../apis/onlineLesson';
+import { TeacherType } from '../../types/teacherType';
+import { CategoryType } from '../../types/categoryType';
+import { CourseType } from '../../types/courseType';
 
 function LessonOverviewPage() {
-  const [teacherList, setTeacherList] = useState([]);
-  const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
-  const [mainCategorySelected, setMainCategorySelected] = useState(0);
-  const [subCategorySelected, setSubCategorySelected] = useState(0);
-  const [mainCategorys, setMainCategorys] = useState([]);
-  const [subCategorys, setSubCategorys] = useState([]);
-  const [lessonOverviewDatas, setLessonOverviewDatas] = useState([]);
+  const [teacherList, setTeacherList] = useState<TeacherType[]>([]);
+  const [selectedTeacherindex, setSelectedTeacherindex] = useState<number>(0);
+  const [mainCategorySelected, setMainCategorySelected] = useState<number>(0);
+  const [subCategorySelected, setSubCategorySelected] = useState<number>(0);
+  const [mainCategorys, setMainCategorys] = useState<CategoryType[]>([]);
+  const [subCategorys, setSubCategorys] = useState<CategoryType[]>([]);
+  const [lessonOverviewDatas, setLessonOverviewDatas] = useState<CourseType[]>(
+    [],
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,9 +37,6 @@ function LessonOverviewPage() {
           setSubCategorys(subategorysResponse.data);
           if (subategorysResponse.data.length > 0) {
             if (subCategorySelected === 0) {
-              console.log(
-                mainCategorysResponse.data[mainCategorySelected].categoryId,
-              );
               try {
                 const onlineCourseByMainCategory =
                   await getOnlineCourseByCategoryId(
@@ -77,7 +79,6 @@ function LessonOverviewPage() {
                 mainCategorys[mainCategorySelected].categoryId,
               );
               setLessonOverviewDatas(data);
-              console.log(data);
             } catch (e) {
               console.log(e);
             }

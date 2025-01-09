@@ -10,14 +10,16 @@ import 'slick-carousel/slick/slick-theme.css';
 import getAllTeachers from '../../apis/teacher';
 import writeQuery from '../../apis/question';
 import uploadImageToS3 from '../../apis/media';
+import { TeacherType } from '../../types/teacherType';
+import { WriteQuestionType } from '../../types/question';
 
 function WriteQueryPage() {
-  const [imgPreview, setImgePreview] = useState([]);
-  const [imgFiles, setImgFiles] = useState([]);
-  const [questionText, setQuestionText] = useState(''); // 질문 텍스트 상태
-  const [questionTitle, setQuestionTitle] = useState('');
-  const [teacherList, setTeacherList] = useState([]);
-  const [selectedTeacherindex, setSelectedTeacherindex] = useState(0);
+  const [imgPreview, setImgePreview] = useState<string[]>([]);
+  const [imgFiles, setImgFiles] = useState<File[]>([]);
+  const [questionText, setQuestionText] = useState<string>(''); // 질문 텍스트 상태
+  const [questionTitle, setQuestionTitle] = useState<string>('');
+  const [teacherList, setTeacherList] = useState<TeacherType[]>([]);
+  const [selectedTeacherindex, setSelectedTeacherindex] = useState<number>(0);
   const navigate = useNavigate();
 
   const finishWrite = async () => {
@@ -39,10 +41,11 @@ function WriteQueryPage() {
         const { data } = await uploadImageToS3(formData);
         images.push(data.imageUrl);
       }
-      const dataToServer = {
+      const dataToServer: WriteQuestionType = {
         title: questionTitle,
         content: questionText,
         images,
+        targetMemberId: -1,
       };
 
       if (selectedTeacherindex !== 0)
@@ -67,7 +70,7 @@ function WriteQueryPage() {
     fetchData();
   }, []);
 
-  const handleDeleteImageButton = (index) => {
+  const handleDeleteImageButton = (index: number) => {
     setImgFiles(() => [
       ...imgFiles.slice(0, index),
       ...imgFiles.slice(index + 1, imgFiles.length),
@@ -139,7 +142,6 @@ function WriteQueryPage() {
             text="완료"
             icon={<BsFillPencilFill size="1.5rem" />}
             handleClick={() => finishWrite()}
-            className="transition-transform transform hover:scale-110 duration-300 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
           />
           <InputImageButton
             setImgFiles={setImgFiles}

@@ -8,12 +8,20 @@ import LoginForm from '../organisms/LoginForm';
 import FindPasswordModal from '../modals/FindPasswordModal';
 
 function LoginPage() {
-  const [userForm, setUserForm] = useState({ id: '', password: '' });
-  const [errorMessage, setErrorMessage] = useState('');
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [installable, setInstallable] = useState(false);
+  const [userForm, setUserForm] = useState<{
+    id: string;
+    password: string;
+  }>({ id: '', password: '' });
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null); // Use Event type
+  const [installable, setInstallable] = useState<boolean>(false);
+
   const navigate = useNavigate();
-  const [findPasswordModalOpen, setFindPasswordModalOpen] = useState(false);
+
+  const [findPasswordModalOpen, setFindPasswordModalOpen] =
+    useState<boolean>(false);
 
   // ID와 패스워드 유효성 검사
   useEffect(() => {
@@ -26,7 +34,7 @@ function LoginPage() {
 
   // PWA 설치 이벤트 리스너 설정
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e) => {
+    const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       console.log('beforeinstallprompt 이벤트 발생'); // 이벤트 발생 로그
       setDeferredPrompt(e); // 프롬프트 이벤트 저장
@@ -51,10 +59,13 @@ function LoginPage() {
   const handlefindPassword = async () => {
     setFindPasswordModalOpen(true);
   };
+
   const handleInstallClick = () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt(); // 설치 프롬프트 실행
-      deferredPrompt.userChoice.then((choiceResult) => {
+      // Use type assertion to access prompt() and userChoice properties
+      const promptEvent = deferredPrompt as BeforeInstallPromptEvent;
+      promptEvent.prompt(); // 설치 프롬프트 실행
+      promptEvent.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
           console.log('PWA 설치 완료');
         } else {

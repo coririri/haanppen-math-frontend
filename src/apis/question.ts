@@ -20,7 +20,7 @@ export const modifyQuery = (
   data: {
     title: string;
     content: string;
-    images: string[];
+    images?: string[];
   },
   questionId: number,
   targetMemberId: number,
@@ -31,7 +31,7 @@ export const modifyQuery = (
     title: data.title,
     content: data.content,
     targetMemberId,
-    imageSources: [...data.images, ...newImages],
+    imageSources: [...(data.images ?? []), ...newImages],
   });
 
 export const getQuestionsList = async (page: number, searchValue: string) =>

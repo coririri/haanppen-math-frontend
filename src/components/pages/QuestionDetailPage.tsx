@@ -19,32 +19,50 @@ import hw1 from '../../assests/hw1.jpg';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import InputImageButton from '../atoms/InputImageButton';
 import uploadImageToS3 from '../../apis/media';
+import { QuestionFrontType } from '../../types/question';
 
 function QuestionDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [data, setData] = useState<QuestionFrontType>({
+    questionDetailData: {
+      title: '',
+      content: '',
+      imageUrls: [],
+      registeredDateTime: '',
+      registerMemberName: '',
+      registerMemberGrade: 0,
+      targetMemberId: -1,
+    },
+    commentsData: [],
+  });
+  const [isWriteComment, setIsWriteComment] = useState<boolean>(false);
+  const [modificationImgPreview, setModificationImgPreview] = useState<
+    string[]
+  >([]);
+  const [modificationImgFiles, setModificationImgFiles] = useState<File[]>([]);
 
-  const [data, setData] = useState(null);
-  const [isWriteComment, setIsWriteComment] = useState(false);
-  const [modificationImgPreview, setModificationImgPreview] = useState([]);
-  const [modificationImgFiles, setModificationImgFiles] = useState([]);
-
-  const [isModify, setIsModify] = useState(false);
-  const [modificationData, setModificationData] = useState({
+  const [isModify, setIsModify] = useState<boolean>(false);
+  const [modificationData, setModificationData] = useState<{
+    title: string;
+    content: string;
+    images?: string[];
+  }>({
     title: '',
     content: '',
     images: [],
   });
-  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const getData = async () => {
-      const response = await getDetailQuestionById(id);
+      const response = await getDetailQuestionById(Number(id));
 
       const questionDetailData = {
         title: response.title,
         content: response.content,
-        imageUrls: response.imageUrls.map((imageUrl) =>
+        imageUrls: response.imageUrls.map((imageUrl: { imageUrl: string }) =>
           imageUrl.imageUrl ? imageUrlToSrc(imageUrl.imageUrl) : hw1,
         ),
         registeredDateTime: response.registeredDateTime,
@@ -67,7 +85,9 @@ function QuestionDetailPage() {
       setModificationData({
         title: response.title,
         content: response.content,
-        images: response.imageUrls.map((value) => value.imageUrl),
+        images: response.imageUrls.map(
+          (value: { imageUrl: string }) => value.imageUrl,
+        ),
       });
     };
 
@@ -82,7 +102,7 @@ function QuestionDetailPage() {
   const handleDelete = async () => {
     // 삭제 로직 구현
     try {
-      await deleteQuestionById(id);
+      await deleteQuestionById(Number(id));
       navigate('/question-board');
     } catch (e) {
       console.log(e);
@@ -90,6 +110,8 @@ function QuestionDetailPage() {
   };
 
   const handleModifyCompelte = async () => {
+    if (data === undefined) return;
+
     try {
       const images = [];
 
@@ -103,18 +125,18 @@ function QuestionDetailPage() {
       setModificationImgPreview([]);
       await modifyQuery(
         modificationData,
-        id,
-        data?.questionDetailData.targetMemberId,
+        Number(id),
+        data.questionDetailData.targetMemberId ?? -1,
         images,
       );
 
       const getData = async () => {
-        const response = await getDetailQuestionById(id);
+        const response = await getDetailQuestionById(Number(id));
 
         const questionDetailData = {
           title: response.title,
           content: response.content,
-          imageUrls: response.imageUrls.map((imageUrl) =>
+          imageUrls: response.imageUrls.map((imageUrl: { imageUrl: string }) =>
             imageUrl.imageUrl ? imageUrlToSrc(imageUrl.imageUrl) : hw1,
           ),
           registeredDateTime: response.registeredDateTime,
@@ -134,7 +156,9 @@ function QuestionDetailPage() {
         setModificationData({
           title: response.title,
           content: response.content,
-          images: response.imageUrls.map((value) => value.imageUrl),
+          images: response.imageUrls.map(
+            (value: { imageUrl: string }) => value.imageUrl,
+          ),
         });
       };
 
@@ -150,7 +174,7 @@ function QuestionDetailPage() {
     setIsModify(false);
   };
 
-  const handleDeleteImageButton = (index) => {
+  const handleDeleteImageButton = (index: number) => {
     setModificationImgFiles(() => [
       ...modificationImgFiles.slice(0, index),
       ...modificationImgFiles.slice(index + 1, modificationImgFiles.length),
@@ -161,6 +185,9 @@ function QuestionDetailPage() {
     ]);
   };
   console.log(data);
+
+  if (data === undefined) return <>대기</>;
+
   if (localStorage.getItem('role') === 'STUDENT') {
     return (
       <div className="w-full">
@@ -179,16 +206,18 @@ function QuestionDetailPage() {
             <div className="h-full flex items-center ml-4">
               <BsBookmarkCheckFill />
               <span className="text-sm font-bold">
-                {gradeTransform(data?.questionDetailData.registerMemberGrade)}
+                {gradeTransform(data.questionDetailData.registerMemberGrade)}
               </span>
               <span className="text-md ml-2 font-bold">
-                {data?.questionDetailData.registerMemberName}
+                {data.questionDetailData.registerMemberName}
               </span>
             </div>
             <div className="h-full flex items-center mr-4">
               <BsClock />
               <span className="ml-1 font-bold pt-[1px]">
-                {dateTimeToDate(data?.questionDetailData.registeredDateTime)}
+                {dateTimeToDate(
+                  new Date(data.questionDetailData.registeredDateTime),
+                )}
               </span>
             </div>
           </div>
@@ -253,7 +282,7 @@ function QuestionDetailPage() {
 
         {/* 질문 이미지 */}
         <div className="relative w-full mx-auto">
-          {isModify
+          {isModify && modificationData.images
             ? modificationData.images.map((imageUrl, index) => (
                 <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
                   <button
@@ -263,9 +292,11 @@ function QuestionDetailPage() {
                     onClick={() => {
                       setModificationData((prev) => {
                         const copiedModificationData = { ...prev };
-                        copiedModificationData.images = [
-                          ...copiedModificationData.images,
-                        ];
+                        if (copiedModificationData.images)
+                          copiedModificationData.images = [
+                            ...copiedModificationData.images,
+                          ];
+                        else copiedModificationData.images = [];
                         copiedModificationData.images.splice(index, 1);
                         console.log(copiedModificationData);
                         return copiedModificationData;
@@ -390,8 +421,14 @@ function QuestionDetailPage() {
             </div>
             <hr className="h-[1px] border-0 bg-hpGray w-full mx-auto mt-[0.5px] mb-4" />
           </div>
-          {data?.commentsData?.map((comment) => (
-            <CommentBox comment={comment} key={comment.commentId} isStudent />
+          {data?.commentsData?.map((comment, commentIndex) => (
+            <CommentBox
+              comment={comment}
+              key={comment.commentId}
+              commentIndex={commentIndex}
+              setData={setData}
+              setModificationData={setModificationData}
+            />
           ))}
         </div>
       </div>
@@ -422,7 +459,9 @@ function QuestionDetailPage() {
           <div className="h-full flex items-center mr-4">
             <BsClock />
             <span className="ml-1 font-bold pt-[1px]">
-              {dateTimeToDate(data?.questionDetailData.registeredDateTime)}
+              {dateTimeToDate(
+                new Date(data.questionDetailData.registeredDateTime),
+              )}
             </span>
           </div>
         </div>
@@ -487,7 +526,7 @@ function QuestionDetailPage() {
 
       {/* 질문 이미지 */}
       <div className="relative w-full mx-auto">
-        {isModify
+        {isModify && modificationData.images
           ? modificationData.images.map((imageUrl, index) => (
               <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
                 <button
@@ -497,9 +536,11 @@ function QuestionDetailPage() {
                   onClick={() => {
                     setModificationData((prev) => {
                       const copiedModificationData = { ...prev };
-                      copiedModificationData.images = [
-                        ...copiedModificationData.images,
-                      ];
+                      if (copiedModificationData.images)
+                        copiedModificationData.images = [
+                          ...copiedModificationData.images,
+                        ];
+                      else copiedModificationData.images = [];
                       copiedModificationData.images.splice(index, 1);
                       console.log(copiedModificationData);
                       return copiedModificationData;
@@ -651,7 +692,6 @@ function QuestionDetailPage() {
             key={comment.commentId}
             setData={setData}
             setModificationData={setModificationData}
-            isStudent
           />
         ))}
 
@@ -659,7 +699,7 @@ function QuestionDetailPage() {
           <div>
             <WriteComment
               setIsWriteComment={setIsWriteComment}
-              questionId={id}
+              questionId={Number(id)}
               setModificationData={setModificationData}
               setData={setData}
             />

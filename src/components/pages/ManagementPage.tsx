@@ -6,15 +6,14 @@ import CourseManagementPage from './CourseManagementPage';
 import LessonCategoryManagementPage from './LessonCategoryManagementPage';
 
 function ManagementPage() {
-  const [adminManagementIndex, setAdminManagementIndex] = useState([
+  const [adminManagementIndex, setAdminManagementIndex] = useState<boolean[]>([
     true,
     false,
     false,
   ]);
-  const [teacherManagementIndex, setTeacherManagementIndex] = useState([
-    true,
-    false,
-  ]);
+  const [teacherManagementIndex, setTeacherManagementIndex] = useState<
+    boolean[]
+  >([true, false]);
   const role = localStorage.getItem('role');
 
   if (role === 'ADMIN')

@@ -9,40 +9,26 @@ import Pagenation from '../organisms/Pagenation';
 import DropdownMenu from '../molecules/DropdownMenu';
 import { getOwnOnlineCourses } from '../../apis/onlineCourse';
 import OnlineLessonList from '../organisms/OnlineLessonList';
-
-// const lessons = [
-//   {
-//     date: '24.09.17',
-//     title: '수학(상) 곱셈정리를',
-//   },
-
-//   {
-//     date: '24.09.17',
-//     title: '수학(상) 곱셈정리를 이용한 인수분해 ',
-//   },
-
-//   {
-//     date: '24.09.17',
-//     title: '수학(상) 곱셈정리를 이용한 인수분해',
-//   },
-// ];
+import { CourseType } from '../../types/courseType';
+import { PageInfoType } from '../../types/page';
+import { OfflineLessonType } from '../../types/offlineLessonType';
 
 const categoryData = ['날짜', '이름'];
 
 function MyClassPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [courseList, setCourseList] = useState([]);
-  const [selectedClassindex, setSelectedClassindex] = useState(
-    searchParams.get('classIndex'),
+  const [courseList, setCourseList] = useState<CourseType[]>([]);
+  const [selectedClassindex, setSelectedClassindex] = useState<number>(
+    Number(searchParams.get('classIndex')),
   );
-  const [selectedCategoryindex, setSelectedCategoryindex] = useState(
-    searchParams.get('sortIndex'),
+  const [selectedCategoryindex, setSelectedCategoryindex] = useState<number>(
+    Number(searchParams.get('sortIndex')),
   );
-  const [startDate, setStartDate] = useState();
-  const [lessons, setLessons] = useState([]);
-  const [page, setPage] = useState(1);
-  const [pageInfo, setPageInfo] = useState({
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [lessons, setLessons] = useState<OfflineLessonType[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [pageInfo, setPageInfo] = useState<PageInfoType>({
     totalItemSize: 0,
     currentPage: 0,
     pageSize: 8,
@@ -54,11 +40,11 @@ function MyClassPage() {
         const offlienCourseResponse = await getOwnCourses();
         const onlineCourseResponse = await getOwnOnlineCourses();
         setCourseList([
-          ...offlienCourseResponse.data.map((course) => ({
+          ...offlienCourseResponse.data.map((course: CourseType) => ({
             ...course,
             type: 'offline',
           })),
-          ...onlineCourseResponse.data.map((course) => ({
+          ...onlineCourseResponse.data.map((course: CourseType) => ({
             ...course,
             type: 'online',
           })),

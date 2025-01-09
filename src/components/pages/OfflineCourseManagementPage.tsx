@@ -1,29 +1,34 @@
 import { useEffect, useState } from 'react';
 import { AiOutlineSmile, AiFillEdit } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
-import OnlineClassList from '../organisms/OnlineCourseList';
-import OnlineCourseEnrollmentModal from '../modals/OnlineCourseEnrollmentModal';
+import ClassList from '../organisms/CourseList';
+import CourseEnrollmentModal from '../modals/CourseEnrollmentModal';
 import {
-  deleteOnlineCourses,
-  getAllOnlineCourses,
-  getOnlineCoursesById,
-} from '../../apis/onlineCourse';
+  deleteCourses,
+  getAllCourses,
+  getCoursesById,
+} from '../../apis/course';
 import getAllTeachers from '../../apis/teacher';
 import TeacherDropdown from '../molecules/TeacherDropdown';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import ErrorConfirmModal from '../modals/ErrorConfirmModal';
-import { useOnlineCourseStudentStore } from '../../store/onluneCourseStudentsStore';
 import { getAllStudents } from '../../apis/student';
+import { useCourseStudentStore } from '../../store/courseStudentsStore';
+import { TeacherType } from '../../types/teacherType';
+import { CourseType } from '../../types/courseType';
 
-function OnlineCourseManagementPage() {
-  const { setEntireStudents } = useOnlineCourseStudentStore();
-  const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
-  const [teacherArr, setTeacherArr] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [courseListData, setCourseListData] = useState(null);
-  const [deletedCoursesIndex, setDeletedCoursesIndex] = useState([]);
-  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
-  const [errorModalOpen, setErrorModalOpen] = useState(false);
+function OfflineCourseManagementPage() {
+  const { setEntireStudents } = useCourseStudentStore();
+
+  const [enrollmentModalOpen, setEnrollmentModalOpen] =
+    useState<boolean>(false);
+  const [teacherArr, setTeacherArr] = useState<TeacherType[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [courseListData, setCourseListData] = useState<CourseType[]>([]);
+  const [deletedCoursesIndex, setDeletedCoursesIndex] = useState<number[]>([]);
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] =
+    useState<boolean>(false);
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     // 비동기 함수 정의
@@ -34,9 +39,9 @@ function OnlineCourseManagementPage() {
         setTeacherArr(data);
 
         if (teacherArr.length === 0 || selectedIndex === 0) {
-          await getAllOnlineCourses(setCourseListData);
+          await getAllCourses(setCourseListData);
         } else {
-          getOnlineCoursesById(
+          await getCoursesById(
             teacherArr[selectedIndex - 1].id,
             setCourseListData,
           );
@@ -55,7 +60,7 @@ function OnlineCourseManagementPage() {
   console.log(deletedCoursesIndex);
   return (
     <div className="w-full text-center">
-      <OnlineCourseEnrollmentModal
+      <CourseEnrollmentModal
         enrollmentModalOpen={enrollmentModalOpen}
         setEnrollmentModalOpen={setEnrollmentModalOpen}
         setCourseListData={setCourseListData}
@@ -68,12 +73,11 @@ function OnlineCourseManagementPage() {
         handleDelete={async () => {
           try {
             for (let i = 0; i < deletedCoursesIndex.length; i += 1)
-              await deleteOnlineCourses(deletedCoursesIndex[i]);
-            await getAllOnlineCourses(setCourseListData);
+              await deleteCourses(deletedCoursesIndex[i]);
+            await getAllCourses(setCourseListData);
             setDeleteCheckModalOpen(false);
             setDeletedCoursesIndex([]);
           } catch (e) {
-            console.log(e);
             setDeleteCheckModalOpen(false);
             setErrorModalOpen(true);
           }
@@ -122,7 +126,7 @@ function OnlineCourseManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <OnlineClassList
+        <ClassList
           courseListData={courseListData}
           setDeletedCoursesIndex={setDeletedCoursesIndex}
           setCourseListData={setCourseListData}
@@ -134,4 +138,4 @@ function OnlineCourseManagementPage() {
   );
 }
 
-export default OnlineCourseManagementPage;
+export default OfflineCourseManagementPage;

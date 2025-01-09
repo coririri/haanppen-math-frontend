@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsBoxSeamFill } from 'react-icons/bs';
 import { useSearchParams } from 'react-router-dom';
 import { getOnlineLesson } from '../../apis/onlineLesson';
+import { AttachmentDetailType } from '../../types/onlineVideoType';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 function OnlineLessonPage() {
   const [searchParams] = useSearchParams();
-  const [videoData, setVideoData] = useState({
+  const [videoData, setVideoData] = useState<{
+    title: string;
+    src: string;
+    attachments: AttachmentDetailType[];
+  }>({
     title: '',
     src: '',
     attachments: [],
@@ -18,7 +23,7 @@ function OnlineLessonPage() {
 
     const fetchData = async () => {
       try {
-        const { data } = await getOnlineLesson(onlineCourseId);
+        const { data } = await getOnlineLesson(Number(onlineCourseId));
         for (let i = 0; i < data.onlineVideoDetails.length; i += 1) {
           if (
             // eslint-disable-next-line eqeqeq

@@ -5,6 +5,8 @@ import {
   // useInfiniteQuery,
   useMutation,
   useQueryClient,
+  InvalidateQueryFilters,
+  QueryClient,
 } from '@tanstack/react-query';
 import TextButton from '../atoms/TextButton';
 import IconButton from '../atoms/IconButton';
@@ -19,33 +21,42 @@ import {
 import Pagenation from '../organisms/Pagenation';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import LoadingBarModal from '../modals/LoadingBarModal';
+import { LoadingType } from '../../types/loadingType';
 
 function StudentManagementPage() {
-  const queryClient = useQueryClient();
-  const [choosenGradeIndex, setChoosenGradeIndex] = useState([
+  const queryClient: QueryClient = useQueryClient();
+  const [choosenGradeIndex, setChoosenGradeIndex] = useState<boolean[]>([
     true,
     false,
     false,
     false,
   ]);
-  const [searchNameValue, setSearchNameValue] = useState('');
-  const searchRef = useRef();
-  const [enrollmentModalOpen, setEnrollmentModalOpen] = useState(false);
+  const [searchNameValue, setSearchNameValue] = useState<string>('');
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [enrollmentModalOpen, setEnrollmentModalOpen] =
+    useState<boolean>(false);
   const [page, setPage] = useState(1);
-  const [forDeletedStudentIds, setForDeletedStudentIds] = useState([]);
-  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
-  const [loadingInfo, setLaodingInfo] = useState({ current: 0, end: 0 });
-  const [loadingBarModalOpen, setLoadingBarModalOpen] = useState(false);
+  const [forDeletedStudentIds, setForDeletedStudentIds] = useState<number[]>(
+    [],
+  );
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] =
+    useState<boolean>(false);
+  const [loadingInfo, setLaodingInfo] = useState<LoadingType>({
+    current: 0,
+    end: 0,
+  });
+  const [loadingBarModalOpen, setLoadingBarModalOpen] =
+    useState<boolean>(false);
 
   const mutation = useMutation({
-    mutationFn: () => deleteStudent(forDeletedStudentIds),
+    mutationFn: async () => deleteStudent(forDeletedStudentIds),
     onSuccess: () => {
       queryClient.invalidateQueries([
         'students',
-        choosenGradeIndex,
+        choosenGradeIndex.findIndex((value) => value === true),
         searchNameValue,
         page - 1,
-      ]);
+      ] as InvalidateQueryFilters);
     },
     onError: () => {
       alert('실패');
@@ -73,14 +84,13 @@ function StudentManagementPage() {
         deleteCheckModalOpen={deleteCheckModalOpen}
         setDeleteCheckModalOpen={setDeleteCheckModalOpen}
         handleDelete={async () => {
-          await mutation.mutate(forDeletedStudentIds);
+          await mutation.mutate();
           setDeleteCheckModalOpen(false);
         }}
       />
 
       <LoadingBarModal
         modalOpen={loadingBarModalOpen}
-        setModalOpen={setLoadingBarModalOpen}
         loadingInfo={loadingInfo}
       />
       <hr className="h-[1px] border-0 bg-hpGray w-[700px] mx-auto mt-2" />
@@ -101,8 +111,6 @@ function StudentManagementPage() {
         <TextButton
           color="white"
           moreStyle="w-[45px]"
-          shape="square"
-          size="small"
           isClick={choosenGradeIndex[1]}
           handleClick={() => {
             setPage(1);
@@ -142,7 +150,6 @@ function StudentManagementPage() {
         {localStorage.getItem('role') === 'ADMIN' && (
           <div className="flex flex-col gap-2">
             <TextButton
-              type="button"
               color="gray"
               textMoreStyle="p-4"
               handleClick={async () => {
@@ -172,14 +179,13 @@ function StudentManagementPage() {
                   choosenGradeIndex,
                   searchNameValue,
                   page - 1,
-                ]);
+                ] as InvalidateQueryFilters);
                 setLoadingBarModalOpen(false);
               }}
             >
               전체 학년 승급
             </TextButton>
             <TextButton
-              type="button"
               color="gray"
               textMoreStyle="p-4"
               handleClick={async () => {
@@ -207,10 +213,10 @@ function StudentManagementPage() {
 
                 queryClient.invalidateQueries([
                   'students',
-                  choosenGradeIndex,
+                  choosenGradeIndex.findIndex((value) => value === true),
                   searchNameValue,
                   page - 1,
-                ]);
+                ] as InvalidateQueryFilters);
                 setLoadingBarModalOpen(false);
               }}
             >
@@ -256,6 +262,7 @@ function StudentManagementPage() {
               type="button"
               aria-label="학생 검색"
               onClick={() => {
+                if (searchRef.current === null) return;
                 setForDeletedStudentIds([]);
                 setSearchNameValue(searchRef.current.value);
               }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import WriteOfflineClassPage from './WriteOfflineClassPage';
 import WriteOnlineClassPage from './WriteOnlineClassPage';
@@ -6,7 +6,7 @@ import SlideBar from '../molecules/SlideBar';
 
 function WriteClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [classTypeArr, setClassArrType] = useState(() => {
+  const [classTypeArr, setClassArrType] = useState<boolean[]>(() => {
     if (searchParams.get('classType') === 'offline') return [true, false];
     return [false, true];
   });

@@ -13,27 +13,34 @@ import enrollOnlineLesson, {
   getRootCategory,
   getSubCategory,
 } from '../../apis/onlineLesson';
+import { CourseType } from '../../types/courseType';
+import { CategoryType } from '../../types/categoryType';
+import { OnlineVideoDataType } from '../../types/onlineVideoType';
 
 function WriteOnlineClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [courseList, setCourseList] = useState([]);
-  const [selectedClassindex, setSelectedClassindex] = useState(
-    searchParams.get('classIndex'),
+  const [courseList, setCourseList] = useState<CourseType[]>([]);
+  const [selectedClassindex, setSelectedClassindex] = useState<number>(
+    Number(searchParams.get('classIndex')),
   );
-  const [isCreated, setIsCreated] = useState(false);
-  const [primaryClassInfo, setPrimaryClassInfo] = useState({
+  const [isCreated, setIsCreated] = useState<boolean>(false);
+  const [primaryClassInfo, setPrimaryClassInfo] = useState<{
+    title: string;
+    lessonRange: string;
+    lessonDesc: string;
+  }>({
     title: '',
     lessonRange: '',
     lessonDesc: '',
   });
-  const [mainCategorySelected, setMainCategorySelected] = useState(0);
-  const [subCategorySelected, setSubCategorySelected] = useState(0);
+  const [mainCategorySelected, setMainCategorySelected] = useState<number>(0);
+  const [subCategorySelected, setSubCategorySelected] = useState<number>(0);
   const [deleteClassCheckModalOpen, setDeleteClassCheckModalOpen] =
-    useState(false);
-  const [mainCategorys, setMainCategorys] = useState([]);
-  const [subCategorys, setSubCategorys] = useState([]);
-  const [videoList, setVideoList] = useState([]);
-  const [deleteCheckArr, setDeleteCheckArr] = useState(
+    useState<boolean>(false);
+  const [mainCategorys, setMainCategorys] = useState<CategoryType[]>([]);
+  const [subCategorys, setSubCategorys] = useState<CategoryType[]>([]);
+  const [videoList, setVideoList] = useState<OnlineVideoDataType[]>([]);
+  const [deleteCheckArr, setDeleteCheckArr] = useState<boolean[]>(
     Array(videoList.length).fill(false),
   );
 
