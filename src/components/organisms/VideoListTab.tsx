@@ -57,7 +57,7 @@ function VideoListTab({
                 mediaSource: '',
                 title: '',
                 attachmentViews: [],
-                mediaSequence: -1,
+                mediaSequence: 999,
               });
               return copiedVideoData;
             });

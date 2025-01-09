@@ -34,7 +34,11 @@ function LessonPage() {
             title: data.progressed,
             desc: data.homework,
           });
-          setVideoData(data.memoMediaViews);
+          setVideoData(
+            data.memoMediaViews.sort(
+              (a: VideoType, b: VideoType) => a.mediaSequence - b.mediaSequence,
+            ),
+          );
           setHasMemo(true);
         }
       } catch (e) {
@@ -93,7 +97,7 @@ function LessonPage() {
       ),
     );
   };
-
+  console.log(videoData);
   return (
     <div>
       <div className="flex justify-center items-center my-6 space-x-6 bg-gradient-to-r from-gray-100 to-blue-50 py-3 px-6 rounded-lg shadow-md">
