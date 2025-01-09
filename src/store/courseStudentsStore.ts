@@ -1,7 +1,12 @@
 import { create } from 'zustand';
+import { StudentByGradeType, StudentType } from '../types/studentType';
 
 // eslint-disable-next-line import/prefer-default-export
-export const useOnlineCourseStudentStore = create((set) => ({
+export const useCourseStudentStore = create<{
+  entireStudentsNum: number;
+  entireStudents: StudentByGradeType[];
+  setEntireStudents: (students: StudentType[]) => void;
+}>((set) => ({
   entireStudentsNum: 0,
   entireStudents: [
     {
@@ -54,9 +59,9 @@ export const useOnlineCourseStudentStore = create((set) => ({
     },
   ],
 
-  setEntireStudents: (students) =>
+  setEntireStudents: (students: StudentType[]) =>
     set(() => {
-      const newStudents = [
+      const newStudents: StudentByGradeType[] = [
         {
           grade: 0,
           students: [],
@@ -112,6 +117,7 @@ export const useOnlineCourseStudentStore = create((set) => ({
         newStudents[student.grade].students.push({
           id: student.id,
           name: student.name,
+          grade: student.grade,
         });
         tempStudentsNum += 1;
       });

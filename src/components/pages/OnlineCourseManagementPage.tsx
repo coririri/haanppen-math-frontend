@@ -12,7 +12,7 @@ import getAllTeachers from '../../apis/teacher';
 import TeacherDropdown from '../molecules/TeacherDropdown';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import ErrorConfirmModal from '../modals/ErrorConfirmModal';
-import { useOnlineCourseStudentStore } from '../../store/onluneCourseStudentsStore';
+import { useOnlineCourseStudentStore } from '../../store/onlineCourseStudentsStore';
 import { getAllStudents } from '../../apis/student';
 import { CourseType } from '../../types/courseType';
 import { TeacherType } from '../../types/teacherType';

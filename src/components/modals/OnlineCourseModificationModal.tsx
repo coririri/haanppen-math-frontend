@@ -11,7 +11,7 @@ import {
 } from '../../apis/onlineCourse';
 import { getOnlineCourseStudents } from '../../apis/student';
 import DropdownMenu from '../molecules/DropdownMenu';
-import { useOnlineCourseStudentStore } from '../../store/onluneCourseStudentsStore';
+import { useOnlineCourseStudentStore } from '../../store/onlineCourseStudentsStore';
 import { CourseType } from '../../types/courseType';
 import { TeacherType } from '../../types/teacherType';
 import {

@@ -9,7 +9,7 @@ import enrollCourse, {
   getOnlineCoursesById,
 } from '../../apis/onlineCourse';
 import DropdownMenu from '../molecules/DropdownMenu';
-import { useOnlineCourseStudentStore } from '../../store/onluneCourseStudentsStore';
+import { useOnlineCourseStudentStore } from '../../store/onlineCourseStudentsStore';
 import { CourseType } from '../../types/courseType';
 import { StudentByGradeType } from '../../types/studentType';
 import { TeacherType } from '../../types/teacherType';
