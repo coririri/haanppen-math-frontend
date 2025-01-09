@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TextButton from '../atoms/TextButton';
 import OnlineCourseModificationModal from '../modals/OnlineCourseModificationModal';
 import { CourseType } from '../../types/courseType';
+import { TeacherType } from '../../types/teacherType';
 
 interface OnlineCourseItemProps {
   className: string; // 강좌 이름
@@ -10,7 +11,7 @@ interface OnlineCourseItemProps {
   courseId: number; // 강좌 ID
   setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>; // 강좌 리스트 데이터 업데이트 함수
   setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>; // 삭제된 강좌 ID 리스트 업데이트 함수
-  teacherArr: string[]; // 강사 배열
+  teacherArr: TeacherType[]; // 강사 배열
   selectedIndex: number; // 선택된 강사 인덱스
 }
 
@@ -25,6 +26,7 @@ function OnlineCourseItem({
   selectedIndex,
 }: OnlineCourseItemProps) {
   const [isClick, setIsClick] = useState(false);
+
   return (
     <div>
       <OnlineCourseModificationModal

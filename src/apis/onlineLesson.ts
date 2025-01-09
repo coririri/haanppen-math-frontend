@@ -25,7 +25,7 @@ export const getRootCategory = () =>
 export const getSubCategory = (categoryId: number) =>
   instance.get(`/api/online-courses/category/${categoryId}`);
 
-export const postCategory = (categoryName: string, mainCategoryId: number) => {
+export const postCategory = (categoryName: string, mainCategoryId?: number) => {
   if (mainCategoryId !== undefined)
     return instance.post(`/api/online-courses/category`, {
       categoryName,

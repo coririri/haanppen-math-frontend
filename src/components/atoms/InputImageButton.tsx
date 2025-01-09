@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { AiOutlineFileImage } from 'react-icons/ai';
 
-interface InputImageButtonType {
+interface InputImageButtonType extends React.HTMLAttributes<HTMLButtonElement> {
   setImgFiles: React.Dispatch<React.SetStateAction<File[]>>;
   setImgPreview: React.Dispatch<React.SetStateAction<string[]>>;
 }

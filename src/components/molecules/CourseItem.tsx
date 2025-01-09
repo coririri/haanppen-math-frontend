@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TextButton from '../atoms/TextButton';
 import CourseModificationModal from '../modals/CourseModificationModal';
 import { CourseType } from '../../types/courseType';
+import { TeacherType } from '../../types/teacherType';
 
 // CourseItemType에 대해 각 prop에 대한 타입을 명시
 interface CourseItemType {
@@ -11,7 +12,7 @@ interface CourseItemType {
   courseId: number;
   setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>; // 데이터 형식에 맞춰 수정 가능
   setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>; // courseId에 따라 타입 설정
-  teacherArr: string[]; // 예시로 teacherArr를 string[]로 설정, 실제 배열의 타입에 맞게 수정 필요
+  teacherArr: TeacherType[];
   selectedIndex: number;
 }
 

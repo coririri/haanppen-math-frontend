@@ -1,4 +1,5 @@
 import { CourseType } from '../../types/courseType';
+import { TeacherType } from '../../types/teacherType';
 import OnlineClassItem from '../molecules/OnlineCourseItem';
 
 // Props 타입 정의
@@ -6,7 +7,7 @@ interface OnlineCourseListProps {
   courseListData: CourseType[];
   setDeletedCoursesIndex: React.Dispatch<React.SetStateAction<number[]>>;
   setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>;
-  teacherArr: string[];
+  teacherArr: TeacherType[];
   selectedIndex: number;
 }
 

@@ -43,12 +43,12 @@ interface PageInfo {
 function QueryBoardPage() {
   const navigate = useNavigate();
 
-  const [slideBarIndex, setSlideBarIndex] = useState([true, false]);
+  const [slideBarIndex, setSlideBarIndex] = useState<boolean[]>([true, false]);
   const [queryListData, setQueryListData] = useState<Question[]>([]);
-  const [searchValue, setSearchValue] = useState('');
-  const [searchState, setSearchState] = useState(false);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchState, setSearchState] = useState<boolean>(false);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     totalItemSize: 0,
     currentPage: 0,

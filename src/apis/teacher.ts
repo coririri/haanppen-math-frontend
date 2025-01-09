@@ -5,7 +5,7 @@ const getAllTeachers = async () => instance.get('/api/members/teachers/all');
 
 export const registTeacherAccount = (payload: {
   name: string;
-  phoneNumber: number;
+  phoneNumber: string;
 }) =>
   instance.post('/api/accounts', {
     name: payload.name,
@@ -29,7 +29,7 @@ export const deleteTeacherAccount = (forDeletedTeacherIds: number[]) =>
 export const modifyTeacher = (payload: {
   id: number;
   name: string;
-  phoneNumber: number;
+  phoneNumber: string;
 }) =>
   instance.put('api/accounts/teacher', {
     targetId: payload.id,

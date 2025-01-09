@@ -1,6 +1,7 @@
 export interface AttachmentViewType {
   attachmentId?: number;
   fileName: string;
+  mediaSource?: string;
 }
 
 export interface VideoType {

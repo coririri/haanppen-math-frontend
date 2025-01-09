@@ -64,16 +64,11 @@ export const getStudentList = ({
 };
 
 export const deleteStudent = (forDeletedStudentIds: number[]) =>
-  instance
-    .delete('api/accounts', {
-      data: {
-        targetIds: forDeletedStudentIds,
-      },
-    })
-    .then(() => {})
-    .catch((error) => {
-      console.log(error);
-    });
+  instance.delete('api/accounts', {
+    data: {
+      targetIds: forDeletedStudentIds,
+    },
+  });
 
 export const modifyStudent = (payload: StudentType) =>
   instance.put('api/accounts/student', {

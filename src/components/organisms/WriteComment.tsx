@@ -67,6 +67,7 @@ function WriteComment({
           registeredDateTime: response.registeredDateTime,
           registerMemberName: response.registeredMember.memberName,
           registerMemberGrade: response.registeredMember.memberGrade + 1,
+          targetMemberId: response.targetMember?.memberId,
         };
 
         const commentsData = response.comments;

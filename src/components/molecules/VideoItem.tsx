@@ -370,7 +370,7 @@ function VideoItem({
               <DeleteCheckModal
                 deleteCheckModalOpen={deleteAttachmentCheckModalOpen}
                 setDeleteCheckModalOpen={setDeleteAttachmentCheckModalOpen}
-                handleDelete={async (e: any) => {
+                handleDelete={async (e: unknown) => {
                   if (attachment.attachmentId !== undefined)
                     await deleteAttachmentFile(attachment.attachmentId);
                   deleteAttachment(e, attachmentIndex);

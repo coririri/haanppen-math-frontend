@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BsTriangleFill } from 'react-icons/bs';
 
 interface TypeDropdownMenuProps {
-  size: 'long' | 'medium' | 'short'; // Defining valid values for size
+  size: 'small' | 'long' | 'medium' | 'short'; // Defining valid values for size
   textArr: string[];
   selectedIndex: number;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;

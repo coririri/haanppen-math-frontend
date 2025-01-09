@@ -3,7 +3,7 @@ import { ImageType } from './imageType';
 import { MemberType } from './memberType';
 
 export interface WriteQuestionType {
-  targetMemberId: number;
+  targetMemberId: number | null;
   title: string;
   content: string;
   images: string[];
@@ -43,9 +43,10 @@ export interface QuestionFrontType {
     title: string;
     content: string;
     registeredDateTime: string;
-    registerMemberName: MemberType;
+    registerMemberName: string;
     registerMemberGrade: number;
-    imageUrls: ImageType[];
+    imageUrls: string[];
+    targetMemberId?: number;
   };
   commentsData: CommentType[];
 }
