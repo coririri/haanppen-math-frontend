@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.77de1911.css",
-    "main.js": "/static/js/main.ec14ae9f.js",
+    "main.css": "/static/css/main.666e10fb.css",
+    "main.js": "/static/js/main.532b83f0.js",
     "static/js/453.dd633453.chunk.js": "/static/js/453.dd633453.chunk.js",
     "static/media/Sejong hospital Bold.ttf": "/static/media/Sejong hospital Bold.0270d7801f8df96f1870.ttf",
     "static/media/Sejong hospital Light.ttf": "/static/media/Sejong hospital Light.3c1d2db5782b38b23cb4.ttf",
@@ -13,12 +13,12 @@
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
-    "main.77de1911.css.map": "/static/css/main.77de1911.css.map",
-    "main.ec14ae9f.js.map": "/static/js/main.ec14ae9f.js.map",
+    "main.666e10fb.css.map": "/static/css/main.666e10fb.css.map",
+    "main.532b83f0.js.map": "/static/js/main.532b83f0.js.map",
     "453.dd633453.chunk.js.map": "/static/js/453.dd633453.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.77de1911.css",
-    "static/js/main.ec14ae9f.js"
+    "static/css/main.666e10fb.css",
+    "static/js/main.532b83f0.js"
   ]
 }
