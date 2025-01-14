@@ -39,6 +39,7 @@ function DropdownMenu({
             }
 
             if (type === 'search') {
+              console.log('바뀜');
               searchParams.set('classIndex', index.toString());
               setSearchParams(searchParams);
             }

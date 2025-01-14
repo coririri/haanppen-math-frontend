@@ -139,9 +139,8 @@ function LessonPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    if (selectedVideoIndex === 0)
-                      setSelectedVideoIndex(videoData.length - 1);
-                    else setSelectedVideoIndex(selectedVideoIndex - 1);
+                    if (selectedVideoIndex !== 0)
+                      setSelectedVideoIndex(selectedVideoIndex - 1);
                   }}
                   className="relative mr-4  px-3 py-1 bg-green-500 text-white font-bold rounded-lg transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 group"
                 >
@@ -150,9 +149,8 @@ function LessonPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    if (videoData.length - 1 === selectedVideoIndex)
-                      setSelectedVideoIndex(0);
-                    else setSelectedVideoIndex(selectedVideoIndex + 1);
+                    if (videoData.length - 1 !== selectedVideoIndex)
+                      setSelectedVideoIndex(selectedVideoIndex + 1);
                   }}
                   className="relative ml-4 px-3 py-1 bg-green-500 text-white font-bold rounded-lg transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 group"
                 >
