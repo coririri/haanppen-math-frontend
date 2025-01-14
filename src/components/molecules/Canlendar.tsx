@@ -68,7 +68,8 @@ function Canlendar({
     // setSearchParams(searchParams);
     setCurrentDate(date);
   };
-
+  console.log(dateTimeToDateAndZeroTimes(startDate));
+  console.log(new Date(dateTimeToDateAndZeroTimes(startDate)));
   return (
     <div className="relative">
       <button

@@ -13,10 +13,14 @@ import {
   addAttachmentVideo,
   deleteLessonVideo,
   deleteAttachmentFile,
+  getLessonByDateAndCourse,
 } from '../../apis/lesson';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import { AttachmentViewType, VideoType } from '../../types/videoType';
+import dateTimeToDate, {
+  dateTimeToDateAndZeroTimes,
+} from '../../utils/dateTimeToDate';
 
 interface VideoItemProps {
   videoData: VideoType[];
@@ -27,6 +31,7 @@ interface VideoItemProps {
   memoId: number;
   startDate: Date;
   selectedClassindex: number;
+  courseId: number;
 }
 
 function VideoItem({
@@ -38,6 +43,7 @@ function VideoItem({
   memoId,
   startDate,
   selectedClassindex,
+  courseId,
 }: VideoItemProps) {
   const navigate = useNavigate();
   const [isVideoSelected] = useState(video.title !== '');
@@ -138,22 +144,18 @@ function VideoItem({
   const deleteVideo = async () => {
     try {
       await deleteLessonVideo(memoId, video.memoMediaId);
-      const copiedVideoDataToServer = videoData.map((tempVideo) => ({
-        ...tempVideo,
-        attachmentViews: [...tempVideo.attachmentViews],
-      }));
-      copiedVideoDataToServer.splice(vedioIndex, 1);
-
-      await putLessonVideos(memoId, copiedVideoDataToServer);
-
-      setVideoData((prev) => {
-        const copiedVideoData = prev.map((tempVideo) => ({
-          ...tempVideo,
-          attachmentViews: [...tempVideo.attachmentViews],
-        }));
-        copiedVideoData.splice(vedioIndex, 1);
-        return copiedVideoData;
-      });
+      const response = await getLessonByDateAndCourse(
+        courseId,
+        dateTimeToDate(
+          new Date(dateTimeToDateAndZeroTimes(new Date(startDate))),
+        ),
+      );
+      if (response.status === 200) {
+        const { data } = response;
+        setVideoData(data.memoMediaViews);
+      } else {
+        setVideoData([]);
+      }
     } catch (e) {
       console.log(e);
     }
