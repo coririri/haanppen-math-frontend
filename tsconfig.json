@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "allowJs": true,
+    "outDir": "./dist", // 출력 파일 경로
+    "rootDir": "./src", // 소스 파일 경로
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"],
+}

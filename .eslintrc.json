@@ -1,9 +1,15 @@
 {
+  "parser": "@typescript-eslint/parser", // TypeScript 파일을 처리하도록 설정
   "env": {
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -11,8 +17,12 @@
     "ecmaVersion": 15,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": [
+    "react",
+    "@typescript-eslint" // TypeScript 플러그인 추가
+  ],
   "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
     "react/react-in-jsx-scope": "off",
     "jsx-a11y/label-has-associated-control": [
       2,
@@ -28,7 +38,10 @@
     "no-param-reassign": "off",
     "no-await-in-loop": "off",
     "no-console": "off",
-    "no-alert": "off"
+    "no-alert": "off",
+    "import/extensions": "off",
+    "react/require-default-props": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "settings": {
     "import/resolver": {

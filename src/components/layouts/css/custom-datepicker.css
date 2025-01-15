@@ -1,0 +1,15 @@
+.highlighted-date {
+  position: relative;
+}
+
+.highlighted-date::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: red; /* 점 색상 */
+  border-radius: 50%;
+}

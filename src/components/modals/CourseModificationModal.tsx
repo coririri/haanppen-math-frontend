@@ -1,0 +1,616 @@
+import { useEffect, useState } from 'react';
+import ReactModal from 'react-modal';
+import { AiFillEdit } from 'react-icons/ai';
+import IconButton from '../atoms/IconButton';
+import StudentListByClass from '../organisms/StudentListByClass';
+import {
+  getAllCourses,
+  getCoursesById,
+  putCourseNameAndTeacher,
+  putCourseStudents,
+} from '../../apis/course';
+import { getCourseStudents } from '../../apis/student';
+import DropdownMenu from '../molecules/DropdownMenu';
+import { useCourseStudentStore } from '../../store/courseStudentsStore';
+import { CourseType } from '../../types/courseType';
+import { TeacherType } from '../../types/teacherType';
+import {
+  StudentByGradeType,
+  StudentPreviewType,
+  CourseStudentType,
+} from '../../types/studentType';
+
+/* overlay는 모달 창 바깥 부분을 처리하는 부분이고,
+content는 모달 창부분이라고 생각하면 쉬울 것이다 */
+const customModalStyles: ReactModal.Styles = {
+  overlay: {
+    backgroundColor: ' rgba(0, 0, 0, 0.4)',
+    width: '100%',
+    height: '100vh',
+    zIndex: '10',
+    position: 'fixed',
+    top: '0',
+    left: '0',
+  },
+  content: {
+    width: '750px',
+    height: '800px',
+    zIndex: '150',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    borderRadius: '10px',
+    boxShadow: '2px 2px 2px rgba(0, 0, 0, 0.25)',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    overflow: 'auto',
+  },
+};
+
+interface CourseModificationModalProps {
+  enrollmentModalOpen: boolean;
+  setEnrollmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setCourseListData: React.Dispatch<React.SetStateAction<CourseType[]>>;
+  courseId: number;
+  teacherArr: TeacherType[];
+  selectedIndex: number;
+}
+
+function CourseModificationModal({
+  enrollmentModalOpen,
+  setEnrollmentModalOpen,
+  setCourseListData,
+  courseId,
+  teacherArr,
+  selectedIndex,
+}: CourseModificationModalProps) {
+  const { entireStudentsNum, entireStudents } = useCourseStudentStore();
+
+  const [selectedTeacherindex, setSelectedTeacherindex] = useState<number>(0);
+  const [courseName, setCourseName] = useState<string>('');
+  const [differentStudentsNum, setDifferentStudentsNum] = useState<number>(0);
+  const [myStudentsNum, setMyStudentsNum] = useState<number>(0);
+  const [myCourseStudents, setMyCourseStudents] = useState<
+    StudentByGradeType[]
+  >([
+    {
+      grade: 0,
+      students: [],
+    },
+    {
+      grade: 1,
+      students: [],
+    },
+    {
+      grade: 2,
+      students: [],
+    },
+    {
+      grade: 3,
+      students: [],
+    },
+    {
+      grade: 4,
+      students: [],
+    },
+    {
+      grade: 5,
+      students: [],
+    },
+    {
+      grade: 6,
+      students: [],
+    },
+    {
+      grade: 7,
+      students: [],
+    },
+    {
+      grade: 8,
+      students: [],
+    },
+    {
+      grade: 9,
+      students: [],
+    },
+    {
+      grade: 10,
+      students: [],
+    },
+    {
+      grade: 11,
+      students: [],
+    },
+  ]);
+
+  const [differntCourseStudents, setDifferntCourseStudents] = useState<
+    StudentByGradeType[]
+  >([
+    {
+      grade: 0,
+      students: [],
+    },
+    {
+      grade: 1,
+      students: [],
+    },
+    {
+      grade: 2,
+      students: [],
+    },
+    {
+      grade: 3,
+      students: [],
+    },
+    {
+      grade: 4,
+      students: [],
+    },
+    {
+      grade: 5,
+      students: [],
+    },
+    {
+      grade: 6,
+      students: [],
+    },
+    {
+      grade: 7,
+      students: [],
+    },
+    {
+      grade: 8,
+      students: [],
+    },
+    {
+      grade: 9,
+      students: [],
+    },
+    {
+      grade: 10,
+      students: [],
+    },
+    {
+      grade: 11,
+      students: [],
+    },
+  ]);
+
+  useEffect(() => {
+    const getAllData = async () => {
+      const { data } = await getCourseStudents(courseId);
+      const newStudents: StudentByGradeType[] = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempStudentsNum = 0;
+
+      data.studentPreviews.forEach((student: StudentPreviewType) => {
+        if (student)
+          newStudents[student.grade].students.push({
+            id: student.studentId,
+            name: student.studentName,
+            grade: student.grade,
+          });
+        tempStudentsNum += 1;
+      });
+      setMyCourseStudents(newStudents);
+      setMyStudentsNum(tempStudentsNum);
+
+      teacherArr.forEach((teacher, index) => {
+        if (teacher?.name === data.teacherPreview.teacherName) {
+          setSelectedTeacherindex(index + 1);
+        }
+      });
+      setCourseName(data.courseName);
+
+      const newDifferntStudents: StudentByGradeType[] = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempDifferentStudentsNum = 0;
+
+      entireStudents.forEach(
+        (studentByGrade: StudentByGradeType, index: number) => {
+          studentByGrade.students.forEach((student: CourseStudentType) => {
+            let flag = true;
+            newStudents[index].students.forEach((filterStudent) => {
+              if (student.name === filterStudent.name) {
+                flag = false;
+              }
+            });
+            if (flag === true) {
+              newDifferntStudents[index].students.push(student);
+              tempDifferentStudentsNum += 1;
+            }
+          });
+        },
+      );
+
+      setDifferntCourseStudents(newDifferntStudents);
+      setDifferentStudentsNum(tempDifferentStudentsNum);
+    };
+
+    if (entireStudentsNum !== 0) getAllData();
+  }, [entireStudentsNum]);
+
+  const resetModalState = async () => {
+    const getAllData = async () => {
+      const { data } = await getCourseStudents(courseId);
+      const newStudents: StudentByGradeType[] = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempStudentsNum = 0;
+
+      data.studentPreviews.forEach((student: StudentPreviewType) => {
+        if (student)
+          newStudents[student.grade].students.push({
+            id: student.studentId,
+            name: student.studentName,
+            grade: student.grade,
+          });
+        tempStudentsNum += 1;
+      });
+      setMyCourseStudents(newStudents);
+      setMyStudentsNum(tempStudentsNum);
+
+      teacherArr.forEach((teacher, index) => {
+        if (teacher?.name === data.teacherPreview.teacherName) {
+          setSelectedTeacherindex(index + 1);
+        }
+      });
+      setCourseName(data.courseName);
+
+      const newDifferntStudents: StudentByGradeType[] = [
+        {
+          grade: 0,
+          students: [],
+        },
+        {
+          grade: 1,
+          students: [],
+        },
+        {
+          grade: 2,
+          students: [],
+        },
+        {
+          grade: 3,
+          students: [],
+        },
+        {
+          grade: 4,
+          students: [],
+        },
+        {
+          grade: 5,
+          students: [],
+        },
+        {
+          grade: 6,
+          students: [],
+        },
+        {
+          grade: 7,
+          students: [],
+        },
+        {
+          grade: 8,
+          students: [],
+        },
+        {
+          grade: 9,
+          students: [],
+        },
+        {
+          grade: 10,
+          students: [],
+        },
+        {
+          grade: 11,
+          students: [],
+        },
+      ];
+      let tempDifferentStudentsNum = 0;
+
+      entireStudents.forEach(
+        (studentByGrade: StudentByGradeType, index: number) => {
+          studentByGrade.students.forEach((student: CourseStudentType) => {
+            let flag = true;
+            newStudents[index].students.forEach((filterStudent) => {
+              if (student.name === filterStudent.name) {
+                flag = false;
+              }
+            });
+            if (flag === true) {
+              newDifferntStudents[index].students.push(student);
+              tempDifferentStudentsNum += 1;
+            }
+          });
+        },
+      );
+
+      setDifferntCourseStudents(newDifferntStudents);
+      setDifferentStudentsNum(tempDifferentStudentsNum);
+    };
+
+    if (entireStudentsNum !== 0) getAllData();
+
+    if (teacherArr.length === 0 || selectedIndex === 0) {
+      getAllCourses(setCourseListData);
+    } else {
+      getCoursesById(teacherArr[selectedIndex - 1].id, setCourseListData);
+    }
+  };
+
+  return (
+    <ReactModal
+      isOpen={enrollmentModalOpen}
+      onRequestClose={() => setEnrollmentModalOpen(false)}
+      style={customModalStyles}
+    >
+      <div className="flex flex-col w-full">
+        <h1 className="w-full font-bold text-3xl text-center mt-2">반 수정</h1>
+        <div className="flex items-center w-full justify-center mt-5">
+          <div className="flex items-center mr-8">
+            <label
+              className="font-bold text-xl w-[70px] mr-2"
+              htmlFor="classModalName"
+            >
+              반 이름
+            </label>
+            <input
+              type="text"
+              className="w-[180px] h-[40px] border-solid border-black border-[1.3px] rounded-md pl-2 text-sm font-bold"
+              id="classModalName"
+              placeholder="이름을 입력해주세요."
+              onChange={(e) => {
+                setCourseName(e.target.value);
+              }}
+              defaultValue={courseName}
+            />
+          </div>
+          <div className="ml-8">
+            <DropdownMenu
+              textArr={[
+                '선택 없음',
+                ...teacherArr.map((teacher) => teacher.name),
+              ]}
+              selectedIndex={selectedTeacherindex}
+              setSelectedIndex={setSelectedTeacherindex}
+            />
+          </div>
+        </div>
+        <hr className="h-[1px] border-0 bg-hpGray w-[600px] mx-auto mt-5" />
+        <div className="flex justify-center mt-4">
+          <div className="mr-4 w-[280px]">
+            <div className="flex items-center border-[1.1px] border-solid border-hpGray mb-3 mx-auto w-[180px]">
+              <span className="w-[142px] text-center font-bold text-lg">
+                전체 학생
+              </span>
+              <div className="bg-hpGray w-[45px] h-[38px] leading-[38px] font-bold text-center">
+                {differentStudentsNum}명
+              </div>
+            </div>
+            <StudentListByClass
+              type="entire"
+              differntCourseStudents={differntCourseStudents}
+              myCourseStudents={myCourseStudents}
+              setDifferntCourseStudents={setDifferntCourseStudents}
+              setMyCourseStudents={setMyCourseStudents}
+              setMyStudentsNum={setMyStudentsNum}
+              setDifferentStudentsNum={setDifferentStudentsNum}
+            />
+          </div>
+          <div className="ml-4 w-[280px]">
+            <div className="flex items-center border-[1.1px] border-solid border-hpGray mb-3 mx-auto w-[180px]">
+              <span className="w-[142px] text-center font-bold text-lg">
+                선택 된 학생
+              </span>
+              <div className="bg-hpGray w-[45px] h-[38px] leading-[38px] font-bold text-center">
+                {myStudentsNum}명
+              </div>
+            </div>
+            <StudentListByClass
+              type="other"
+              differntCourseStudents={differntCourseStudents}
+              myCourseStudents={myCourseStudents}
+              setDifferntCourseStudents={setDifferntCourseStudents}
+              setMyCourseStudents={setMyCourseStudents}
+              setMyStudentsNum={setMyStudentsNum}
+              setDifferentStudentsNum={setDifferentStudentsNum}
+            />
+          </div>
+        </div>
+        <div className="flex w-full justify-center mt-6">
+          <div className="mr-4">
+            <IconButton
+              bgColor="white"
+              icon={<AiFillEdit size="20px" />}
+              text="완료"
+              handleClick={async () => {
+                if (courseName === '') {
+                  alert('반 이름을 입력해주세요');
+                  return;
+                }
+
+                const tempMyCourseStudents = myCourseStudents.filter(
+                  (grade) => grade.students.length !== 0,
+                );
+                const newCourseStudents: number[] = [];
+                tempMyCourseStudents.forEach((grade) => {
+                  grade.students.forEach((student) => {
+                    newCourseStudents.push(student.id);
+                  });
+                });
+
+                await putCourseStudents(courseId, newCourseStudents);
+                await putCourseNameAndTeacher(
+                  courseId,
+                  courseName,
+                  teacherArr[selectedTeacherindex - 1].id,
+                );
+
+                await resetModalState();
+                setEnrollmentModalOpen(false);
+              }}
+            />
+          </div>
+          <div className="ml-4">
+            <IconButton
+              bgColor="white"
+              icon={<AiFillEdit size="20px" />}
+              text="취소"
+              handleClick={() => {
+                resetModalState();
+                setEnrollmentModalOpen(false);
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </ReactModal>
+  );
+}
+
+export default CourseModificationModal;
