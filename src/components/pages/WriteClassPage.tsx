@@ -14,12 +14,14 @@ function WriteClassPage() {
   useEffect(() => {
     if (classTypeArr[0] === true) {
       searchParams.set('classType', 'offline');
+      searchParams.set('classIndex', '0');
       setSearchParams(searchParams);
     } else {
       searchParams.set('classType', 'online');
+      searchParams.set('classIndex', '0');
       setSearchParams(searchParams);
     }
-  }, [classTypeArr, setSearchParams]);
+  }, [classTypeArr]);
 
   return (
     <div className="flex flex-col items-center justify-center mt-2">
