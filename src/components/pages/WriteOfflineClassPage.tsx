@@ -19,9 +19,15 @@ function WriteOfflineClassPage() {
   const [selectedClassindex, setSelectedClassindex] = useState<number>(
     Number(searchParams.get('classIndex')),
   );
-  const [startDate, setStartDate] = useState<Date>(
-    new Date(searchParams.get('date') ?? ''),
-  );
+  const [startDate, setStartDate] = useState<Date>(() => {
+    const dateStr = searchParams.get('date') ?? '';
+    const date = new Date(dateStr);
+
+    // 원하는 형식으로 날짜 포맷
+    const formattedDate = date.toISOString(); // "YYYY-MM-DD" 형식으로
+    console.log(formattedDate.split('T')[0]); // 2025-01-14
+    return new Date(formattedDate.split('T')[0]);
+  });
   const [classDetailData, setClassDetailData] = useState<{
     id?: number;
     title: string;
@@ -78,7 +84,13 @@ function WriteOfflineClassPage() {
   }, [searchParams.get('classIndex')]);
 
   useEffect(() => {
-    setStartDate(new Date(searchParams.get('date') ?? ''));
+    const dateStr = searchParams.get('date') ?? '';
+    const date = new Date(dateStr);
+
+    // 원하는 형식으로 날짜 포맷
+    const formattedDate = date.toISOString(); // "YYYY-MM-DD" 형식으로
+    console.log(formattedDate); // 2025-01-14
+    setStartDate(new Date(formattedDate.split('T')[0]));
   }, [searchParams.get('date')]);
   console.log(startDate);
   return (
@@ -123,6 +135,7 @@ function WriteOfflineClassPage() {
             memoId={classDetailData.id ?? -1}
             startDate={startDate}
             selectedClassindex={selectedClassindex}
+            courseId={courseList[Number(selectedClassindex)]?.courseId}
           />
         </div>
       )}

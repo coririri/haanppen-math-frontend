@@ -9,6 +9,7 @@ interface VideoListTabProps {
   memoId: number;
   startDate: Date;
   selectedClassindex: number;
+  courseId: number;
 }
 function VideoListTab({
   videoData,
@@ -16,6 +17,7 @@ function VideoListTab({
   memoId,
   startDate,
   selectedClassindex,
+  courseId,
 }: VideoListTabProps) {
   const [nowPlusVedio, setNowPlusVdeio] = useState(false);
   console.log(videoData);
@@ -39,6 +41,7 @@ function VideoListTab({
             memoId={memoId}
             startDate={startDate}
             selectedClassindex={selectedClassindex}
+            courseId={courseId}
           />
         ))}
       {!nowPlusVedio && (
