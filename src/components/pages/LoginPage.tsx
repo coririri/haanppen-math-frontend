@@ -112,7 +112,7 @@ function LoginPage() {
         errorMessage={errorMessage}
         handleLoginClick={handleLoginClick}
       />
-
+      <div>업데이트</div>
       <div className="flex justify-center">
         {/* PWA 설치 버튼 추가 */}
         <button
