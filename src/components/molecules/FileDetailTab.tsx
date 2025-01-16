@@ -30,10 +30,10 @@ function FileDetailTab({ fileData }: { fileData: DirectoryType }) {
           <span className="block w-[100px] text-[#BFBFBF]">종류</span>
           <span className="font-bold">파일</span>
         </div>
-        <div className="flex mt-2">
+        {/* <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">크기</span>
           <span className="font-bold">10GB</span>
-        </div>
+        </div> */}
         <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">올린 날짜</span>
           <span className="font-bold">
@@ -41,10 +41,10 @@ function FileDetailTab({ fileData }: { fileData: DirectoryType }) {
             {dateTimeToDateAndTimes(new Date(fileData.createdTime))}
           </span>
         </div>
-        <div className="flex mt-2">
+        {/* <div className="flex mt-2">
           <span className="block w-[100px] text-[#BFBFBF]">수정 날짜</span>
           <span className="font-bold">2030-08-20 08:02:04</span>
-        </div>
+        </div> */}
         <div className="w-[9rem] mx-auto mt-24 mb-4">
           <TextButton
             color="gray"

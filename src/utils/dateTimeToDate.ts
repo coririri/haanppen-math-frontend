@@ -32,7 +32,7 @@ export const dateTimeToDateAndTimes = (dateTimeString: Date): string => {
 };
 
 export const dateTimeToDateAndZeroTimes = (dateTimeString: Date): string => {
-  console.log(typeof dateTimeString);
+  console.log(dateTimeString);
   // 월 이름과 숫자 매핑
   const monthMap = {
     Jan: 0,
@@ -78,7 +78,7 @@ export const dateTimeToDateAndZeroTimes = (dateTimeString: Date): string => {
 
   // 원하는 형식으로 문자열 생성
   const formattedDateTime = `${year}-${month}-${day} 18:32:03`;
-
+  console.log(formattedDateTime);
   return formattedDateTime; // 예: "2024-09-03 09:42:32"
 };
 

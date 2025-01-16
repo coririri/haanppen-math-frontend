@@ -25,14 +25,23 @@ export const modifyQuery = (
   questionId: number,
   targetMemberId: number,
   newImages: string[],
-) =>
-  instance.put(`/api/board/questions`, {
+) => {
+  if (targetMemberId === -1)
+    return instance.put(`/api/board/questions`, {
+      questionId,
+      title: data.title,
+      content: data.content,
+      imageSources: [...(data.images ?? []), ...newImages],
+    });
+
+  return instance.put(`/api/board/questions`, {
     questionId,
     title: data.title,
     content: data.content,
     targetMemberId,
     imageSources: [...(data.images ?? []), ...newImages],
   });
+};
 
 export const getQuestionsList = async (page: number, searchValue: string) =>
   instance.get('/api/board/questions', {
