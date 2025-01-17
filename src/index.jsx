@@ -23,6 +23,7 @@ if (navigator.serviceWorker) {
     .then((registration) => {
       // 대기 중인 서비스 워커가 있는지 확인
       if (registration.waiting) {
+        console.log(registration.waiting);
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
       }
 
