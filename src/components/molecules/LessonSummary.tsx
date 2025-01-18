@@ -1,36 +1,48 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LessonOverviewType } from '../../types/LessonOverviewType';
+import lesson from '../../assests/lesson.jpg';
 
 interface LessonSummaryProps {
   lessonOverviewData: LessonOverviewType; // 강좌의 개요 데이터
-  mainCategoryName: string; // 카테고리 이름
+  mainCategoryName: string;
+  subCategoryName: string;
 }
 
 function LessonSummary({
   lessonOverviewData,
   mainCategoryName,
+  subCategoryName,
 }: LessonSummaryProps) {
   const navigate = useNavigate();
+
   return (
-    <div className="relative bg-white w-72  rounded-3xl shadow-lg transform hover:scale-105 transition-all duration-300">
-      {/* <!-- 상단 라벨 --> */}
-      <div className="absolute z-[1] -top-12 left-1/2  transform -translate-x-1/2 bg-white text-center pb-12 pt-1 px-4 rounded-full border">
-        <p className="text-md font-bold text-[#3E3E3E]">{mainCategoryName}</p>
-        <p className="text-sm font-bold text-[#3E3E3E]">
-          {lessonOverviewData.teacherPreview.teacherName}
-        </p>
-      </div>
-      {/* <!-- 본문 --> */}
-      <div className="relative z-[4] flex items-center justify-center h-full bg-white rounded-3xl py-2 pb-10">
-        <div className=" flex flex-col justify-start items-center  mx-4 w-66  rounded-3xl my-1">
-          <h2 className="text-lg font-semibold text-gray-800 bg-[#F6F6F6] text-center p-2 rounded-xl">
+    <div className="w-full relative">
+      <div className="w-full flex justify-start items-center">
+        <div>
+          <img
+            src={lesson}
+            alt="수업 대표 이미지"
+            className="w-[80px] ml-2 mr-4"
+          />
+        </div>
+        <div className="">
+          <div className="flex flex-wrap mb-[2px] gap-y-2">
+            <span className="mr-2 text-[15px] bg-[#ffe8df] text-[#f47321] border-[#ffc9b2] border-[1.2px] border-solid px-[8px] py-[1px]">
+              {lessonOverviewData.teacherPreview.teacherName} 선생님
+            </span>
+            <span className=" mr-2 text-[15px] bg-[#e9f1fe] text-[#5a83c0] border-[#c8d8f4] border-[1.2px] border-solid px-[8px] py-[1px]">
+              {mainCategoryName}
+            </span>
+            <span className="text-[15px] bg-[#e8fbd9] text-[#6cbb27] border-[#bbe7a6] border-[1.2px] border-solid px-[8px] py-[1px]">
+              {subCategoryName}
+            </span>
+          </div>
+          <h2 className="font-bold text-[15px] mb-[2px]">
             {lessonOverviewData.courseName}
           </h2>
-
           <button
             type="button"
-            className="absolute bottom-1 w-[120px] bg-[#FFB74D] text-white font-extrabold py-1.5 px-3 rounded-lg shadow-md hover:shadow-lg hover:bg-[#FFA726] transition duration-300"
+            className="text-[13px] px-4 py-[1px] text-gray-600 border-solid border-gray-600 border-[1.2px] rounded-md shadow-md hover:shadow-lg hover:bg-gray-600 hover:text-white hover:scale-105 transition duration-300"
             onClick={() => {
               navigate(
                 `/preview-class?teacherName=${lessonOverviewData.teacherPreview.teacherName}&onlineCourseId=${lessonOverviewData.courseId}`,
@@ -41,6 +53,7 @@ function LessonSummary({
           </button>
         </div>
       </div>
+      <div className="border-t-[1.2px] border-gray-400/40 border-solid w-full my-4" />
     </div>
   );
 }
