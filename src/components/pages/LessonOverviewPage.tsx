@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TypeDropdownMenu from '../molecules/TypeDropdownMenu';
-import getAllTeachers from '../../apis/teacher';
 import LessonSummary from '../molecules/LessonSummary';
 import {
   getOnlineCourseByCategoryId,
   getRootCategory,
   getSubCategory,
 } from '../../apis/onlineLesson';
-import { TeacherType } from '../../types/teacherType';
 import { CategoryType } from '../../types/categoryType';
 import { CourseType } from '../../types/courseType';
 
 function LessonOverviewPage() {
-  const [teacherList, setTeacherList] = useState<TeacherType[]>([]);
-  const [selectedTeacherindex, setSelectedTeacherindex] = useState<number>(0);
-  const [mainCategorySelected, setMainCategorySelected] = useState<number>(0);
+  const [mainCategorySelected, setMainCategorySelected] = useState<number>(1);
   const [subCategorySelected, setSubCategorySelected] = useState<number>(0);
   const [mainCategorys, setMainCategorys] = useState<CategoryType[]>([]);
   const [subCategorys, setSubCategorys] = useState<CategoryType[]>([]);
@@ -25,8 +21,6 @@ function LessonOverviewPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await getAllTeachers();
-        setTeacherList([...data]);
         const mainCategorysResponse = await getRootCategory();
         setMainCategorys(mainCategorysResponse.data);
         if (mainCategorysResponse.data.length === 0) setSubCategorys([]);
@@ -136,66 +130,43 @@ function LessonOverviewPage() {
       }
     };
     fetchData();
-  }, [selectedTeacherindex, mainCategorySelected, subCategorySelected]);
-  console.log(teacherList?.[selectedTeacherindex - 1]?.name);
+  }, [mainCategorySelected, subCategorySelected]);
+
   return (
     <div className="w-full">
-      <div className="w-full min-h-screen bg-[#F0F0F0] mx-auto flex flex-col">
+      <div className="w-full min-h-screen mx-auto flex flex-col">
         <div className="w-full  mx-auto">
           {/* DropdownMenu */}
           <div className="w-[233px] mx-auto mt-6">
             <div className="flex justify-center gap-2 mb-2">
-              <TypeDropdownMenu
-                textArr={[
-                  '전체',
-                  ...teacherList.map((teacher) => teacher.name),
-                ]}
-                selectedIndex={selectedTeacherindex}
-                setSelectedIndex={setSelectedTeacherindex}
-                size="small"
-              />
-
               <TypeDropdownMenu
                 textArr={mainCategorys.map((category) => category.categoryName)}
                 selectedIndex={mainCategorySelected}
                 setSelectedIndex={setMainCategorySelected}
                 size="medium"
               />
+              <TypeDropdownMenu
+                textArr={[
+                  '전체',
+                  ...subCategorys.map((category) => category.categoryName),
+                ]}
+                selectedIndex={subCategorySelected}
+                setSelectedIndex={setSubCategorySelected}
+                size="long"
+              />
             </div>
-            <TypeDropdownMenu
-              textArr={[
-                '전체',
-                ...subCategorys.map((category) => category.categoryName),
-              ]}
-              selectedIndex={subCategorySelected}
-              setSelectedIndex={setSubCategorySelected}
-              size="long"
-            />
           </div>
-          <div className="flex flex-col md:flex-row md:flex-wrap items-center justify-center mt-16 gap-20">
-            {selectedTeacherindex !== 0
-              ? lessonOverviewDatas
-                  .filter(
-                    (lessonOverviewData) =>
-                      lessonOverviewData.teacherPreview.teacherName ===
-                      teacherList?.[selectedTeacherindex - 1]?.name,
-                  )
-                  .map((lessonOverviewData) => (
-                    <LessonSummary
-                      lessonOverviewData={lessonOverviewData}
-                      mainCategoryName={
-                        mainCategorys[mainCategorySelected].categoryName
-                      }
-                    />
-                  ))
-              : lessonOverviewDatas.map((lessonOverviewData) => (
-                  <LessonSummary
-                    lessonOverviewData={lessonOverviewData}
-                    mainCategoryName={
-                      mainCategorys[mainCategorySelected].categoryName
-                    }
-                  />
-                ))}
+          <div className="border-t-[1.2px] border-gray-400/40 border-solid w-full mt-4 mb-4" />
+          <div className="flex flex-col items-center justify-center gap-20">
+            {lessonOverviewDatas.map((lessonOverviewData) => (
+              <LessonSummary
+                lessonOverviewData={lessonOverviewData}
+                mainCategoryName={
+                  mainCategorys[mainCategorySelected].categoryName
+                }
+                subCategoryName={subCategorys[subCategorySelected].categoryName}
+              />
+            ))}
           </div>
         </div>
       </div>
