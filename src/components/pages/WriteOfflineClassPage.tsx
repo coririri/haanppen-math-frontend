@@ -39,6 +39,9 @@ function WriteOfflineClassPage() {
   });
   const [videoData, setVideoData] = useState<VideoType[]>([]);
   const [isCreated, setIsCreated] = useState<boolean>(false);
+  const [deleteCheckArr, setDeleteCheckArr] = useState<boolean[]>(
+    Array(videoData.length).fill(false),
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,7 +97,7 @@ function WriteOfflineClassPage() {
   }, [searchParams.get('date')]);
   console.log(startDate);
   return (
-    <div className="w-[950px] mx-auto">
+    <div className=" mx-auto">
       <div>
         <div className="flex justify-center mt-4">
           <div className="relative inline-block">
@@ -116,19 +119,20 @@ function WriteOfflineClassPage() {
             />
           </div>
         </div>
-        <ClassDetailTab
-          classId={classDetailData.id ?? -1}
-          classDetailData={classDetailData}
-          setClassDetailData={setClassDetailData}
-          isCreated={isCreated}
-          setIsCreated={setIsCreated}
-          startDate={startDate}
-          courseList={courseList}
-          selectedClassindex={selectedClassindex}
-        />
       </div>
-      {isCreated && (
-        <div>
+      {isCreated ? (
+        <div className="flex justify-center my-6">
+          <ClassDetailTab
+            classId={classDetailData.id ?? -1}
+            classDetailData={classDetailData}
+            setClassDetailData={setClassDetailData}
+            isCreated={isCreated}
+            setIsCreated={setIsCreated}
+            startDate={startDate}
+            courseList={courseList}
+            selectedClassindex={selectedClassindex}
+          />
+          <div className="w-[10px] h-[600px] bg-gray-200 mx-12 my-6" />
           <VideoListTab
             videoData={videoData}
             setVideoData={setVideoData}
@@ -136,6 +140,21 @@ function WriteOfflineClassPage() {
             startDate={startDate}
             selectedClassindex={selectedClassindex}
             courseId={courseList[Number(selectedClassindex)]?.courseId}
+            deleteCheckArr={deleteCheckArr}
+            setDeleteCheckArr={setDeleteCheckArr}
+          />
+        </div>
+      ) : (
+        <div>
+          <ClassDetailTab
+            classId={classDetailData.id ?? -1}
+            classDetailData={classDetailData}
+            setClassDetailData={setClassDetailData}
+            isCreated={isCreated}
+            setIsCreated={setIsCreated}
+            startDate={startDate}
+            courseList={courseList}
+            selectedClassindex={selectedClassindex}
           />
         </div>
       )}
