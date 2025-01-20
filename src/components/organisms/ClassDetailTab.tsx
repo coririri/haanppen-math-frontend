@@ -39,7 +39,7 @@ function ClassDetailTab({
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
   return (
-    <div className="w-[750px] mx-auto">
+    <div className="mx-auto">
       <DeleteCheckModal
         deleteCheckModalOpen={deleteCheckModalOpen}
         setDeleteCheckModalOpen={setDeleteCheckModalOpen}
@@ -54,17 +54,13 @@ function ClassDetailTab({
         }}
       />
 
-      <div className="flex justify-center items-center mt-4">
+      <div className="flex justify-center items-center">
         <AiOutlineBook size="1.7rem" className="mr-2" />
-        <span className="font-bold text-2xl">수업 세부 내용</span>
-      </div>
-
-      <div>
-        <span className="ml-4 text-md font-bold">제목(필수 항목)</span>
+        <span className="font-bold text-2xl mr-2">수업 세부 내용</span>
         {isCreated && (
           <TextButton
             color="gray"
-            moreStyle="w-[5rem] ml-4 mb-1"
+            moreStyle="w-[5rem]  mb-1"
             handleClick={async () => {
               try {
                 await putLessonDetailContentByClassId(
@@ -80,8 +76,14 @@ function ClassDetailTab({
             저장
           </TextButton>
         )}
-        <InputBox
-          moreStyle="w-full font-bold leading-[26px] mb-5"
+      </div>
+
+      <div>
+        <div className="my-4">
+          <span className="ml-4 text-md font-bold">제목(필수 항목)</span>
+        </div>
+        <textarea
+          className="w-[32rem] h-16 p-1 pl-3 border border-black  rounded-lg focus:outline-none focus:ring-2  transition-all duration-300 hover:shadow-lg"
           value={classDetailData.title}
           onChange={(e) => {
             setClassDetailData((prev) => ({
@@ -93,28 +95,11 @@ function ClassDetailTab({
       </div>
 
       <div>
-        <span className="ml-4 text-md font-bold">수업 내용</span>
-        {isCreated && (
-          <TextButton
-            color="gray"
-            moreStyle="w-[5rem] ml-4 mb-1"
-            handleClick={async () => {
-              try {
-                await putLessonDetailContentByClassId(
-                  classId,
-                  classDetailData.title,
-                  classDetailData.content,
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }}
-          >
-            저장
-          </TextButton>
-        )}
-        <Textarea
-          moreStyle="w-full font-bold leading-[26px] h-[120px] mt-1"
+        <div className="my-4">
+          <span className="ml-4 text-md font-bold">수업 내용</span>
+        </div>
+        <textarea
+          className="w-[32rem] h-16 p-1 pl-3 border border-black  rounded-lg focus:outline-none focus:ring-2  transition-all duration-300 hover:shadow-lg"
           value={classDetailData.content}
           onChange={(e) => {
             setClassDetailData((prev) => ({
