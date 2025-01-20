@@ -1,4 +1,5 @@
 import { SetStateAction } from 'react';
+import { AiOutlineBook } from 'react-icons/ai';
 import enrollOnlineLesson from '../../apis/onlineLesson';
 import TextButton from '../atoms/TextButton';
 import DropdownMenu from '../molecules/DropdownMenu';
@@ -35,33 +36,36 @@ function OnlinePrimaryForm({
 }: OnlinePrimaryFormProps) {
   return (
     <div className="flex flex-col items-start justify-center my-6">
-      <h3 className="font-bold text-3xl mx-auto">수업 세부 내용</h3>
+      <div className="flex justify-center items-center mx-auto">
+        <AiOutlineBook size="1.7rem" className="mr-2" />
+        <h3 className="font-bold text-3xl mr-2">수업 세부 내용</h3>
+        {isCreated && (
+          <TextButton
+            color="gray"
+            moreStyle="w-[5rem] "
+            handleClick={async () => {
+              try {
+                await enrollOnlineLesson(
+                  courseList[selectedClassindex].courseId,
+                  primaryClassInfo.title,
+                  primaryClassInfo.lessonRange,
+                  primaryClassInfo.lessonDesc,
+                  subCategorys[subCategorySelected].categoryId,
+                );
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+          >
+            저장
+          </TextButton>
+        )}
+      </div>
       <div>
         <div className="my-4">
           <span className="ml-8 mr-2 text-sm font-bold text-gray-600">
             제목(필수 항목)
           </span>
-          {isCreated && (
-            <TextButton
-              color="gray"
-              moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {
-                try {
-                  await enrollOnlineLesson(
-                    courseList[selectedClassindex].courseId,
-                    primaryClassInfo.title,
-                    primaryClassInfo.lessonRange,
-                    primaryClassInfo.lessonDesc,
-                    subCategorys[subCategorySelected].categoryId,
-                  );
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
-            >
-              저장
-            </TextButton>
-          )}
         </div>
         <textarea
           value={primaryClassInfo.title}
@@ -82,27 +86,6 @@ function OnlinePrimaryForm({
           <span className="ml-8 mr-2 text-sm font-bold text-gray-600">
             강좌 범위
           </span>
-          {isCreated && (
-            <TextButton
-              color="gray"
-              moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {
-                try {
-                  await enrollOnlineLesson(
-                    courseList[selectedClassindex].courseId,
-                    primaryClassInfo.title,
-                    primaryClassInfo.lessonRange,
-                    primaryClassInfo.lessonDesc,
-                    subCategorys[subCategorySelected].categoryId,
-                  );
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
-            >
-              저장
-            </TextButton>
-          )}
         </div>
         <textarea
           value={primaryClassInfo.lessonRange}
@@ -123,27 +106,6 @@ function OnlinePrimaryForm({
           <span className="ml-8 mr-2 text-sm font-bold text-gray-600">
             수업 내용
           </span>
-          {isCreated && (
-            <TextButton
-              color="gray"
-              moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {
-                try {
-                  await enrollOnlineLesson(
-                    courseList[selectedClassindex].courseId,
-                    primaryClassInfo.title,
-                    primaryClassInfo.lessonRange,
-                    primaryClassInfo.lessonDesc,
-                    subCategorys[subCategorySelected].categoryId,
-                  );
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
-            >
-              저장
-            </TextButton>
-          )}
         </div>
         <textarea
           value={primaryClassInfo.lessonDesc}
@@ -163,27 +125,6 @@ function OnlinePrimaryForm({
           <span className="ml-8 mr-2 text-sm font-bold text-gray-600">
             수업 분류
           </span>
-          {isCreated && (
-            <TextButton
-              color="gray"
-              moreStyle="w-[5rem] mr-1"
-              handleClick={async () => {
-                try {
-                  await enrollOnlineLesson(
-                    courseList[selectedClassindex].courseId,
-                    primaryClassInfo.title,
-                    primaryClassInfo.lessonRange,
-                    primaryClassInfo.lessonDesc,
-                    subCategorys[subCategorySelected].categoryId,
-                  );
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
-            >
-              저장
-            </TextButton>
-          )}
         </div>
         <div className="flex justify-center">
           <div className="mr-4">
