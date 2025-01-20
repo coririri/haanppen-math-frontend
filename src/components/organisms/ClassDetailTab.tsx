@@ -56,31 +56,31 @@ function ClassDetailTab({
 
       <div className="flex justify-center items-center">
         <AiOutlineBook size="1.7rem" className="mr-2" />
-        <span className="font-bold text-2xl">수업 세부 내용</span>
+        <span className="font-bold text-2xl mr-2">수업 세부 내용</span>
+        {isCreated && (
+          <TextButton
+            color="gray"
+            moreStyle="w-[5rem]  mb-1"
+            handleClick={async () => {
+              try {
+                await putLessonDetailContentByClassId(
+                  classId,
+                  classDetailData.title,
+                  classDetailData.content,
+                );
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+          >
+            저장
+          </TextButton>
+        )}
       </div>
 
       <div>
         <div className="my-4">
           <span className="ml-4 text-md font-bold">제목(필수 항목)</span>
-          {isCreated && (
-            <TextButton
-              color="gray"
-              moreStyle="w-[5rem] ml-4 mb-1"
-              handleClick={async () => {
-                try {
-                  await putLessonDetailContentByClassId(
-                    classId,
-                    classDetailData.title,
-                    classDetailData.content,
-                  );
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
-            >
-              저장
-            </TextButton>
-          )}
         </div>
         <textarea
           className="w-[32rem] h-16 p-1 pl-3 border border-black  rounded-lg focus:outline-none focus:ring-2  transition-all duration-300 hover:shadow-lg"
@@ -97,25 +97,6 @@ function ClassDetailTab({
       <div>
         <div className="my-4">
           <span className="ml-4 text-md font-bold">수업 내용</span>
-          {isCreated && (
-            <TextButton
-              color="gray"
-              moreStyle="w-[5rem] ml-4 mb-1"
-              handleClick={async () => {
-                try {
-                  await putLessonDetailContentByClassId(
-                    classId,
-                    classDetailData.title,
-                    classDetailData.content,
-                  );
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
-            >
-              저장
-            </TextButton>
-          )}
         </div>
         <textarea
           className="w-[32rem] h-16 p-1 pl-3 border border-black  rounded-lg focus:outline-none focus:ring-2  transition-all duration-300 hover:shadow-lg"

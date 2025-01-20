@@ -118,17 +118,6 @@ function VideoItem({
     }
   };
 
-  const addAttachment = () => {
-    setVideoData((prev) => {
-      const copiedVideoData = prev.map((tempVideo) => ({
-        ...tempVideo,
-        attachmentViews: [...tempVideo.attachmentViews],
-      }));
-      copiedVideoData[vedioIndex].attachmentViews.push({ fileName: '' });
-      return copiedVideoData;
-    });
-  };
-
   return (
     <div className="flex items-center w-[700px] px-[30px] py-4 border-solid  border-b-[2px] border-[#C9C9C9] ">
       <OfflineAttachmentManagementModal
