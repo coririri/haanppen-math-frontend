@@ -103,22 +103,8 @@ function MyClassPage() {
       <div className="flex items-center justify-center h-[calc(100vh-157px)] bg-gray-100">
         <div className="p-8 bg-white shadow-xl rounded-2xl border border-gray-200 mb-36">
           <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-            수업 등록을 해주세요
+            등록된 수업이 없습니다.
           </h1>
-          <p className="text-gray-600 text-center">
-            아래 버튼을 눌러 수업을 등록하세요.
-          </p>
-          <div className="mt-6 flex justify-center">
-            <button
-              className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
-              type="button"
-              onClick={() => {
-                navigate('/lesson-overview');
-              }}
-            >
-              등록하기
-            </button>
-          </div>
         </div>
       </div>
     );

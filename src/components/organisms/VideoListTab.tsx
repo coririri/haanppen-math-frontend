@@ -71,7 +71,7 @@ function VideoListTab({
       <div className="flex flex-col items-center justify-center">
         <div className="flex justify-between items-center">
           <AiOutlineVideoCameraAdd size="2rem" className="mr-2" />
-          <span className="font-bold text-2xl">수업 영상 목록</span>
+          <span className="font-bold text-3xl">수업 영상 관리</span>
         </div>
         <div className="flex justify-center my-2">
           <div className="mr-8">

@@ -34,46 +34,11 @@ function ClassDetailTab({
   courseList,
   selectedClassindex,
 }: ClassDetailTabProps) {
-  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
-
   return (
     <div className="mx-auto">
-      <DeleteCheckModal
-        deleteCheckModalOpen={deleteCheckModalOpen}
-        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
-        handleDelete={async () => {
-          try {
-            await deleteLessonById(classId);
-            setIsCreated(false);
-            setDeleteCheckModalOpen(false);
-          } catch (e) {
-            console.log(e);
-          }
-        }}
-      />
-
       <div className="flex justify-center items-center">
         <AiOutlineBook size="1.7rem" className="mr-2" />
-        <span className="font-bold text-2xl mr-2">수업 세부 내용</span>
-        {isCreated && (
-          <TextButton
-            color="gray"
-            moreStyle="w-[5rem]  mb-1"
-            handleClick={async () => {
-              try {
-                await putLessonDetailContentByClassId(
-                  classId,
-                  classDetailData.title,
-                  classDetailData.content,
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }}
-          >
-            저장
-          </TextButton>
-        )}
+        <span className="font-bold text-3xl mr-2">수업 세부 내용</span>
       </div>
 
       <div>
@@ -107,19 +72,28 @@ function ClassDetailTab({
           }}
         />
       </div>
-
-      {isCreated ? (
-        <div className="text-center mt-4">
-          <IconButton
-            bgColor="white"
-            icon={<AiFillEdit size="20px" />}
-            text="수업 삭제"
+      {isCreated && (
+        <div className="flex justify-center">
+          <TextButton
+            color="gray"
+            moreStyle="w-[7rem] my-2 py-[1px]"
             handleClick={async () => {
-              setDeleteCheckModalOpen(true);
+              try {
+                await putLessonDetailContentByClassId(
+                  classId,
+                  classDetailData.title,
+                  classDetailData.content,
+                );
+              } catch (e) {
+                console.log(e);
+              }
             }}
-          />
+          >
+            전체 저장
+          </TextButton>
         </div>
-      ) : (
+      )}
+      {!isCreated && (
         <div className="text-center mt-4">
           <IconButton
             bgColor="white"

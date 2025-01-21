@@ -26,7 +26,7 @@ function LessonOverviewPage() {
         if (mainCategorysResponse.data.length === 0) setSubCategorys([]);
         else {
           const subategorysResponse = await getSubCategory(
-            mainCategorysResponse.data[0].categoryId,
+            mainCategorysResponse.data[1].categoryId,
           );
           setSubCategorys(subategorysResponse.data);
           if (subategorysResponse.data.length > 0) {
@@ -164,7 +164,6 @@ function LessonOverviewPage() {
                 mainCategoryName={
                   mainCategorys[mainCategorySelected].categoryName
                 }
-                subCategoryName={subCategorys[subCategorySelected].categoryName}
               />
             ))}
           </div>

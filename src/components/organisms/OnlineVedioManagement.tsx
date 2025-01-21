@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AiFillEdit } from 'react-icons/ai';
+import { AiFillEdit, AiOutlineVideoCameraAdd } from 'react-icons/ai';
 import IconButton from '../atoms/IconButton';
 import VideoCard from '../molecules/VideoCard';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
@@ -57,7 +57,10 @@ function OnlineVedioManagement({
           }
         }}
       />
-      <h3 className="font-bold text-3xl">수업 영상 관리</h3>
+      <div className="flex justify-between items-center">
+        <AiOutlineVideoCameraAdd size="2rem" className="mr-2" />
+        <h3 className="font-bold text-3xl">수업 영상 관리</h3>
+      </div>
       <div className="flex justify-center my-2">
         <div className="mr-8">
           <IconButton
