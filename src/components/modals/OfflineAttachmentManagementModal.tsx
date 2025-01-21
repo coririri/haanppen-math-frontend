@@ -2,11 +2,9 @@ import ReactModal from 'react-modal';
 import { SetStateAction, useState } from 'react';
 import { AiFillEdit } from 'react-icons/ai';
 import { AxiosError } from 'axios';
-import DeleteCheckModal from './DeleteCheckModal';
 import { addAttachmentVideo, deleteAttachmentFile } from '../../apis/lesson';
 import { AttachmentViewType, VideoType } from '../../types/videoType';
 import VideoUploadingModal from './VideoUploadingModal';
-import IconButton from '../atoms/IconButton';
 import TextButton from '../atoms/TextButton';
 
 interface AttachmentManagementModalProps {

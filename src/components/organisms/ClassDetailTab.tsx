@@ -3,9 +3,7 @@ import { AiFillEdit, AiOutlineBook } from 'react-icons/ai';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import 'react-datepicker/dist/react-datepicker.css'; // 스타일을 불러옵니다.
 import IconButton from '../atoms/IconButton';
-import InputBox from '../atoms/InputBox';
 import '../../css/datepicker/datepicker.css';
-import Textarea from '../atoms/Textarea';
 import TextButton from '../atoms/TextButton';
 import enrollLesson, {
   deleteLessonById,
