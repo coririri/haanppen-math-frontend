@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { AiFillEdit } from 'react-icons/ai';
 import { useSearchParams } from 'react-router-dom';
 import ClassDetailTab from '../organisms/ClassDetailTab';
 import VideoListTab from '../organisms/VideoListTab';
@@ -9,9 +10,11 @@ import { getOwnCourses } from '../../apis/course';
 import dateTimeToDate, {
   dateTimeToDateAndZeroTimes,
 } from '../../utils/dateTimeToDate';
-import { getLessonByDateAndCourse } from '../../apis/lesson';
+import { deleteLessonById, getLessonByDateAndCourse } from '../../apis/lesson';
 import { CourseType } from '../../types/courseType';
 import { VideoType } from '../../types/videoType';
+import IconButton from '../atoms/IconButton';
+import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function WriteOfflineClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,6 +45,7 @@ function WriteOfflineClassPage() {
   const [deleteCheckArr, setDeleteCheckArr] = useState<boolean[]>(
     Array(videoData.length).fill(false),
   );
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,6 +102,19 @@ function WriteOfflineClassPage() {
   console.log(startDate);
   return (
     <div className=" mx-auto">
+      <DeleteCheckModal
+        deleteCheckModalOpen={deleteCheckModalOpen}
+        setDeleteCheckModalOpen={setDeleteCheckModalOpen}
+        handleDelete={async () => {
+          try {
+            await deleteLessonById(classDetailData.id ?? -1);
+            setIsCreated(false);
+            setDeleteCheckModalOpen(false);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
+      />
       <div>
         <div className="flex justify-center mt-4">
           <div className="relative inline-block">
@@ -132,7 +149,19 @@ function WriteOfflineClassPage() {
             courseList={courseList}
             selectedClassindex={selectedClassindex}
           />
-          <div className="w-[10px] h-[600px] bg-gray-200 mx-12 my-6" />
+          <div>
+            <div className="w-[10px] h-[500px] bg-gray-200 mx-12 my-6" />
+            <div className="text-center mt-4">
+              <IconButton
+                bgColor="white"
+                icon={<AiFillEdit size="20px" />}
+                text="수업 삭제"
+                handleClick={async () => {
+                  setDeleteCheckModalOpen(true);
+                }}
+              />
+            </div>
+          </div>
           <VideoListTab
             videoData={videoData}
             setVideoData={setVideoData}
@@ -145,7 +174,7 @@ function WriteOfflineClassPage() {
           />
         </div>
       ) : (
-        <div>
+        <div className="flex justify-center my-6">
           <ClassDetailTab
             classId={classDetailData.id ?? -1}
             classDetailData={classDetailData}

@@ -5,13 +5,13 @@ import lesson from '../../assests/lesson.jpg';
 interface LessonSummaryProps {
   lessonOverviewData: LessonOverviewType; // 강좌의 개요 데이터
   mainCategoryName: string;
-  subCategoryName: string;
+  // subCategoryName: string;
 }
 
 function LessonSummary({
   lessonOverviewData,
   mainCategoryName,
-  subCategoryName,
+  // subCategoryName,
 }: LessonSummaryProps) {
   const navigate = useNavigate();
 
@@ -33,9 +33,9 @@ function LessonSummary({
             <span className=" mr-2 text-[15px] bg-[#e9f1fe] text-[#5a83c0] border-[#c8d8f4] border-[1.2px] border-solid px-[8px] py-[1px]">
               {mainCategoryName}
             </span>
-            <span className="text-[15px] bg-[#e8fbd9] text-[#6cbb27] border-[#bbe7a6] border-[1.2px] border-solid px-[8px] py-[1px]">
+            {/* <span className="text-[15px] bg-[#e8fbd9] text-[#6cbb27] border-[#bbe7a6] border-[1.2px] border-solid px-[8px] py-[1px]">
               {subCategoryName}
-            </span>
+            </span> */}
           </div>
           <h2 className="font-bold text-[15px] mb-[2px]">
             {lessonOverviewData.courseName}

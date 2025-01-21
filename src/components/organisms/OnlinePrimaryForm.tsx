@@ -39,27 +39,6 @@ function OnlinePrimaryForm({
       <div className="flex justify-center items-center mx-auto">
         <AiOutlineBook size="1.7rem" className="mr-2" />
         <h3 className="font-bold text-3xl mr-2">수업 세부 내용</h3>
-        {isCreated && (
-          <TextButton
-            color="gray"
-            moreStyle="w-[5rem] "
-            handleClick={async () => {
-              try {
-                await enrollOnlineLesson(
-                  courseList[selectedClassindex].courseId,
-                  primaryClassInfo.title,
-                  primaryClassInfo.lessonRange,
-                  primaryClassInfo.lessonDesc,
-                  subCategorys[subCategorySelected].categoryId,
-                );
-              } catch (e) {
-                console.log(e);
-              }
-            }}
-          >
-            저장
-          </TextButton>
-        )}
       </div>
       <div>
         <div className="my-4">
@@ -145,6 +124,29 @@ function OnlinePrimaryForm({
             setSelectedIndex={setSubCategorySelected}
           />
         </div>
+      </div>
+      <div className="mx-auto">
+        {isCreated && (
+          <TextButton
+            color="gray"
+            moreStyle="w-[7rem] my-2 py-[1px]"
+            handleClick={async () => {
+              try {
+                await enrollOnlineLesson(
+                  courseList[selectedClassindex].courseId,
+                  primaryClassInfo.title,
+                  primaryClassInfo.lessonRange,
+                  primaryClassInfo.lessonDesc,
+                  subCategorys[subCategorySelected].categoryId,
+                );
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+          >
+            저장
+          </TextButton>
+        )}
       </div>
     </div>
   );
