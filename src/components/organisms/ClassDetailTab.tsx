@@ -1,12 +1,9 @@
-import { useState } from 'react';
 import { AiFillEdit, AiOutlineBook } from 'react-icons/ai';
-import DeleteCheckModal from '../modals/DeleteCheckModal';
 import 'react-datepicker/dist/react-datepicker.css'; // 스타일을 불러옵니다.
 import IconButton from '../atoms/IconButton';
 import '../../css/datepicker/datepicker.css';
 import TextButton from '../atoms/TextButton';
 import enrollLesson, {
-  deleteLessonById,
   putLessonDetailContentByClassId,
 } from '../../apis/lesson';
 import { dateTimeToDateAndZeroTimes } from '../../utils/dateTimeToDate';
