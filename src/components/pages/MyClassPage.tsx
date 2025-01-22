@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { getOwnCourses } from '../../apis/course';
 import { getLessonsByClassId } from '../../apis/lesson';
 import DateSelector from '../molecules/DateSelector';
@@ -16,7 +16,6 @@ import { OfflineLessonType } from '../../types/offlineLessonType';
 const categoryData = ['날짜', '이름'];
 
 function MyClassPage() {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [courseList, setCourseList] = useState<CourseType[]>([]);
   const [selectedClassindex, setSelectedClassindex] = useState<number>(
