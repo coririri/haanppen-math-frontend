@@ -215,6 +215,7 @@ function UserInformation() {
               try {
                 await putAccountInfo(userForm);
                 await logout();
+                localStorage.removeItem('hp_accessToekn');
                 window.location.href = '/login';
                 instance.defaults.headers.common.Authorization = null;
               } catch (e) {
@@ -239,6 +240,7 @@ function UserInformation() {
             text="로그아웃"
             handleClick={async () => {
               await logout();
+              localStorage.removeItem('hp_accessToekn');
               navigate('/login');
             }}
           />
