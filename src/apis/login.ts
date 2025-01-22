@@ -17,6 +17,7 @@ const login = (
       instance.defaults.headers.common.Authorization = token;
       localStorage.setItem('role', role);
       localStorage.setItem('userName', userName);
+      localStorage.setItem('hp_accessToekn', token);
       navigate('/');
     })
     .catch((error) => {
