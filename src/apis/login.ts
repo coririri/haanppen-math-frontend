@@ -27,6 +27,7 @@ const login = (
         const { errorCode } = error.response.data;
         if (errorStatus >= 400 && errorStatus < 500) {
           // 클라이언트 요청 오류
+          console.log(errorStatus);
           if (errorStatus === 404) {
             navigate('nonfound-pageserver');
             setTimeout(() => {
@@ -44,7 +45,7 @@ const login = (
           }
         } else if (errorStatus >= 500) {
           navigate('server-error');
-          alert('메인 페이지로 이동합니다');
+          alert('서버 에러가 발생했습니다.');
           // 500 페이지로 이동
         }
       } else if (error.request) {

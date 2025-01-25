@@ -205,28 +205,27 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
             {video.attachmentViews.map(
               (attachment: AttachmentViewType, attachmentIndex: number) => (
                 <div
-                  className="flex items-center border-b-[1.3px] border-solid border-gray-400/40 mt-2"
+                  className="flex items-center justify-center border-b-[1.3px] border-solid border-gray-400/40 my-2 pb-2"
                   key={attachment.fileName}
                 >
-                  <span className="border-solid border-[1.3px] h-[30px] rounded-xl border-black w-[300px] text-lg text-center font-bold mr-8">
+                  <span className="font-bold text-xl">
+                    {attachmentIndex + 1}번
+                  </span>
+                  <span className="mx-4 border-solid border-[1.3px] h-[30px] rounded-xl border-black w-[300px] text-lg text-center font-bold">
                     {attachment.fileName}
                   </span>
-                  <div
-                    className="w-[130px] flex flex-col gap-2 mb-2"
-                    key={attachment.attachmentId}
+
+                  <TextButton
+                    color="gray"
+                    moreStyle="w-[130px]"
+                    handleClick={async () => {
+                      if (attachment.attachmentId !== undefined)
+                        await deleteAttachmentFile(attachment.attachmentId);
+                      deleteAttachment(attachmentIndex);
+                    }}
                   >
-                    <TextButton
-                      color="gray"
-                      moreStyle="w-[130px] mr-4"
-                      handleClick={async () => {
-                        if (attachment.attachmentId !== undefined)
-                          await deleteAttachmentFile(attachment.attachmentId);
-                        deleteAttachment(attachmentIndex);
-                      }}
-                    >
-                      삭제 하기
-                    </TextButton>
-                  </div>
+                    삭제 하기
+                  </TextButton>
                 </div>
               ),
             )}

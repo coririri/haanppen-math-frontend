@@ -350,6 +350,11 @@ function QuestionDetailPage() {
         data?.questionDetailData.registerMemberName ? (
           isModify ? (
             <div className="flex space-x-2 my-2 justify-end mr-4">
+              <InputImageButton
+                setImgFiles={setModificationImgFiles}
+                setImgPreview={setModificationImgPreview}
+                className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
+              />
               <button
                 onClick={handleModifyCompelte}
                 className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
@@ -364,11 +369,6 @@ function QuestionDetailPage() {
               >
                 취소
               </button>
-              <InputImageButton
-                setImgFiles={setModificationImgFiles}
-                setImgPreview={setModificationImgPreview}
-                className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
-              />
             </div>
           ) : (
             <div className="flex space-x-2 my-2 justify-end mr-4">
@@ -595,6 +595,11 @@ function QuestionDetailPage() {
       localStorage.getItem('role') === 'TEACHER' ? (
         isModify ? (
           <div className="flex space-x-2 my-2 justify-end w-[400px] mx-auto pr-4">
+            <InputImageButton
+              setImgFiles={setModificationImgFiles}
+              setImgPreview={setModificationImgPreview}
+              className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
+            />
             <button
               onClick={handleModifyCompelte}
               className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
@@ -609,11 +614,6 @@ function QuestionDetailPage() {
             >
               취소
             </button>
-            <InputImageButton
-              setImgFiles={setModificationImgFiles}
-              setImgPreview={setModificationImgPreview}
-              className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
-            />
           </div>
         ) : (
           <div className="flex space-x-2 my-2 justify-end w-[400px] mx-auto pr-4">
