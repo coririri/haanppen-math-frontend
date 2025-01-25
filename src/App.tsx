@@ -16,6 +16,7 @@ import LessonPage from './components/pages/LessonPage';
 import LessonOverviewPage from './components/pages/LessonOverviewPage';
 import OnlineLessonPage from './components/pages/OnlineLessonPage';
 import PreviewClassPage from './components/pages/PreviewClassPage';
+import ServerErrorPage from './components/pages/ServerErrorPage';
 
 // 배포1
 
@@ -45,6 +46,7 @@ function App() {
           </Route>
           {/* 단독 레이아웃 */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/server-error" element={<ServerErrorPage />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

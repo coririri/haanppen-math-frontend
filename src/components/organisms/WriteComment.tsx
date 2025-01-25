@@ -129,9 +129,12 @@ function WriteComment({
             placeholder="댓글 작성"
           />
           <div className="flex justify-between items-center mt-12">
-            <div className="flex">
+            <div className="flex w-[192px] overflow-x-auto">
               {imgsPreview.map((previewImage, index) => (
-                <div className="relative" key={previewImage}>
+                <div
+                  className="relative w-[96px] flex-shrink-0"
+                  key={previewImage}
+                >
                   <button
                     className="absolute top-1 right-5"
                     type="button"

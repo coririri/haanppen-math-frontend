@@ -113,7 +113,7 @@ function WriteQueryPage() {
       </div>
 
       {/* 이미지 미리보기 */}
-      <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto">
+      <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto mb-[80px]">
         {imgPreview.map((src, index) => (
           <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
             <button

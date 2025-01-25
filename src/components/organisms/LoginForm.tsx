@@ -40,6 +40,12 @@ function LoginForm({
     setPasswordVisibility((prev) => !prev);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLoginClick();
+    }
+  };
+
   return (
     <form className="md:w-[30.25rem] w-[16rem] h-[16rem] flex flex-col justify-between mx-auto">
       <input
@@ -49,6 +55,7 @@ function LoginForm({
         onChange={(e) => {
           handleChangeForm(e, 'id');
         }}
+        onKeyDown={handleKeyDown} // Enter 키 감지
       />
       <div className="md:w-[30.25rem] w-[16rem] relative">
         <input
@@ -59,6 +66,7 @@ function LoginForm({
           onChange={(e) => {
             handleChangeForm(e, 'password');
           }}
+          onKeyDown={handleKeyDown} // Enter 키 감지
         />
         {passwordVisibility ? (
           <button
