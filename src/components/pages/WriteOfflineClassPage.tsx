@@ -15,6 +15,7 @@ import { CourseType } from '../../types/courseType';
 import { VideoType } from '../../types/videoType';
 import IconButton from '../atoms/IconButton';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
+import Loading from '../layouts/Loading';
 
 function WriteOfflineClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,6 +47,7 @@ function WriteOfflineClassPage() {
     Array(videoData.length).fill(false),
   );
   const [deleteCheckModalOpen, setDeleteCheckModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +59,7 @@ function WriteOfflineClassPage() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const response = await getLessonByDateAndCourse(
         courseList[Number(selectedClassindex)]?.courseId,
         dateTimeToDate(
@@ -80,6 +83,7 @@ function WriteOfflineClassPage() {
         });
         setVideoData([]);
       }
+      setIsLoading(false);
     };
     if (startDate && courseList[Number(selectedClassindex)]?.courseId) {
       fetchData();
@@ -99,7 +103,9 @@ function WriteOfflineClassPage() {
     console.log(formattedDate); // 2025-01-14
     setStartDate(new Date(formattedDate.split('T')[0]));
   }, [searchParams.get('date')]);
-  console.log(startDate);
+
+  if (isLoading) return <Loading />;
+
   return (
     <div className=" mx-auto">
       <DeleteCheckModal

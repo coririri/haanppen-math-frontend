@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AiFillEdit } from 'react-icons/ai';
 import DropdownMenu from '../molecules/DropdownMenu';
@@ -16,6 +16,7 @@ import enrollOnlineLesson, {
 import { CourseType } from '../../types/courseType';
 import { CategoryType } from '../../types/categoryType';
 import { OnlineVideoDataType } from '../../types/onlineVideoType';
+import Loading from '../layouts/Loading';
 
 function WriteOnlineClassPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,9 +44,11 @@ function WriteOnlineClassPage() {
   const [deleteCheckArr, setDeleteCheckArr] = useState<boolean[]>(
     Array(videoList.length).fill(false),
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const mainCategorysResponse = await getRootCategory();
       let subategorysResponse;
 
@@ -112,6 +115,7 @@ function WriteOnlineClassPage() {
         setVideoList(onlineLessonRespose.data.onlineVideoDetails);
         setIsCreated(true);
       }
+      setIsLoading(false);
     };
     fetchData();
   }, [selectedClassindex, isCreated]);
@@ -129,6 +133,8 @@ function WriteOnlineClassPage() {
     };
     fetchData();
   }, [mainCategorySelected]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>

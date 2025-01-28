@@ -29,6 +29,18 @@ instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // 네트워크 에러 처리
+    if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
+      window.location.href = '/network-error'; // 네트워크 에러 페이지로 이동
+      return Promise.reject(error);
+    }
+
+    // 요청 취소 처리
+    if (error.code === 'ERR_CANCELED' || error.message === 'canceled') {
+      window.location.href = '/server-error'; // 요청 취소 페이지로 이동
+      return Promise.reject(error);
+    }
+
     // AccessToken 만료로 인한 에러 처리
     if (
       error.response &&
@@ -49,6 +61,7 @@ instance.interceptors.response.use(
         originalRequest.headers.Authorization = newToken;
         return instance(originalRequest); // 요청 재시도
       } catch (refreshError) {
+        window.location.href = '/login'; // 요청 취소 페이지로 이동
         return Promise.reject(refreshError); // 갱신 실패 시 에러 반환
       }
     }
