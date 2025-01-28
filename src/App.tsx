@@ -17,6 +17,7 @@ import LessonOverviewPage from './components/pages/LessonOverviewPage';
 import OnlineLessonPage from './components/pages/OnlineLessonPage';
 import PreviewClassPage from './components/pages/PreviewClassPage';
 import ServerErrorPage from './components/pages/ServerErrorPage';
+import NetworkErrorPage from './components/pages/NetworkErrorPage';
 
 // 배포1
 
@@ -47,6 +48,7 @@ function App() {
           {/* 단독 레이아웃 */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/server-error" element={<ServerErrorPage />} />
+          <Route path="/network-error" element={<NetworkErrorPage />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
