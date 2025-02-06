@@ -63,7 +63,10 @@ function WriteOnlineClassPage() {
 
       const { data } = await getOwnOnlineCourses();
       setCourseList(data);
-      if (data.length === 0) return;
+      if (data.length === 0) {
+        setIsLoading(false);
+        return;
+      }
       const onlineLessonRespose = await getOnlineLesson(
         data[selectedClassindex].courseId,
       );
