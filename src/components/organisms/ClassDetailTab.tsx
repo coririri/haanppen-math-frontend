@@ -86,7 +86,7 @@ function ClassDetailTab({
               }
             }}
           >
-            전체 저장
+            저장
           </TextButton>
         </div>
       )}
