@@ -348,6 +348,7 @@ function OnlineCourseEnrollmentModal({
                     alert('반 이름을 입력해주세요');
                     return;
                   }
+                  console.log(courseName, teacherArr, selectedTeacherindex);
                   await enrollCourse(
                     courseName,
                     teacherArr[selectedTeacherindex - 1].id,

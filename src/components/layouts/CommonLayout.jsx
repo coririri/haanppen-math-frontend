@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/no-danger */
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { AiOutlineCheck } from 'react-icons/ai';
+import { AiOutlineCheck, AiOutlineDown } from 'react-icons/ai';
 import DatePicker from 'react-datepicker';
 import instance from '../../apis/instance';
 import Header from './Header';
@@ -330,6 +331,43 @@ function CommonLayout() {
       </div>
     );
 
+  const fqaData = [
+    {
+      question: '학생 등록과 학생 로그인',
+      answer: `1. 관리 - 학생 관리에서 학생을 등록할 수 있습니다. <br/>
+               2. 학년 정보/이름/연락처를 입력하면 학생이 등록 됩니다. <br/>
+               3. 학생은 ID: “본인 전화번호”, 비밀번호: “0000”으로 초기 로그인을 하면 된다고 안내해주세요. <br/>
+               4. 보안을 위해 “오른쪽 상단 내정보”를 가서 비밀번호를 바꿔주세요`,
+    },
+    {
+      question: '질문 타겟 선생님이 뭔가요??',
+      answer: `학생은 질문 글을 작성할 때, 질문을 받아줄 타겟 선생님을
+                          선택할 수 있습니다.<br />
+                         <br />
+                          타겟 선생님이 아닌 선생님이 답변을 해도 됩니다.
+                          <br />
+                          (단순 타겟 선생님을 명확하게 할 의도 입니다.)`,
+    },
+    {
+      question: '질문 글은 언제 해결로 바뀌나요?',
+      answer: `선생님이 질문 게시글에 답변을 달면 자동으로 게시글이 해결로 바뀝니다.`,
+    },
+    {
+      question: '학원 강좌 / 단과 강좌의 차이점',
+      answer: `학원 강좌(반)은 “학원에서 수업한 수업”을 뜻합니다.<br/><br/>
+      단과 강좌는 “온라인 전용 수업”을 뜻합니다. (개설 강좌는 개설 강좌 탭을 통해 학생들이 수업을 직접 탐색해볼 수 있습니다.)`,
+    },
+    {
+      question: '학생 입장에서는 어떻게 보이나요?',
+      answer: `초1(테스트) 학생을 원하는 반에 등록하고, 사이트에 01011111111/0000으로 로그인해서 확인하시면 됩니다.
+      <br/> (핸드폰으로 로그인하시면 조금더 정확한 UI로 보실 수 있습니다.)`,
+    },
+  ];
+
+  const [teacherTutorialIndex, setTeacherTutorialIndex] = useState(0);
+  const [isOpenFQAArr, setIsOpenFQAArr] = useState(
+    Array(fqaData.length).fill(false),
+  );
   if (localStorage.getItem('role') === 'TEACHER')
     return (
       <div>
@@ -338,63 +376,144 @@ function CommonLayout() {
         <div className="w-[1440px] min-h-[680px] relative mx-auto border-[20px] border-hpBackgroundGray border-solid">
           {location.pathname === '/' ? (
             <div className="min-h-screen ">
-              {/* Hero Section */}
-              <section className="bg-white py-20">
-                <div className="max-w-7xl mx-auto text-center">
-                  <h2 className="text-4xl font-bold mb-6">
-                    수학 학습을 쉽고 재미있게!
-                  </h2>
-                  <p className="text-lg text-gray-600 mb-8">
-                    Hannppen은 학생들에게 수학 개념을 쉽게 이해할 수 있도록
-                    도와줍니다. 다양한 수학 학습 리소스와 문제 풀이로 수학
-                    실력을 높이세요.
-                  </p>
-                  <a
-                    href="/"
-                    className="bg-indigo-600 text-white py-3 px-8 rounded-md shadow hover:bg-indigo-700 transition"
+              <div className="flex flex-col gap-1 mt-4">
+                <div className="mx-auto flex justify-center items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTeacherTutorialIndex(0);
+                    }}
                   >
-                    학습 시작하기
-                  </a>
+                    <h2
+                      className={`w-[380px] py-2 text-center text-md font-semibold leading-[40px] border-gray-200  border-solid ${teacherTutorialIndex === 0 ? 'text-white bg-[#a40033] border-0' : 'text-black bg-white border-[3px]'}`}
+                    >
+                      자주 묻는 질문
+                    </h2>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTeacherTutorialIndex(1);
+                    }}
+                  >
+                    <h2
+                      className={`w-[380px] py-2 text-center text-md font-semibold  leading-[40px] border-gray-200  border-solid ${teacherTutorialIndex === 1 ? 'text-white bg-[#a40033] border-0' : 'text-black bg-white border-[3px]'}`}
+                    >
+                      학원 영상 관리 탭 설명
+                    </h2>
+                  </button>
                 </div>
-              </section>
+                <div className="mx-auto flex justify-center items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTeacherTutorialIndex(2);
+                    }}
+                  >
+                    <h2
+                      className={`w-[380px] py-2 text-center text-md font-semibold  leading-[40px] border-gray-200  border-solid ${teacherTutorialIndex === 2 ? 'text-white bg-[#a40033] border-0' : 'text-black bg-white border-[3px]'}`}
+                    >
+                      학원 강좌 등록 설명
+                    </h2>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTeacherTutorialIndex(3);
+                    }}
+                  >
+                    <h2
+                      className={`w-[380px] py-2 text-center text-md font-semibold  leading-[40px] border-gray-200  border-solid ${teacherTutorialIndex === 3 ? 'text-white bg-[#a40033] border-0' : 'text-black bg-white border-[3px]'}`}
+                    >
+                      단과 강좌 등록 설명
+                    </h2>
+                  </button>
+                </div>
+              </div>
 
-              {/* Features Section */}
-              <section className="bg-gray-200 py-16">
-                <div className="max-w-7xl mx-auto text-center">
-                  <h3 className="text-3xl font-semibold mb-12">
-                    주요 학습 콘텐츠
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <div className="bg-white p-6 rounded-lg shadow">
-                      <h4 className="text-xl font-semibold mb-4">
-                        수업 녹화본 복습
-                      </h4>
-                      <p className="text-gray-600">
-                        덧셈, 뺄셈부터 시작하여, 학생들이 수학의 기초를 단단하게
-                        쌓을 수 있도록 도와줍니다.
-                      </p>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow">
-                      <h4 className="text-xl font-semibold mb-4">
-                        질문 게시판
-                      </h4>
-                      <p className="text-gray-600">
-                        다양한 수학 문제를 통해 학생들이 실생활에서 수학을
-                        어떻게 사용할 수 있는지 배워보세요.
-                      </p>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow">
-                      <h4 className="text-xl font-semibold mb-4">
-                        수업 자료 다운
-                      </h4>
-                      <p className="text-gray-600">
-                        수학 문제를 풀고, 즉시 결과를 확인하면서 실력을 점검할
-                        수 있는 퀴즈 기능을 제공합니다.
-                      </p>
-                    </div>
-                  </div>
+              {teacherTutorialIndex === 0 && (
+                <div className="mx-auto w-[770px] mt-12">
+                  {fqaData.map((fqa, fqaIndex) => (
+                    <button
+                      className={`border-gray-200 border-solid border-[2.2px] mb-3 ${isOpenFQAArr[fqaIndex] ? 'bg-[#f8f8f8]' : 'bg-white'}`}
+                      type="button"
+                      onClick={() => {
+                        setIsOpenFQAArr((prev) => {
+                          const copiedIsOpenFQAArr = [...prev];
+                          copiedIsOpenFQAArr[fqaIndex] =
+                            !copiedIsOpenFQAArr[fqaIndex];
+                          return copiedIsOpenFQAArr;
+                        });
+                      }}
+                    >
+                      <div className="w-[770px]  py-4 flex items-center justify-start">
+                        <div className="w-[200px] flex items-center justify-start ml-12">
+                          <span className="mr-4 text-[#a40033] text-3xl font-semibold">
+                            Q
+                          </span>
+                          <span className="text-[#a40033] text-lg">
+                            [질문게시판]
+                          </span>
+                        </div>
+                        <span
+                          className={`text-lg w-[500px] text-left ${isOpenFQAArr[0] ? 'text-[#a40033]' : 'text-black '}`}
+                        >
+                          {fqa.question}
+                        </span>
+                        <div>
+                          <AiOutlineDown
+                            className={`w-[70px] ${isOpenFQAArr[0] ? 'transform rotate-180' : ''} transition-transform duration-300 ease-in-out`}
+                          />
+                        </div>
+                      </div>
+                      {isOpenFQAArr[fqaIndex] && (
+                        <div
+                          className="text-left pl-20 font-semibold py-2"
+                          dangerouslySetInnerHTML={{
+                            __html: fqa.answer,
+                          }}
+                        />
+                      )}
+                    </button>
+                  ))}
                 </div>
-              </section>
+              )}
+              {teacherTutorialIndex === 1 && (
+                <div className="mx-auto w-[770px] mt-12">
+                  <iframe
+                    title="학원 강좌"
+                    width="770"
+                    height="433"
+                    src="https://www.youtube.com/embed/FOJMD4mHku0?si=eN_L8p7ACmlBVSZq"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                </div>
+              )}
+              {teacherTutorialIndex === 2 && (
+                <div className="mx-auto w-[770px] mt-12">
+                  <iframe
+                    title="단과 강좌"
+                    width="770"
+                    height="433"
+                    src="https://www.youtube.com/embed/M8Ksr0WsZMI?si=b3--kVPrTIAZD0Pq"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                </div>
+              )}
+              {teacherTutorialIndex === 3 && (
+                <div className="mx-auto w-[770px] mt-12">
+                  <iframe
+                    title="단과 강좌"
+                    width="770"
+                    height="433"
+                    src="https://www.youtube.com/embed/U2q63VbHvfI?si=wlnIi2LemS8I7HoW"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                </div>
+              )}
             </div>
           ) : (
             <Outlet />
