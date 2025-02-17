@@ -1,6 +1,6 @@
 {
   "name": "한편의 수학",
-  "short_name": "한편",
+  "short_name": "한편의 수학",
   "start_url": "/",
   "display": "standalone",
   "icons": [
@@ -37,6 +37,12 @@
     {
       "src": "/android-icon-192x192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "density": "4.0"
+    },
+    {
+      "src": "/android-icon-512x512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "density": "4.0"
     }
