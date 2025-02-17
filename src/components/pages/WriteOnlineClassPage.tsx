@@ -232,6 +232,7 @@ function WriteOnlineClassPage() {
                 handleClick={async () => {
                   if (primaryClassInfo.title.length === 0) {
                     alert('수업 제목은 필수입니다.');
+                    return;
                   }
                   try {
                     await enrollOnlineLesson(
