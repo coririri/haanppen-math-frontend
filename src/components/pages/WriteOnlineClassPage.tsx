@@ -230,6 +230,9 @@ function WriteOnlineClassPage() {
                 icon={<AiFillEdit size="20px" />}
                 text="수업 생성"
                 handleClick={async () => {
+                  if (primaryClassInfo.title.length === 0) {
+                    alert('수업 제목은 필수입니다.');
+                  }
                   try {
                     await enrollOnlineLesson(
                       courseList[selectedClassindex].courseId,
