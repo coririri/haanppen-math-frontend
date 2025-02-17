@@ -82,6 +82,10 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
               color="gray"
               moreStyle="w-[5rem] mr-1"
               handleClick={async () => {
+                if (folderName.length === 0) {
+                  alert('폴더 이름은 필수입니다.');
+                  return;
+                }
                 try {
                   const absolutePath = breadscrumArray.join('/');
                   if (absolutePath !== '/') {

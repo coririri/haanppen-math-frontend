@@ -206,13 +206,15 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
               moreStyle="w-[5rem] mr-4"
               handleClick={async () => {
                 // api 연결
-                for (let i = 0; i < additionAttachmentViews.length; i += 1)
+                for (let i = 0; i < additionAttachmentViews.length; i += 1) {
                   await postOnlineCourseAttachment(
                     onlineCourseId,
                     videoId,
                     additionAttachmentViews[i].title,
                     additionAttachmentViews[i].url,
                   );
+                }
+
                 const onlineLessonRespose =
                   await getOnlineLesson(onlineCourseId);
                 setVideoList(onlineLessonRespose.data.onlineVideoDetails);
