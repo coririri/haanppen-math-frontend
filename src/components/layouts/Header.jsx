@@ -30,7 +30,7 @@ function Header() {
             }}
           >
             <img
-              src="/images/header/sm_logo_image.png"
+              src="https://www.hpmath.co.kr/images/sm_logo_image.png"
               alt="한편의 수학 로고 이미지"
               className="w-[80px]"
             />
@@ -65,7 +65,7 @@ function Header() {
           }}
         >
           <img
-            src="/images/header/sm_logo_image.png"
+            src="https://www.hpmath.co.kr/images/sm_logo_image.png"
             alt="한편의 수학 로고 이미지"
             className="w-[70px]"
           />
