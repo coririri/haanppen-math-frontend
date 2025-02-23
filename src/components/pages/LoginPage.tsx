@@ -102,7 +102,7 @@ function LoginPage() {
       <div className="mb-24">
         <img
           className="mx-auto md:w-[250px] w-[220px]"
-          src="/images/loginPage/lg_logo_image.png"
+          src="https://www.hpmath.co.kr/images/lg_logo_image.png"
           alt="한편의 수학 로고 이미지"
         />
       </div>
