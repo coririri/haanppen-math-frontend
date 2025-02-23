@@ -1,7 +1,6 @@
 import React from 'react';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { Link, useNavigate } from 'react-router-dom';
-import logoImages from '../../images/header/sm_logo_image.png';
 
 function Header() {
   const role = localStorage.getItem('role');
@@ -31,7 +30,7 @@ function Header() {
             }}
           >
             <img
-              src={logoImages}
+              src="/images/header/sm_logo_image.png"
               alt="한편의 수학 로고 이미지"
               className="w-[80px]"
             />
@@ -66,7 +65,7 @@ function Header() {
           }}
         >
           <img
-            src={logoImages}
+            src="/images/header/sm_logo_image.png"
             alt="한편의 수학 로고 이미지"
             className="w-[70px]"
           />
