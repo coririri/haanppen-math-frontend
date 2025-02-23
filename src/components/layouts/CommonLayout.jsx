@@ -429,6 +429,23 @@ function CommonLayout() {
                     </h2>
                   </button>
                 </div>
+                <div className="mx-auto flex justify-center items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTeacherTutorialIndex(4);
+                    }}
+                  >
+                    <h2
+                      className={`w-[380px] py-2 text-center text-md font-semibold  leading-[40px] border-gray-200  border-solid ${teacherTutorialIndex === 4 ? 'text-white bg-[#a40033] border-0' : 'text-black bg-white border-[3px]'}`}
+                    >
+                      QR코드 링크로 변환
+                    </h2>
+                  </button>
+                  <div>
+                    <p className="w-[380px] py-2 text-center text-md font-semibold  leading-[40px]   " />
+                  </div>
+                </div>
               </div>
 
               {teacherTutorialIndex === 0 && (
@@ -509,6 +526,18 @@ function CommonLayout() {
                     width="770"
                     height="433"
                     src="https://www.youtube.com/embed/U2q63VbHvfI?si=wlnIi2LemS8I7HoW"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                </div>
+              )}
+              {teacherTutorialIndex === 4 && (
+                <div className="mx-auto w-[770px] mt-12">
+                  <iframe
+                    title="QR코드 링크로 변환"
+                    width="770"
+                    height="433"
+                    src="https://youtube.com/embed/19Y33m-zEmk?si=Ua1dZ0HmuF1vNnL5"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
                   />

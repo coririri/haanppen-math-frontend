@@ -18,6 +18,7 @@ import OnlineLessonPage from './components/pages/OnlineLessonPage';
 import PreviewClassPage from './components/pages/PreviewClassPage';
 import ServerErrorPage from './components/pages/ServerErrorPage';
 import NetworkErrorPage from './components/pages/NetworkErrorPage';
+import PrivacyPage from './components/pages/PrivacyPage';
 
 // 배포1
 
@@ -49,6 +50,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/server-error" element={<ServerErrorPage />} />
           <Route path="/network-error" element={<NetworkErrorPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
