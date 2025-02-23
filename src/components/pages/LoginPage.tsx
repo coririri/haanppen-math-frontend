@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logoImages from '../../images/loginPage/lg_logo_image.png';
 import phoneNumberValidation from '../../utils/idValidation';
 import passwordValidation from '../../utils/passwordValidation';
 import login from '../../apis/login';
@@ -103,7 +102,7 @@ function LoginPage() {
       <div className="mb-24">
         <img
           className="mx-auto md:w-[250px] w-[220px]"
-          src={logoImages}
+          src="/images/loginPage/lg_logo_image.png"
           alt="한편의 수학 로고 이미지"
         />
       </div>
