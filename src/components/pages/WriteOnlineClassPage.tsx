@@ -234,6 +234,10 @@ function WriteOnlineClassPage() {
                     alert('수업 제목은 필수입니다.');
                     return;
                   }
+                  if (courseList.length === 0) {
+                    alert('반을 먼저 생성해주세요.');
+                    return;
+                  }
                   try {
                     await enrollOnlineLesson(
                       courseList[selectedClassindex].courseId,

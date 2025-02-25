@@ -102,6 +102,11 @@ function ClassDetailTab({
                 return;
               }
 
+              if (courseList.length === 0) {
+                alert('반을 먼저 생성해주세요.');
+                return;
+              }
+
               try {
                 await enrollLesson(
                   courseList[selectedClassindex].courseId,
