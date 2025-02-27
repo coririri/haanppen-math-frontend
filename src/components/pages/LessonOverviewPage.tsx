@@ -7,16 +7,16 @@ import {
   getSubCategory,
 } from '../../apis/onlineLesson';
 import { CategoryType } from '../../types/categoryType';
-import { CourseType } from '../../types/courseType';
+import { CourseOverviewType } from '../../types/courseType';
 
 function LessonOverviewPage() {
   const [mainCategorySelected, setMainCategorySelected] = useState<number>(1);
   const [subCategorySelected, setSubCategorySelected] = useState<number>(0);
   const [mainCategorys, setMainCategorys] = useState<CategoryType[]>([]);
   const [subCategorys, setSubCategorys] = useState<CategoryType[]>([]);
-  const [lessonOverviewDatas, setLessonOverviewDatas] = useState<CourseType[]>(
-    [],
-  );
+  const [lessonOverviewDatas, setLessonOverviewDatas] = useState<
+    CourseOverviewType[]
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,13 +37,11 @@ function LessonOverviewPage() {
                     mainCategorysResponse.data[mainCategorySelected].categoryId,
                   );
                 setLessonOverviewDatas(onlineCourseByMainCategory.data);
-                console.log(onlineCourseByMainCategory.data);
                 return;
               } catch (e) {
                 console.log(e);
               }
             }
-
             const categoryOnlineCourse = await getOnlineCourseByCategoryId(
               subategorysResponse.data[subCategorySelected - 1].categoryId,
             );
@@ -93,13 +91,14 @@ function LessonOverviewPage() {
         console.log(e);
       }
     };
+    if (mainCategorys.length === 0) {
+      return;
+    }
     fetchData();
   }, [mainCategorySelected]);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(subCategorys[subCategorySelected]?.categoryId !== undefined);
-      console.log(subCategorySelected);
       if (mainCategorys.length === 0) {
         return;
       }
@@ -110,7 +109,6 @@ function LessonOverviewPage() {
             mainCategorys[mainCategorySelected].categoryId,
           );
           setLessonOverviewDatas(data);
-          console.log(data);
         } catch (e) {
           console.log(e);
         }
@@ -123,7 +121,6 @@ function LessonOverviewPage() {
             subCategorys[subCategorySelected - 1].categoryId,
           );
           setLessonOverviewDatas(data);
-          console.log(data);
         } catch (e) {
           console.log(e);
         }
@@ -159,12 +156,7 @@ function LessonOverviewPage() {
           <div className="border-t-[1.2px] border-gray-400/40 border-solid w-full mt-4 mb-4" />
           <div className="flex flex-col items-center justify-center gap-20">
             {lessonOverviewDatas.map((lessonOverviewData) => (
-              <LessonSummary
-                lessonOverviewData={lessonOverviewData}
-                mainCategoryName={
-                  mainCategorys[mainCategorySelected].categoryName
-                }
-              />
+              <LessonSummary lessonOverviewData={lessonOverviewData} />
             ))}
           </div>
         </div>

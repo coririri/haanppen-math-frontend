@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { LessonOverviewType } from '../../types/LessonOverviewType';
+import { CourseOverviewType } from '../../types/courseType';
 import lesson from '../../assests/lesson.jpg';
 
 interface LessonSummaryProps {
-  lessonOverviewData: LessonOverviewType; // 강좌의 개요 데이터
-  mainCategoryName: string;
+  lessonOverviewData: CourseOverviewType; // 강좌의 개요 데이터
   // subCategoryName: string;
 }
 
 function LessonSummary({
   lessonOverviewData,
-  mainCategoryName,
   // subCategoryName,
 }: LessonSummaryProps) {
   const navigate = useNavigate();
@@ -31,11 +29,11 @@ function LessonSummary({
               {lessonOverviewData.teacherPreview.teacherName} 선생님
             </span>
             <span className=" mr-2 text-[15px] bg-[#e9f1fe] text-[#5a83c0] border-[#c8d8f4] border-[1.2px] border-solid px-[8px] py-[1px]">
-              {mainCategoryName}
+              {lessonOverviewData.lessonCategoryInfo.parentCategoryName}
             </span>
-            {/* <span className="text-[15px] bg-[#e8fbd9] text-[#6cbb27] border-[#bbe7a6] border-[1.2px] border-solid px-[8px] py-[1px]">
-              {subCategoryName}
-            </span> */}
+            <span className="text-[15px] bg-[#e8fbd9] text-[#6cbb27] border-[#bbe7a6] border-[1.2px] border-solid px-[8px] py-[1px]">
+              {lessonOverviewData.lessonCategoryInfo.categoryName}
+            </span>
           </div>
           <h2 className="font-bold text-[15px] mb-[2px]">
             {lessonOverviewData.courseName}
