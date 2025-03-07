@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { CourseOverviewType } from '../../types/courseType';
 import lesson from '../../assests/lesson.jpg';
+import imageUrlToSrc from '../../utils/imageUrlToSrc';
 
 interface LessonSummaryProps {
   lessonOverviewData: CourseOverviewType; // 강좌의 개요 데이터
@@ -17,11 +18,19 @@ function LessonSummary({
     <div className="w-full relative">
       <div className="w-full flex justify-start items-center">
         <div>
-          <img
-            src={lesson}
-            alt="수업 대표 이미지"
-            className="w-[80px] ml-2 mr-4"
-          />
+          {lessonOverviewData.imageSrc == null ? (
+            <img
+              src={lesson}
+              alt="수업 대표 이미지"
+              className="w-[80px] ml-2 mr-4"
+            />
+          ) : (
+            <img
+              src={imageUrlToSrc(lessonOverviewData.imageSrc)}
+              alt="수업 대표 이미지"
+              className="w-[80px] ml-2 mr-4"
+            />
+          )}
         </div>
         <div className="">
           <div className="flex flex-wrap mb-[2px] gap-y-2">

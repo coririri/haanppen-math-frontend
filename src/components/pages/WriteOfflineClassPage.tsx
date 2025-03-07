@@ -1,7 +1,8 @@
 /* eslint-disable import/no-unresolved */
 import { useEffect, useState } from 'react';
+import { SetURLSearchParams } from 'react-router-dom';
 import { AiFillEdit } from 'react-icons/ai';
-import { useSearchParams } from 'react-router-dom';
+
 import ClassDetailTab from '../organisms/ClassDetailTab';
 import VideoListTab from '../organisms/VideoListTab';
 import DropdownMenu from '../molecules/DropdownMenu';
@@ -17,8 +18,15 @@ import IconButton from '../atoms/IconButton';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import Loading from '../layouts/Loading';
 
-function WriteOfflineClassPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+interface WriteOfflineClassPageProps {
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
+}
+
+function WriteOfflineClassPage({
+  searchParams,
+  setSearchParams,
+}: WriteOfflineClassPageProps) {
   const [courseList, setCourseList] = useState<CourseType[]>([]);
   const [selectedClassindex, setSelectedClassindex] = useState<number>(
     Number(searchParams.get('classIndex')),
@@ -88,7 +96,7 @@ function WriteOfflineClassPage() {
     if (startDate && courseList[Number(selectedClassindex)]?.courseId) {
       fetchData();
     }
-  }, [startDate, courseList[Number(selectedClassindex)]?.courseId, isCreated]);
+  }, [startDate, courseList[Number(selectedClassindex)]?.courseId]);
 
   useEffect(() => {
     setSelectedClassindex(Number(searchParams.get('classIndex')));
@@ -114,7 +122,7 @@ function WriteOfflineClassPage() {
         handleDelete={async () => {
           try {
             await deleteLessonById(classDetailData.id ?? -1);
-            setIsCreated(false);
+            window.location.reload();
             setDeleteCheckModalOpen(false);
           } catch (e) {
             console.log(e);

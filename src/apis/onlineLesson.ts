@@ -5,6 +5,7 @@ const enrollOnlineLesson = async (
   title: string,
   lessonRange: string,
   lessonDescribe: string,
+  imageSrc: null | string,
   categoryId = 0,
 ) =>
   instance.put('/api/online-courses/lesson', {
@@ -13,6 +14,7 @@ const enrollOnlineLesson = async (
     lessonRange,
     lessonDescribe,
     categoryId,
+    imageSrc,
   });
 
 export default enrollOnlineLesson;

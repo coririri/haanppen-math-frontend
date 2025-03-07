@@ -14,11 +14,9 @@ function WriteClassPage() {
   useEffect(() => {
     if (classTypeArr[0] === true) {
       searchParams.set('classType', 'offline');
-      searchParams.set('classIndex', '0');
       setSearchParams(searchParams);
     } else {
       searchParams.set('classType', 'online');
-      searchParams.set('classIndex', '0');
       setSearchParams(searchParams);
     }
   }, [classTypeArr]);
@@ -33,7 +31,17 @@ function WriteClassPage() {
         setIsClickArr={setClassArrType}
       />
       <div className="mt-4">
-        {classTypeArr[0] ? <WriteOfflineClassPage /> : <WriteOnlineClassPage />}
+        {classTypeArr[0] ? (
+          <WriteOfflineClassPage
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
+        ) : (
+          <WriteOnlineClassPage
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
+        )}
       </div>
     </div>
   );

@@ -21,4 +21,5 @@ export interface CourseOverviewType {
   studentSize: number;
   teacherPreview: TeacherPreview;
   lessonCategoryInfo: LessonCategoryInfo;
+  imageSrc: null | string;
 }

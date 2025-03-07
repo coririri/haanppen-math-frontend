@@ -115,6 +115,7 @@ function ClassDetailTab({
                   classDetailData.content,
                 );
                 setIsCreated(true);
+                window.location.reload();
               } catch (e) {
                 console.log(e);
               }
