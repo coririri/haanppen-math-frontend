@@ -42,6 +42,7 @@ function TeacherManagementPage() {
   const { data, isLoading } = useQuery({
     queryKey: ['teachers', searchNameValue, page - 1],
     queryFn: getTeacherByPage,
+    staleTime: 1000 * 60 * 5, // 5분 동안은 네트워크 요청 안 보내고 캐시 데이터 사용
   });
 
   return (
