@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { SetStateAction } from 'react';
 import { AiOutlineBook } from 'react-icons/ai';
 import enrollOnlineLesson from '../../apis/onlineLesson';
 import TextButton from '../atoms/TextButton';

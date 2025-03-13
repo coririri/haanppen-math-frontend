@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AiOutlineRight } from 'react-icons/ai';
 import { CgLayoutList, CgLayoutGrid } from 'react-icons/cg';
@@ -111,7 +111,7 @@ function VedioManagementPage() {
     const video = document.createElement('video');
     video.preload = 'metadata';
     video.src = URL.createObjectURL(file);
-    const videoRuntime = await getVideoDuration(file);
+    // const videoRuntime = await getVideoDuration(file);
 
     // total size 계산
     const totalChunks = Math.ceil(file.size / chunkSize);
