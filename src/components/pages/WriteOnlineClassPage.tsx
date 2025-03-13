@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { SetURLSearchParams } from 'react-router-dom';
 import { AiFillEdit } from 'react-icons/ai';
 import DropdownMenu from '../molecules/DropdownMenu';
 import { getOwnOnlineCourses } from '../../apis/onlineCourse';
@@ -17,23 +17,37 @@ import { CourseType } from '../../types/courseType';
 import { CategoryType } from '../../types/categoryType';
 import { OnlineVideoDataType } from '../../types/onlineVideoType';
 import Loading from '../layouts/Loading';
+import uploadImageToS3 from '../../apis/media';
+import imageUrlToSrc from '../../utils/imageUrlToSrc';
 
-function WriteOnlineClassPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+interface WriteOnlineClassPageProps {
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
+}
+
+function WriteOnlineClassPage({
+  searchParams,
+  setSearchParams,
+}: WriteOnlineClassPageProps) {
   const [courseList, setCourseList] = useState<CourseType[]>([]);
   const [selectedClassindex, setSelectedClassindex] = useState<number>(
-    Number(searchParams.get('classIndex')),
+    Number(searchParams.get('classIndex') ?? 0),
   );
   const [isCreated, setIsCreated] = useState<boolean>(false);
   const [primaryClassInfo, setPrimaryClassInfo] = useState<{
     title: string;
     lessonRange: string;
     lessonDesc: string;
+    image: null | string;
   }>({
     title: '',
     lessonRange: '',
     lessonDesc: '',
+    image: '',
   });
+  console.log(selectedClassindex);
+  const [imageFile, setImageFile] = useState<null | File>(null);
+
   const [mainCategorySelected, setMainCategorySelected] = useState<number>(0);
   const [subCategorySelected, setSubCategorySelected] = useState<number>(0);
   const [deleteClassCheckModalOpen, setDeleteClassCheckModalOpen] =
@@ -53,13 +67,6 @@ function WriteOnlineClassPage() {
       let subategorysResponse;
 
       setMainCategorys(mainCategorysResponse.data);
-      if (mainCategorysResponse.data.length === 0) setSubCategorys([]);
-      else {
-        subategorysResponse = await getSubCategory(
-          mainCategorysResponse.data[0].categoryId,
-        );
-        setSubCategorys(subategorysResponse.data);
-      }
 
       const { data } = await getOwnOnlineCourses();
       setCourseList(data);
@@ -72,10 +79,19 @@ function WriteOnlineClassPage() {
       );
 
       if (onlineLessonRespose.data.title === null) {
+        if (mainCategorysResponse.data.length === 0) setSubCategorys([]);
+        else {
+          subategorysResponse = await getSubCategory(
+            mainCategorysResponse.data[0].categoryId,
+          );
+          setSubCategorys(subategorysResponse.data);
+        }
+
         setPrimaryClassInfo({
           title: '',
           lessonRange: '',
           lessonDesc: '',
+          image: null,
         });
 
         setMainCategorySelected(0);
@@ -86,6 +102,10 @@ function WriteOnlineClassPage() {
           title: onlineLessonRespose.data.title,
           lessonRange: onlineLessonRespose.data.lessonRange,
           lessonDesc: onlineLessonRespose.data.lessonDesc,
+          image:
+            onlineLessonRespose.data.imgSrc == null
+              ? null
+              : imageUrlToSrc(onlineLessonRespose.data.imgSrc),
         });
 
         let mainCategoryIndex = 0;
@@ -121,7 +141,7 @@ function WriteOnlineClassPage() {
       setIsLoading(false);
     };
     fetchData();
-  }, [selectedClassindex, isCreated]);
+  }, [selectedClassindex]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,6 +154,8 @@ function WriteOnlineClassPage() {
         console.log(e);
       }
     };
+    if (mainCategorys.length === 0) return;
+
     fetchData();
   }, [mainCategorySelected]);
 
@@ -149,6 +171,7 @@ function WriteOnlineClassPage() {
             await deleteOnlineLesson(courseList[selectedClassindex].courseId);
             setIsCreated(false);
             setDeleteClassCheckModalOpen(false);
+            window.location.reload();
           } catch (e) {
             console.log(e);
           }
@@ -179,6 +202,8 @@ function WriteOnlineClassPage() {
                 subCategorys={subCategorys}
                 courseList={courseList}
                 selectedClassindex={selectedClassindex}
+                imageFile={imageFile}
+                setImageFile={setImageFile}
               />
             </div>
           ) : (
@@ -196,6 +221,8 @@ function WriteOnlineClassPage() {
                   subCategorys={subCategorys}
                   courseList={courseList}
                   selectedClassindex={selectedClassindex}
+                  imageFile={imageFile}
+                  setImageFile={setImageFile}
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
@@ -234,14 +261,28 @@ function WriteOnlineClassPage() {
                     alert('수업 제목은 필수입니다.');
                     return;
                   }
+                  if (courseList.length === 0) {
+                    alert('반을 먼저 생성해주세요.');
+                    return;
+                  }
                   try {
+                    let imageUrlToServer = null;
+                    if (imageFile !== null) {
+                      const formData = new FormData();
+                      formData.append('image', imageFile);
+                      const { data } = await uploadImageToS3(formData);
+                      imageUrlToServer = data.imageUrl;
+                    }
+
                     await enrollOnlineLesson(
                       courseList[selectedClassindex].courseId,
                       primaryClassInfo.title,
                       primaryClassInfo.lessonRange,
                       primaryClassInfo.lessonDesc,
+                      imageUrlToServer,
                       subCategorys[subCategorySelected].categoryId,
                     );
+                    window.location.reload();
                     setIsCreated(true);
                   } catch (e) {
                     console.log(e);

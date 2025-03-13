@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { AxiosError } from 'axios';
 import { StudentType } from '../types/studentType';
 import instance from './instance';
 
@@ -99,74 +100,35 @@ export const getCourseStudents = async (courseId: number) =>
 export const getOnlineCourseStudents = async (courseId: number) =>
   instance.get(`/api/online-courses/${courseId}`);
 
-export const getStudentByPage = ({
+export const getStudentByPage = async ({
   queryKey,
 }: {
-  queryKey: [string, boolean[], string, number];
+  queryKey: ['students', number, string, number];
 }) => {
-  if (queryKey[1][0] === true)
-    return instance
-      .get('/api/members/students/paging', {
-        params: {
-          size: 10,
-          page: queryKey[3],
-          startGrade: 0,
-          endGrade: 11,
-          name: queryKey[2],
-        },
-      })
-      .then((res) => res.data);
+  const [, gradeIndex, name, page] = queryKey;
 
-  if (queryKey[1][1] === true)
-    return instance
-      .get('/api/members/students/paging', {
-        params: {
-          size: 10,
-          page: queryKey[3],
-          startGrade: 0,
-          endGrade: 5,
-          name: queryKey[2],
-        },
-      })
-      .then((res) => res.data);
+  const gradeConfig = [
+    { startGrade: 0, endGrade: 11 },
+    { startGrade: 0, endGrade: 5 },
+    { startGrade: 6, endGrade: 8 },
+    { startGrade: 9, endGrade: 11 },
+  ];
 
-  if (queryKey[1][2] === true)
-    return instance
-      .get('/api/members/students/paging', {
-        params: {
-          size: 10,
-          page: queryKey[3],
-          startGrade: 6,
-          endGrade: 8,
-          name: queryKey[2],
-        },
-      })
-      .then((res) => res.data);
+  const { startGrade, endGrade } = gradeConfig[gradeIndex] || gradeConfig[0];
 
-  if (queryKey[1][3] === true)
-    return instance
-      .get('/api/members/students/paging', {
-        params: {
-          size: 10,
-          page: queryKey[3],
-          startGrade: 9,
-          endGrade: 11,
-          name: queryKey[2],
-        },
-      })
-      .then((res) => res.data);
+  try {
+    const response = await instance.get('/api/members/students/paging', {
+      params: { size: 10, page, startGrade, endGrade, name },
+    });
+    return response.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>; // AxiosError 타입 적용
+    console.error('Error fetching students:', axiosError);
 
-  return instance
-    .get('/api/members/students/paging', {
-      params: {
-        size: 10,
-        page: queryKey[3],
-        startGrade: 0,
-        endGrade: 11,
-        name: queryKey[2],
-      },
-    })
-    .then((res) => res.data);
+    throw new Error(
+      axiosError.response?.data?.message || 'Failed to fetch students',
+    );
+  }
 };
 
 export default studentAccountRegist;

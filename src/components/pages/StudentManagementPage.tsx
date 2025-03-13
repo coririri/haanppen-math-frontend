@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
 import {
   useQuery,
-  // useInfiniteQuery,
   useMutation,
   useQueryClient,
   InvalidateQueryFilters,
@@ -64,8 +63,14 @@ function StudentManagementPage() {
   });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['students', choosenGradeIndex, searchNameValue, page - 1],
+    queryKey: [
+      'students',
+      choosenGradeIndex.findIndex((value) => value === true),
+      searchNameValue,
+      page - 1,
+    ],
     queryFn: getStudentByPage,
+    staleTime: 1000 * 60 * 5, // 5분 동안은 네트워크 요청 안 보내고 캐시 데이터 사용
   });
 
   return (
@@ -176,7 +181,7 @@ function StudentManagementPage() {
                 }
                 queryClient.invalidateQueries([
                   'students',
-                  choosenGradeIndex,
+                  choosenGradeIndex.findIndex((value) => value === true),
                   searchNameValue,
                   page - 1,
                 ] as InvalidateQueryFilters);
