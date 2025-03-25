@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
 import {
   InvalidateQueryFilters,
@@ -15,7 +15,6 @@ import Pagenation from '../organisms/Pagenation';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 
 function TeacherManagementPage() {
-  const searchRef = useRef<HTMLInputElement>(null);
   const queryClient: QueryClient = useQueryClient();
   const [enrollmentModalOpen, setEnrollmentModalOpen] =
     useState<boolean>(false);
@@ -98,17 +97,16 @@ function TeacherManagementPage() {
               type="text"
               className="w-[180px] h-[36px] leading-[21px] border-[1.3px] border-solid border-black pr-2 pl-4 rounded-sm focus-visible:outline-0 text-lg"
               placeholder="강사 이름 검색"
-              ref={searchRef}
+              value={searchNameValue}
+              onChange={(e) => {
+                setSearchNameValue(e.target.value);
+              }}
             />
             <button
               className="absolute bg-bjsBlue text-md p-1 pl-3 text-white right-0 top-[1px] rounded-r-xl "
               type="button"
               aria-label="강사 검색"
-              onClick={() => {
-                if (searchRef.current === null) return;
-                setSearchNameValue(searchRef.current.value);
-                setForDeletedTeacherIds([]);
-              }}
+              disabled
             >
               <AiOutlineSearch size="26px" className="mr-2" color="black" />
             </button>
