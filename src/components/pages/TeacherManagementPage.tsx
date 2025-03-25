@@ -58,7 +58,11 @@ function TeacherManagementPage() {
         deleteCheckModalOpen={deleteCheckModalOpen}
         setDeleteCheckModalOpen={setDeleteCheckModalOpen}
         handleDelete={async () => {
-          await mutation.mutate();
+          if (data?.data.length === 1 && page > 1) {
+            // 현재 페이지에 1명 남았다면 + 2페이지 이상이라면
+            setPage(page - 1);
+          }
+          mutation.mutate();
           setDeleteCheckModalOpen(false);
         }}
       />
