@@ -80,17 +80,17 @@ function VedioManagementPage() {
   }; // 개별 디렉토리를 삭제하는 메서드
 
   // 영상 길이 구하는 함수
-  // const getVideoDuration = (file: File): Promise<number> =>
-  //   new Promise((resolve) => {
-  //     const video = document.createElement('video');
-  //     video.preload = 'metadata';
-  //     video.src = URL.createObjectURL(file);
+  const getVideoDuration = (file: File): Promise<number> =>
+    new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.src = URL.createObjectURL(file);
 
-  //     video.onloadedmetadata = () => {
-  //       resolve(video.duration); // 영상 길이 반환
-  //       URL.revokeObjectURL(video.src); // 메모리 누수 방지
-  //     };
-  //   });
+      video.onloadedmetadata = () => {
+        resolve(video.duration); // 영상 길이 반환
+        URL.revokeObjectURL(video.src); // 메모리 누수 방지
+      };
+    });
 
   const handleEnrollVideo = async () => {
     if (videoRef.current === null || videoRef.current.files === null) return;
@@ -111,7 +111,7 @@ function VedioManagementPage() {
     const video = document.createElement('video');
     video.preload = 'metadata';
     video.src = URL.createObjectURL(file);
-    // const videoRuntime = await getVideoDuration(file);
+    const videoRuntime = await getVideoDuration(file);
 
     // total size 계산
     const totalChunks = Math.ceil(file.size / chunkSize);
@@ -142,6 +142,7 @@ function VedioManagementPage() {
         currChunkIndex: start === 0 ? 0 : start + 1,
         isLast: totalChunks - 1 === currentChunk,
         extension: '.mp4',
+        mediaDuration: videoRuntime,
       };
       console.log(info);
       formData.append('media', chunk);

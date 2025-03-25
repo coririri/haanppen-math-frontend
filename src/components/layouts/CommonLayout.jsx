@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AiOutlineCheck, AiOutlineDown } from 'react-icons/ai';
 import DatePicker from 'react-datepicker';
+import { ko } from 'date-fns/locale';
 import instance from '../../apis/instance';
 import Header from './Header';
 import Navigation from './Navigation';
@@ -570,6 +571,7 @@ function CommonLayout() {
                 dayClassName={(date) =>
                   isMarkedDate(date) ? 'highlighted-date' : undefined
                 }
+                locale={ko}
               />
             </di>
             {/* 오늘의 강의 */}

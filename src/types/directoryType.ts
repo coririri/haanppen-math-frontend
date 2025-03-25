@@ -5,4 +5,5 @@ export interface DirectoryType {
   createdTime: string;
   canViewByEveryone: boolean;
   canModifyByEveryone: boolean;
+  runtimeDuration?: number;
 }

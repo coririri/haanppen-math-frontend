@@ -31,7 +31,7 @@ instance.interceptors.response.use(
 
     // 네트워크 에러 처리
     if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
-      window.location.href = '/network-error'; // 네트워크 에러 페이지로 이동
+      // window.location.href = '/network-error'; // 네트워크 에러 페이지로 이동
       return Promise.reject(error);
     }
 
