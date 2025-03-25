@@ -46,7 +46,7 @@ function WriteOnlineClassPage({
     image: '',
   });
   console.log(selectedClassindex);
-  const [imageFile, setImageFile] = useState<null | File>(null);
+  const [imgsSrc, setImgsSrc] = useState<string[]>([]);
 
   const [mainCategorySelected, setMainCategorySelected] = useState<number>(0);
   const [subCategorySelected, setSubCategorySelected] = useState<number>(0);
@@ -93,7 +93,7 @@ function WriteOnlineClassPage({
           lessonDesc: '',
           image: null,
         });
-
+        setImgsSrc([]);
         setMainCategorySelected(0);
         setSubCategorySelected(0);
         setIsCreated(false);
@@ -107,6 +107,11 @@ function WriteOnlineClassPage({
               ? null
               : imageUrlToSrc(onlineLessonRespose.data.imgSrc),
         });
+        if (onlineLessonRespose.data.imgSrc == null) {
+          setImgsSrc([]);
+        } else {
+          setImgsSrc([onlineLessonRespose.data.imgSrc]);
+        }
 
         let mainCategoryIndex = 0;
         for (let i = 0; i < mainCategorysResponse.data.length; i += 1) {
@@ -202,8 +207,8 @@ function WriteOnlineClassPage({
                 subCategorys={subCategorys}
                 courseList={courseList}
                 selectedClassindex={selectedClassindex}
-                imageFile={imageFile}
-                setImageFile={setImageFile}
+                imgsSrc={imgsSrc}
+                setImgsSrc={setImgsSrc}
               />
             </div>
           ) : (
@@ -221,8 +226,8 @@ function WriteOnlineClassPage({
                   subCategorys={subCategorys}
                   courseList={courseList}
                   selectedClassindex={selectedClassindex}
-                  imageFile={imageFile}
-                  setImageFile={setImageFile}
+                  imgsSrc={imgsSrc}
+                  setImgsSrc={setImgsSrc}
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
@@ -265,21 +270,14 @@ function WriteOnlineClassPage({
                     alert('반을 먼저 생성해주세요.');
                     return;
                   }
+                  const imageToServer = imgsSrc.length < 1 ? null : imgsSrc[0];
                   try {
-                    let imageUrlToServer = null;
-                    if (imageFile !== null) {
-                      const formData = new FormData();
-                      formData.append('image', imageFile);
-                      const { data } = await uploadImageToS3(formData);
-                      imageUrlToServer = data.imageUrl;
-                    }
-
                     await enrollOnlineLesson(
                       courseList[selectedClassindex].courseId,
                       primaryClassInfo.title,
                       primaryClassInfo.lessonRange,
                       primaryClassInfo.lessonDesc,
-                      imageUrlToServer,
+                      imageToServer,
                       subCategorys[subCategorySelected].categoryId,
                     );
                     window.location.reload();

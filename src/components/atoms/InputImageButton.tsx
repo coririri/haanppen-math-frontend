@@ -1,14 +1,15 @@
 import React, { useRef } from 'react';
 import { AiOutlineFileImage } from 'react-icons/ai';
+import uploadImageToS3 from '../../apis/media';
 
 interface InputImageButtonType extends React.HTMLAttributes<HTMLButtonElement> {
-  setImgFiles: React.Dispatch<React.SetStateAction<File[]>>;
-  setImgPreview: React.Dispatch<React.SetStateAction<string[]>>;
+  setImgsSrc: React.Dispatch<React.SetStateAction<string[]>>;
+  type?: 'one' | 'mutiple';
 }
 
 function InputImageButton({
-  setImgFiles,
-  setImgPreview,
+  setImgsSrc,
+  type = 'mutiple',
 }: InputImageButtonType) {
   const imgRef = useRef<HTMLInputElement>(null);
 
@@ -65,13 +66,13 @@ function InputImageButton({
       type: 'image/png',
     });
 
-    setImgFiles((prev) => [...prev, resizedFile]);
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImgPreview((prev) => [...prev, reader.result as string]);
-      };
+    const formData = new FormData();
+    formData.append('image', resizedFile);
+    const { data } = await uploadImageToS3(formData);
+    if (type === 'one') {
+      setImgsSrc([data.imageUrl]);
+    } else {
+      setImgsSrc((prev) => [...prev, data.imageUrl]);
     }
   };
 

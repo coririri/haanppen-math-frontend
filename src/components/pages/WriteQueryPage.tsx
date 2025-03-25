@@ -9,13 +9,12 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import getAllTeachers from '../../apis/teacher';
 import writeQuery from '../../apis/question';
-import uploadImageToS3 from '../../apis/media';
 import { TeacherType } from '../../types/teacherType';
 import { WriteQuestionType } from '../../types/question';
+import imageUrlToSrc from '../../utils/imageUrlToSrc';
 
 function WriteQueryPage() {
-  const [imgPreview, setImgePreview] = useState<string[]>([]);
-  const [imgFiles, setImgFiles] = useState<File[]>([]);
+  const [imgsSrc, setImgsSrc] = useState<string[]>([]);
   const [questionText, setQuestionText] = useState<string>(''); // 질문 텍스트 상태
   const [questionTitle, setQuestionTitle] = useState<string>('');
   const [teacherList, setTeacherList] = useState<TeacherType[]>([]);
@@ -29,22 +28,15 @@ function WriteQueryPage() {
         return;
       }
 
-      if (questionText === '' && imgFiles.length === 0) {
+      if (questionText === '' && imgsSrc.length === 0) {
         alert('질문에 내용을 적어주세요.');
         return;
       }
-      const images = [];
 
-      for (let i = 0; i < imgFiles.length; i += 1) {
-        const formData = new FormData();
-        formData.append('image', imgFiles[i]);
-        const { data } = await uploadImageToS3(formData);
-        images.push(data.imageUrl);
-      }
       const dataToServer: WriteQuestionType = {
         title: questionTitle,
         content: questionText,
-        images,
+        images: imgsSrc,
         targetMemberId: -1,
       };
 
@@ -71,13 +63,9 @@ function WriteQueryPage() {
   }, []);
 
   const handleDeleteImageButton = (index: number) => {
-    setImgFiles(() => [
-      ...imgFiles.slice(0, index),
-      ...imgFiles.slice(index + 1, imgFiles.length),
-    ]);
-    setImgePreview(() => [
-      ...imgPreview.slice(0, index),
-      ...imgPreview.slice(index + 1, imgFiles.length),
+    setImgsSrc(() => [
+      ...imgsSrc.slice(0, index),
+      ...imgsSrc.slice(index + 1, imgsSrc.length),
     ]);
   };
 
@@ -114,7 +102,7 @@ function WriteQueryPage() {
 
       {/* 이미지 미리보기 */}
       <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto mb-[80px]">
-        {imgPreview.map((src, index) => (
+        {imgsSrc.map((src, index) => (
           <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
             <button
               className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
@@ -127,7 +115,7 @@ function WriteQueryPage() {
 
             <img
               className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto rounded-lg shadow-lg"
-              src={src}
+              src={imageUrlToSrc(src)}
               alt={`이미지 ${index + 1}`}
             />
           </div>
@@ -144,8 +132,7 @@ function WriteQueryPage() {
             handleClick={() => finishWrite()}
           />
           <InputImageButton
-            setImgFiles={setImgFiles}
-            setImgPreview={setImgePreview}
+            setImgsSrc={setImgsSrc}
             className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
           />
         </div>

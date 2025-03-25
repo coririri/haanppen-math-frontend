@@ -7,6 +7,8 @@ import { PrimaryClassInfoType } from '../../types/onlineClassInfoType';
 import { CategoryType } from '../../types/categoryType';
 import { CourseType } from '../../types/courseType';
 import uploadImageToS3 from '../../apis/media';
+import InputImageButton from '../atoms/InputImageButton';
+import imageUrlToSrc from '../../utils/imageUrlToSrc';
 
 interface OnlinePrimaryFormProps {
   isCreated: boolean;
@@ -20,8 +22,8 @@ interface OnlinePrimaryFormProps {
   subCategorys: CategoryType[];
   courseList: CourseType[];
   selectedClassindex: number;
-  imageFile: File | null;
-  setImageFile: React.Dispatch<SetStateAction<File | null>>;
+  imgsSrc: string[];
+  setImgsSrc: React.Dispatch<SetStateAction<string[]>>;
 }
 
 function OnlinePrimaryForm({
@@ -36,10 +38,9 @@ function OnlinePrimaryForm({
   subCategorys,
   courseList,
   selectedClassindex,
-  imageFile,
-  setImageFile,
+  imgsSrc,
+  setImgsSrc,
 }: OnlinePrimaryFormProps) {
-  console.log(primaryClassInfo);
   return (
     <div className="flex flex-col items-start justify-center my-6">
       <div className="flex justify-center items-center mx-auto">
@@ -132,16 +133,16 @@ function OnlinePrimaryForm({
         </div>
       </div>
       <div>
-        <div className="my-4 p-4 border border-gray-300 rounded-lg">
+        <div className="mt-2 p-4 border border-gray-300 rounded-lg">
           {/* 이미지 미리보기 */}
-          {primaryClassInfo.image ? (
+          {imgsSrc[0] ? (
             <img
-              src={primaryClassInfo.image}
+              src={imageUrlToSrc(imgsSrc[0])}
               alt="미리보기"
-              className="w-full h-48 rounded-md border border-gray-400"
+              className="w-full h-48 rounded-md border border-gray-400 mb-2"
             />
           ) : (
-            <div className="w-full h-48 flex items-center justify-center border border-gray-400 rounded-md bg-gray-100">
+            <div className="w-full h-48 flex items-center justify-center border border-gray-400 rounded-md bg-gray-100 mb-2">
               <span className="text-gray-500">
                 수업 대표 이미지를 업로드하세요 <br />
                 (없으면 기본 이미지가 사용 됩니다)
@@ -150,23 +151,8 @@ function OnlinePrimaryForm({
           )}
 
           {/* 파일 업로드 버튼 */}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              if (e.target.files === null) return;
-              const file = e.target.files[0];
-              if (file) {
-                const imageUrl = URL.createObjectURL(file); // 이미지 URL 생성
-                setImageFile(file);
-                setPrimaryClassInfo((prev) => ({
-                  ...prev,
-                  image: imageUrl, // 이미지 URL 저장
-                }));
-              }
-            }}
-            className="mt-2 block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none"
-          />
+
+          <InputImageButton type="one" setImgsSrc={setImgsSrc} />
         </div>
       </div>
       <div className="mx-auto">
@@ -176,19 +162,12 @@ function OnlinePrimaryForm({
             moreStyle="w-[7rem] my-2 py-[1px]"
             handleClick={async () => {
               try {
-                let imageUrlToServer = null;
-                if (imageFile !== null) {
-                  const formData = new FormData();
-                  formData.append('image', imageFile);
-                  const { data } = await uploadImageToS3(formData);
-                  imageUrlToServer = data.imageUrl;
-                }
                 await enrollOnlineLesson(
                   courseList[selectedClassindex].courseId,
                   primaryClassInfo.title,
                   primaryClassInfo.lessonRange,
                   primaryClassInfo.lessonDesc,
-                  imageUrlToServer,
+                  imgsSrc[0],
                   subCategorys[subCategorySelected].categoryId,
                 );
               } catch (e) {
