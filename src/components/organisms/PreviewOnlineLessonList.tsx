@@ -3,6 +3,7 @@ import { GoTriangleRight, GoTriangleDown } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 import { getOnlineLesson } from '../../apis/onlineLesson';
 import { OnlineVideoDataType } from '../../types/onlineVideoType';
+import secondToTime from '../../utils/secondToTime';
 
 function PreviewOnlineLessonList({
   teacherName,
@@ -102,33 +103,32 @@ function PreviewOnlineLessonList({
 
       {videoList
         .sort((a, b) => a.videoSequence - b.videoSequence)
-        .map((video) => (
+        .map((lesson) => (
           <div
             className="flex items-center border-[#D9D9D9] border-b-2 border-solid py-4"
-            key={video.videoId}
+            key={lesson.videoId}
           >
             <span className="block w-[200px] text-center font-bold text-md">
-              {video.mediaName}
+              {lesson.mediaName}
             </span>
 
-            <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
-              13:00
+            <span className="block w-[50px]  text-center font-bold text-md  border-solid text-black rounded-xl">
+              {lesson.duration ? secondToTime(lesson.duration) : '00:00:00'}
             </span>
 
             <button
               type="button"
-              className="mr-2"
               onClick={() => {
-                if (video.isPreview === true)
+                if (lesson.isPreview === true)
                   navigate(
-                    `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${video.videoId}&courseName=${onlineLessonInformation.title}`,
+                    `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${lesson.videoId}&courseName=${onlineLessonInformation.title}`,
                   );
                 else {
-                  alert('수업을 등록해주세요');
+                  alert('무료 체험 강의가 아닙니다');
                 }
               }}
             >
-              <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
+              <span className="block w-[50px] ml-[25px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
                 Play
               </span>
             </button>
