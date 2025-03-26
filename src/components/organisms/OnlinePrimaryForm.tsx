@@ -6,7 +6,6 @@ import DropdownMenu from '../molecules/DropdownMenu';
 import { PrimaryClassInfoType } from '../../types/onlineClassInfoType';
 import { CategoryType } from '../../types/categoryType';
 import { CourseType } from '../../types/courseType';
-import uploadImageToS3 from '../../apis/media';
 import InputImageButton from '../atoms/InputImageButton';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
 

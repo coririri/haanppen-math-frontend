@@ -10,5 +10,6 @@ export interface OnlineVideoDataType {
   mediaName: string;
   isPreview: boolean;
   mediaSrc?: string;
+  duration?: number | null;
   attachmentDetails: AttachmentDetailType[];
 }
