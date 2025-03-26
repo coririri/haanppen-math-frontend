@@ -31,14 +31,20 @@ function InputImageButton({
   return (
     <form>
       <label htmlFor="imageUpload">
-        <div className="w-[113px] h-[44px] border-[1.5px] border-solid border-hpBlack rounded-md bg-white">
+        <div className="px-2 h-[44px] border-[1.5px] border-solid border-hpBlack rounded-md bg-white">
           <div className="flex items-center justify-center">
             <div className="mr-2">
               <AiOutlineFileImage size="24px" />
             </div>
-            <span className="block leading-10 text-md font-bold">
-              사진 추가
-            </span>
+            {type === 'one' ? (
+              <span className="block leading-10 text-md font-bold">
+                대표 이미지 설정
+              </span>
+            ) : (
+              <span className="block leading-10 text-md font-bold">
+                사진 추가
+              </span>
+            )}
           </div>
         </div>
       </label>
