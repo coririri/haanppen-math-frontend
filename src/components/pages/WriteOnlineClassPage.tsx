@@ -17,7 +17,6 @@ import { CourseType } from '../../types/courseType';
 import { CategoryType } from '../../types/categoryType';
 import { OnlineVideoDataType } from '../../types/onlineVideoType';
 import Loading from '../layouts/Loading';
-import uploadImageToS3 from '../../apis/media';
 import imageUrlToSrc from '../../utils/imageUrlToSrc';
 
 interface WriteOnlineClassPageProps {
