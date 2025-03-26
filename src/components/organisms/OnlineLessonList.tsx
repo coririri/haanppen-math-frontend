@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getOnlineLesson } from '../../apis/onlineLesson';
 import { CourseType } from '../../types/courseType';
 import { OnlineVideoDataType } from '../../types/onlineVideoType';
+import secondToTime from '../../utils/secondToTime';
 
 // Props 타입 정의
 interface OnlineLessonListProps {
@@ -121,20 +122,19 @@ function OnlineLessonList({
               {lesson.mediaName}
             </span>
 
-            <span className="block w-[50px] mx-[15px]  text-center font-bold text-md  border-solid text-black rounded-xl">
-              13:00
+            <span className="block w-[50px]  text-center font-bold text-md  border-solid text-black rounded-xl">
+              {lesson.duration ? secondToTime(lesson.duration) : '00:00:00'}
             </span>
 
             <button
               type="button"
-              className="mr-2"
               onClick={() => {
                 navigate(
                   `/online-lesson?onlineCourseId=${onlineCourseId}&videoId=${lesson.videoId}&courseName=${onlineLessonInformation.title}`,
                 );
               }}
             >
-              <span className="block w-[50px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
+              <span className="block w-[50px] ml-[25px]  text-center font-bold text-md border-hpLightBlue border-[1.5px] border-solid text-hpLightBlue rounded-xl">
                 Play
               </span>
             </button>

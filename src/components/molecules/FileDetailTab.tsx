@@ -5,6 +5,7 @@ import { dateTimeToDateAndTimes } from '../../utils/dateTimeToDate';
 import { addLessonVideo } from '../../apis/lesson';
 import { postOnlineCourseVedio } from '../../apis/onlineLesson';
 import { DirectoryType } from '../../types/directoryType';
+import secondToTime from '../../utils/secondToTime';
 
 function FileDetailTab({ fileData }: { fileData: DirectoryType }) {
   const navigate = useNavigate();
@@ -41,10 +42,12 @@ function FileDetailTab({ fileData }: { fileData: DirectoryType }) {
             {dateTimeToDateAndTimes(new Date(fileData.createdTime))}
           </span>
         </div>
-        {/* <div className="flex mt-2">
-          <span className="block w-[100px] text-[#BFBFBF]">수정 날짜</span>
-          <span className="font-bold">2030-08-20 08:02:04</span>
-        </div> */}
+        <div className="flex mt-2">
+          <span className="block w-[100px] text-[#BFBFBF]">영상 길이</span>
+          <span className="font-bold">
+            {secondToTime(fileData.runtimeDuration)}
+          </span>
+        </div>
         <div className="w-[9rem] mx-auto mt-24 mb-4">
           <TextButton
             color="gray"

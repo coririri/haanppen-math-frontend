@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineSmile, AiOutlineSearch, AiFillEdit } from 'react-icons/ai';
 import {
   useQuery,
@@ -31,7 +31,6 @@ function StudentManagementPage() {
     false,
   ]);
   const [searchNameValue, setSearchNameValue] = useState<string>('');
-  const searchRef = useRef<HTMLInputElement>(null);
   const [enrollmentModalOpen, setEnrollmentModalOpen] =
     useState<boolean>(false);
   const [page, setPage] = useState(1);
@@ -89,7 +88,11 @@ function StudentManagementPage() {
         deleteCheckModalOpen={deleteCheckModalOpen}
         setDeleteCheckModalOpen={setDeleteCheckModalOpen}
         handleDelete={async () => {
-          await mutation.mutate();
+          if (data?.data.length === 1 && page > 1) {
+            // 현재 페이지에 1명 남았다면 + 2페이지 이상이라면
+            setPage(page - 1);
+          }
+          mutation.mutate();
           setDeleteCheckModalOpen(false);
         }}
       />
@@ -260,17 +263,16 @@ function StudentManagementPage() {
               type="text"
               className="w-[180px] h-[36px] leading-[21px] border-[1.3px] border-solid border-black pr-2 pl-4 rounded-sm focus-visible:outline-0 text-lg"
               placeholder="학생 이름 검색"
-              ref={searchRef}
+              value={searchNameValue}
+              onChange={(e) => {
+                setSearchNameValue(e.target.value);
+              }}
             />
             <button
               className="absolute bg-bjsBlue text-md p-1 pl-3 text-white right-0 top-[1px] rounded-r-xl "
               type="button"
               aria-label="학생 검색"
-              onClick={() => {
-                if (searchRef.current === null) return;
-                setForDeletedStudentIds([]);
-                setSearchNameValue(searchRef.current.value);
-              }}
+              disabled
             >
               <AiOutlineSearch size="26px" className="mr-2" color="black" />
             </button>

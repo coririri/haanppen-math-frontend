@@ -18,7 +18,6 @@ import CommentBox from '../organisms/CommentBox';
 import hw1 from '../../assests/hw1.jpg';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import InputImageButton from '../atoms/InputImageButton';
-import uploadImageToS3 from '../../apis/media';
 import { QuestionFrontType } from '../../types/question';
 
 function QuestionDetailPage() {
@@ -37,10 +36,7 @@ function QuestionDetailPage() {
     commentsData: [],
   });
   const [isWriteComment, setIsWriteComment] = useState<boolean>(false);
-  const [modificationImgPreview, setModificationImgPreview] = useState<
-    string[]
-  >([]);
-  const [modificationImgFiles, setModificationImgFiles] = useState<File[]>([]);
+  const [imgsSrc, setImgsSrc] = useState<string[]>([]);
 
   const [isModify, setIsModify] = useState<boolean>(false);
   const [modificationData, setModificationData] = useState<{
@@ -113,22 +109,14 @@ function QuestionDetailPage() {
     if (data === undefined) return;
 
     try {
-      const images = [];
-
-      for (let i = 0; i < modificationImgFiles.length; i += 1) {
-        const formData = new FormData();
-        formData.append('image', modificationImgFiles[i]);
-        const response = await uploadImageToS3(formData);
-        images.push(response.data.imageUrl);
-      }
-      setModificationImgFiles([]);
-      setModificationImgPreview([]);
       await modifyQuery(
         modificationData,
         Number(id),
         data.questionDetailData.targetMemberId ?? -1,
-        images,
+        imgsSrc,
       );
+
+      setImgsSrc([]);
 
       const getData = async () => {
         const response = await getDetailQuestionById(Number(id));
@@ -175,13 +163,9 @@ function QuestionDetailPage() {
   };
 
   const handleDeleteImageButton = (index: number) => {
-    setModificationImgFiles(() => [
-      ...modificationImgFiles.slice(0, index),
-      ...modificationImgFiles.slice(index + 1, modificationImgFiles.length),
-    ]);
-    setModificationImgPreview(() => [
-      ...modificationImgPreview.slice(0, index),
-      ...modificationImgPreview.slice(index + 1, modificationImgPreview.length),
+    setImgsSrc(() => [
+      ...imgsSrc.slice(0, index),
+      ...imgsSrc.slice(index + 1, imgsSrc.length),
     ]);
   };
   console.log(data);
@@ -323,7 +307,7 @@ function QuestionDetailPage() {
           {/* 이미지 미리보기 */}
           {isModify && (
             <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto">
-              {modificationImgPreview.map((src, index) => (
+              {imgsSrc.map((src, index) => (
                 <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
                   <button
                     className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
@@ -336,7 +320,7 @@ function QuestionDetailPage() {
 
                   <img
                     className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto rounded-lg shadow-lg"
-                    src={src}
+                    src={imageUrlToSrc(src)}
                     alt={`이미지 ${index + 1}`}
                   />
                 </div>
@@ -351,8 +335,7 @@ function QuestionDetailPage() {
           isModify ? (
             <div className="flex space-x-2 my-2 justify-end mr-4">
               <InputImageButton
-                setImgFiles={setModificationImgFiles}
-                setImgPreview={setModificationImgPreview}
+                setImgsSrc={setImgsSrc}
                 className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
               />
               <button
@@ -567,7 +550,7 @@ function QuestionDetailPage() {
         {/* 이미지 미리보기 */}
         {isModify && (
           <div className="block lg:w-[404px] md:w-[404px] w-[300px] mx-auto">
-            {modificationImgPreview.map((src, index) => (
+            {imgsSrc.map((src, index) => (
               <div className="g:w-[404px] md:w-[404px] w-[300px] mx-auto mt-6 relative transition-transform transform hover:scale-105 duration-300">
                 <button
                   className="absolute right-4 top-2 bg-black rounded-lg p-1 transition-colors duration-300 hover:bg-red-600"
@@ -580,7 +563,7 @@ function QuestionDetailPage() {
 
                 <img
                   className="lg:w-[380px] md:w-[380px] w-[300px] mx-auto rounded-lg shadow-lg"
-                  src={src}
+                  src={imageUrlToSrc(src)}
                   alt={`이미지 ${index + 1}`}
                 />
               </div>
@@ -596,8 +579,7 @@ function QuestionDetailPage() {
         isModify ? (
           <div className="flex space-x-2 my-2 justify-end w-[400px] mx-auto pr-4">
             <InputImageButton
-              setImgFiles={setModificationImgFiles}
-              setImgPreview={setModificationImgPreview}
+              setImgsSrc={setImgsSrc}
               className="transition-transform transform hover:scale-110 duration-300 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
             />
             <button
@@ -627,7 +609,6 @@ function QuestionDetailPage() {
             <button
               onClick={() => {
                 setDeleteCheckModalOpen(true);
-                console.log('짜증나');
               }}
               className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
               type="button"
