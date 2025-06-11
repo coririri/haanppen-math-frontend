@@ -73,21 +73,10 @@ export const getLessonsByClassId = (
 
 export const addAttachmentVideo = async (
   memoMediaId: number,
-  fileName: string,
-  totalChunkCount: number,
-  currChunkIndex: number,
-  isLast: boolean,
-  extension: string,
-  formData: FormData,
+  mediaSrc: string,
 ) =>
   instance.post(
-    `/api/courses/memos/media/attachment?memoMediaId=${memoMediaId}&fileName=${fileName}&totalChunkCount=${totalChunkCount}&currChunkIndex=${currChunkIndex}&isLast=${isLast}&extension=${extension}`,
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Content-Type을 반드시 이렇게 하여야 한다.
-      },
-    },
+    `/api/courses/memos/media/attachment?memoMediaId=${memoMediaId}&mediaSrc=${mediaSrc}`,
   );
 
 export const getAttachmentFile = (sourceId: string) =>

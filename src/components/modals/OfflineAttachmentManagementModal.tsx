@@ -6,6 +6,7 @@ import { addAttachmentVideo, deleteAttachmentFile } from '../../apis/lesson';
 import { AttachmentViewType, VideoType } from '../../types/videoType';
 import VideoUploadingModal from './VideoUploadingModal';
 import TextButton from '../atoms/TextButton';
+import initFileUpload, { combineChunks, postChunks } from '../../apis/file';
 
 interface AttachmentManagementModalProps {
   modalOpen: boolean;
@@ -88,77 +89,146 @@ content는 모달 창부분이라고 생각하면 쉬울 것이다 */
     // 동영상 업로드 로딩창 열림
     setIsVideoUploadingModalOpen(true);
 
+    // 파일 단위 전체 개수
+
+    let uniqueId = 'null';
+
+    try {
+      const initFileRes = await initFileUpload(totalChunks);
+      uniqueId = initFileRes.data.uniqueId;
+    } catch (e) {
+      console.log(e);
+    }
+
     // chunk file 전송
     const sendNextChunk = async () => {
       // chunk size 만큼 데이터 분할
 
-      const start = currentChunk * chunkSize;
-      const end = Math.min(start + chunkSize, file.size);
+      let start = currentChunk * chunkSize;
+      let end = Math.min(start + chunkSize, file.size);
 
-      const chunk = file.slice(start, end);
-
+      let chunk = file.slice(start, end);
       // form data 형식으로 전송
       const formData = new FormData();
-
-      formData.append('chunkedFile', chunk);
-
+      formData.append(
+        'file',
+        new Blob([chunk], { type: 'application/octet-stream' }),
+      );
       try {
-        const response = await addAttachmentVideo(
-          video.memoMediaId,
-          file.name.split('.')[0],
-          file.size,
-          start === 0 ? 0 : start + 1,
-          totalChunks - 1 === currentChunk,
-          file.name.slice(-4),
-          formData,
-        );
-        console.log(response);
-        if (response.status === 201) {
-          setIsVideoUploadingModalOpen(false);
-          alert('파일 전송이 끝났습니다');
-          setVideoData((prev) => {
-            const copiedVideoData = prev.map((tempVideo) => ({
-              ...tempVideo,
-              attachmentViews: [...tempVideo.attachmentViews],
-            }));
-            copiedVideoData[vedioIndex].attachmentViews.push({
-              fileName: file.name,
-            });
-
-            console.log(copiedVideoData);
-            return copiedVideoData;
-          });
-        } else if (response.status === 202) {
+        for (let i = 0; i < totalChunks; i += 1) {
+          start = currentChunk * chunkSize;
+          end = Math.min(start + chunkSize, file.size);
+          chunk = file.slice(start, end);
+          formData.set(
+            'file',
+            new Blob([chunk], { type: 'application/octet-stream' }),
+          );
+          await postChunks(formData, currentChunk, uniqueId);
           currentChunk += 1;
+          // eslint-disable-next-line no-loop-func
           setUploadingInfo((prev) => ({
             ...prev,
             current: currentChunk,
           }));
-          sendNextChunk();
         }
-      } catch (e: unknown) {
-        if (
-          e instanceof AxiosError &&
-          e.response &&
-          e.response.status === 406
-        ) {
-          console.log('406 Not Acceptable 에러 발생:', e.response.data);
-          // 서버로부터 chunkIndex를 받아옴
-          const { nextChunkIndex } = e.response.data;
-          console.log(nextChunkIndex);
-          currentChunk = ((nextChunkIndex - 1) / 1024) * 1024;
-          setUploadingInfo((prev) => ({
-            ...prev,
-            current: currentChunk,
+
+        const response = await combineChunks(
+          uniqueId,
+          file.name.split('.')[0] ?? '기본',
+          `.${file.name.split('.')[1]}`,
+          file.size,
+        );
+
+        await addAttachmentVideo(video.memoMediaId, response.data.mediaSrc);
+
+        setIsVideoUploadingModalOpen(false);
+        alert('파일 전송이 끝났습니다');
+        setVideoData((prev) => {
+          const copiedVideoData = prev.map((tempVideo) => ({
+            ...tempVideo,
+            attachmentViews: [...tempVideo.attachmentViews],
           }));
-          sendNextChunk();
-        } else {
-          console.log('알 수 없는 에러:', e);
-          alert('파일 업로드에 실패 하였습니다.');
-          setIsVideoUploadingModalOpen(false);
-        }
+          copiedVideoData[vedioIndex].attachmentViews.push({
+            fileName: file.name,
+          });
+
+          console.log(copiedVideoData);
+          return copiedVideoData;
+        });
+      } catch (e) {
+        console.log(e);
       }
     };
+    // // chunk file 전송
+    // const sendNextChunk = async () => {
+    //   // chunk size 만큼 데이터 분할
+
+    //   const start = currentChunk * chunkSize;
+    //   const end = Math.min(start + chunkSize, file.size);
+
+    //   const chunk = file.slice(start, end);
+
+    //   // form data 형식으로 전송
+    //   const formData = new FormData();
+
+    //   formData.append('chunkedFile', chunk);
+
+    // try {
+    //   const response = await addAttachmentVideo(
+    //     video.memoMediaId,
+    //     file.name.split('.')[0],
+    //     file.size,
+    //     start === 0 ? 0 : start + 1,
+    //     totalChunks - 1 === currentChunk,
+    //     file.name.slice(-4),
+    //     formData,
+    //   );
+    //   console.log(response);
+    //   if (response.status === 201) {
+    //     setIsVideoUploadingModalOpen(false);
+    //     alert('파일 전송이 끝났습니다');
+    //     setVideoData((prev) => {
+    //       const copiedVideoData = prev.map((tempVideo) => ({
+    //         ...tempVideo,
+    //         attachmentViews: [...tempVideo.attachmentViews],
+    //       }));
+    //       copiedVideoData[vedioIndex].attachmentViews.push({
+    //         fileName: file.name,
+    //       });
+
+    //       console.log(copiedVideoData);
+    //       return copiedVideoData;
+    //     });
+    //   } else if (response.status === 202) {
+    //     currentChunk += 1;
+    //     setUploadingInfo((prev) => ({
+    //       ...prev,
+    //       current: currentChunk,
+    //     }));
+    //     sendNextChunk();
+    //   }
+    // } catch (e: unknown) {
+    //   if (
+    //     e instanceof AxiosError &&
+    //     e.response &&
+    //     e.response.status === 406
+    //   ) {
+    //     console.log('406 Not Acceptable 에러 발생:', e.response.data);
+    //     // 서버로부터 chunkIndex를 받아옴
+    //     const { nextChunkIndex } = e.response.data;
+    //     console.log(nextChunkIndex);
+    //     currentChunk = ((nextChunkIndex - 1) / 1024) * 1024;
+    //     setUploadingInfo((prev) => ({
+    //       ...prev,
+    //       current: currentChunk,
+    //     }));
+    //     sendNextChunk();
+    //   } else {
+    //     console.log('알 수 없는 에러:', e);
+    //     alert('파일 업로드에 실패 하였습니다.');
+    //     setIsVideoUploadingModalOpen(false);
+    //   }
+    // }
 
     sendNextChunk();
   };

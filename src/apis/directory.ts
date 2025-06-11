@@ -22,3 +22,11 @@ export const changeDirectoryName = (dirPath: string, newDirName: string) =>
     targetDirPath: dirPath,
     newDirName,
   });
+
+export const enrollMediaToDirectory = (
+  directoryPath: string,
+  mediaSrc: string,
+) =>
+  instance.post(
+    `/api/directory/media?directoryPath=${directoryPath}&mediaSrc=${mediaSrc}`,
+  );

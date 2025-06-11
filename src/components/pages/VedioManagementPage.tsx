@@ -7,13 +7,18 @@ import Folder from '../molecules/Folder';
 import VideoFile from '../molecules/ViedoFile';
 import FileDetailTab from '../molecules/FileDetailTab';
 import FolderDetailTab from '../molecules/FolderDetailTab';
-import getDirectory, { deleteDirectory } from '../../apis/directory';
+import getDirectory, {
+  deleteDirectory,
+  enrollMediaToDirectory,
+} from '../../apis/directory';
 import CreateFolderModal from '../modals/CreateFolderModal';
 import enrollVideo, { deleteVideo } from '../../apis/video';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import { DirectoryType } from '../../types/directoryType';
 import { LoadingType } from '../../types/loadingType';
+import initFileUpload, { combineChunks, postChunks } from '../../apis/file';
+import getVideoDuration from '../../utils/getVideoDuration';
 // import enrollVideo from '../../apis/video';
 
 function VedioManagementPage() {
@@ -79,30 +84,18 @@ function VedioManagementPage() {
     }
   }; // 개별 디렉토리를 삭제하는 메서드
 
-  // 영상 길이 구하는 함수
-  const getVideoDuration = (file: File): Promise<number> =>
-    new Promise((resolve) => {
-      const video = document.createElement('video');
-      video.preload = 'metadata';
-      video.src = URL.createObjectURL(file);
-
-      video.onloadedmetadata = () => {
-        resolve(video.duration); // 영상 길이 반환
-        URL.revokeObjectURL(video.src); // 메모리 누수 방지
-      };
-    });
-
   const handleEnrollVideo = async () => {
     if (videoRef.current === null || videoRef.current.files === null) return;
     const chunkSize = 1024 * 1024; // 1MB
     const file = videoRef.current.files[0];
     if (file === undefined) return;
 
+    // 파일 저장 경로
     const tempAbsolutePath = breadscrumArray.join('/');
     let absolutePath = '';
 
     if (tempAbsolutePath !== '/') {
-      absolutePath = `${tempAbsolutePath.slice(1)}`;
+      absolutePath = `${tempAbsolutePath.slice(1)}/`;
     } else {
       absolutePath = `${tempAbsolutePath}`;
     }
@@ -113,8 +106,17 @@ function VedioManagementPage() {
     video.src = URL.createObjectURL(file);
     const videoRuntime = await getVideoDuration(file);
 
-    // total size 계산
+    // 파일 단위 전체 개수
     const totalChunks = Math.ceil(file.size / chunkSize);
+    let uniqueId = 'null';
+
+    try {
+      const initFileRes = await initFileUpload(totalChunks);
+      uniqueId = initFileRes.data.uniqueId;
+    } catch (e) {
+      console.log(e);
+    }
+
     let currentChunk = 0;
     setUploadingInfo({
       current: 0,
@@ -128,84 +130,49 @@ function VedioManagementPage() {
     const sendNextChunk = async () => {
       // chunk size 만큼 데이터 분할
 
-      const start = currentChunk * chunkSize;
-      const end = Math.min(start + chunkSize, file.size);
+      let start = currentChunk * chunkSize;
+      let end = Math.min(start + chunkSize, file.size);
 
-      const chunk = file.slice(start, end);
-      console.log(chunk);
+      let chunk = file.slice(start, end);
       // form data 형식으로 전송
       const formData = new FormData();
-      const info = {
-        targetDirectoryPath: absolutePath,
-        fileName: file.name.split('.')[0] ?? '기본',
-        totalChunkCount: file.size,
-        currChunkIndex: start === 0 ? 0 : start + 1,
-        isLast: totalChunks - 1 === currentChunk,
-        extension: '.mp4',
-        mediaDuration: videoRuntime,
-      };
-      console.log(info);
-      formData.append('media', chunk);
       formData.append(
-        'info',
-        new Blob([JSON.stringify(info)], { type: 'application/json' }),
+        'file',
+        new Blob([chunk], { type: 'application/octet-stream' }),
       );
-      console.log(info);
-
       try {
-        const response = await enrollVideo(formData);
+        for (let i = 0; i < totalChunks; i += 1) {
+          start = currentChunk * chunkSize;
+          end = Math.min(start + chunkSize, file.size);
+          chunk = file.slice(start, end);
+          formData.set(
+            'file',
+            new Blob([chunk], { type: 'application/octet-stream' }),
+          );
+          await postChunks(formData, currentChunk, uniqueId);
 
-        if (response.status === 201) {
-          setIsVideoUploadingModalOpen(false);
-          alert('파일 전송이 끝났습니다');
-
-          try {
-            const { data } = await getDirectory(absolutePath);
-            setDirectoryDatas(data);
-          } catch (e) {
-            console.log(e);
-          }
-        } else if (response.status === 202) {
           currentChunk += 1;
+          // eslint-disable-next-line no-loop-func
           setUploadingInfo((prev) => ({
             ...prev,
             current: currentChunk,
           }));
-          sendNextChunk();
         }
-      } catch (e: unknown) {
-        // 에러가 AxiosError 타입인지 확인
-        if (e instanceof Error && 'response' in e) {
-          const errorResponse = (e as any).response;
+        const response = await combineChunks(
+          uniqueId,
+          file.name.split('.')[0] ?? '기본',
+          '.mp4',
+          file.size,
+          videoRuntime,
+        );
 
-          if (errorResponse && errorResponse.status === 406) {
-            console.log('406 Not Acceptable 에러 발생:', errorResponse.data);
-
-            // 서버로부터 chunkIndex를 받아옴
-            const { nextChunkIndex } = errorResponse.data;
-            console.log(nextChunkIndex);
-
-            // currentChunk 계산
-            currentChunk = (nextChunkIndex - 1) / 1024 / 1024;
-
-            // 업로드 상태 업데이트
-            setUploadingInfo((prev) => ({
-              ...prev,
-              current: currentChunk,
-            }));
-
-            // 다음 청크 전송
-            sendNextChunk();
-          } else {
-            console.log('알 수 없는 에러:', e);
-            alert('영상 업로드에 실패 하였습니다.');
-            setIsVideoUploadingModalOpen(false);
-          }
-        } else {
-          console.log('알 수 없는 에러:', e);
-          alert('영상 업로드에 실패 하였습니다.');
-          setIsVideoUploadingModalOpen(false);
-        }
+        await enrollMediaToDirectory(`${absolutePath}`, response.data.mediaSrc);
+        const { data } = await getDirectory(absolutePath);
+        setDirectoryDatas(data);
+        setIsVideoUploadingModalOpen(false);
+        alert('파일 전송이 끝났습니다');
+      } catch (e) {
+        console.log(e);
       }
     };
 

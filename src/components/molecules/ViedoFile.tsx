@@ -52,9 +52,7 @@ function VideoFile({
             >
               <FcVideoFile size="4rem" />
             </button>
-            <span className="font-bold text-md ml-6">
-              {name.slice(0, -4)}.mp4
-            </span>
+            <span className="font-bold text-md ml-6">{name}.mp4</span>
           </div>
           <span className="mr-6 font-bold text-md">
             {createTime.split('T')[0]} {createTime.split('T')[1].split(':')[0]}:
