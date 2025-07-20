@@ -128,6 +128,16 @@ function LoginPage() {
           비밀번호 찾기
         </button>
       </div>
+          {/* ✅ 개인정보처리방침 링크 추가 */}
+      <div className="mt-6 text-sm text-gray-600 underline hover:text-blue-600 transition">
+        <a
+          href="https://www.hpmath.co.kr/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          개인정보처리방침
+        </a>
+      </div>
     </main>
   );
 }

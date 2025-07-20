@@ -12,14 +12,14 @@ import getDirectory, {
   enrollMediaToDirectory,
 } from '../../apis/directory';
 import CreateFolderModal from '../modals/CreateFolderModal';
-import enrollVideo, { deleteVideo } from '../../apis/video';
+import  { deleteVideo } from '../../apis/video';
 import VideoUploadingModal from '../modals/VideoUploadingModal';
 import DeleteCheckModal from '../modals/DeleteCheckModal';
 import { DirectoryType } from '../../types/directoryType';
 import { LoadingType } from '../../types/loadingType';
 import initFileUpload, { combineChunks, postChunks } from '../../apis/file';
 import getVideoDuration from '../../utils/getVideoDuration';
-// import enrollVideo from '../../apis/video';
+
 
 function VedioManagementPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -158,9 +158,11 @@ function VedioManagementPage() {
             current: currentChunk,
           }));
         }
+        const fileName = file.name.split('.');
+        fileName.pop();
         const response = await combineChunks(
           uniqueId,
-          file.name.split('.')[0] ?? '기본',
+          fileName.join('.') ?? '기본',
           '.mp4',
           file.size,
           videoRuntime,

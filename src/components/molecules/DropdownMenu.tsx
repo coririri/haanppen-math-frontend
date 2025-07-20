@@ -48,7 +48,7 @@ function DropdownMenu({
             setIsOpen((prev) => !prev);
           }}
         >
-          <div className="w-42 h-[36px] leading-[2.4rem] text-lg text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
+        <div className="w-42 h-[36px] leading-[2.4rem] text-sm text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
             {text}
           </div>
         </button>
@@ -62,16 +62,16 @@ function DropdownMenu({
 
   if (size === 'long')
     return (
-      <div className="w-52 h-[2.4rem] relative mx-auto bg-white rounded-lg">
+      <div className="w-64 h-[2.4rem] relative mx-auto bg-white rounded-lg">
         <button
           type="button"
-          className={`w-52 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
+          className={`w-64 h-[2.4rem] font-bold  border-hpLightkBlack border-solid flex items-center ${isOpen ? 'border-[0.075rem] rounded-t-lg' : 'border-[0.075rem] rounded-lg'}`}
           key={textArr[selectedIndex]}
           onClick={() => {
             setIsOpen((prev) => !prev);
           }}
         >
-          <div className="w-64 h-[2.4rem] leading-[2.4rem] text-lg text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
+          <div className="w-72 h-[2.4rem] leading-[2.4rem] text-sm text-left pl-6 whitespace-nowrap overflow-hidden hover:overflow-x-auto">
             {textArr[selectedIndex]}
           </div>
           <div
@@ -82,7 +82,7 @@ function DropdownMenu({
         </button>
 
         {isOpen && (
-          <div className="absolute w-52  bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpLightkBlack border-solid flex flex-col overflow-y-auto overflow-x-hidden">
+          <div className="absolute w-64 text-sm  bg-white z-10 border-x-[0.075rem] border-b-[0.075rem] border-hpLightkBlack border-solid flex flex-col overflow-y-auto overflow-x-hidden">
             {filteredList}
           </div>
         )}

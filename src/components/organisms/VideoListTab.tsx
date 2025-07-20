@@ -119,6 +119,14 @@ function VideoListTab({
             <input
               type="checkbox"
               className="w-[20px] h-[20px] align-middle mr-[30px]"
+              checked={deleteCheckArr.every((checked) => checked)}
+              onChange={() => {
+                setDeleteCheckArr(
+                  Array(deleteCheckArr.length).fill(
+                    !deleteCheckArr.every((checked) => checked),
+                  ),
+                );
+              }}
             />
             <span className="leading-[20px] font-bold w-[80px] text-center text-lg">
               순서

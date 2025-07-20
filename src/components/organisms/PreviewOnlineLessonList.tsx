@@ -37,7 +37,7 @@ function PreviewOnlineLessonList({
   }, [onlineCourseId]);
 
   return (
-    <div className="w-[330px] mx-auto mt-[8px]">
+   <div className="w-[400px] mx-auto mt-[8px]">
       <h2 className="text-xl font-bold my-1 text-center">
         {onlineLessonInformation.title}
       </h2>
@@ -109,7 +109,7 @@ function PreviewOnlineLessonList({
             key={lesson.videoId}
           >
             <span className="block w-[200px] text-center font-bold text-md">
-              {lesson.mediaName}
+               {lesson.mediaName.slice(0, -4)}
             </span>
 
             <span className="block w-[50px]  text-center font-bold text-md  border-solid text-black rounded-xl">

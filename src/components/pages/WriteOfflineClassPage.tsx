@@ -58,6 +58,10 @@ function WriteOfflineClassPage({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setDeleteCheckArr(Array(videoData.length).fill(false));
+  }, [videoData]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const { data } = await getOwnCourses();
       setCourseList(data);

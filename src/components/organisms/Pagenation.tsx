@@ -1,138 +1,75 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
-interface PagenationProps {
+interface PaginationProps {
   totalItemNumbers: number;
   itemNumPerPage: number;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  maxVisiblePages?: number; // 기본값 10
 }
 
-const maxPage = 10; // 최대로 표시할 페이지 수 (기본적으로, 10개)
-function Pagenation({
-  totalItemNumbers = 0,
+function Pagination({
+  totalItemNumbers,
   itemNumPerPage,
   page,
   setPage,
-}: PagenationProps) {
-  const [pageUi, setPageUi] = useState({
-    startPage: 1,
-    pageLevel: 0, // 1~10페이지는 0, 11~20페이지는 1 이런 변수임
-    pageNums:
-      Math.ceil(totalItemNumbers / itemNumPerPage) - maxPage * 0 >= maxPage
-        ? maxPage
-        : Math.ceil(totalItemNumbers / itemNumPerPage) - maxPage * 0,
-  });
+  maxVisiblePages = 10,
+}: PaginationProps) {
+  const totalPages = Math.ceil(totalItemNumbers / itemNumPerPage);
 
-  function leftPage() {
-    if (page === 1) {
-      return;
+  // 현재 페이지 기준으로 시작 페이지 계산
+  const currentBlock = Math.floor((page - 1) / maxVisiblePages);
+  const startPage = currentBlock * maxVisiblePages + 1;
+  const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+
+  const handleClickPage = (pageNum: number) => {
+    if (pageNum >= 1 && pageNum <= totalPages) {
+      setPage(pageNum);
     }
+  };
 
-    if (page - 1 < pageUi.startPage) {
-      setPageUi((prev) => ({
-        startPage: page - maxPage,
-        pageLevel: prev.pageLevel - 1,
-        pageNums:
-          Math.ceil(totalItemNumbers / itemNumPerPage) -
-            maxPage * (prev.pageLevel - 1) >=
-          maxPage
-            ? maxPage
-            : Math.ceil(totalItemNumbers / itemNumPerPage) -
-              maxPage * (prev.pageLevel - 1),
-      }));
-    }
-
-    setPage((prev) => prev - 1);
-  }
-
-  function rightPage() {
-    if (page === Math.ceil(totalItemNumbers / itemNumPerPage)) {
-      return;
-    }
-
-    if (pageUi.startPage + maxPage - 1 < page + 1) {
-      setPageUi((prev) => ({
-        startPage: page + 1,
-        pageLevel: prev.pageLevel + 1,
-        pageNums:
-          Math.ceil(totalItemNumbers / itemNumPerPage) -
-            maxPage * (prev.pageLevel + 1) >=
-          maxPage
-            ? maxPage
-            : Math.ceil(totalItemNumbers / itemNumPerPage) -
-              maxPage * (prev.pageLevel + 1),
-      }));
-    }
-
-    setPage((prev) => prev + 1);
-  }
-
-  useEffect(() => {
-    setPageUi((prev) => ({
-      startPage: prev.startPage,
-      pageLevel: prev.pageLevel,
-      pageNums:
-        Math.ceil(totalItemNumbers / itemNumPerPage) -
-          maxPage * prev.pageLevel >=
-          maxPage ||
-        Math.ceil(totalItemNumbers / itemNumPerPage) -
-          maxPage * prev.pageLevel <
-          0
-          ? maxPage
-          : Math.ceil(totalItemNumbers / itemNumPerPage) -
-            maxPage * prev.pageLevel,
-    }));
-  }, [page, totalItemNumbers]);
-
-  console.log(pageUi);
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center items-center gap-1 mt-6">
+      {/* 왼쪽 버튼 */}
       <button
         type="button"
-        aria-label="왼쪽으로 페이지 넘기기"
-        onClick={() => {
-          leftPage();
-        }}
+        onClick={() => handleClickPage(page - 1)}
+        disabled={page === 1}
+        className="w-[30px] h-[30px] flex items-center justify-center hover:bg-slate-100 rounded-xl disabled:opacity-30"
       >
-        <div className="w-[30px] h-[30px] hover:bg-slate-100 hover:rounded-xl flex justify-center items-center">
-          <AiOutlineLeft className="font-bold" />
-        </div>
+        <AiOutlineLeft />
       </button>
-      {Array(pageUi.pageNums)
-        .fill(0)
-        .map((value, index) => {
-          const pageNumber = pageUi.startPage + index;
-          return (
-            <button
-              key={pageNumber}
-              type="button"
-              onClick={() => {
-                setPage(pageNumber);
-              }}
-            >
-              <div
-                className={`w-[30px] h-[30px] leading-[30px] text-center rounded-2xl  ${pageNumber === page ? 'text-white bg-hpHoverLightGray' : 'text-black hover:bg-hpWhiteBlue hover:bg-opacity-25 hover:text-hpDarkBlue'}`}
-              >
-                <span className="font-bold">{pageNumber}</span>
-              </div>
-            </button>
-          );
-        })}
+      {/* 페이지 숫자 버튼 */}
+      {Array.from({ length: endPage - startPage + 1 }, (_, i) => {
+        const pageNum = startPage + i;
+        return (
+          <button
+            type="button"
+            key={pageNum}
+            onClick={() => handleClickPage(pageNum)}
+            className={`w-[30px] h-[30px] leading-[30px] text-center rounded-2xl font-bold ${
+              pageNum === page
+                ? 'bg-hpHoverLightGray text-white'
+                : 'text-black hover:bg-hpWhiteBlue hover:bg-opacity-25 hover:text-hpDarkBlue'
+            }`}
+          >
+            {pageNum}
+          </button>
+        );
+      })}
 
+      {/* 오른쪽 버튼 */}
       <button
         type="button"
-        aria-label="오른쪽으로 페이지 넘기기"
-        onClick={() => {
-          rightPage();
-        }}
+        onClick={() => handleClickPage(page + 1)}
+        disabled={page === totalPages}
+        className="w-[30px] h-[30px] flex items-center justify-center hover:bg-slate-100 rounded-xl disabled:opacity-30"
       >
-        <div className="w-[30px] h-[30px] leading-[30px] text-center hover:bg-slate-100 hover:rounded-xl flex justify-center items-center">
-          <AiOutlineRight className="font-bold" />
-        </div>
+        <AiOutlineRight />
       </button>
     </div>
   );
 }
 
-export default Pagenation;
+export default Pagination;

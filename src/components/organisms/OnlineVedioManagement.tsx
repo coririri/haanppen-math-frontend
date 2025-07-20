@@ -95,9 +95,17 @@ function OnlineVedioManagement({
       </div>
       <div className="h-[500px] overflow-y-auto">
         <div className="flex items-center w-[700px] px-[30px] py-4 border-solid border-t-[5px] border-b-[2px] border-[#C9C9C9] bg-[#F6F6F6]">
-          <input
+         <input
             type="checkbox"
             className="w-[20px] h-[20px] align-middle mr-[30px]"
+            checked={deleteCheckArr.every((checked) => checked)}
+            onChange={() => {
+              setDeleteCheckArr(
+                Array(deleteCheckArr.length).fill(
+                  !deleteCheckArr.every((checked) => checked),
+                ),
+              );
+            }}
           />
           <span className="leading-[20px] font-bold w-[60px] text-center text-lg">
             순서
@@ -116,6 +124,7 @@ function OnlineVedioManagement({
           .sort((a, b) => a.videoSequence - b.videoSequence)
           .map((video, index) => (
             <VideoCard
+              key={video.videoId}
               video={video}
               videoIndex={index}
               videoList={videoList}

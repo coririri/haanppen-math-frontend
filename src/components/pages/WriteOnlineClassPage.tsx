@@ -60,6 +60,10 @@ function WriteOnlineClassPage({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setDeleteCheckArr(Array(videoList.length).fill(false));
+  }, [videoList]);
+
+  useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       const mainCategorysResponse = await getRootCategory();

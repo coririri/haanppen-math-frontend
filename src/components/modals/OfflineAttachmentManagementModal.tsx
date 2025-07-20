@@ -1,7 +1,6 @@
 import ReactModal from 'react-modal';
 import { SetStateAction, useState } from 'react';
 import { AiFillEdit } from 'react-icons/ai';
-import { AxiosError } from 'axios';
 import { addAttachmentVideo, deleteAttachmentFile } from '../../apis/lesson';
 import { AttachmentViewType, VideoType } from '../../types/videoType';
 import VideoUploadingModal from './VideoUploadingModal';

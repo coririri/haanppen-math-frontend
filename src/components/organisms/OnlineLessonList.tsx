@@ -119,7 +119,7 @@ function OnlineLessonList({
             key={lesson.videoId}
           >
             <span className="block w-[200px] text-center font-bold text-md">
-              {lesson.mediaName}
+              {lesson.mediaName.slice(0, -4)}
             </span>
 
             <span className="block w-[50px]  text-center font-bold text-md  border-solid text-black rounded-xl">
