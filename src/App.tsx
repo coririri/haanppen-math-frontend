@@ -26,6 +26,7 @@ function App() {
   const queryClient = new QueryClient();
   ReactModal.setAppElement('#root');
   // build
+  // serviceworker test
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
